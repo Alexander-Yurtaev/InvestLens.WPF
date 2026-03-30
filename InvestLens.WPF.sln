@@ -1,0 +1,51 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InvestLens.App", "src\InvestLens.App\InvestLens.App.csproj", "{F5739897-695E-4C20-84A1-138CDD5E0D09}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InvestLens.DataAccess", "src\InvestLens.DataAccess\InvestLens.DataAccess.csproj", "{0C5FEB1F-0648-48E0-92FF-59ED59E616C6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InvestLens.Model", "src\InvestLens.Model\InvestLens.Model.csproj", "{90AA187D-6940-4638-8054-681C335F3905}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InvestLens.Common", "src\InvestLens.Common\InvestLens.Common.csproj", "{D0A95761-2A96-44E6-A9BC-F918D49DAD92}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Plugins", "Plugins", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InvestLens.Tests", "tests\InvestLens.Tests\InvestLens.Tests.csproj", "{8D145553-4A16-4201-A254-64CF96053DF6}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F5739897-695E-4C20-84A1-138CDD5E0D09}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F5739897-695E-4C20-84A1-138CDD5E0D09}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F5739897-695E-4C20-84A1-138CDD5E0D09}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F5739897-695E-4C20-84A1-138CDD5E0D09}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0C5FEB1F-0648-48E0-92FF-59ED59E616C6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0C5FEB1F-0648-48E0-92FF-59ED59E616C6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0C5FEB1F-0648-48E0-92FF-59ED59E616C6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0C5FEB1F-0648-48E0-92FF-59ED59E616C6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{90AA187D-6940-4638-8054-681C335F3905}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{90AA187D-6940-4638-8054-681C335F3905}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{90AA187D-6940-4638-8054-681C335F3905}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{90AA187D-6940-4638-8054-681C335F3905}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D0A95761-2A96-44E6-A9BC-F918D49DAD92}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D0A95761-2A96-44E6-A9BC-F918D49DAD92}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D0A95761-2A96-44E6-A9BC-F918D49DAD92}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D0A95761-2A96-44E6-A9BC-F918D49DAD92}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8D145553-4A16-4201-A254-64CF96053DF6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8D145553-4A16-4201-A254-64CF96053DF6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8D145553-4A16-4201-A254-64CF96053DF6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8D145553-4A16-4201-A254-64CF96053DF6}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {85BAE356-F745-4D18-B781-772E7D0D174E}
+	EndGlobalSection
+EndGlobal
