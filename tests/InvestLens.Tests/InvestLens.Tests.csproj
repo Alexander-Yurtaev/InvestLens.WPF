@@ -21,6 +21,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\src\InvestLens.Model\InvestLens.Model.csproj" />
+    <ProjectReference Include="..\..\src\InvestLens.ViewModel\InvestLens.ViewModel.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Using Include="Xunit" />
   </ItemGroup>
 

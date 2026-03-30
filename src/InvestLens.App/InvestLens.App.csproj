@@ -8,4 +8,8 @@
     <UseWPF>true</UseWPF>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\InvestLens.ViewModel\InvestLens.ViewModel.csproj" />
+  </ItemGroup>
+
 </Project>
