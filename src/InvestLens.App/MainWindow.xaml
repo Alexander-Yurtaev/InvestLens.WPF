@@ -21,7 +21,7 @@
             </Grid.RowDefinitions>
 
             <Border Grid.Row="0"
-                    Padding="24, 48"
+                    Padding="24, 14"
                     Margin="0, 0, 0, 16"
                     BorderThickness="0, 0, 0, 1"
                     BorderBrush="#19FFFFFF">
