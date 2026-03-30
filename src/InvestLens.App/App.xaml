@@ -4,6 +4,10 @@
              xmlns:local="clr-namespace:InvestLens.App"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-         
+         <ResourceDictionary>
+             <ResourceDictionary.MergedDictionaries>
+                 <ResourceDictionary Source="Resources/Thems/InvestLens.xaml"/>
+             </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
     </Application.Resources>
 </Application>

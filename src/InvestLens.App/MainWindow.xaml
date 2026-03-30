@@ -5,8 +5,51 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:InvestLens.App"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid>
+        Title="MainWindow" Height="450" Width="800"
+        Background="{StaticResource MainBackgroundBrush}"
+        FontFamily="Segoe UI">
+    <Grid Margin="0">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="320"/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Grid Grid.Column="0" 
+                Background="{StaticResource MenuBackgroundBrush}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
 
+            <Border Grid.Row="0"
+                    Padding="24, 48"
+                    Margin="0, 0, 0, 16"
+                    BorderThickness="0, 0, 0, 1"
+                    BorderBrush="#19FFFFFF">
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                    <Border Width="36"
+                            Height="36"
+                            Background="#C8102E"
+                            CornerRadius="10">
+                        <TextBlock FontWeight="700"
+                                   FontSize="18"
+                                   Foreground="White"
+                                   Margin="12"
+                                   HorizontalAlignment="Center"
+                                   VerticalAlignment="Center">IL</TextBlock>
+                    </Border>
+                    <TextBlock FontSize="20"
+                               FontWeight="600"
+                               Margin="12"
+                               Foreground="White">Invest Lens</TextBlock>
+                </StackPanel>
+            </Border>
+            <Border Grid.Row="1"
+                  Padding="12, 0, 12, 24">
+
+            </Border>
+        </Grid>
+        <Border Grid.Column="1">
+
+        </Border>
     </Grid>
 </Window>
