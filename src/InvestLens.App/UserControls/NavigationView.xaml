@@ -125,11 +125,14 @@
                     HorizontalAlignment="Stretch"/>
         </DataTemplate>
         <DataTemplate DataType="{x:Type menu:MenuNode}">
-            <ToggleButton Foreground="White"
+            <ToggleButton 
+                Foreground="White"
                 HorizontalContentAlignment="Left"
                 Cursor="Hand"
                 Width="200"
                 BorderThickness="0"
+                Command="{Binding RelativeSource={RelativeSource AncestorType=TreeView}, Path=DataContext.NavigateCommand}"
+                CommandParameter="{Binding}"
                 IsChecked="{Binding RelativeSource={RelativeSource AncestorType=TreeViewItem}, Mode=TwoWay, Path=IsSelected}">
                 <ToggleButton.Resources>
                     <Style TargetType="TextBlock">
@@ -181,7 +184,8 @@
         </Border>
         <Border Grid.Row="1"
                 Padding="12, 0, 12, 24">
-            <TreeView ItemsSource="{Binding MenuItems}" Background="Transparent">
+            <TreeView ItemsSource="{Binding MenuItems}" 
+                      Background="Transparent">
                 <TreeView.ItemTemplate>
                     <HierarchicalDataTemplate DataType="{x:Type menu:MenuNode}" 
                                               ItemsSource="{Binding Children}">

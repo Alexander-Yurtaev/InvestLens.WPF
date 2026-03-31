@@ -1,23 +1,42 @@
-﻿using InvestLens.Model.Menu;
+﻿using System.Windows.Input;
+using InvestLens.Model.Menu;
+using InvestLens.ViewModel.Events;
 
 namespace InvestLens.ViewModel;
 
 public class NavigationViewModel : BindableBase, INavigationViewModel
 {
+    private readonly IEventAggregator _eventAggregator;
+    
     public NavigationViewModel()
     {
-        MenuItems = GetMenuItems();
+        _eventAggregator = new EventAggregator();
     }
 
+    public NavigationViewModel(IEventAggregator eventAggregator)
+    {
+        _eventAggregator = eventAggregator;
+        MenuItems = GetMenuItems();
+
+        NavigateCommand = new DelegateCommand<MenuNode>(OnNavigate);
+    }
+
+    public ICommand NavigateCommand { get; }
+
     public List<MenuItemModel> MenuItems { get; set; }
+
+    private void OnNavigate(MenuNode node)
+    {
+        _eventAggregator.GetEvent<SelectMenuNodeEvent>().Publish(node);
+    }
 
     private List<MenuItemModel> GetMenuItems()
     {
         var result = new List<MenuItemModel>
         {
-            new MenuNode("🏠", "Главная"),
+            new MenuNode("🏠", "Главная"){Title = "Главная", Description = "Обзор инвестиционной активности"},
             new MenuDivider(),
-            new MenuNode("📁", "Портфели", GetPortfoliosMenuItems()),
+            new MenuNode("📁", "Портфели", GetPortfoliosMenuItems()) {Title = "Портфели", Description = "Управление инвестиционными портфелями"},
             new MenuNode("📚", "Справочники", GetDictionariesMenuItems()),
             new MenuDivider(),
             new MenuNode("⬇️", "Менеджер закачек"),
@@ -34,9 +53,9 @@ public class NavigationViewModel : BindableBase, INavigationViewModel
     {
         var result = new List<MenuNode>
         {
-            new MenuNode("📊", "Составной инвестиционный"),
-            new MenuNode("💰", "Портфель №1"),
-            new MenuNode("💎", "Портфель №2")
+            new MenuNode("📊", "Составной инвестиционный"){Title = "Составной инвестиционный", Description = "Детальная информация о портфеле"},
+            new MenuNode("💰", "Портфель №1"){Title = "Портфель №1", Description = "Детальная информация о портфеле"},
+            new MenuNode("💎", "Портфель №2"){Title = "Портфель №2", Description = "Детальная информация о портфеле"}
         };
 
         return result;
@@ -57,8 +76,8 @@ public class NavigationViewModel : BindableBase, INavigationViewModel
     {
         var result = new List<MenuNode>
         {
-            new MenuNode("📈", "Ценные бумаги"),
-            new MenuNode("📜", "Облигации")
+            new MenuNode("📈", "Ценные бумаги"){Title = "Ценные бумаги (MOEX)", Description = "Акции, ETF и другие инструменты"},
+            new MenuNode("📜", "Облигации"){Title = "Облигации (MOEX)", Description = "Облигации на Московской бирже"}
         };
 
         return result;
@@ -68,7 +87,7 @@ public class NavigationViewModel : BindableBase, INavigationViewModel
     {
         var result = new List<MenuNode>
         {
-            new MenuNode("📜", "Облигации")
+            new MenuNode("📜", "Облигации"){Title = "Облигации (Dohod.ru)", Description = "Данные с агрегатора dohod.ru"}
         };
 
         return result;
@@ -78,8 +97,8 @@ public class NavigationViewModel : BindableBase, INavigationViewModel
     {
         var result = new List<MenuNode>
         {
-            new MenuNode("🔧", "Общие"),
-            new MenuNode("🧩", "Плагины")
+            new MenuNode("🔧", "Общие"){Title = "Общие настройки", Description = "Настройки интерфейса и форматов"},
+            new MenuNode("🧩", "Плагины"){Title = "Плагины", Description = "Управление расширениями"}
         };
 
         return result;
