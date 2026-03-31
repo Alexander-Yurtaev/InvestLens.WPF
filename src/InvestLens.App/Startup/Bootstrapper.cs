@@ -3,9 +3,9 @@ using InvestLens.ViewModel;
 
 namespace InvestLens.App.Startup
 {
-    public class Bootstrapper
+    public static class Bootstrapper
     {
-        public IContainer BootStrap()
+        public static IContainer BootStrap()
         {
             var builder = new ContainerBuilder();
 
@@ -14,6 +14,7 @@ namespace InvestLens.App.Startup
             builder.RegisterType<MainWindow>().AsSelf();
             builder.RegisterType<MainWindowViewModel>().As<IMainWindowViewModel>();
             builder.RegisterType<NavigationViewModel>().As<INavigationViewModel>();
+            builder.RegisterType<HeaderViewModel>().As<IHeaderViewModel>();
 
             return builder.Build();
         }

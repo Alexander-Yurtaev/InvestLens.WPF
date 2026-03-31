@@ -2,7 +2,7 @@
 
 namespace InvestLens.ViewModel;
 
-public class NavigationViewModel : BindableBase
+public class NavigationViewModel : BindableBase, INavigationViewModel
 {
     public NavigationViewModel()
     {

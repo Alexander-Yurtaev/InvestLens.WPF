@@ -9,7 +9,8 @@ namespace InvestLens.Tests
         public void MenuItemsShouldBeInitializedCorrect()
         {
             var navigationVm = new NavigationViewModel();
-            var vm = new MainWindowViewModel(navigationVm);
+            var headerVm = new HeaderViewModel();
+            var vm = new MainWindowViewModel(navigationVm, headerVm);
 
             Assert.NotNull(vm.NavigationVm.MenuItems);
             Assert.Equal(10, vm.NavigationVm.MenuItems.Count);

@@ -3,11 +3,11 @@
 namespace InvestLens.App.UserControls
 {
     /// <summary>
-    /// Interaction logic for NavigationView.xaml
+    /// Interaction logic for HeaderView.xaml
     /// </summary>
-    public partial class NavigationView : UserControl
+    public partial class HeaderView : UserControl
     {
-        public NavigationView()
+        public HeaderView()
         {
             InitializeComponent();
         }

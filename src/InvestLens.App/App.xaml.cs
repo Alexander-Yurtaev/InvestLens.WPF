@@ -1,5 +1,6 @@
-﻿using InvestLens.ViewModel;
-using System.Windows;
+﻿using System.Windows;
+using Autofac;
+using InvestLens.App.Startup;
 
 namespace InvestLens.App
 {
@@ -39,13 +40,10 @@ namespace InvestLens.App
         protected override void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
-            var navigationVm = new NavigationViewModel();
-            var mainWindowViewModel = new MainWindowViewModel(navigationVm);
 
-            var mainWindow = new MainWindow
-            {
-                DataContext = mainWindowViewModel
-            };
+            var container = Bootstrapper.BootStrap();
+
+            var mainWindow = container.Resolve<MainWindow>();
 
             mainWindow.Show();
         }

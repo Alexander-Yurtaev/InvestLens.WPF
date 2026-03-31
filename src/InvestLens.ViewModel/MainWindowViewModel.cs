@@ -1,11 +1,24 @@
 ﻿namespace InvestLens.ViewModel;
 
-public class MainWindowViewModel : BindableBase
+public class MainWindowViewModel : BindableBase, IMainWindowViewModel
 {
-    public MainWindowViewModel(NavigationViewModel navigationVm)
+    public MainWindowViewModel()
     {
-        NavigationVm = navigationVm;
+        
     }
 
-    public NavigationViewModel NavigationVm { get; set; }
+    public MainWindowViewModel(INavigationViewModel navigationVm, IHeaderViewModel headerVm)
+    {
+        NavigationVm = navigationVm;
+        HeaderVm = headerVm;
+    }
+
+    public INavigationViewModel NavigationVm { get; }
+    public IHeaderViewModel HeaderVm { get; }
+
+    public int NotificationsCount { get; set; }
+    public string NotificationsCountDisplay => NotificationsCount <= 9 ? NotificationsCount.ToString() : "9+";
+    public bool HasNotifications => NotificationsCount > 0;
+    public string UserAvatar { get; set; } = string.Empty;
+    public string UserName { get; set; } = string.Empty;
 }
