@@ -10,6 +10,7 @@ public class MainWindowViewModel : BindableBase, IMainWindowViewModel
 {
     private readonly IViewModelFactory _viewModelFactory;
     private readonly IEventAggregator _eventAggregator;
+    private INotifyPropertyChanged? _contentVm;
 
     public MainWindowViewModel(INavigationViewModel navigationVm, 
         IHeaderViewModel headerVm,
@@ -31,7 +32,12 @@ public class MainWindowViewModel : BindableBase, IMainWindowViewModel
 
     public INavigationViewModel NavigationVm { get; }
     public IHeaderViewModel HeaderVm { get; }
-    public INotifyPropertyChanged? ContentVm { get; private set; }
+
+    public INotifyPropertyChanged? ContentVm
+    {
+        get => _contentVm;
+        private set => SetProperty(ref _contentVm, value);
+    }
 
     public INotificationsManager NotificationsManager { get; }
     public IUserManager UserManager { get; }

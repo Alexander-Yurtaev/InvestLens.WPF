@@ -16,47 +16,25 @@ public class ViewModelFactory : IViewModelFactory
 
     public INotifyPropertyChanged CreateViewModel(NodeTypes nodeType)
     {
-        switch (nodeType)
+        return nodeType switch
         {
-            case NodeTypes.Dashboard:
-                return _componentContext.Resolve<IDashboardViewModel>();
-
-            case NodeTypes.Portfolios:
-                return _componentContext.Resolve<IPortfoliosViewModel>();
-            case NodeTypes.PortfoliosComplex:
-                return _componentContext.Resolve<IPortfoliosComplexViewModel>();
-            case NodeTypes.PortfoliosFirst:
-                return _componentContext.Resolve<IPortfoliosFirstViewModel>();
-            case NodeTypes.PortfoliosSecond:
-                return _componentContext.Resolve<IPortfoliosSecondViewModel>();
-
-            case NodeTypes.Dictionaries:
-                return _componentContext.Resolve<IDictionariesViewModel>();
-            case NodeTypes.DictionariesMoex:
-                return _componentContext.Resolve<IDictionariesMoexViewModel>();
-            case NodeTypes.DictionariesMoexSecurities:
-                return _componentContext.Resolve<IDictionariesMoexSecuritiesViewModel>();
-            case NodeTypes.DictionariesMoexBonds:
-                return _componentContext.Resolve<IDictionariesMoexBondsViewModel>();
-
-            case NodeTypes.DictionariesDohod:
-                return _componentContext.Resolve<IDictionariesDohodViewModel>();
-            case NodeTypes.DictionariesDohodBonds:
-                return _componentContext.Resolve<IDictionariesDohodBondsViewModel>();
-
-            case NodeTypes.Downloader:
-                return _componentContext.Resolve<IDownloaderViewModel>();
-            case NodeTypes.Scheduler:
-                return _componentContext.Resolve<ISchedulerViewModel>();
-
-            case NodeTypes.Settings:
-                return _componentContext.Resolve<ISettingsViewModel>();
-            case NodeTypes.SettingsCommon:
-                return _componentContext.Resolve<ISettingsCommonViewModel>();
-            case NodeTypes.SettingsPlugins:
-                return _componentContext.Resolve<ISettingsPluginsViewModel>();
-            default:
-                throw new ArgumentOutOfRangeException(nameof(nodeType), nodeType, null);
-        }
+            NodeTypes.Dashboard => _componentContext.Resolve<IDashboardViewModel>(),
+            NodeTypes.Portfolios => _componentContext.Resolve<IPortfoliosViewModel>(),
+            NodeTypes.PortfoliosComplex => _componentContext.Resolve<IPortfoliosComplexViewModel>(),
+            NodeTypes.PortfoliosFirst => _componentContext.Resolve<IPortfoliosFirstViewModel>(),
+            NodeTypes.PortfoliosSecond => _componentContext.Resolve<IPortfoliosSecondViewModel>(),
+            NodeTypes.Dictionaries => _componentContext.Resolve<IDictionariesViewModel>(),
+            NodeTypes.DictionariesMoex => _componentContext.Resolve<IDictionariesMoexViewModel>(),
+            NodeTypes.DictionariesMoexSecurities => _componentContext.Resolve<IDictionariesMoexSecuritiesViewModel>(),
+            NodeTypes.DictionariesMoexBonds => _componentContext.Resolve<IDictionariesMoexBondsViewModel>(),
+            NodeTypes.DictionariesDohod => _componentContext.Resolve<IDictionariesDohodViewModel>(),
+            NodeTypes.DictionariesDohodBonds => _componentContext.Resolve<IDictionariesDohodBondsViewModel>(),
+            NodeTypes.Downloader => _componentContext.Resolve<IDownloaderViewModel>(),
+            NodeTypes.Scheduler => _componentContext.Resolve<ISchedulerViewModel>(),
+            NodeTypes.Settings => _componentContext.Resolve<ISettingsViewModel>(),
+            NodeTypes.SettingsCommon => _componentContext.Resolve<ISettingsCommonViewModel>(),
+            NodeTypes.SettingsPlugins => _componentContext.Resolve<ISettingsPluginsViewModel>(),
+            _ => throw new ArgumentOutOfRangeException(nameof(nodeType), nodeType, null)
+        };
     }
 }

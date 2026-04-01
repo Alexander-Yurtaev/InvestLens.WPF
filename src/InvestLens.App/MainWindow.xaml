@@ -7,6 +7,7 @@
         xmlns:viewModel="clr-namespace:InvestLens.ViewModel;assembly=InvestLens.ViewModel"
         xmlns:menu="clr-namespace:InvestLens.Model.Menu;assembly=InvestLens.Model"
         xmlns:userControls="clr-namespace:InvestLens.App.UserControls"
+        xmlns:pages="clr-namespace:InvestLens.ViewModel.Pages;assembly=InvestLens.ViewModel"
         mc:Ignorable="d"
         d:DataContext="{d:DesignInstance viewModel:MainWindowViewModel, IsDesignTimeCreatable=True}"
         Title="MainWindow" Height="450" Width="800"
@@ -14,6 +15,63 @@
         FontFamily="Segoe UI"
         WindowStartupLocation="CenterOwner"
         WindowState="Maximized">
+
+    <Window.Resources>
+        <ResourceDictionary>
+            <Style x:Key="ContentAreaStyle" TargetType="Border">
+                <Setter Property="Padding" Value="32"/>
+            </Style>
+
+            <DataTemplate DataType="{x:Type pages:DashboardViewModel}">
+                <userControls:DashboardView/>
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type pages:PortfoliosViewModel}">
+                <userControls:PortfoliosView/>
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type pages:PortfoliosComplexViewModel}">
+                <userControls:PortfoliosComplexView/>
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type pages:PortfoliosFirstViewModel}">
+                <userControls:PortfoliosFirstView/>
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type pages:PortfoliosSecondViewModel}">
+                <userControls:PortfoliosSecondView/>
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type pages:DictionariesViewModel}">
+                <userControls:DictionariesView/>
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type pages:DictionariesMoexViewModel}">
+                <userControls:DictionariesMoexView/>
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type pages:DictionariesMoexSecuritiesViewModel}">
+                <userControls:DictionariesMoexSecuritiesView/>
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type pages:DictionariesMoexBondsViewModel}">
+                <userControls:DictionariesMoexBondsView/>
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type pages:DictionariesDohodViewModel}">
+                <userControls:DictionariesDohodView/>
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type pages:DictionariesDohodBondsViewModel}">
+                <userControls:DictionariesDohodBondsView/>
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type pages:DownloaderViewModel}">
+                <userControls:DownloaderView/>
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type pages:SchedulerViewModel}">
+                <userControls:SchedulerView/>
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type pages:SettingsViewModel}">
+                <userControls:SettingsView/>
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type pages:SettingsCommonViewModel}">
+                <userControls:SettingsCommonView/>
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type pages:SettingsPluginsViewModel}">
+                <userControls:SettingsPluginsView/>
+            </DataTemplate>
+        </ResourceDictionary>
+    </Window.Resources>
 
     <Grid Margin="0">
         <Grid.ColumnDefinitions>
@@ -34,6 +92,8 @@
                                  Grid.Row="0"
                                  DataContext="{Binding}"/>
 
-        <ContentControl Grid.Column="1" Grid.Row="1" Content="{Binding ContentVm}"/>
+        <Border Grid.Column="1" Grid.Row="1" Style="{StaticResource ContentAreaStyle}">
+            <ContentControl Content="{Binding ContentVm}"/>
+        </Border>
     </Grid>
 </Window>

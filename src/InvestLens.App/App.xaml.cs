@@ -45,8 +45,8 @@ namespace InvestLens.App
             var container = Bootstrapper.BootStrap();
 
             var userManager = container.Resolve<IUserManager>();
-            var userTask = userManager.LoadAsync();
-            userTask.Await();
+            var userLoadTask = userManager.LoadAsync();
+            userLoadTask.Await();
 
             var mainWindow = container.Resolve<MainWindow>();
 

@@ -33,13 +33,13 @@ public class NavigationViewModel : BindableBase, INavigationViewModel
             new MenuNode(NodeTypes.Dashboard, "🏠", "Главная"){Title = "Главная", Description = "Обзор инвестиционной активности"},
             new MenuDivider(),
             new MenuNode(NodeTypes.Portfolios, "📁", "Портфели", GetPortfoliosMenuItems()) {Title = "Портфели", Description = "Управление инвестиционными портфелями"},
-            new MenuNode(NodeTypes.Dictionaries, "📚", "Справочники", GetDictionariesMenuItems()),
+            new MenuNode(NodeTypes.Dictionaries, "📚", "Справочники", GetDictionariesMenuItems()){Title = "Справочники", Description = "Источники рыночных данных и справочной информации"},
             new MenuDivider(),
             new MenuNode(NodeTypes.Downloader, "⬇️", "Менеджер закачек"){Title = "Менеджер закачек", Description = "Управление загрузкой данных"},
             new MenuDivider(),
             new MenuNode(NodeTypes.Scheduler, "📅", "Планировщик"){Title = "Планировщик", Description = "Управление задачами и напоминаниями"},
             new MenuDivider(),
-            new MenuNode(NodeTypes.Settings, "⚙️", "Настройки", GetSettingsMenuItems())
+            new MenuNode(NodeTypes.Settings, "⚙️", "Настройки", GetSettingsMenuItems()){Title = "Настройки", Description = "Настройка приложения и управление плагинами"}
         };
 
         return result;
@@ -61,8 +61,8 @@ public class NavigationViewModel : BindableBase, INavigationViewModel
     {
         var result = new List<MenuNode>
         {
-            new MenuNode(NodeTypes.DictionariesMoex, "🏛️", "MOEX", GetMoexMenuItems()),
-            new MenuNode(NodeTypes.DictionariesDohod, "🌐", "Dohod.ru", GetDohodMenuItems())
+            new MenuNode(NodeTypes.DictionariesMoex, "🏛️", "MOEX", GetMoexMenuItems()){Title = "Московская Биржа (MOEX)", Description = "Основные рыночные инструменты и индексы"},
+            new MenuNode(NodeTypes.DictionariesDohod, "🌐", "Dohod.ru", GetDohodMenuItems()){Title = "Dohod.ru", Description = "Агрегатор данных по облигациям"}
         };
 
         return result;

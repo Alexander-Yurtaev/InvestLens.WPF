@@ -2,13 +2,15 @@
 
 public class UserManager : IUserManager
 {
-    public string UserAvatar { get; set; } = string.Empty;
-    public string UserName { get; set; } = string.Empty;
+    public string UserAvatar { get; private set; } = string.Empty;
+    public string UserName { get; private set; } = string.Empty;
+    public string UserFullNameInShortFormat { get; private set; } = string.Empty;
 
     public async Task LoadAsync()
     {
         UserAvatar = "АЮ";
-        UserName = "Александр Ю.";
+        UserName = "Александр";
+        UserFullNameInShortFormat = "Александр Ю.";
         await Task.CompletedTask;
     }
 }

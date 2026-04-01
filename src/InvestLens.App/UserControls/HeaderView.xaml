@@ -135,7 +135,7 @@
                             Text="{Binding UserManager.UserAvatar}"/>
                     </Border>
                     <TextBlock Grid.Column="1"  
-                        Text="{Binding UserManager.UserName}"
+                        Text="{Binding UserManager.UserFullNameInShortFormat}"
                         Style="{StaticResource UserNameStyle}"/>
                 </Grid>
             </Grid>

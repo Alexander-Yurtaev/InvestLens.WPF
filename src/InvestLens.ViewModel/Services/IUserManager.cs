@@ -2,7 +2,8 @@
 
 public interface IUserManager
 {
-    string UserAvatar { get; set; }
-    string UserName { get; set; }
+    string UserAvatar { get; }
+    string UserName { get; }
+    string UserFullNameInShortFormat { get; }
     Task LoadAsync();
 }
