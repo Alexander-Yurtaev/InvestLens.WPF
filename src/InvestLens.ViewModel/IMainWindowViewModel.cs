@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel;
+using InvestLens.ViewModel.Services;
 
 namespace InvestLens.ViewModel;
 
@@ -8,10 +9,8 @@ public interface IMainWindowViewModel
     IHeaderViewModel HeaderVm { get; }
     INotifyPropertyChanged? ContentVm { get; }
 
-    int NotificationsCount { get; set; }
-    bool HasNotifications { get; }
-    string UserAvatar { get; set; }
-    string UserName { get; set; }
+    INotificationsManager NotificationsManager { get; }
+    IUserManager UserManager { get; }
 
     event PropertyChangedEventHandler? PropertyChanged;
 }

@@ -1,6 +1,7 @@
 ﻿using System.Windows;
 using Autofac;
 using InvestLens.App.Startup;
+using InvestLens.ViewModel.Services;
 
 namespace InvestLens.App
 {
@@ -42,6 +43,10 @@ namespace InvestLens.App
             base.OnStartup(e);
 
             var container = Bootstrapper.BootStrap();
+
+            var userManager = container.Resolve<IUserManager>();
+            var userTask = userManager.LoadAsync();
+            userTask.Await();
 
             var mainWindow = container.Resolve<MainWindow>();
 

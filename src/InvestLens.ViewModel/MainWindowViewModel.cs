@@ -12,7 +12,9 @@ public class MainWindowViewModel : BindableBase, IMainWindowViewModel
     private readonly IEventAggregator _eventAggregator;
 
     public MainWindowViewModel(INavigationViewModel navigationVm, 
-        IHeaderViewModel headerVm, 
+        IHeaderViewModel headerVm,
+        IUserManager userManager,
+        INotificationsManager notificationsManager,
         IViewModelFactory viewModelFactory, 
         IEventAggregator eventAggregator)
     {
@@ -21,10 +23,8 @@ public class MainWindowViewModel : BindableBase, IMainWindowViewModel
         NavigationVm = navigationVm;
         HeaderVm = headerVm;
 
-        //Remove
-        UserAvatar = "АЮ";
-        UserName = "Александр Ю.";
-        NotificationsCount = new Random().Next(100);
+        UserManager = userManager;
+        NotificationsManager = notificationsManager;
 
         _eventAggregator.GetEvent<SelectMenuNodeEvent>().Subscribe(OnSelectMenuNode);
     }
@@ -33,11 +33,8 @@ public class MainWindowViewModel : BindableBase, IMainWindowViewModel
     public IHeaderViewModel HeaderVm { get; }
     public INotifyPropertyChanged? ContentVm { get; private set; }
 
-    public int NotificationsCount { get; set; }
-    public string NotificationsCountDisplay => NotificationsCount <= 9 ? NotificationsCount.ToString() : "9+";
-    public bool HasNotifications => NotificationsCount > 0;
-    public string UserAvatar { get; set; }
-    public string UserName { get; set; }
+    public INotificationsManager NotificationsManager { get; }
+    public IUserManager UserManager { get; }
 
     private void OnSelectMenuNode(MenuNode node)
     {

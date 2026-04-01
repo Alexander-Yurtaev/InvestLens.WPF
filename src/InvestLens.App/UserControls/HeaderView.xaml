@@ -117,9 +117,9 @@
                                Style="{StaticResource NotificationIconStyle}"/>
                     <Border Grid.Column="1"
                             Grid.Row="0"
-                            Visibility="{Binding HasNotifications, Converter={StaticResource BooleanToVisibilityConverter}}"
+                            Visibility="{Binding NotificationsManager.HasNotifications, Converter={StaticResource BooleanToVisibilityConverter}}"
                             Style="{StaticResource NotificationBadgeBorderStyle}">
-                        <TextBlock Text="{Binding NotificationsCountDisplay}" 
+                        <TextBlock Text="{Binding NotificationsManager.NotificationsCountDisplay}" 
                                    Style="{StaticResource NotificationBadgeTextBlockStyle}"/>
                     </Border>
                 </Grid>
@@ -132,10 +132,10 @@
                     <Border Grid.Column="0" Style="{StaticResource AvatarBorderStyle}">
                         <TextBlock
                             Style="{StaticResource AvatarTextBlockStyle}"
-                            Text="{Binding UserAvatar}"/>
+                            Text="{Binding UserManager.UserAvatar}"/>
                     </Border>
                     <TextBlock Grid.Column="1"  
-                        Text="{Binding UserName}"
+                        Text="{Binding UserManager.UserName}"
                         Style="{StaticResource UserNameStyle}"/>
                 </Grid>
             </Grid>
