@@ -15,6 +15,7 @@ namespace InvestLens.App.Startup
             builder.RegisterType<ViewModelFactory>().As<IViewModelFactory>().SingleInstance();
             builder.RegisterType<NotificationsManager>().As<INotificationsManager>().SingleInstance();
             builder.RegisterType<UserManager>().As<IUserManager>().SingleInstance();
+            builder.RegisterType<MetricsManager>().As<IMetricsManager>().SingleInstance();
 
             builder.RegisterType<MainWindow>().AsSelf();
             builder.RegisterType<MainWindowViewModel>().As<IMainWindowViewModel>();

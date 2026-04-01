@@ -11,7 +11,7 @@
 
     <UserControl.Resources>
         <ResourceDictionary>
-            <Style x:Key="WelcomeSectionStyle" TargetType="Grid">
+            <Style x:Key="WelcomeSectionStyle" TargetType="StackPanel">
                 <Setter Property="Margin" Value="0 0 0 28"/>
             </Style>
             <Style x:Key="H1Style" TargetType="TextBlock">
@@ -31,9 +31,23 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <StackPanel Grid.Row="0">
+        <StackPanel Grid.Row="0" Style="{StaticResource WelcomeSectionStyle}">
             <TextBlock Style="{StaticResource H1Style}" Text="{Binding WelcomeTitle}"/>
             <TextBlock Style="{StaticResource PStyle}" Text="{Binding WelcomeDescription}"/>
+        </StackPanel>
+        <StackPanel Grid.Row="1" Orientation="Horizontal">
+            <ItemsControl ItemsSource="{Binding MetricCards}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel Orientation="Horizontal"/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <local:MetricCard/>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
         </StackPanel>
     </Grid>
 </UserControl>
