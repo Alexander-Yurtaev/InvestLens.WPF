@@ -21,6 +21,11 @@ public class MainWindowViewModel : BindableBase, IMainWindowViewModel
         NavigationVm = navigationVm;
         HeaderVm = headerVm;
 
+        //Remove
+        UserAvatar = "АЮ";
+        UserName = "Александр Ю.";
+        NotificationsCount = new Random().Next(100);
+
         _eventAggregator.GetEvent<SelectMenuNodeEvent>().Subscribe(OnSelectMenuNode);
     }
 
