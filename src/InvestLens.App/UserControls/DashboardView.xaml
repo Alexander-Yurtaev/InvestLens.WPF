@@ -22,6 +22,58 @@
             <Style x:Key="PStyle" TargetType="TextBlock">
                 <Setter Property="Foreground" Value="#5A6E8A"/>
             </Style>
+            <Style x:Key="MetricsGridStyle" TargetType="StackPanel">
+                <Setter Property="Margin" Value="0 0 0 32"/>
+            </Style>
+            <Style x:Key="CardStyle" TargetType="Border">
+                <Setter Property="Background" Value="White"/>
+                <Setter Property="CornerRadius" Value="20"/>
+                <Setter Property="Padding" Value="20"/>
+                <Setter Property="BorderThickness" Value="1"/>
+                <Setter Property="BorderBrush" Value="#E9EDF2"/>
+                <Setter Property="Effect">
+                    <Setter.Value>
+                        <DropShadowEffect ShadowDepth="2" 
+                                          BlurRadius="8" 
+                                          Opacity="0.04"
+                                          Color="Black"/>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+            <Style x:Key="CardHeader" TargetType="TextBlock">
+                <Setter Property="FontSize" Value="16"/>
+                <Setter Property="FontWeight" Value="SemiBold"/>
+                <Setter Property="Foreground" Value="#002855"/>
+            </Style>
+            <!--PeriodSelector-->
+            <Style x:Key="PeriodSelectorStyle" TargetType="RadioButton">
+                <Setter Property="FontSize" Value="12"/>
+                <Setter Property="Foreground" Value="#5A6E8A"/>
+                <Setter Property="Background" Value="Transparent"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="RadioButton">
+                            <Border Cursor="Hand"
+                                    Padding="8 4"
+                                    CornerRadius="6"
+                                    Background="{TemplateBinding Background}">
+                                <TextBlock Text="{Binding RelativeSource={RelativeSource AncestorType={x:Type RadioButton}}, Path=Content}"
+                                           FontSize="12"
+                                           Foreground="{TemplateBinding Foreground}"/>
+                            </Border>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+                <Style.Triggers>
+                    <Trigger Property="IsChecked" Value="True">
+                        <Setter Property="Background" Value="#C8102E"/>
+                        <Setter Property="Foreground" Value="White"/>
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
+            <Style x:Key="ChartPlaceholderStyle" TargetType="Border">
+                <Setter Property="Height" Value="200"/>
+            </Style>
         </ResourceDictionary>
     </UserControl.Resources>
 
@@ -35,7 +87,7 @@
             <TextBlock Style="{StaticResource H1Style}" Text="{Binding WelcomeTitle}"/>
             <TextBlock Style="{StaticResource PStyle}" Text="{Binding WelcomeDescription}"/>
         </StackPanel>
-        <StackPanel Grid.Row="1" Orientation="Horizontal">
+        <StackPanel Grid.Row="1" Orientation="Horizontal" Style="{StaticResource MetricsGridStyle}">
             <ItemsControl ItemsSource="{Binding MetricCards}">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
@@ -49,5 +101,42 @@
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
         </StackPanel>
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Border Grid.Column="0" Style="{StaticResource CardStyle}" Margin="0 0 12 0">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <Grid Grid.Row="0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="0" 
+                                   Style="{StaticResource CardHeader}"
+                                   Text="Динамика портфеля"/>
+
+                        <RadioButton Grid.Column="2" GroupName="PeriodSelector" Content="1М" Style="{StaticResource PeriodSelectorStyle}"/>
+                        <RadioButton Grid.Column="3" GroupName="PeriodSelector" Content="3М" Style="{StaticResource PeriodSelectorStyle}"/>
+                        <RadioButton Grid.Column="4" GroupName="PeriodSelector" Content="6М" Style="{StaticResource PeriodSelectorStyle}"/>
+                        <RadioButton Grid.Column="5" GroupName="PeriodSelector" Content="1Г" Style="{StaticResource PeriodSelectorStyle}"/>
+                    </Grid>
+                    <Border Grid.Row="1" Style="{StaticResource ChartPlaceholderStyle}">
+
+                    </Border>
+                </Grid>
+            </Border>
+            <Border Grid.Column="1" Style="{StaticResource CardStyle}" Margin="12 0 0 0">
+            </Border>
+        </Grid>
     </Grid>
 </UserControl>
