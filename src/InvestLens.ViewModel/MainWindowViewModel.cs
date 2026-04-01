@@ -36,8 +36,8 @@ public class MainWindowViewModel : BindableBase, IMainWindowViewModel
     public int NotificationsCount { get; set; }
     public string NotificationsCountDisplay => NotificationsCount <= 9 ? NotificationsCount.ToString() : "9+";
     public bool HasNotifications => NotificationsCount > 0;
-    public string UserAvatar { get; set; } = string.Empty;
-    public string UserName { get; set; } = string.Empty;
+    public string UserAvatar { get; set; }
+    public string UserName { get; set; }
 
     private void OnSelectMenuNode(MenuNode node)
     {
