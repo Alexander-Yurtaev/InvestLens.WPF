@@ -6,6 +6,7 @@ public interface IMainWindowViewModel
 {
     INavigationViewModel NavigationVm { get; }
     IHeaderViewModel HeaderVm { get; }
+    INotifyPropertyChanged ContentVm { get; }
 
     int NotificationsCount { get; set; }
     bool HasNotifications { get; }

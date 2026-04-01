@@ -1,10 +1,12 @@
-﻿using System.ComponentModel;
+﻿using InvestLens.Model.Menu;
+using System.ComponentModel;
 
 namespace InvestLens.ViewModel;
 
 public interface IHeaderViewModel
 {
-    string Title { get; set; }
-    string Description { get; set; }
+    string Title { get; }
+    string Description { get; }
+    void SetModel(MenuNode model);
     event PropertyChangedEventHandler? PropertyChanged;
 }

@@ -1,5 +1,8 @@
 ﻿using InvestLens.Model.Menu;
 using InvestLens.ViewModel;
+using InvestLens.ViewModel.Events;
+using InvestLens.ViewModel.Services;
+using Moq;
 
 namespace InvestLens.Tests
 {
@@ -8,9 +11,13 @@ namespace InvestLens.Tests
         [Fact]
         public void MenuItemsShouldBeInitializedCorrect()
         {
-            var navigationVm = new NavigationViewModel();
-            var headerVm = new HeaderViewModel();
-            var vm = new MainWindowViewModel(navigationVm, headerVm);
+            var headerVmMock = new Mock<IHeaderViewModel>();
+            var viewModelFactoryMock = new Mock<IViewModelFactory>();
+            var eventAggregatorMock = new Mock<IEventAggregator>();
+            eventAggregatorMock.Setup(ea => ea.GetEvent<SelectMenuNodeEvent>()).Returns(new SelectMenuNodeEvent());
+            var navigationVm = new NavigationViewModel(eventAggregatorMock.Object);
+
+            var vm = new MainWindowViewModel(navigationVm, headerVmMock.Object, viewModelFactoryMock.Object, eventAggregatorMock.Object);
 
             Assert.NotNull(vm.NavigationVm.MenuItems);
             Assert.Equal(10, vm.NavigationVm.MenuItems.Count);

@@ -1,19 +1,22 @@
-﻿using InvestLens.Model.Menu;
+﻿using System.ComponentModel;
+using InvestLens.Model.Enums;
+using InvestLens.Model.Menu;
 using InvestLens.ViewModel.Events;
+using InvestLens.ViewModel.Services;
 
 namespace InvestLens.ViewModel;
 
 public class MainWindowViewModel : BindableBase, IMainWindowViewModel
 {
+    private readonly IViewModelFactory _viewModelFactory;
     private readonly IEventAggregator _eventAggregator;
 
-    public MainWindowViewModel()
+    public MainWindowViewModel(INavigationViewModel navigationVm, 
+        IHeaderViewModel headerVm, 
+        IViewModelFactory viewModelFactory, 
+        IEventAggregator eventAggregator)
     {
-        _eventAggregator = new EventAggregator();
-    }
-
-    public MainWindowViewModel(INavigationViewModel navigationVm, IHeaderViewModel headerVm, IEventAggregator eventAggregator)
-    {
+        _viewModelFactory = viewModelFactory;
         _eventAggregator = eventAggregator;
         NavigationVm = navigationVm;
         HeaderVm = headerVm;
@@ -23,6 +26,7 @@ public class MainWindowViewModel : BindableBase, IMainWindowViewModel
 
     public INavigationViewModel NavigationVm { get; }
     public IHeaderViewModel HeaderVm { get; }
+    public INotifyPropertyChanged? ContentVm { get; private set; }
 
     public int NotificationsCount { get; set; }
     public string NotificationsCountDisplay => NotificationsCount <= 9 ? NotificationsCount.ToString() : "9+";
@@ -32,7 +36,12 @@ public class MainWindowViewModel : BindableBase, IMainWindowViewModel
 
     private void OnSelectMenuNode(MenuNode node)
     {
-        HeaderVm.Title = node.Title;
-        HeaderVm.Description = node.Description;
+        HeaderVm.SetModel(node);
+        ContentVm = GetContentVm(node.NodeType);
+    }
+
+    private INotifyPropertyChanged GetContentVm(NodeTypes nodeType)
+    {
+        return _viewModelFactory.CreateViewModel(nodeType);
     }
 }

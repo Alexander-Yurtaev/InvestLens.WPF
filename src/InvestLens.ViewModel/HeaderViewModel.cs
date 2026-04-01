@@ -1,19 +1,19 @@
-﻿namespace InvestLens.ViewModel;
+﻿using InvestLens.Model.Menu;
+
+namespace InvestLens.ViewModel;
 
 public class HeaderViewModel : BindableBase, IHeaderViewModel
 {
-    private string _title = string.Empty;
-    private string _description = string.Empty;
+    private MenuNode? _model;
 
-    public string Title
-    {
-        get => _title;
-        set => SetProperty(ref _title, value);
-    }
+    public string Title => _model?.Title ?? string.Empty;
 
-    public string Description
+    public string Description => _model?.Description ?? string.Empty;
+
+    public void SetModel(MenuNode model)
     {
-        get => _description;
-        set => SetProperty(ref _description, value);
+        _model = model;
+        RaisePropertyChanged(nameof(Title));
+        RaisePropertyChanged(nameof(Description));
     }
 }

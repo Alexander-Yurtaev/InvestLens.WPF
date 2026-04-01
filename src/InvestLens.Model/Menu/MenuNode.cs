@@ -1,8 +1,11 @@
-﻿namespace InvestLens.Model.Menu;
+﻿using InvestLens.Model.Enums;
 
-public class MenuNode(string icon, string header, List<MenuNode>? children = null) : MenuItemWithHeaderModel(icon, header)
+namespace InvestLens.Model.Menu;
+
+public class MenuNode(NodeTypes nodeType, string icon, string header, List<MenuNode>? children = null) : MenuItemWithHeaderModel(icon, header)
 {
     public List<MenuNode> Children { get; } = children ?? [];
-    public string Title { get; init; }
-    public string Description { get; init; }
+    public NodeTypes NodeType { get; init; } = nodeType;
+    public string Title { get; init; } = string.Empty;
+    public string Description { get; init; } = string.Empty;
 }

@@ -1,4 +1,5 @@
 ﻿using System.Windows.Input;
+using InvestLens.Model.Enums;
 using InvestLens.Model.Menu;
 using InvestLens.ViewModel.Events;
 
@@ -8,11 +9,6 @@ public class NavigationViewModel : BindableBase, INavigationViewModel
 {
     private readonly IEventAggregator _eventAggregator;
     
-    public NavigationViewModel()
-    {
-        _eventAggregator = new EventAggregator();
-    }
-
     public NavigationViewModel(IEventAggregator eventAggregator)
     {
         _eventAggregator = eventAggregator;
@@ -34,16 +30,16 @@ public class NavigationViewModel : BindableBase, INavigationViewModel
     {
         var result = new List<MenuItemModel>
         {
-            new MenuNode("🏠", "Главная"){Title = "Главная", Description = "Обзор инвестиционной активности"},
+            new MenuNode(NodeTypes.Dashboard, "🏠", "Главная"){Title = "Главная", Description = "Обзор инвестиционной активности"},
             new MenuDivider(),
-            new MenuNode("📁", "Портфели", GetPortfoliosMenuItems()) {Title = "Портфели", Description = "Управление инвестиционными портфелями"},
-            new MenuNode("📚", "Справочники", GetDictionariesMenuItems()),
+            new MenuNode(NodeTypes.Portfolios, "📁", "Портфели", GetPortfoliosMenuItems()) {Title = "Портфели", Description = "Управление инвестиционными портфелями"},
+            new MenuNode(NodeTypes.Dictionaries, "📚", "Справочники", GetDictionariesMenuItems()),
             new MenuDivider(),
-            new MenuNode("⬇️", "Менеджер закачек"),
+            new MenuNode(NodeTypes.Downloader, "⬇️", "Менеджер закачек"){Title = "Менеджер закачек", Description = "Управление загрузкой данных"},
             new MenuDivider(),
-            new MenuNode("📅", "Планировщик"),
+            new MenuNode(NodeTypes.Scheduler, "📅", "Планировщик"){Title = "Планировщик", Description = "Управление задачами и напоминаниями"},
             new MenuDivider(),
-            new MenuNode("⚙️", "Настройки", GetSettingsMenuItems())
+            new MenuNode(NodeTypes.Settings, "⚙️", "Настройки", GetSettingsMenuItems())
         };
 
         return result;
@@ -53,9 +49,9 @@ public class NavigationViewModel : BindableBase, INavigationViewModel
     {
         var result = new List<MenuNode>
         {
-            new MenuNode("📊", "Составной инвестиционный"){Title = "Составной инвестиционный", Description = "Детальная информация о портфеле"},
-            new MenuNode("💰", "Портфель №1"){Title = "Портфель №1", Description = "Детальная информация о портфеле"},
-            new MenuNode("💎", "Портфель №2"){Title = "Портфель №2", Description = "Детальная информация о портфеле"}
+            new MenuNode(NodeTypes.PortfoliosComplex, "📊", "Составной инвестиционный"){Title = "Составной инвестиционный", Description = "Детальная информация о портфеле"},
+            new MenuNode(NodeTypes.PortfoliosFirst, "💰", "Портфель №1"){Title = "Портфель №1", Description = "Детальная информация о портфеле"},
+            new MenuNode(NodeTypes.PortfoliosSecond, "💎", "Портфель №2"){Title = "Портфель №2", Description = "Детальная информация о портфеле"}
         };
 
         return result;
@@ -65,8 +61,8 @@ public class NavigationViewModel : BindableBase, INavigationViewModel
     {
         var result = new List<MenuNode>
         {
-            new MenuNode("🏛️", "MOEX", GetMoexMenuItems()),
-            new MenuNode("🌐", "Dohod.ru", GetDohodMenuItems())
+            new MenuNode(NodeTypes.DictionariesMoex, "🏛️", "MOEX", GetMoexMenuItems()),
+            new MenuNode(NodeTypes.DictionariesDohod, "🌐", "Dohod.ru", GetDohodMenuItems())
         };
 
         return result;
@@ -76,8 +72,8 @@ public class NavigationViewModel : BindableBase, INavigationViewModel
     {
         var result = new List<MenuNode>
         {
-            new MenuNode("📈", "Ценные бумаги"){Title = "Ценные бумаги (MOEX)", Description = "Акции, ETF и другие инструменты"},
-            new MenuNode("📜", "Облигации"){Title = "Облигации (MOEX)", Description = "Облигации на Московской бирже"}
+            new MenuNode(NodeTypes.DictionariesMoexSecurities, "📈", "Ценные бумаги"){Title = "Ценные бумаги (MOEX)", Description = "Акции, ETF и другие инструменты"},
+            new MenuNode(NodeTypes.DictionariesMoexBonds, "📜", "Облигации"){Title = "Облигации (MOEX)", Description = "Облигации на Московской бирже"}
         };
 
         return result;
@@ -87,7 +83,7 @@ public class NavigationViewModel : BindableBase, INavigationViewModel
     {
         var result = new List<MenuNode>
         {
-            new MenuNode("📜", "Облигации"){Title = "Облигации (Dohod.ru)", Description = "Данные с агрегатора dohod.ru"}
+            new MenuNode(NodeTypes.DictionariesDohodBonds, "📜", "Облигации"){Title = "Облигации (Dohod.ru)", Description = "Данные с агрегатора dohod.ru"}
         };
 
         return result;
@@ -97,8 +93,8 @@ public class NavigationViewModel : BindableBase, INavigationViewModel
     {
         var result = new List<MenuNode>
         {
-            new MenuNode("🔧", "Общие"){Title = "Общие настройки", Description = "Настройки интерфейса и форматов"},
-            new MenuNode("🧩", "Плагины"){Title = "Плагины", Description = "Управление расширениями"}
+            new MenuNode(NodeTypes.SettingsCommon, "🔧", "Общие"){Title = "Общие настройки", Description = "Настройки интерфейса и форматов"},
+            new MenuNode(NodeTypes.SettingsPlugins, "🧩", "Плагины"){Title = "Плагины", Description = "Управление расширениями"}
         };
 
         return result;

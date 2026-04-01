@@ -48,5 +48,4 @@ namespace InvestLens.App
             mainWindow.Show();
         }
     }
-
 }

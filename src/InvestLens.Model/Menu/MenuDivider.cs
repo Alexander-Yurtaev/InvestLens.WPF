@@ -1,3 +1,5 @@
-﻿namespace InvestLens.Model.Menu;
+﻿using InvestLens.Model.Enums;
 
-public class MenuDivider() : MenuNode("", "");
+namespace InvestLens.Model.Menu;
+
+public class MenuDivider() : MenuNode(NodeTypes.None, "", "");
