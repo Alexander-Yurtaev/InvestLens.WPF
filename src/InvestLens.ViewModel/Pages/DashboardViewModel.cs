@@ -23,7 +23,7 @@ public class DashboardViewModel : BindableBase, IDashboardViewModel
 
         var welcomeTitle = $"Добро пожаловать, {_userManager.UserName}";
         var welcomeDescription = "Вот что происходит с вашими инвестициями сегодня";
-        ContentHeaderVm = new ContentHeaderViewModel(welcomeTitle, welcomeDescription, "+ Создать портфель", OnCreatePortfolio);
+        ContentHeaderVm = new ContentHeaderViewModel(welcomeTitle, welcomeDescription);
     }
 
     public IPortfolioDynamicsService PortfolioDynamicsService { get; }
@@ -31,9 +31,4 @@ public class DashboardViewModel : BindableBase, IDashboardViewModel
     public List<MetricCard> MetricCards { get; }
     public List<ActivityItem> ActivityItems { get; }
     public IContentHeaderViewModel ContentHeaderVm { get; }
-
-    private void OnCreatePortfolio()
-    {
-        
-    }
 }

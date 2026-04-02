@@ -6,7 +6,20 @@
              xmlns:local="clr-namespace:InvestLens.App.UserControls"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
+
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <Style x:Key="ContentHeaderStyle" TargetType="{x:Type local:ContentHeader}">
+                <Setter Property="Margin" Value="0 0 0 28"/>
+            </Style>
+        </ResourceDictionary>
+    </UserControl.Resources>
+
     <Grid>
-        <TextBlock TextAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" FontSize="24">Portfolios</TextBlock>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <local:ContentHeader Grid.Row="0" DataContext="{Binding ContentHeaderVm}" Style="{StaticResource ContentHeaderStyle}"/>
     </Grid>
 </UserControl>

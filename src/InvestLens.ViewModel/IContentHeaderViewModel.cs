@@ -6,6 +6,7 @@ public interface IContentHeaderViewModel
 {
     string WelcomeTitle { get; }
     string WelcomeDescription { get; }
-    string ButtonContent { get; }
-    ICommand ButtonCommand { get; }
+    string? ButtonContent { get; }
+    ICommand? ButtonCommand { get; }
+    bool ShowButton { get; }
 }

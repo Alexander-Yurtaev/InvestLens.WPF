@@ -11,6 +11,7 @@
 
     <UserControl.Resources>
         <ResourceDictionary>
+            <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConv"/>
             <Style x:Key="H1Style" TargetType="{x:Type TextBlock}">
                 <Setter Property="FontSize" Value="24"/>
                 <Setter Property="Foreground" Value="#002855"/>
@@ -56,6 +57,7 @@
             <TextBlock Style="{StaticResource PStyle}" Text="{Binding WelcomeDescription}"/>
         </StackPanel>
         <Button Grid.Column="1" 
+                Visibility="{Binding ShowButton, Converter={StaticResource BooleanToVisibilityConv}}"
                 Style="{StaticResource PrimaryButtonStyle}" 
                 Command="{Binding ButtonCommand}"
                 Content="{Binding ButtonContent}"/>

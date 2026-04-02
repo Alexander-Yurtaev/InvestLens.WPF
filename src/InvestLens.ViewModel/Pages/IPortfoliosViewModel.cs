@@ -4,4 +4,5 @@ namespace InvestLens.ViewModel.Pages;
 
 public interface IPortfoliosViewModel : INotifyPropertyChanged
 {
+    IContentHeaderViewModel ContentHeaderVm { get; }
 }
