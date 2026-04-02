@@ -74,6 +74,20 @@
             <Style x:Key="ChartPlaceholderStyle" TargetType="Border">
                 <Setter Property="Height" Value="200"/>
             </Style>
+            <Style x:Key="LinkStyle" TargetType="Button">
+                <Setter Property="Foreground" Value="#C8102E"/>
+                <Setter Property="FontSize" Value="13"/>
+                <Setter Property="Cursor" Value="Hand"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="Button">
+                            <TextBlock Text="{TemplateBinding Content}"
+                                       Foreground="{TemplateBinding Foreground}"
+                                       FontSize="{TemplateBinding FontSize}"/>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
         </ResourceDictionary>
     </UserControl.Resources>
 
@@ -148,7 +162,27 @@
                 </Grid>
             </Border>
             <Border Grid.Column="1" Style="{StaticResource CardStyle}" Margin="12 0 0 0">
-                
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <Grid Grid.Row="0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="0" 
+                                   Style="{StaticResource CardHeader}"
+                                   Text="Последние операции"/>
+
+                        <Button Grid.Column="2" Content="Все →" Style="{StaticResource LinkStyle}"/>
+                    </Grid>
+                    <Border Grid.Row="1" Style="{StaticResource ChartPlaceholderStyle}">
+                        
+                    </Border>
+                </Grid>
             </Border>
         </Grid>
     </Grid>
