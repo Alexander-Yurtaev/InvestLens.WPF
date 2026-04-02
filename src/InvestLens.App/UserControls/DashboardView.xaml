@@ -12,16 +12,8 @@
 
     <UserControl.Resources>
         <ResourceDictionary>
-            <Style x:Key="WelcomeSectionStyle" TargetType="{x:Type StackPanel}">
+            <Style x:Key="ContentHeaderStyle" TargetType="{x:Type local:ContentHeader}">
                 <Setter Property="Margin" Value="0 0 0 28"/>
-            </Style>
-            <Style x:Key="H1Style" TargetType="{x:Type TextBlock}">
-                <Setter Property="FontSize" Value="24"/>
-                <Setter Property="Foreground" Value="#002855"/>
-                <Setter Property="Margin" Value="0 0 0 8"/>
-            </Style>
-            <Style x:Key="PStyle" TargetType="{x:Type TextBlock}">
-                <Setter Property="Foreground" Value="#5A6E8A"/>
             </Style>
             <Style x:Key="MetricsGridStyle" TargetType="{x:Type Grid}">
                 <Setter Property="Margin" Value="0 0 0 32"/>
@@ -160,10 +152,7 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <StackPanel Grid.Row="0" Style="{StaticResource WelcomeSectionStyle}">
-            <TextBlock Style="{StaticResource H1Style}" Text="{Binding WelcomeTitle}"/>
-            <TextBlock Style="{StaticResource PStyle}" Text="{Binding WelcomeDescription}"/>
-        </StackPanel>
+        <local:ContentHeader Grid.Row="0" DataContext="{Binding ContentHeaderVm}" Style="{StaticResource ContentHeaderStyle}"/>
         <Grid Grid.Row="1" Style="{StaticResource MetricsGridStyle}">
             <ItemsControl ItemsSource="{Binding MetricCards}">
                 <ItemsControl.ItemsPanel>

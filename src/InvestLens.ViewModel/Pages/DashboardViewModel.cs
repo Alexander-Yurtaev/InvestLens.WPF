@@ -20,12 +20,20 @@ public class DashboardViewModel : BindableBase, IDashboardViewModel
         _activityManager = activityManager;
         MetricCards = _metricsManager.GetMetricCards();
         ActivityItems = _activityManager.GetActivityItems();
+
+        var welcomeTitle = $"Добро пожаловать, {_userManager.UserName}";
+        var welcomeDescription = "Вот что происходит с вашими инвестициями сегодня";
+        ContentHeaderVm = new ContentHeaderViewModel(welcomeTitle, welcomeDescription, "+ Создать портфель", OnCreatePortfolio);
     }
 
-    public string WelcomeTitle => $"Добро пожаловать, {_userManager.UserName}";
-    public string WelcomeDescription => "Вот что происходит с вашими инвестициями сегодня";
     public IPortfolioDynamicsService PortfolioDynamicsService { get; }
 
     public List<MetricCard> MetricCards { get; }
     public List<ActivityItem> ActivityItems { get; }
+    public IContentHeaderViewModel ContentHeaderVm { get; }
+
+    private void OnCreatePortfolio()
+    {
+        
+    }
 }
