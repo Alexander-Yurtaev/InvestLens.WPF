@@ -13,7 +13,7 @@
                 <Setter Property="Background" Value="White"/>
                 <Setter Property="CornerRadius" Value="20"/>
                 <Setter Property="Padding" Value="20"/>
-                <Setter Property="Margin" Value="16 0"/>
+                <Setter Property="Margin" Value="0 0 20 0"/>
                 <Setter Property="BorderThickness" Value="1"/>
                 <Setter Property="BorderBrush" Value="#E9EDF2"/>
             </Style>
@@ -21,12 +21,14 @@
             <Style x:Key="MetricIconBorderStyle" TargetType="Border">
                 <Setter Property="Width" Value="48"/>
                 <Setter Property="Height" Value="48"/>
+                <Setter Property="Margin" Value="0 0 16 0"/>
                 <Setter Property="CornerRadius" Value="16"/>
                 <Setter Property="Background" Value="#F8FAFE"/>
             </Style>
             <Style x:Key="MetricIconTextBlockStyle" TargetType="TextBlock">
                 <Setter Property="FontSize" Value="24"/>
                 <Setter Property="HorizontalAlignment" Value="Center"/>
+                <Setter Property="VerticalAlignment" Value="Center"/>
             </Style>
             <!--Metric Info-->
             <Style x:Key="MetricLabelTextBlockStyle" TargetType="TextBlock">
