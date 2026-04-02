@@ -205,10 +205,26 @@
                                    Style="{StaticResource CardHeaderStyle}"
                                    Text="Динамика портфеля"/>
 
-                        <RadioButton Grid.Column="2" GroupName="PeriodSelector" Content="1М" Style="{StaticResource PeriodSelectorStyle}"/>
-                        <RadioButton Grid.Column="3" GroupName="PeriodSelector" Content="3М" Style="{StaticResource PeriodSelectorStyle}"/>
-                        <RadioButton Grid.Column="4" GroupName="PeriodSelector" Content="6М" Style="{StaticResource PeriodSelectorStyle}"/>
-                        <RadioButton Grid.Column="5" GroupName="PeriodSelector" Content="1Г" Style="{StaticResource PeriodSelectorStyle}"/>
+                        <RadioButton Grid.Column="2" 
+                                     GroupName="PeriodSelector" 
+                                     Content="1М" 
+                                     IsChecked="{Binding PortfolioDynamicsService.Period1M}"
+                                     Style="{StaticResource PeriodSelectorStyle}"/>
+                        <RadioButton Grid.Column="3" 
+                                     GroupName="PeriodSelector" 
+                                     Content="3М" 
+                                     IsChecked="{Binding PortfolioDynamicsService.Period3M}"
+                                     Style="{StaticResource PeriodSelectorStyle}"/>
+                        <RadioButton Grid.Column="4" 
+                                     GroupName="PeriodSelector" 
+                                     Content="6М" 
+                                     IsChecked="{Binding PortfolioDynamicsService.Period6M}"
+                                     Style="{StaticResource PeriodSelectorStyle}"/>
+                        <RadioButton Grid.Column="5" 
+                                     GroupName="PeriodSelector" 
+                                     Content="1Г" 
+                                     IsChecked="{Binding PortfolioDynamicsService.Period1Y}"
+                                     Style="{StaticResource PeriodSelectorStyle}"/>
                     </Grid>
                     <Border Grid.Row="1" Style="{StaticResource ChartPlaceholderStyle}">
                         <Viewbox>
