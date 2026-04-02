@@ -113,6 +113,7 @@
                 <Setter Property="Margin" Value="0 0 12 0"/>
             </Style>
             <Style x:Key="ActivityTitleStyle" TargetType="{x:Type TextBlock}">
+                <Setter Property="FontSize" Value="14"/>
                 <Setter Property="FontWeight" Value="Bold"/>
             </Style>
             <Style x:Key="ActivityDescriptionStyle" TargetType="{x:Type TextBlock}">
@@ -142,6 +143,7 @@
                         <TextBlock Grid.Column="0" Text="{Binding Icon}" Style="{StaticResource ActivityIcon}"/>
                         <StackPanel Grid.Column="1" Orientation="Vertical" Style="{StaticResource ActivityInfoStyle}">
                             <TextBlock Text="{Binding Title}" Style="{StaticResource ActivityTitleStyle}"/>
+                            <TextBlock FontSize="4"/>
                             <TextBlock Text="{Binding Description}" Style="{StaticResource ActivityDescriptionStyle}"/>
                         </StackPanel>
                         <TextBlock Grid.Column="2" Text="{Binding Amount}" Style="{StaticResource ActivityAmountStyle}"/>
