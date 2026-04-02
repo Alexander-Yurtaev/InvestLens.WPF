@@ -13,11 +13,18 @@ namespace InvestLens.Tests
         {
             var headerVmMock = new Mock<IHeaderViewModel>();
             var viewModelFactoryMock = new Mock<IViewModelFactory>();
+            var userManagerMock = new Mock<IUserManager>();
+            var notificationsManagerMock = new Mock<INotificationsManager>();
             var eventAggregatorMock = new Mock<IEventAggregator>();
             eventAggregatorMock.Setup(ea => ea.GetEvent<SelectMenuNodeEvent>()).Returns(new SelectMenuNodeEvent());
             var navigationVm = new NavigationViewModel(eventAggregatorMock.Object);
 
-            var vm = new MainWindowViewModel(navigationVm, headerVmMock.Object, viewModelFactoryMock.Object, eventAggregatorMock.Object);
+            var vm = new MainWindowViewModel(navigationVm, 
+                headerVmMock.Object, 
+                userManagerMock.Object,
+                notificationsManagerMock.Object,
+                viewModelFactoryMock.Object, 
+                eventAggregatorMock.Object);
 
             Assert.NotNull(vm.NavigationVm.MenuItems);
             Assert.Equal(10, vm.NavigationVm.MenuItems.Count);
