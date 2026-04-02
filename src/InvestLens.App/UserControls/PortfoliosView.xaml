@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:InvestLens.App.UserControls"
+             xmlns:viewModel="clr-namespace:InvestLens.ViewModel;assembly=InvestLens.ViewModel"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
 
@@ -11,6 +12,15 @@
         <ResourceDictionary>
             <Style x:Key="ContentHeaderStyle" TargetType="{x:Type local:ContentHeader}">
                 <Setter Property="Margin" Value="0 0 0 28"/>
+            </Style>
+            <Style x:Key="PortfolioCard" TargetType="{x:Type Button}">
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate>
+                            <local:PortfolioCard/>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
             </Style>
         </ResourceDictionary>
     </UserControl.Resources>
@@ -22,7 +32,14 @@
         </Grid.RowDefinitions>
         <local:ContentHeader Grid.Row="0" DataContext="{Binding ContentHeaderVm}" Style="{StaticResource ContentHeaderStyle}"/>
         <Grid Grid.Row="1">
-            <ItemsControl ItemsSource="{Binding PortfoliosManager.PortfolioInfos}"/>
+            <ItemsControl ItemsSource="{Binding PortfoliosManager.PortfolioInfos}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate DataType="{x:Type viewModel:PortfolioInfo}">
+                        <Button Style="{StaticResource PortfolioCard}" 
+                                Content="{Binding Title}"/>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
         </Grid>
     </Grid>
 </UserControl>
