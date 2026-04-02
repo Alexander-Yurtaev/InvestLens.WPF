@@ -5,27 +5,28 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:InvestLens.App.UserControls"
              xmlns:pages="clr-namespace:InvestLens.ViewModel.Pages;assembly=InvestLens.ViewModel"
+             xmlns:model="clr-namespace:InvestLens.Model;assembly=InvestLens.Model"
              mc:Ignorable="d" 
              d:DataContext="{d:DesignInstance pages:DashboardViewModel, IsDesignTimeCreatable=True}"
              d:DesignHeight="450" d:DesignWidth="800">
 
     <UserControl.Resources>
         <ResourceDictionary>
-            <Style x:Key="WelcomeSectionStyle" TargetType="StackPanel">
+            <Style x:Key="WelcomeSectionStyle" TargetType="{x:Type StackPanel}">
                 <Setter Property="Margin" Value="0 0 0 28"/>
             </Style>
-            <Style x:Key="H1Style" TargetType="TextBlock">
+            <Style x:Key="H1Style" TargetType="{x:Type TextBlock}">
                 <Setter Property="FontSize" Value="24"/>
                 <Setter Property="Foreground" Value="#002855"/>
                 <Setter Property="Margin" Value="0 0 0 8"/>
             </Style>
-            <Style x:Key="PStyle" TargetType="TextBlock">
+            <Style x:Key="PStyle" TargetType="{x:Type TextBlock}">
                 <Setter Property="Foreground" Value="#5A6E8A"/>
             </Style>
-            <Style x:Key="MetricsGridStyle" TargetType="Grid">
+            <Style x:Key="MetricsGridStyle" TargetType="{x:Type Grid}">
                 <Setter Property="Margin" Value="0 0 0 32"/>
             </Style>
-            <Style x:Key="CardStyle" TargetType="Border">
+            <Style x:Key="CardStyle" TargetType="{x:Type Border}">
                 <Setter Property="Background" Value="White"/>
                 <Setter Property="CornerRadius" Value="20"/>
                 <Setter Property="Padding" Value="20"/>
@@ -40,19 +41,19 @@
                     </Setter.Value>
                 </Setter>
             </Style>
-            <Style x:Key="CardHeader" TargetType="TextBlock">
+            <Style x:Key="CardHeaderStyle" TargetType="{x:Type TextBlock}">
                 <Setter Property="FontSize" Value="16"/>
                 <Setter Property="FontWeight" Value="SemiBold"/>
                 <Setter Property="Foreground" Value="#002855"/>
             </Style>
             <!--PeriodSelector-->
-            <Style x:Key="PeriodSelectorStyle" TargetType="RadioButton">
+            <Style x:Key="PeriodSelectorStyle" TargetType="{x:Type RadioButton}">
                 <Setter Property="FontSize" Value="12"/>
                 <Setter Property="Foreground" Value="#5A6E8A"/>
                 <Setter Property="Background" Value="Transparent"/>
                 <Setter Property="Template">
                     <Setter.Value>
-                        <ControlTemplate TargetType="RadioButton">
+                        <ControlTemplate TargetType="{x:Type RadioButton}">
                             <Border Cursor="Hand"
                                     Padding="8 4"
                                     CornerRadius="6"
@@ -71,16 +72,19 @@
                     </Trigger>
                 </Style.Triggers>
             </Style>
-            <Style x:Key="ChartPlaceholderStyle" TargetType="Border">
+            <Style x:Key="ChartPlaceholderStyle" TargetType="{x:Type Border}">
                 <Setter Property="Height" Value="200"/>
             </Style>
-            <Style x:Key="LinkStyle" TargetType="Button">
+            <Style x:Key="HeaderStyle" TargetType="{x:Type Grid}">
+                <Setter Property="Margin" Value="0 0 0 16"/>
+            </Style>
+            <Style x:Key="LinkStyle" TargetType="{x:Type Button}">
                 <Setter Property="Foreground" Value="#C8102E"/>
                 <Setter Property="FontSize" Value="13"/>
                 <Setter Property="Cursor" Value="Hand"/>
                 <Setter Property="Template">
                     <Setter.Value>
-                        <ControlTemplate TargetType="Button">
+                        <ControlTemplate TargetType="{x:Type Button}">
                             <TextBlock Text="{TemplateBinding Content}"
                                        Foreground="{TemplateBinding Foreground}"
                                        FontSize="{TemplateBinding FontSize}"/>
@@ -88,6 +92,63 @@
                     </Setter.Value>
                 </Setter>
             </Style>
+            <!--Activity-->
+            <Style x:Key="ActivityListStyle" TargetType="{x:Type ListView}">
+                <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                <Setter Property="BorderThickness" Value="0"/>
+            </Style>
+            <Style x:Key="ActivityItemStyle" TargetType="{x:Type Border}">
+                <Setter Property="HorizontalAlignment" Value="Stretch"/>
+                <Setter Property="Margin" Value="0 16 0 0"/>
+                <Setter Property="Padding" Value="0 0 0 12"/>
+                <Setter Property="BorderThickness" Value="0 0 0 1"/>
+                <Setter Property="BorderBrush" Value="#E9EDF2"/>
+            </Style>
+            <Style x:Key="ActivityIcon" TargetType="{x:Type TextBlock}">
+                <Setter Property="Width" Value="32"/>
+                <Setter Property="FontSize" Value="20"/>
+                <Setter Property="Margin" Value="0 0 12 0"/>
+            </Style>
+            <Style x:Key="ActivityInfoStyle" TargetType="{x:Type StackPanel}">
+                <Setter Property="Margin" Value="0 0 12 0"/>
+            </Style>
+            <Style x:Key="ActivityTitleStyle" TargetType="{x:Type TextBlock}">
+                <Setter Property="FontWeight" Value="Bold"/>
+            </Style>
+            <Style x:Key="ActivityDescriptionStyle" TargetType="{x:Type TextBlock}">
+                <Setter Property="FontSize" Value="12"/>
+                <Setter Property="Foreground" Value="#6E7288"/>
+            </Style>
+            <Style x:Key="ActivityAmountStyle" TargetType="{x:Type TextBlock}">
+                <Setter Property="HorizontalAlignment" Value="Right"/>
+                <Setter Property="FontWeight" Value="Medium"/>
+                <Setter Property="Margin" Value="0 0 28 0"/>
+                <Setter Property="VerticalAlignment" Value="Center"/>
+            </Style>
+            <Style x:Key="ActivityDateStyle" TargetType="{x:Type TextBlock}">
+                <Setter Property="FontSize" Value="12"/>
+                <Setter Property="Foreground" Value="#8E92A8"/>
+                <Setter Property="VerticalAlignment" Value="Center"/>
+            </Style>
+            <DataTemplate DataType="{x:Type model:ActivityItem}">
+                <Border Style="{StaticResource ActivityItemStyle}">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="0" Text="{Binding Icon}" Style="{StaticResource ActivityIcon}"/>
+                        <StackPanel Grid.Column="1" Orientation="Vertical" Style="{StaticResource ActivityInfoStyle}">
+                            <TextBlock Text="{Binding Title}" Style="{StaticResource ActivityTitleStyle}"/>
+                            <TextBlock Text="{Binding Description}" Style="{StaticResource ActivityDescriptionStyle}"/>
+                        </StackPanel>
+                        <TextBlock Grid.Column="2" Text="{Binding Amount}" Style="{StaticResource ActivityAmountStyle}"/>
+                        <TextBlock Grid.Column="3" Text="{Binding Date}" Style="{StaticResource ActivityDateStyle}"/>
+                    </Grid>
+                </Border>
+            </DataTemplate>
         </ResourceDictionary>
     </UserControl.Resources>
 
@@ -129,7 +190,7 @@
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
-                    <Grid Grid.Row="0">
+                    <Grid Grid.Row="0" Style="{StaticResource HeaderStyle}">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto"/>
                             <ColumnDefinition Width="*"/>
@@ -139,7 +200,7 @@
                             <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
                         <TextBlock Grid.Column="0" 
-                                   Style="{StaticResource CardHeader}"
+                                   Style="{StaticResource CardHeaderStyle}"
                                    Text="Динамика портфеля"/>
 
                         <RadioButton Grid.Column="2" GroupName="PeriodSelector" Content="1М" Style="{StaticResource PeriodSelectorStyle}"/>
@@ -167,20 +228,27 @@
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
-                    <Grid Grid.Row="0">
+                    <Grid Grid.Row="0" Style="{StaticResource HeaderStyle}">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto"/>
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
                         <TextBlock Grid.Column="0" 
-                                   Style="{StaticResource CardHeader}"
+                                   Style="{StaticResource CardHeaderStyle}"
                                    Text="Последние операции"/>
 
                         <Button Grid.Column="2" Content="Все →" Style="{StaticResource LinkStyle}"/>
                     </Grid>
                     <Border Grid.Row="1" Style="{StaticResource ChartPlaceholderStyle}">
-                        
+                        <ListView ItemsSource="{Binding ActivityItems}"
+                                  Style="{StaticResource ActivityListStyle}">
+                            <ListView.ItemContainerStyle>
+                                <Style TargetType="{x:Type ListViewItem}">
+                                    <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                                </Style>
+                            </ListView.ItemContainerStyle>
+                        </ListView>
                     </Border>
                 </Grid>
             </Border>
