@@ -134,7 +134,16 @@
                         <RadioButton Grid.Column="5" GroupName="PeriodSelector" Content="1Г" Style="{StaticResource PeriodSelectorStyle}"/>
                     </Grid>
                     <Border Grid.Row="1" Style="{StaticResource ChartPlaceholderStyle}">
-
+                        <Viewbox>
+                            <Grid>
+                                <Polyline Points="0,150 50,120 100,140 150,80 200,90 250,40 300,60 350,30 400,50 450,70 500,45 550,60 600,40" 
+                                          Fill="Transparent" 
+                                          Stroke="#C8102E" 
+                                          StrokeThickness="2"/>
+                                <Polygon Points="0,150 50,120 100,140 150,80 200,90 250,40 300,60 350,30 400,50 450,70 500,45 550,60 600,40 600,180 0,180" 
+                                         Fill="#1AC8102E"/>
+                            </Grid>
+                        </Viewbox>
                     </Border>
                 </Grid>
             </Border>
