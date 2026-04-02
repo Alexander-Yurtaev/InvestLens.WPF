@@ -21,5 +21,8 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <local:ContentHeader Grid.Row="0" DataContext="{Binding ContentHeaderVm}" Style="{StaticResource ContentHeaderStyle}"/>
+        <Grid Grid.Row="1">
+            <ItemsControl ItemsSource="{Binding PortfoliosManager.PortfolioInfos}"/>
+        </Grid>
     </Grid>
 </UserControl>
