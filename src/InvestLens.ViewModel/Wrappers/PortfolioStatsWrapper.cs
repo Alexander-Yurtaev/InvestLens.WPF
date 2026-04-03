@@ -13,9 +13,7 @@ public class PortfolioStatsWrapper : BindableBase
         _model = model;
     }
 
-    public string Title => _model.Title;
-    public double Value => _model.Value;
-    public bool NeedConvertForeground => ValueDisplay.StartsWith("-") || ValueDisplay.StartsWith("+");
+    public string Title => _model.Title.ToUpper();
 
     public string ValueDisplay
     {

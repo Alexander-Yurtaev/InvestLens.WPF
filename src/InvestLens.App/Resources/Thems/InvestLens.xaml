@@ -3,5 +3,8 @@
     <SolidColorBrush x:Key="MainBackgroundBrush" Color="#F8FAFE"/>
     <SolidColorBrush x:Key="MenuBackgroundBrush" Color="#002855"/>
     <SolidColorBrush x:Key="MenuForegroundBrush" Color="#EFF3F8"/>
-
+    
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="Button.xaml"/>
+    </ResourceDictionary.MergedDictionaries>
 </ResourceDictionary>

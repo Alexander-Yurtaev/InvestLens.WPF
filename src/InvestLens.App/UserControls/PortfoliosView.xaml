@@ -17,7 +17,7 @@
                 <Setter Property="Template">
                     <Setter.Value>
                         <ControlTemplate>
-                            <local:PortfolioCard/>
+                            <local:PortfolioCard MinWidth="340" Margin="12 0"/>
                         </ControlTemplate>
                     </Setter.Value>
                 </Setter>
@@ -32,7 +32,16 @@
         </Grid.RowDefinitions>
         <local:ContentHeader Grid.Row="0" DataContext="{Binding ContentHeaderVm}" Style="{StaticResource ContentHeaderStyle}"/>
         <Grid Grid.Row="1">
-            <ItemsControl ItemsSource="{Binding PortfolioInfos}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <ItemsControl Grid.Row="0" ItemsSource="{Binding PortfolioInfos}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel Orientation="Horizontal"/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
                 <ItemsControl.ItemTemplate>
                     <DataTemplate DataType="{x:Type wrappers:PortfolioInfoWrapper}">
                         <Button Style="{StaticResource PortfolioCard}" 

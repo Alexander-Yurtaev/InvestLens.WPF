@@ -3,7 +3,6 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:InvestLens.App.UserControls"
              xmlns:converters="clr-namespace:InvestLens.App.Converters"
              xmlns:wrappers="clr-namespace:InvestLens.ViewModel.Wrappers;assembly=InvestLens.ViewModel"
              mc:Ignorable="d" 
@@ -12,27 +11,86 @@
 
     <UserControl.Resources>
         <ResourceDictionary>
-            <Style x:Key="PortfolioStatsStackPanelStyle"
-                   TargetType="{x:Type StackPanel}">
-                <Setter Property="Margin" Value="0 0 0 16"/>
-            </Style>
-            <Style x:Key="PortfolioStatsBorderStyle"
-                   TargetType="{x:Type Border}">
-                <Setter Property="BorderThickness" Value=" 0 1 0 1"/>
+            <QuadraticEase x:Key="EaseOutQuad" EasingMode="EaseOut"/>
+            
+            <Style x:Key="PortfolioCardStyle" TargetType="{x:Type Border}">
+                <Setter Property="Background" Value="White"/>
+                <Setter Property="CornerRadius" Value="20"/>
+                <Setter Property="Padding" Value="20"/>
+                <Setter Property="BorderThickness" Value="1"/>
                 <Setter Property="BorderBrush" Value="#E9EDF2"/>
-                <Setter Property="Padding" Value="0 12"/>
+
+                <!-- Начальное состояние: тень есть, но прозрачная -->
+                <Setter Property="Effect">
+                    <Setter.Value>
+                        <DropShadowEffect 
+                            BlurRadius="12" 
+                            ShadowDepth="4" 
+                            Opacity="0"
+                            Color="Black"/>
+                    </Setter.Value>
+                </Setter>
+
+                <!-- Начальное положение -->
+                <Setter Property="RenderTransform">
+                    <Setter.Value>
+                        <TranslateTransform Y="0"/>
+                    </Setter.Value>
+                </Setter>
+
+                <Style.Triggers>
+                    <Trigger Property="IsMouseOver" Value="True">
+                        <Setter Property="BorderBrush" Value="#C8102E"/>
+                        <Trigger.EnterActions>
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <!-- Плавное появление тени -->
+                                    <DoubleAnimation 
+                                        Storyboard.TargetProperty="(UIElement.Effect).(DropShadowEffect.Opacity)"
+                                        To="0.15" 
+                                        Duration="0:0:0.2"
+                                        EasingFunction="{StaticResource EaseOutQuad}"/>
+
+                                    <!-- Плавный сдвиг -->
+                                    <DoubleAnimation 
+                                        Storyboard.TargetProperty="(UIElement.RenderTransform).(TranslateTransform.Y)"
+                                        To="-2"
+                                        Duration="0:0:0.2"
+                                        EasingFunction="{StaticResource EaseOutQuad}"/>
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </Trigger.EnterActions>
+
+                        <Trigger.ExitActions>
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <!-- Плавное исчезновение тени -->
+                                    <DoubleAnimation 
+                        Storyboard.TargetProperty="(UIElement.Effect).(DropShadowEffect.Opacity)"
+                        To="0" 
+                        Duration="0:0:0.2"
+                        EasingFunction="{StaticResource EaseOutQuad}"/>
+
+                                    <!-- Возврат позиции -->
+                                    <DoubleAnimation 
+                        Storyboard.TargetProperty="(UIElement.RenderTransform).(TranslateTransform.Y)"
+                        To="0"
+                        Duration="0:0:0.2"
+                        EasingFunction="{StaticResource EaseOutQuad}"/>
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </Trigger.ExitActions>
+                    </Trigger>
+                </Style.Triggers>
             </Style>
         </ResourceDictionary>
     </UserControl.Resources>
 
-    <Border Background="White"
-            CornerRadius="20"
-            BorderThickness="1"
-            BorderBrush="#E9EDF2">
+    <Border Style="{StaticResource PortfolioCardStyle}">
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
-                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
             <Grid Grid.Row="0" Margin="0 0 0 16">
@@ -41,44 +99,60 @@
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
                 <TextBlock Grid.Column="0" Text="{Binding Title}"
-                           FontSize="18"
-                           Foreground="#002855"/>
+               FontSize="18"
+               Foreground="#002855"
+               FontWeight="Bold"/>
                 <Border Grid.Column="1"
-                        Background="{Binding PortfolioType, Converter={x:Static converters:PortfolioTypeToBackgroundConverter.Instance}}"
-                        Padding="10 4"
-                        CornerRadius="20">
+            Background="{Binding PortfolioType, Converter={x:Static converters:PortfolioTypeToBackgroundConverter.Instance}}"
+            Padding="10 4"
+            CornerRadius="20">
                     <TextBlock Text="{Binding PortfolioType, Converter={x:Static converters:PortfolioTypeToStringConverter.Instance}}"
-                               Foreground="{Binding PortfolioType, Converter={x:Static converters:PortfolioTypeToForegroundConverter.Instance}}"
-                               FontSize="11"
-                               FontWeight="Medium"/>
+                   Foreground="{Binding PortfolioType, Converter={x:Static converters:PortfolioTypeToForegroundConverter.Instance}}"
+                   FontSize="11"
+                   FontWeight="Medium"/>
                 </Border>
             </Grid>
-            <Border Grid.Row="1"
-                    Style="{StaticResource PortfolioStatsBorderStyle}">
-                <ItemsControl
-                          ItemsSource="{Binding PortfolioStats}">
-                    <ItemsControl.ItemsPanel>
-                        <ItemsPanelTemplate>
-
-                            <StackPanel Orientation="Horizontal"
-                                        Style="{StaticResource PortfolioStatsStackPanelStyle}"/>
-                        </ItemsPanelTemplate>
-                    </ItemsControl.ItemsPanel>
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate DataType="{x:Type wrappers:PortfolioStatsWrapper}">
-                            <StackPanel Orientation="Vertical">
-                                <TextBlock Text="{Binding Title}" 
-                                       FontSize="11"
-                                       Foreground="#5A6E8A"/>
-                                <TextBlock Text="{Binding ValueDisplay}"
-                                       FontSize="18"
-                                       FontWeight="Bold"
-                                       Foreground="{Binding ValueDisplay, Converter={x:Static converters:ValueDisplayToForegroundConverter.Instance}, ConverterParameter=#002855}"/>
-                            </StackPanel>
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                </ItemsControl>
-            </Border>
+            <Grid Grid.Row="1">
+                <Border Grid.Row="1"
+            Margin="0 0 0 16"
+            Padding="0 12"
+            BorderThickness="0 1 0 1"
+            BorderBrush="#E9EDF2">
+                    <ItemsControl ItemsSource="{Binding PortfolioStats}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <StackPanel Orientation="Horizontal"/>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate DataType="{x:Type wrappers:PortfolioStatsWrapper}">
+                                <StackPanel Orientation="Vertical">
+                                    <TextBlock Text="{Binding Title}" 
+                                   FontSize="11"
+                                   Foreground="#5A6E8A"
+                                   Margin="12 0"/>
+                                    <TextBlock Text="{Binding ValueDisplay}"
+                                   FontSize="18"
+                                   FontWeight="Bold"
+                                   Margin="12 0"
+                                   Foreground="{Binding ValueDisplay, Converter={x:Static converters:ValueDisplayToForegroundConverter.Instance}, ConverterParameter=#002855}"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </Border>
+            </Grid>
+            <Grid Grid.Row="2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Column="0" 
+               FontSize="12"
+               Foreground="#8E92A8"
+               Text="{Binding RefreshDateDisplay}"/>
+                <Button Grid.Column="1" Content="Подробнее →" Style="{StaticResource LinkStyle}"/>
+            </Grid>
         </Grid>
     </Border>
 </UserControl>

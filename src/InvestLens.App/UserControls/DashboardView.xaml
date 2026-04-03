@@ -70,20 +70,6 @@
             <Style x:Key="HeaderStyle" TargetType="{x:Type Grid}">
                 <Setter Property="Margin" Value="0 0 0 16"/>
             </Style>
-            <Style x:Key="LinkStyle" TargetType="{x:Type Button}">
-                <Setter Property="Foreground" Value="#C8102E"/>
-                <Setter Property="FontSize" Value="13"/>
-                <Setter Property="Cursor" Value="Hand"/>
-                <Setter Property="Template">
-                    <Setter.Value>
-                        <ControlTemplate TargetType="{x:Type Button}">
-                            <TextBlock Text="{TemplateBinding Content}"
-                                       Foreground="{TemplateBinding Foreground}"
-                                       FontSize="{TemplateBinding FontSize}"/>
-                        </ControlTemplate>
-                    </Setter.Value>
-                </Setter>
-            </Style>
             <!--Activity-->
             <Style x:Key="ActivityListStyle" TargetType="{x:Type ListView}">
                 <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
@@ -248,7 +234,6 @@
                         <TextBlock Grid.Column="0" 
                                    Style="{StaticResource CardHeaderStyle}"
                                    Text="Последние операции"/>
-
                         <Button Grid.Column="2" Content="Все →" Style="{StaticResource LinkStyle}"/>
                     </Grid>
                     <Border Grid.Row="1" Style="{StaticResource ChartPlaceholderStyle}">

@@ -15,5 +15,5 @@ public class PortfolioInfoWrapper : BindableBase
     public string Title => _model.Title;
     public PortfolioType PortfolioType => _model.PortfolioType;
     public List<PortfolioStatsWrapper> PortfolioStats { get; }
-    public string RefreshDate => _model.RefreshDate;
+    public string RefreshDateDisplay => $"Последнее обновленеи: {_model.RefreshDate}";
 }
