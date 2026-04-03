@@ -4,14 +4,24 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:InvestLens.App.UserControls"
-             xmlns:viewModel="clr-namespace:InvestLens.ViewModel;assembly=InvestLens.ViewModel"
              xmlns:converters="clr-namespace:InvestLens.App.Converters"
+             xmlns:wrappers="clr-namespace:InvestLens.ViewModel.Wrappers;assembly=InvestLens.ViewModel"
              mc:Ignorable="d" 
-             d:DataContext="{d:DesignInstance viewModel:PortfolioInfo, IsDesignTimeCreatable=True}"
+             d:DataContext="{d:DesignInstance wrappers:PortfolioInfoWrapper, IsDesignTimeCreatable=True}"
              d:DesignHeight="450" d:DesignWidth="800">
 
     <UserControl.Resources>
         <ResourceDictionary>
+            <Style x:Key="PortfolioStatsStackPanelStyle"
+                   TargetType="{x:Type StackPanel}">
+                <Setter Property="Margin" Value="0 0 0 16"/>
+            </Style>
+            <Style x:Key="PortfolioStatsBorderStyle"
+                   TargetType="{x:Type Border}">
+                <Setter Property="BorderThickness" Value=" 0 1 0 1"/>
+                <Setter Property="BorderBrush" Value="#E9EDF2"/>
+                <Setter Property="Padding" Value="0 12"/>
+            </Style>
         </ResourceDictionary>
     </UserControl.Resources>
 
@@ -43,6 +53,32 @@
                                FontWeight="Medium"/>
                 </Border>
             </Grid>
+            <Border Grid.Row="1"
+                    Style="{StaticResource PortfolioStatsBorderStyle}">
+                <ItemsControl
+                          ItemsSource="{Binding PortfolioStats}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+
+                            <StackPanel Orientation="Horizontal"
+                                        Style="{StaticResource PortfolioStatsStackPanelStyle}"/>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate DataType="{x:Type wrappers:PortfolioStatsWrapper}">
+                            <StackPanel Orientation="Vertical">
+                                <TextBlock Text="{Binding Title}" 
+                                       FontSize="11"
+                                       Foreground="#5A6E8A"/>
+                                <TextBlock Text="{Binding ValueDisplay}"
+                                       FontSize="18"
+                                       FontWeight="Bold"
+                                       Foreground="{Binding ValueDisplay, Converter={x:Static converters:ValueDisplayToForegroundConverter.Instance}, ConverterParameter=#002855}"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </Border>
         </Grid>
     </Border>
 </UserControl>
