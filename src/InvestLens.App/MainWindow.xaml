@@ -28,14 +28,8 @@
             <DataTemplate DataType="{x:Type pages:PortfoliosViewModel}">
                 <userControls:PortfoliosView/>
             </DataTemplate>
-            <DataTemplate DataType="{x:Type pages:PortfoliosComplexViewModel}">
-                <userControls:PortfoliosComplexView/>
-            </DataTemplate>
-            <DataTemplate DataType="{x:Type pages:PortfoliosFirstViewModel}">
-                <userControls:PortfoliosFirstView/>
-            </DataTemplate>
-            <DataTemplate DataType="{x:Type pages:PortfoliosSecondViewModel}">
-                <userControls:PortfoliosSecondView/>
+            <DataTemplate DataType="{x:Type pages:PortfolioDetailViewModel}">
+                <userControls:PortfolioDetailView/>
             </DataTemplate>
             <DataTemplate DataType="{x:Type pages:DictionariesViewModel}">
                 <userControls:DictionariesView/>

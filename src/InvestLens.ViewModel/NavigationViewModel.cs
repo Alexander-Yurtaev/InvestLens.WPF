@@ -2,15 +2,18 @@
 using InvestLens.Model.Enums;
 using InvestLens.Model.Menu;
 using InvestLens.ViewModel.Events;
+using InvestLens.ViewModel.Services;
 
 namespace InvestLens.ViewModel;
 
 public class NavigationViewModel : BindableBase, INavigationViewModel
 {
+    private readonly IPortfoliosManager _portfoliosManager;
     private readonly IEventAggregator _eventAggregator;
     
-    public NavigationViewModel(IEventAggregator eventAggregator)
+    public NavigationViewModel(IPortfoliosManager portfoliosManager, IEventAggregator eventAggregator)
     {
+        _portfoliosManager = portfoliosManager;
         _eventAggregator = eventAggregator;
         MenuItems = GetMenuItems();
 
@@ -32,7 +35,7 @@ public class NavigationViewModel : BindableBase, INavigationViewModel
         {
             new MenuNode(NodeTypes.Dashboard, "🏠", "Главная"){Title = "Главная", Description = "Обзор инвестиционной активности"},
             new MenuDivider(),
-            new MenuNode(NodeTypes.Portfolios, "📁", "Портфели", GetPortfoliosMenuItems()) {Title = "Портфели", Description = "Управление инвестиционными портфелями"},
+            new MenuNode(NodeTypes.Portfolios, "📁", "Портфели", _portfoliosManager.GetPortfoliosMenuItems()) {Title = "Портфели", Description = "Управление инвестиционными портфелями"},
             new MenuNode(NodeTypes.Dictionaries, "📚", "Справочники", GetDictionariesMenuItems()){Title = "Справочники", Description = "Источники рыночных данных и справочной информации"},
             new MenuDivider(),
             new MenuNode(NodeTypes.Downloader, "⬇️", "Менеджер закачек"){Title = "Менеджер закачек", Description = "Управление загрузкой данных"},
@@ -40,18 +43,6 @@ public class NavigationViewModel : BindableBase, INavigationViewModel
             new MenuNode(NodeTypes.Scheduler, "📅", "Планировщик"){Title = "Планировщик", Description = "Управление задачами и напоминаниями"},
             new MenuDivider(),
             new MenuNode(NodeTypes.Settings, "⚙️", "Настройки", GetSettingsMenuItems()){Title = "Настройки", Description = "Настройка приложения и управление плагинами"}
-        };
-
-        return result;
-    }
-
-    private List<MenuNode> GetPortfoliosMenuItems()
-    {
-        var result = new List<MenuNode>
-        {
-            new MenuNode(NodeTypes.PortfoliosComplex, "📊", "Составной инвестиционный"){Title = "Составной инвестиционный", Description = "Детальная информация о портфеле"},
-            new MenuNode(NodeTypes.PortfoliosFirst, "💰", "Портфель №1"){Title = "Портфель №1", Description = "Детальная информация о портфеле"},
-            new MenuNode(NodeTypes.PortfoliosSecond, "💎", "Портфель №2"){Title = "Портфель №2", Description = "Детальная информация о портфеле"}
         };
 
         return result;

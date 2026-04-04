@@ -1,7 +1,7 @@
-﻿using InvestLens.Model.Enums;
+﻿using Autofac;
+using InvestLens.Model.Enums;
 using InvestLens.ViewModel.Pages;
 using System.ComponentModel;
-using Autofac;
 
 namespace InvestLens.ViewModel.Services;
 
@@ -20,9 +20,11 @@ public class ViewModelFactory : IViewModelFactory
         {
             NodeTypes.Dashboard => _componentContext.Resolve<IDashboardViewModel>(),
             NodeTypes.Portfolios => _componentContext.Resolve<IPortfoliosViewModel>(),
-            NodeTypes.PortfoliosComplex => _componentContext.Resolve<IPortfoliosComplexViewModel>(),
-            NodeTypes.PortfoliosFirst => _componentContext.Resolve<IPortfoliosFirstViewModel>(),
-            NodeTypes.PortfoliosSecond => _componentContext.Resolve<IPortfoliosSecondViewModel>(),
+
+            NodeTypes.PortfoliosComplex => CreatePortfolioViewModel(nodeType),
+            NodeTypes.PortfoliosFirst => CreatePortfolioViewModel(nodeType),
+            NodeTypes.PortfoliosSecond => CreatePortfolioViewModel(nodeType),
+            
             NodeTypes.Dictionaries => _componentContext.Resolve<IDictionariesViewModel>(),
             NodeTypes.DictionariesMoex => _componentContext.Resolve<IDictionariesMoexViewModel>(),
             NodeTypes.DictionariesMoexSecurities => _componentContext.Resolve<IDictionariesMoexSecuritiesViewModel>(),
@@ -36,5 +38,12 @@ public class ViewModelFactory : IViewModelFactory
             NodeTypes.SettingsPlugins => _componentContext.Resolve<ISettingsPluginsViewModel>(),
             _ => throw new ArgumentOutOfRangeException(nameof(nodeType), nodeType, null)
         };
+    }
+
+    private INotifyPropertyChanged CreatePortfolioViewModel(NodeTypes nodeType)
+    {
+        var parameters = new TypedParameter(typeof(NodeTypes), nodeType);
+        var viewModel = _componentContext.Resolve<IPortfolioDetailViewModel>(parameters);
+        return viewModel;
     }
 }

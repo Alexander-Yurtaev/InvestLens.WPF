@@ -29,9 +29,7 @@ namespace InvestLens.App.Startup
             builder.RegisterType<DashboardViewModel>().As<IDashboardViewModel>();
             
             builder.RegisterType<PortfoliosViewModel>().As<IPortfoliosViewModel>();
-            builder.RegisterType<PortfoliosComplexViewModel>().As<IPortfoliosComplexViewModel>();
-            builder.RegisterType<PortfoliosFirstViewModel>().As<IPortfoliosFirstViewModel>();
-            builder.RegisterType<PortfoliosSecondViewModel>().As<IPortfoliosSecondViewModel>();
+            builder.RegisterType<PortfolioDetailViewModel>().As<IPortfolioDetailViewModel>();
             
             builder.RegisterType<DictionariesViewModel>().As<IDictionariesViewModel>();
             builder.RegisterType<DictionariesMoexViewModel>().As<IDictionariesMoexViewModel>();
