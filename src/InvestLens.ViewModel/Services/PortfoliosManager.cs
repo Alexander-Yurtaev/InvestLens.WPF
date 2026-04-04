@@ -1,5 +1,6 @@
 ﻿using InvestLens.Model;
 using InvestLens.Model.Enums;
+using InvestLens.Model.Menu;
 
 namespace InvestLens.ViewModel.Services;
 
@@ -39,5 +40,17 @@ public class PortfoliosManager : IPortfoliosManager
 
         PortfolioInfos.Clear();
         PortfolioInfos.AddRange(result);
+    }
+
+    public List<MenuNode> GetPortfoliosMenuItems()
+    {
+        var result = new List<MenuNode>
+        {
+            new MenuNode(NodeTypes.PortfoliosComplex, "📊", "Составной инвестиционный"){Title = "Составной инвестиционный", Description = "Детальная информация о портфеле"},
+            new MenuNode(NodeTypes.PortfoliosFirst, "💰", "Портфель №1"){Title = "Портфель №1", Description = "Детальная информация о портфеле"},
+            new MenuNode(NodeTypes.PortfoliosSecond, "💎", "Портфель №2"){Title = "Портфель №2", Description = "Детальная информация о портфеле"}
+        };
+
+        return result;
     }
 }
