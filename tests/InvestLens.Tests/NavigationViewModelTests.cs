@@ -1,4 +1,5 @@
-﻿using InvestLens.Model.Menu;
+﻿using InvestLens.Model.Enums;
+using InvestLens.Model.Menu;
 using InvestLens.ViewModel;
 using InvestLens.ViewModel.Events;
 using InvestLens.ViewModel.Services;
@@ -15,9 +16,11 @@ namespace InvestLens.Tests
             var viewModelFactoryMock = new Mock<IViewModelFactory>();
             var userManagerMock = new Mock<IUserManager>();
             var notificationsManagerMock = new Mock<INotificationsManager>();
+            var portfoliosManager = new Mock<IPortfoliosManager>();
+            portfoliosManager.Setup(pm => pm.GetPortfoliosMenuItems()).Returns(GetPortfoliosMenuItems());
             var eventAggregatorMock = new Mock<IEventAggregator>();
             eventAggregatorMock.Setup(ea => ea.GetEvent<SelectMenuNodeEvent>()).Returns(new SelectMenuNodeEvent());
-            var navigationVm = new NavigationViewModel(eventAggregatorMock.Object);
+            var navigationVm = new NavigationViewModel(portfoliosManager.Object, eventAggregatorMock.Object);
 
             var vm = new MainWindowViewModel(navigationVm, 
                 headerVmMock.Object, 
@@ -88,6 +91,18 @@ namespace InvestLens.Tests
             Assert.Equal("Настройки", settings.Header);
             Assert.NotNull(settings.Children);
             Assert.Equal(2, settings.Children.Count);
+        }
+
+        private List<MenuNode> GetPortfoliosMenuItems()
+        {
+            var result = new List<MenuNode>
+            {
+                new MenuNode(NodeType.PortfoliosComplex, "📊", "Составной инвестиционный"),
+                new MenuNode(NodeType.PortfoliosFirst, "💰", "Портфель №1"),
+                new MenuNode(NodeType.PortfoliosSecond, "💎", "Портфель №2")
+            };
+
+            return result;
         }
     }
 }

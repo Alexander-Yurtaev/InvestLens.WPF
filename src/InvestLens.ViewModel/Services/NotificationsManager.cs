@@ -11,10 +11,3 @@ public class NotificationsManager : INotificationsManager
     public string NotificationsCountDisplay => NotificationsCount <= 9 ? NotificationsCount.ToString() : "9+";
     public bool HasNotifications => NotificationsCount > 0;
 }
-
-public interface INotificationsManager
-{
-    int NotificationsCount { get; }
-    string NotificationsCountDisplay { get; }
-    bool HasNotifications { get; }
-}
