@@ -1,12 +1,6 @@
 ﻿using InvestLens.Model.Enums;
-using System.ComponentModel;
 
 namespace InvestLens.ViewModel.Pages;
-
-public interface IPortfolioDetailViewModel : INotifyPropertyChanged
-{
-    string Title { get; }
-}
 
 public class PortfolioDetailViewModel : BindableBase, IPortfolioDetailViewModel
 {
