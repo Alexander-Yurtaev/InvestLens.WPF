@@ -48,7 +48,7 @@ public class MainWindowViewModel : BindableBase, IMainWindowViewModel
         ContentVm = GetContentVm(node.NodeType);
     }
 
-    private INotifyPropertyChanged GetContentVm(NodeTypes nodeType)
+    private INotifyPropertyChanged GetContentVm(NodeType nodeType)
     {
         return _viewModelFactory.CreateViewModel(nodeType);
     }

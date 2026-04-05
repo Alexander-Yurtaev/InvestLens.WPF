@@ -2,4 +2,4 @@
 
 namespace InvestLens.Model.Menu;
 
-public class MenuDivider() : MenuNode(NodeTypes.None, "", "");
+public class MenuDivider() : MenuNode(NodeType.None, "", "");

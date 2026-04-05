@@ -1,15 +1,15 @@
-﻿using InvestLens.Model.Enums;
+﻿using InvestLens.Model;
 
 namespace InvestLens.ViewModel.Pages;
 
 public class PortfolioDetailViewModel : BindableBase, IPortfolioDetailViewModel
 {
-    private readonly NodeTypes _nodeType;
+    private readonly PortfolioDetail _model;
 
-    public PortfolioDetailViewModel(NodeTypes nodeType)
+    public PortfolioDetailViewModel(PortfolioDetail model)
     {
-        _nodeType = nodeType;
+        _model = model;
     }
 
-    public string Title => _nodeType.ToString();
+    public string Title => _model.Title;
 }

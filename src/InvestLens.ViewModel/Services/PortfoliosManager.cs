@@ -6,9 +6,9 @@ namespace InvestLens.ViewModel.Services;
 
 public class PortfoliosManager : IPortfoliosManager
 {
-    private readonly Dictionary<string, PortfolioDetail> _portfolios = new Dictionary<string, PortfolioDetail>
+    private readonly Dictionary<NodeType, PortfolioDetail> _portfolios = new Dictionary<NodeType, PortfolioDetail>
     {
-        { "Составной инвестиционный", new PortfolioDetail("Составной инвестиционный")
+        { NodeType.PortfoliosComplex, new PortfolioDetail("Составной инвестиционный")
             {
                 PortfolioStats = {
                     new PortfolioStats("Стоимость", 84320, "$", false),
@@ -26,7 +26,7 @@ public class PortfoliosManager : IPortfoliosManager
                 }
             }
         },
-        { "Портфель №1", new PortfolioDetail("Портфель №1")
+        { NodeType.PortfoliosFirst, new PortfolioDetail("Портфель №1")
         {
             PortfolioStats = {
                 new PortfolioStats("Стоимость", 24150, "$", false),
@@ -43,7 +43,7 @@ public class PortfoliosManager : IPortfoliosManager
                 new SecurityOperation("MSFT", SecurityOperationType.Buy){Date = new DateTime(2025, 02, 10), Count = 28, Price = 393.2, TotalPrice = 11010},
             }
         } },
-        { "Портфель №2", new PortfolioDetail("Портфель №2")
+        { NodeType.PortfoliosSecond, new PortfolioDetail("Портфель №2")
         {
             PortfolioStats = {
                 new PortfolioStats("Стоимость", 16062, "$", false),
@@ -73,23 +73,23 @@ public class PortfoliosManager : IPortfoliosManager
     {
         var result = new List<MenuNode>
         {
-            new MenuNode(NodeTypes.PortfoliosComplex, "📊", "Составной инвестиционный"){Title = "Составной инвестиционный", Description = "Детальная информация о портфеле"},
-            new MenuNode(NodeTypes.PortfoliosFirst, "💰", "Портфель №1"){Title = "Портфель №1", Description = "Детальная информация о портфеле"},
-            new MenuNode(NodeTypes.PortfoliosSecond, "💎", "Портфель №2"){Title = "Портфель №2", Description = "Детальная информация о портфеле"}
+            new MenuNode(NodeType.PortfoliosComplex, "📊", "Составной инвестиционный"){Title = "Составной инвестиционный", Description = "Детальная информация о портфеле"},
+            new MenuNode(NodeType.PortfoliosFirst, "💰", "Портфель №1"){Title = "Портфель №1", Description = "Детальная информация о портфеле"},
+            new MenuNode(NodeType.PortfoliosSecond, "💎", "Портфель №2"){Title = "Портфель №2", Description = "Детальная информация о портфеле"}
         };
 
         return result;
     }
 
-    public PortfolioDetail GetPortfolio(string title)
+    public PortfolioDetail GetPortfolio(NodeType nodeType)
     {
-        return _portfolios[title];
+        return _portfolios[nodeType];
     }
 
     private void LoadPortfolioInfos()
     {
         var result = _portfolios.Select(p =>
-            new PortfolioInfo(p.Key, PortfolioType.Primary, "сегодня", p.Value.PortfolioStats.ToList())).ToList();
+            new PortfolioInfo(p.Value.Title, PortfolioType.Primary, "сегодня", p.Value.PortfolioStats.ToList())).ToList();
 
         //var result = new List<PortfolioInfo>
         //{

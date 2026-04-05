@@ -1,6 +1,6 @@
 ﻿namespace InvestLens.Model.Enums;
 
-public enum NodeTypes
+public enum NodeType
 {
     None,
     Dashboard,
