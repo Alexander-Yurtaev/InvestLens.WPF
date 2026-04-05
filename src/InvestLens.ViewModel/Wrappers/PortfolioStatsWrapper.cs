@@ -1,5 +1,4 @@
-﻿using System.Globalization;
-using InvestLens.Common.Helpers;
+﻿using InvestLens.Common.Helpers;
 using InvestLens.Model;
 
 namespace InvestLens.ViewModel.Wrappers;
@@ -19,7 +18,7 @@ public class PortfolioStatsWrapper : BindableBase
     {
         get
         {
-            var result = ConvertValueToString(_model.Value);
+            var result = NumberHelpers.ConvertValueToString(_model.Value);
             if (string.IsNullOrEmpty(_model.Unit)) return result;
 
             if (!_model.UnitIsSuffix) return $"{_model.Unit}{result}";
@@ -29,10 +28,5 @@ public class PortfolioStatsWrapper : BindableBase
 
             return result;
         }
-    }
-
-    private string ConvertValueToString(double value)
-    {
-        return value.ToString(NumberHelpers.IsInt(value) ? "N0" : "F1", CultureInfo.InvariantCulture);
     }
 }

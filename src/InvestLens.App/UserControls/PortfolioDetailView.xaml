@@ -22,6 +22,76 @@
                     </Setter.Value>
                 </Setter>
             </Style>
+            <!--TabControl-->
+            <!-- Стиль для TabItem -->
+            <Style TargetType="TabItem">
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="TabItem">
+                            <Border x:Name="Border" 
+                                    Background="Transparent"
+                                    BorderThickness="0"
+                                    CornerRadius="30"
+                                    Padding="24,8"
+                                    Margin="0,0,8,24"
+                                    Cursor="Hand">
+                                <TextBlock x:Name="HeaderText"
+                                           Text="{TemplateBinding Header}"
+                                           FontSize="14"
+                                           FontWeight="Medium"
+                                           Foreground="#5A6E8A"
+                                           VerticalAlignment="Center"
+                                           HorizontalAlignment="Center"/>
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsSelected" Value="True">
+                                    <Setter TargetName="Border" Property="Background" Value="#C8102E"/>
+                                    <Setter TargetName="HeaderText" Property="Foreground" Value="White"/>
+                                </Trigger>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter TargetName="Border" Property="Background" Value="#F8FAFE"/>
+                                    <Setter TargetName="HeaderText" Property="Foreground" Value="#C8102E"/>
+                                </Trigger>
+                                <MultiTrigger>
+                                    <MultiTrigger.Conditions>
+                                        <Condition Property="IsSelected" Value="True"/>
+                                        <Condition Property="IsMouseOver" Value="True"/>
+                                    </MultiTrigger.Conditions>
+                                    <Setter TargetName="Border" Property="Background" Value="#C8102E"/>
+                                    <Setter TargetName="HeaderText" Property="Foreground" Value="White"/>
+                                </MultiTrigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+
+            <!-- Стиль для TabPanel (область с вкладками) -->
+            <Style TargetType="TabPanel">
+                <Setter Property="Background" Value="Transparent"/>
+                <Setter Property="Margin" Value="0,0,0,24"/>
+            </Style>
+
+            <Style TargetType="GridViewColumnHeader">
+                <Setter Property="Height" Value="40"/>
+                <Setter Property="Background" Value="#F8FAFE"/>
+                <Setter Property="Foreground" Value="#5A6E8A"/>
+                <Setter Property="FontSize" Value="12"/>
+                <Setter Property="FontWeight" Value="SemiBold"/>
+                <Setter Property="HorizontalContentAlignment" Value="Left"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="GridViewColumnHeader">
+                            <Border Background="{TemplateBinding Background}"
+                                    BorderBrush="#E9EDF2"
+                                    BorderThickness="0,0,1,1"
+                                    Padding="12,0">
+                                <ContentPresenter VerticalAlignment="Center"/>
+                            </Border>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
         </ResourceDictionary>
     </UserControl.Resources>
 
@@ -34,6 +104,7 @@
         <local:ContentHeader Grid.Row="0" DataContext="{Binding ContentHeaderVm}" Style="{StaticResource ContentHeaderStyle}"/>
         <Border Grid.Row="1"
                 Background="White"
+                Margin="0 0 0 24"
                 Padding="20"
                 CornerRadius="16"
                 BorderThickness="1"
@@ -60,5 +131,175 @@
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
         </Border>
+        <TabControl Grid.Row="2">
+            <TabItem Header="Активы">
+                <ListView ItemsSource="{Binding Securities}"
+                          VirtualizingPanel.IsVirtualizing="True">
+                    <ListView.View>
+                        <GridView>
+                            <GridViewColumn Header="Актив" Width="120">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Horizontal">
+                                            <!--<Image Source="{Binding IconPath}" Width="20" Height="20" Margin="0,0,8,0"/>-->
+                                            <TextBlock Text="{Binding SecId}" FontWeight="SemiBold"/>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+
+                            <GridViewColumn Header="Количество" Width="100">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Count, StringFormat=N0}" 
+                                                   TextAlignment="Right"/>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+
+                            <GridViewColumn Header="Средняя цена" Width="120">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding AveragePrice, StringFormat=C2}"
+                                                   TextAlignment="Right"/>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+
+                            <GridViewColumn Header="Текущая цена" Width="120">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding CurrentPrice, StringFormat=C2}"
+                                                   TextAlignment="Right"/>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+
+                            <GridViewColumn Header="Стоимость" Width="120">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding TotalPrice, StringFormat=C2}"
+                                   TextAlignment="Right"
+                                   FontWeight="SemiBold"/>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+
+                            <GridViewColumn Header="Прибыль" Width="120">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding ProfitDisplay}"
+                                                   TextAlignment="Right"
+                                                   FontWeight="SemiBold"
+                                                   Foreground="{Binding ProfitDisplay, Converter={x:Static converters:ValueDisplayToForegroundConverter.Instance}, ConverterParameter=#002855}"/>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                        </GridView>
+                    </ListView.View>
+
+                    <!-- Стилизация ListView -->
+                    <ListView.ItemContainerStyle>
+                        <Style TargetType="ListViewItem">
+                            <Setter Property="Height" Value="48"/>
+                            <Setter Property="VerticalContentAlignment" Value="Center"/>
+                            <Style.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="Background" Value="#F8FAFE"/>
+                                </Trigger>
+                                <Trigger Property="IsSelected" Value="True">
+                                    <Setter Property="Background" Value="#E8EEF8"/>
+                                    <Setter Property="BorderBrush" Value="#C8102E"/>
+                                    <Setter Property="BorderThickness" Value="0,0,0,0"/>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </ListView.ItemContainerStyle>
+                </ListView>
+            </TabItem>
+            <TabItem Header="Операции">
+                <ListView ItemsSource="{Binding Operations}"
+                          VirtualizingPanel.IsVirtualizing="True">
+                    <ListView.View>
+                        <GridView>
+                            <GridViewColumn Header="Дата" Width="100">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Date, StringFormat=dd.MM.yyyy}" 
+                                                   TextAlignment="Right"/>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+
+                            <GridViewColumn Header="Актив" Width="120">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Horizontal">
+                                            <!--<Image Source="{Binding IconPath}" Width="20" Height="20" Margin="0,0,8,0"/>-->
+                                            <TextBlock Text="{Binding SecId}" FontWeight="SemiBold"/>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+
+                            <GridViewColumn Header="Тип" Width="100">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding OperationType}" 
+                                                   TextAlignment="Right"/>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+
+                            <GridViewColumn Header="Количество" Width="120">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Count, StringFormat=F2}"
+                                                   TextAlignment="Right"/>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+
+                            <GridViewColumn Header="Цена" Width="120">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Price, StringFormat=C2}"
+                                                   TextAlignment="Right"/>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+
+                            <GridViewColumn Header="Сумма" Width="120">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding TotalPrice, StringFormat=C2}"
+                                                   TextAlignment="Right"
+                                                   FontWeight="SemiBold"/>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                        </GridView>
+                    </ListView.View>
+
+                    <!-- Стилизация ListView -->
+                    <ListView.ItemContainerStyle>
+                        <Style TargetType="ListViewItem">
+                            <Setter Property="Height" Value="48"/>
+                            <Setter Property="VerticalContentAlignment" Value="Center"/>
+                            <Style.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="Background" Value="#F8FAFE"/>
+                                </Trigger>
+                                <Trigger Property="IsSelected" Value="True">
+                                    <Setter Property="Background" Value="#E8EEF8"/>
+                                    <Setter Property="BorderBrush" Value="#C8102E"/>
+                                    <Setter Property="BorderThickness" Value="0,0,0,0"/>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </ListView.ItemContainerStyle>
+                </ListView>
+            </TabItem>
+        </TabControl>
     </Grid>
 </UserControl>
