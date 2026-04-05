@@ -11,7 +11,7 @@ public class PortfolioDetail
     }
 
     public string Title { get; set; }
-    public List<PortfolioStats> PortfolioStats { get; }
+    public List<Stat> PortfolioStats { get; }
     public List<SecurityInfo> Securities { get; }
     public List<SecurityOperation> Operations { get; }
 }

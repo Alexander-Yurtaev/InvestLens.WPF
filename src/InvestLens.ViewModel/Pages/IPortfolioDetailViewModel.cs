@@ -8,7 +8,7 @@ public interface IPortfolioDetailViewModel : INotifyPropertyChanged
 {
     IContentHeaderViewModel ContentHeaderVm { get; }
     string Title { get; }
-    List<PortfolioStatsWrapper> PortfolioStats { get; }
+    List<StatWrapper> PortfolioStats { get; }
     List<SecurityInfoWrapper> Securities { get; }
     List<SecurityOperation> Operations { get; }
 }

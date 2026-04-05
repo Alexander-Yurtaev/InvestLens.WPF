@@ -18,13 +18,13 @@ public class PortfolioDetailViewModel : BindableBase, IPortfolioDetailViewModel
         };
         ContentHeaderVm = new ContentHeaderViewModel(_model.Title, string.Empty, buttonModels);
 
-        PortfolioStats = model.PortfolioStats.Select(p => new PortfolioStatsWrapper(p)).ToList();
+        PortfolioStats = model.PortfolioStats.Select(p => new StatWrapper(p)).ToList();
         Securities = _model.Securities.Select(s => new SecurityInfoWrapper(s)).ToList();
     }
 
     public IContentHeaderViewModel ContentHeaderVm { get; }
     public string Title => _model.Title + "-title";
-    public List<PortfolioStatsWrapper> PortfolioStats { get; }
+    public List<StatWrapper> PortfolioStats { get; }
     public List<SecurityInfoWrapper> Securities { get; }
     public List<SecurityOperation> Operations => _model.Operations;
 

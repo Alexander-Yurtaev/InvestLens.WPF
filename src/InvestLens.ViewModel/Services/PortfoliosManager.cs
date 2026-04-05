@@ -11,9 +11,9 @@ public class PortfoliosManager : IPortfoliosManager
         { NodeType.PortfoliosComplex, new PortfolioDetail("Составной инвестиционный")
             {
                 PortfolioStats = {
-                    new PortfolioStats("Стоимость", 84320, "$", false),
-                    new PortfolioStats("Доходность", 15.2, "%"),
-                    new PortfolioStats("Активов", 12)
+                    new Stat("Стоимость", 84320, "$", false),
+                    new Stat("Доходность", 15.2, "%"),
+                    new Stat("Активов", 12)
                 },
                 Securities =
                 {
@@ -29,9 +29,9 @@ public class PortfoliosManager : IPortfoliosManager
         { NodeType.PortfoliosFirst, new PortfolioDetail("Портфель №1")
         {
             PortfolioStats = {
-                new PortfolioStats("Стоимость", 24150, "$", false),
-                new PortfolioStats("Доходность", -8.4, "%"),
-                new PortfolioStats("Активов", 8)
+                new Stat("Стоимость", 24150, "$", false),
+                new Stat("Доходность", -8.4, "%"),
+                new Stat("Активов", 8)
             },
             Securities =
             {
@@ -46,9 +46,9 @@ public class PortfoliosManager : IPortfoliosManager
         { NodeType.PortfoliosSecond, new PortfolioDetail("Портфель №2")
         {
             PortfolioStats = {
-                new PortfolioStats("Стоимость", 16062, "$", false),
-                new PortfolioStats("Доходность", 22.1, "%"),
-                new PortfolioStats("Активов", 6)
+                new Stat("Стоимость", 16062, "$", false),
+                new Stat("Доходность", 22.1, "%"),
+                new Stat("Активов", 6)
             },
             Securities =
             {
@@ -63,11 +63,11 @@ public class PortfoliosManager : IPortfoliosManager
 
     public PortfoliosManager()
     {
-        PortfolioInfos = [];
+        Cards = [];
         LoadPortfolioInfos();
     }
 
-    public List<PortfolioInfo> PortfolioInfos { get; set; }
+    public List<Card> Cards { get; set; }
 
     public List<MenuNode> GetPortfoliosMenuItems()
     {
@@ -89,31 +89,64 @@ public class PortfoliosManager : IPortfoliosManager
     private void LoadPortfolioInfos()
     {
         var result = _portfolios.Select(p =>
-            new PortfolioInfo(p.Value.Title, PortfolioType.Primary, "сегодня", p.Value.PortfolioStats.ToList())).ToList();
+        {
+            var portfolioType = TitleToPortfolioType(p.Value.Title);
+            var card = new Card(p.Value.Title)
+            {
+                CardType = PortfolioTypeToStringConverter(portfolioType),
+                CardTypeForeground = PortfolioTypeToForegroundConverter(portfolioType),
+                CardTypeBackground = PortfolioTypeToBackgroundConverter(portfolioType),
+                LastDateUpdate = "сегодня"
+            };
+            card.Stats.AddRange(p.Value.PortfolioStats);
+            return card;
+        }).ToList();
 
-        //var result = new List<PortfolioInfo>
-        //{
-        //    new PortfolioInfo("Составной инвестиционный", PortfolioType.Primary, "сегодня",
-        //    [
-        //        new PortfolioStats("Стоимость", 84320, "$", false),
-        //        new PortfolioStats("Доходность", 15.2, "%"),
-        //        new PortfolioStats("Активов", 12)
-        //    ]),
-        //    new PortfolioInfo("Портфель №1", PortfolioType.Dividend, "вчера",
-        //    [
-        //        new PortfolioStats("Стоимость", 24150, "$", false),
-        //        new PortfolioStats("Доходность", -8.4, "%"),
-        //        new PortfolioStats("Активов", 8)
-        //    ]),
-        //    new PortfolioInfo("Портфель №2", PortfolioType.Agressive, "2 дня назад",
-        //    [
-        //        new PortfolioStats("Стоимость", 16062, "$", false),
-        //        new PortfolioStats("Доходность", 22.1, "%"),
-        //        new PortfolioStats("Активов", 6)
-        //    ]),
-        //};
+        Cards.Clear();
+        Cards.AddRange(result);
+    }
 
-        PortfolioInfos.Clear();
-        PortfolioInfos.AddRange(result);
+    private PortfolioType TitleToPortfolioType(string title)
+    {
+        return title switch
+        {
+            "Составной инвестиционный" => PortfolioType.Primary,
+            "Портфель №1" => PortfolioType.Dividend,
+            "Портфель №2" => PortfolioType.Agressive,
+            _ => PortfolioType.Primary
+        };
+    }
+
+    private string PortfolioTypeToStringConverter(PortfolioType portfolioType)
+    {
+        return portfolioType switch
+        {
+            PortfolioType.Primary => "Основной",
+            PortfolioType.Agressive => "Агрессивный",
+            PortfolioType.Dividend => "Дивидендный",
+            _ => throw new ArgumentOutOfRangeException()
+        };
+    }
+
+    private string PortfolioTypeToForegroundConverter(PortfolioType portfolioType)
+    {
+        return portfolioType switch
+        {
+            PortfolioType.Primary => "#FFC8102E",
+            PortfolioType.Agressive => "#FF2C8C6E",
+            PortfolioType.Dividend => "#FF2C8C6E",
+            _ => "0xFFFF4500"
+        };
+    }
+
+    private string PortfolioTypeToBackgroundConverter(PortfolioType portfolioType)
+    {
+        return portfolioType switch
+        {
+            PortfolioType.Primary => "#1AC8102E",
+            PortfolioType.Agressive => "#1A2C8C6E",
+            PortfolioType.Dividend => "#1A2C8C6E",
+            _ => "0xFFFFA500"
+        };
     }
 }

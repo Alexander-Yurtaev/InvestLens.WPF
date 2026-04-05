@@ -3,7 +3,7 @@ using InvestLens.ViewModel.Wrappers;
 
 namespace InvestLens.Tests;
 
-public class PortfolioStatsWrapperTests
+public class StatWrapperTests
 {
     [Theory]
     [InlineData(84320, "$", false, "$84,320")]
@@ -12,8 +12,8 @@ public class PortfolioStatsWrapperTests
     [InlineData(12, "", false, "12")]
     public void ValueDisplayShouldReturnCorrectFormat(double value, string unit, bool suffix, string expected)
     {
-        var model = new PortfolioStats("", value, unit, suffix);
-        var vm = new PortfolioStatsWrapper(model);
+        var model = new Stat("", value, unit, suffix);
+        var vm = new StatWrapper(model);
 
         Assert.Equal(expected, vm.ValueDisplay);
     }

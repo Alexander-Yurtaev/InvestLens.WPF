@@ -3,11 +3,11 @@ using InvestLens.Model;
 
 namespace InvestLens.ViewModel.Wrappers;
 
-public class PortfolioStatsWrapper : BindableBase
+public class StatWrapper : BindableBase
 {
-    private readonly PortfolioStats _model;
+    private readonly Stat _model;
 
-    public PortfolioStatsWrapper(PortfolioStats model)
+    public StatWrapper(Stat model)
     {
         _model = model;
     }

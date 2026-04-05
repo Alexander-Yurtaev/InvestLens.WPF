@@ -6,5 +6,5 @@ namespace InvestLens.ViewModel.Pages;
 public interface IPortfoliosViewModel : INotifyPropertyChanged
 {
     IContentHeaderViewModel ContentHeaderVm { get; }
-    List<PortfolioInfoWrapper> PortfolioInfos { get; }
+    List<CardWrapper> Cards { get; }
 }

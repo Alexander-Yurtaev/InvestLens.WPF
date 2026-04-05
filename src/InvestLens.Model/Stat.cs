@@ -1,8 +1,8 @@
 ﻿namespace InvestLens.Model;
 
-public class PortfolioStats
+public class Stat
 {
-    public PortfolioStats(string title, double value, string unit="", bool unitIsSuffix=true)
+    public Stat(string title, double value, string unit="", bool unitIsSuffix=true)
     {
         Title = title;
         Value = value;
