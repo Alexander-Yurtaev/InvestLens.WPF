@@ -11,7 +11,11 @@ public class PortfoliosViewModel : BindableBase, IPortfoliosViewModel
     {
         var welcomeTitle = "Мои портфели";
         var welcomeDescription = "Управляйте своими инвестиционными портфелями";
-        ContentHeaderVm = new ContentHeaderViewModel(welcomeTitle, welcomeDescription, OnCreatePortfolio, "+ Создать портфель");
+        var buttonModels = new List<ButtonModel>
+        {
+            new ButtonModel("+ Создать портфель", OnCreatePortfolio)
+        };
+        ContentHeaderVm = new ContentHeaderViewModel(welcomeTitle, welcomeDescription, buttonModels);
 
         _portfoliosManager = portfoliosManager;
         PortfolioInfos = _portfoliosManager.PortfolioInfos.Select(p => new PortfolioInfoWrapper(p)).ToList();

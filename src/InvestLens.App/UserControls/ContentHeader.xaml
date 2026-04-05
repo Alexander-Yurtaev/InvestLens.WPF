@@ -20,14 +20,18 @@
             <Style x:Key="PStyle" TargetType="{x:Type TextBlock}">
                 <Setter Property="Foreground" Value="#5A6E8A"/>
             </Style>
+            <Style x:Key="ButtonsContainerStyle" TargetType="ItemsControl">
+                <Setter Property="HorizontalAlignment" Value="Right"/>
+                <Setter Property="VerticalAlignment" Value="Center"/>
+            </Style>
             <Style x:Key="PrimaryButtonStyle" TargetType="Button">
                 <Setter Property="Background" Value="#C8102E"/>
                 <Setter Property="Foreground" Value="White"/>
                 <Setter Property="BorderThickness" Value="0"/>
+                <Setter Property="Margin" Value="6 0"/>
                 <Setter Property="Padding" Value="20 8"/>
                 <Setter Property="Cursor" Value="Hand"/>
                 <Setter Property="VerticalAlignment" Value="Center"/>
-                <Setter Property="HorizontalAlignment" Value="Right"/>
                 <Setter Property="Template">
                     <Setter.Value>
                         <ControlTemplate TargetType="Button">
@@ -56,10 +60,21 @@
             <TextBlock Style="{StaticResource H1Style}" Text="{Binding WelcomeTitle}"/>
             <TextBlock Style="{StaticResource PStyle}" Text="{Binding WelcomeDescription}"/>
         </StackPanel>
-        <Button Grid.Column="1" 
-                Visibility="{Binding ShowButton, Converter={StaticResource BooleanToVisibilityConv}}"
-                Style="{StaticResource PrimaryButtonStyle}" 
-                Command="{Binding ButtonCommand}"
-                Content="{Binding ButtonContent}"/>
+        <ItemsControl Grid.Column="1" 
+                      ItemsSource="{Binding Buttons}"
+                      Style="{StaticResource ButtonsContainerStyle}">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <StackPanel Orientation="Horizontal"/>
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <Button Style="{StaticResource PrimaryButtonStyle}" 
+                            Command="{Binding Command}"
+                            Content="{Binding Content}"/>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
     </Grid>
 </UserControl>

@@ -3,5 +3,6 @@
 public enum SecurityOperationType
 {
     Sell,
-    Buy
+    Buy,
+    Dividend
 }
