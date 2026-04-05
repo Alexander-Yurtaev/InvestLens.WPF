@@ -18,7 +18,7 @@ public class PortfoliosViewModel : BindableBase, IPortfoliosViewModel
         ContentHeaderVm = new ContentHeaderViewModel(welcomeTitle, welcomeDescription, buttonModels);
 
         _portfoliosManager = portfoliosManager;
-        Cards.AddRange(_portfoliosManager.Cards.Select(p => new CardWrapper(p)));
+        Cards.AddRange(_portfoliosManager.Cards.Select(c => new CardWrapper(c)));
     }
 
     public IContentHeaderViewModel ContentHeaderVm { get; }

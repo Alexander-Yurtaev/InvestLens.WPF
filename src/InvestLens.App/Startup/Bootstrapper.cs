@@ -19,6 +19,7 @@ namespace InvestLens.App.Startup
             builder.RegisterType<ActivityManager>().As<IActivityManager>().SingleInstance();
             builder.RegisterType<PortfolioDynamicsService>().As<IPortfolioDynamicsService>().SingleInstance();
             builder.RegisterType<PortfoliosManager>().As<IPortfoliosManager>().SingleInstance();
+            builder.RegisterType<DictionariesManager>().As<IDictionariesManager>().SingleInstance();
 
             builder.RegisterType<MainWindow>().AsSelf();
             builder.RegisterType<MainWindowViewModel>().As<IMainWindowViewModel>();

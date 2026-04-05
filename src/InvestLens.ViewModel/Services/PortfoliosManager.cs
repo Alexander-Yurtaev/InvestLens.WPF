@@ -63,11 +63,10 @@ public class PortfoliosManager : IPortfoliosManager
 
     public PortfoliosManager()
     {
-        Cards = [];
         LoadPortfolioInfos();
     }
 
-    public List<Card> Cards { get; set; }
+    public List<Card> Cards { get; } = [];
 
     public List<MenuNode> GetPortfoliosMenuItems()
     {
