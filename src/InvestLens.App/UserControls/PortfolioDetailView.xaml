@@ -4,6 +4,8 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:InvestLens.App.UserControls"
+             xmlns:wrappers="clr-namespace:InvestLens.ViewModel.Wrappers;assembly=InvestLens.ViewModel"
+             xmlns:converters="clr-namespace:InvestLens.App.Converters"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <UserControl.Resources>
@@ -29,8 +31,28 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <local:ContentHeader Grid.Row="0" DataContext="{Binding ContentHeaderVm}" Style="{StaticResource ContentHeaderStyle}"/>
-        <Grid Grid.Row="1">
-            
-        </Grid>
+        <Border Grid.Row="1" >
+            <ItemsControl ItemsSource="{Binding PortfolioStats}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel Orientation="Horizontal"/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate DataType="{x:Type wrappers:PortfolioStatsWrapper}">
+                        <StackPanel Orientation="Vertical"
+                                    Margin="16 0">
+                            <TextBlock Text="{Binding Title}" 
+                                       FontSize="12"
+                                       Foreground="#5A6E8A"/>
+                            <TextBlock Text="{Binding ValueDisplay}"
+                                       FontSize="28"
+                                       FontWeight="Bold"
+                                       Foreground="{Binding ValueDisplay, Converter={x:Static converters:ValueDisplayToForegroundConverter.Instance}, ConverterParameter=#002855}"/>
+                        </StackPanel>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </Border>
     </Grid>
 </UserControl>

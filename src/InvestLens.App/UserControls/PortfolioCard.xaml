@@ -12,7 +12,7 @@
     <UserControl.Resources>
         <ResourceDictionary>
             <QuadraticEase x:Key="EaseOutQuad" EasingMode="EaseOut"/>
-            
+
             <Style x:Key="PortfolioCardStyle" TargetType="{x:Type Border}">
                 <Setter Property="Background" Value="White"/>
                 <Setter Property="CornerRadius" Value="20"/>
@@ -98,26 +98,26 @@
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
-                <TextBlock Grid.Column="0" Text="{Binding Title}"
-               FontSize="18"
-               Foreground="#002855"
-               FontWeight="Bold"/>
+                <TextBlock Grid.Column="0" 
+                           Text="{Binding Title}"
+                           FontSize="18"
+                           Foreground="#002855"
+                           FontWeight="Bold"/>
                 <Border Grid.Column="1"
-            Background="{Binding PortfolioType, Converter={x:Static converters:PortfolioTypeToBackgroundConverter.Instance}}"
-            Padding="10 4"
-            CornerRadius="20">
+                        Background="{Binding PortfolioType, Converter={x:Static converters:PortfolioTypeToBackgroundConverter.Instance}}"
+                        Padding="10 4"
+                        CornerRadius="20">
                     <TextBlock Text="{Binding PortfolioType, Converter={x:Static converters:PortfolioTypeToStringConverter.Instance}}"
-                   Foreground="{Binding PortfolioType, Converter={x:Static converters:PortfolioTypeToForegroundConverter.Instance}}"
-                   FontSize="11"
-                   FontWeight="Medium"/>
+                               Foreground="{Binding PortfolioType, Converter={x:Static converters:PortfolioTypeToForegroundConverter.Instance}}"
+                               FontSize="11"
+                               FontWeight="Medium"/>
                 </Border>
             </Grid>
             <Grid Grid.Row="1">
-                <Border Grid.Row="1"
-            Margin="0 0 0 16"
-            Padding="0 12"
-            BorderThickness="0 1 0 1"
-            BorderBrush="#E9EDF2">
+                <Border Margin="0 0 0 16"
+                        Padding="0 12"
+                        BorderThickness="0 1 0 1"
+                        BorderBrush="#E9EDF2">
                     <ItemsControl ItemsSource="{Binding PortfolioStats}">
                         <ItemsControl.ItemsPanel>
                             <ItemsPanelTemplate>
@@ -128,14 +128,14 @@
                             <DataTemplate DataType="{x:Type wrappers:PortfolioStatsWrapper}">
                                 <StackPanel Orientation="Vertical">
                                     <TextBlock Text="{Binding Title}" 
-                                   FontSize="11"
-                                   Foreground="#5A6E8A"
-                                   Margin="12 0"/>
+                                               FontSize="11"
+                                               Foreground="#5A6E8A"
+                                               Margin="12 0"/>
                                     <TextBlock Text="{Binding ValueDisplay}"
-                                   FontSize="18"
-                                   FontWeight="Bold"
-                                   Margin="12 0"
-                                   Foreground="{Binding ValueDisplay, Converter={x:Static converters:ValueDisplayToForegroundConverter.Instance}, ConverterParameter=#002855}"/>
+                                               FontSize="18"
+                                               FontWeight="Bold"
+                                               Margin="12 0"
+                                               Foreground="{Binding ValueDisplay, Converter={x:Static converters:ValueDisplayToForegroundConverter.Instance}, ConverterParameter=#002855}"/>
                                 </StackPanel>
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>
@@ -148,10 +148,12 @@
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
                 <TextBlock Grid.Column="0" 
-               FontSize="12"
-               Foreground="#8E92A8"
-               Text="{Binding RefreshDateDisplay}"/>
-                <Button Grid.Column="1" Content="Подробнее →" Style="{StaticResource LinkStyle}"/>
+                           FontSize="12"
+                           Foreground="#8E92A8"
+                           Text="{Binding RefreshDateDisplay}"/>
+                <Button Grid.Column="1" 
+                        Content="Подробнее →" 
+                        Style="{StaticResource LinkStyle}"/>
             </Grid>
         </Grid>
     </Border>
