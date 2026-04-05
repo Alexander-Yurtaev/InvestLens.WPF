@@ -2,11 +2,17 @@
 
 public class SecurityInfo
 {
-    public string SecId { get; set; } = string.Empty;
-    public string Name { get; set; } = string.Empty;
-    public int Count { get; set; }
-    public decimal AveragePrice { get; set; }
-    public decimal CurrentPrice { get; set; }
-    public decimal TotalPrice { get; set; }
-    public decimal Profit { get; set; }
+    public SecurityInfo(string secId, string name)
+    {
+        SecId = secId;
+        Name = name;
+    }
+
+    public string SecId { get; }
+    public string Name { get; }
+    public int Count { get; init; }
+    public double AveragePrice { get; init; }
+    public double CurrentPrice { get; init; }
+    public decimal TotalPrice { get; init; }
+    public decimal Profit { get; init; }
 }
