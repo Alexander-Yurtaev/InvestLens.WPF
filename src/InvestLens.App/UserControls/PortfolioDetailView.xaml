@@ -28,10 +28,16 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <local:ContentHeader Grid.Row="0" DataContext="{Binding ContentHeaderVm}" Style="{StaticResource ContentHeaderStyle}"/>
-        <Border Grid.Row="1" >
+        <Border Grid.Row="1"
+                Background="White"
+                Padding="20"
+                CornerRadius="16"
+                BorderThickness="1"
+                BorderBrush="#E9EDF2">
             <ItemsControl ItemsSource="{Binding PortfolioStats}">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
