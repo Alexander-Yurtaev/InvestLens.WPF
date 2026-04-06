@@ -7,5 +7,6 @@
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="Common.xaml"/>
         <ResourceDictionary Source="Button.xaml"/>
+        <ResourceDictionary Source="TabControl.xaml"/>
     </ResourceDictionary.MergedDictionaries>
 </ResourceDictionary>

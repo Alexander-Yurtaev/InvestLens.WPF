@@ -10,9 +10,6 @@
              d:DesignHeight="450" d:DesignWidth="800">
     <UserControl.Resources>
         <ResourceDictionary>
-            <Style x:Key="ContentHeaderStyle" TargetType="{x:Type local:ContentHeader}">
-                <Setter Property="Margin" Value="0 0 0 28"/>
-            </Style>
             <Style x:Key="PortfolioCard" TargetType="{x:Type Button}">
                 <Setter Property="Template">
                     <Setter.Value>
@@ -21,55 +18,6 @@
                         </ControlTemplate>
                     </Setter.Value>
                 </Setter>
-            </Style>
-            <!--TabControl-->
-            <!-- Стиль для TabItem -->
-            <Style TargetType="TabItem">
-                <Setter Property="Template">
-                    <Setter.Value>
-                        <ControlTemplate TargetType="TabItem">
-                            <Border x:Name="Border" 
-                                    Background="Transparent"
-                                    BorderThickness="0"
-                                    CornerRadius="30"
-                                    Padding="24,8"
-                                    Margin="0,0,8,24"
-                                    Cursor="Hand">
-                                <TextBlock x:Name="HeaderText"
-                                           Text="{TemplateBinding Header}"
-                                           FontSize="14"
-                                           FontWeight="Medium"
-                                           Foreground="#5A6E8A"
-                                           VerticalAlignment="Center"
-                                           HorizontalAlignment="Center"/>
-                            </Border>
-                            <ControlTemplate.Triggers>
-                                <Trigger Property="IsSelected" Value="True">
-                                    <Setter TargetName="Border" Property="Background" Value="#C8102E"/>
-                                    <Setter TargetName="HeaderText" Property="Foreground" Value="White"/>
-                                </Trigger>
-                                <Trigger Property="IsMouseOver" Value="True">
-                                    <Setter TargetName="Border" Property="Background" Value="#F8FAFE"/>
-                                    <Setter TargetName="HeaderText" Property="Foreground" Value="#C8102E"/>
-                                </Trigger>
-                                <MultiTrigger>
-                                    <MultiTrigger.Conditions>
-                                        <Condition Property="IsSelected" Value="True"/>
-                                        <Condition Property="IsMouseOver" Value="True"/>
-                                    </MultiTrigger.Conditions>
-                                    <Setter TargetName="Border" Property="Background" Value="#C8102E"/>
-                                    <Setter TargetName="HeaderText" Property="Foreground" Value="White"/>
-                                </MultiTrigger>
-                            </ControlTemplate.Triggers>
-                        </ControlTemplate>
-                    </Setter.Value>
-                </Setter>
-            </Style>
-
-            <!-- Стиль для TabPanel (область с вкладками) -->
-            <Style TargetType="TabPanel">
-                <Setter Property="Background" Value="Transparent"/>
-                <Setter Property="Margin" Value="0,0,0,24"/>
             </Style>
 
             <Style TargetType="GridViewColumnHeader">
@@ -101,7 +49,9 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <local:ContentHeader Grid.Row="0" DataContext="{Binding ContentHeaderVm}" Style="{StaticResource ContentHeaderStyle}"/>
+        <local:ContentHeader Grid.Row="0" 
+                             DataContext="{Binding ContentHeaderVm}" 
+                             Style="{StaticResource ContentHeaderStyle}"/>
         <Border Grid.Row="1"
                 Background="White"
                 Margin="0 0 0 24"

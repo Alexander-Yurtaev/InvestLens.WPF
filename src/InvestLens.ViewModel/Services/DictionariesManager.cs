@@ -5,6 +5,28 @@ namespace InvestLens.ViewModel.Services;
 public class DictionariesManager : IDictionariesManager
 {
     public List<Card> Cards { get; } = [];
+    public List<string> GetSecurityTypes()
+    {
+        var result = new List<string>
+        {
+            "Акции",
+            "ETF"
+        };
+        return result;
+    }
+
+    public List<Security> GetSecurities(string type)
+    {
+        var result = new List<Security>
+        {
+            new Security("SBER", "Сбербанк", "Акции"),
+            new Security("GAZP", "Газпром", "Акции"),
+            new Security("LKOH", "Лукойл", "Акции"),
+            new Security("FXRL", "FXRL (Россия)", "ETF"),
+            new Security("YNDX", "Яндекс", "Акции")
+        };
+        return result.Where(r => r.SecType == type).ToList();
+    }
 
     public DictionariesManager()
     {
