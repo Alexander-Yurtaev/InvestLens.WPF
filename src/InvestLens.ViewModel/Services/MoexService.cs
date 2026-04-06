@@ -15,8 +15,18 @@ public class MoexService : IMoexService
     {
         var result = new List<Card>
         {
-            new Card("Акции"){Stats = { new Stat("Всего", 584), new Stat("Торгуется", 236) }},
-            new Card("Облигации"){Stats = { new Stat("Всего", 2347), new Stat("Торгуется", 1284) }},
+            new Card("Ценные бумаги"){Stats =
+            {
+                new Stat("Всего", 584), 
+                new Stat("Торгуется", 236),
+                new Stat("Акции", 106),
+                new Stat("ETF", 84),
+            }},
+            new Card("Облигации"){Stats =
+            {
+                new Stat("Всего", 2347), 
+                new Stat("Торгуется", 1284)
+            }},
         };
 
         Cards.Clear();

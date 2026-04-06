@@ -20,9 +20,8 @@ public class DictionariesManager : IDictionariesManager
                 CardType = "Официальные данные",
                 Stats =
                 {
-                    new Stat("Акции", 236),
-                    new Stat("Облигации", 1284),
-                    new Stat("ETF", 42),
+                    new Stat("Ценные бумаги", 1647),
+                    new Stat("Облигации", 1284)
                 },
                 CardTypeForeground = "#FFC8102E",
                 CardTypeBackground = "#1AC8102E",
