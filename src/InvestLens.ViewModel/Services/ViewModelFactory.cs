@@ -10,11 +10,15 @@ public class ViewModelFactory : IViewModelFactory
 {
     private readonly IComponentContext _componentContext;
     private readonly IPortfoliosManager _portfoliosManager;
+    private readonly IDohodService _dohodService;
 
-    public ViewModelFactory(IComponentContext componentContext, IPortfoliosManager portfoliosManager)
+    public ViewModelFactory(IComponentContext componentContext, 
+        IPortfoliosManager portfoliosManager,
+        IDohodService dohodService)
     {
         _componentContext = componentContext;
         _portfoliosManager = portfoliosManager;
+        _dohodService = dohodService;
     }
 
     public INotifyPropertyChanged CreateViewModel(NodeType nodeType)
@@ -33,7 +37,11 @@ public class ViewModelFactory : IViewModelFactory
             NodeType.DictionariesMoexSecurities => _componentContext.Resolve<IDictionariesMoexSecuritiesViewModel>(),
             NodeType.DictionariesMoexBonds => _componentContext.Resolve<IDictionariesMoexBondsViewModel>(),
             NodeType.DictionariesDohod => _componentContext.Resolve<IDictionariesDohodViewModel>(),
-            NodeType.DictionariesDohodBonds => _componentContext.Resolve<IDictionariesDohodBondsViewModel>(),
+            
+            NodeType.DictionariesDohodBondsAAA => CreateDictionariesDohodBondsViewModel(NodeType.DictionariesDohodBondsAAA),
+            NodeType.DictionariesDohodBondsAA => CreateDictionariesDohodBondsViewModel(NodeType.DictionariesDohodBondsAA),
+            NodeType.DictionariesDohodBondsAplus => CreateDictionariesDohodBondsViewModel(NodeType.DictionariesDohodBondsAplus),
+
             NodeType.Downloader => _componentContext.Resolve<IDownloaderViewModel>(),
             NodeType.Scheduler => _componentContext.Resolve<ISchedulerViewModel>(),
             NodeType.Settings => _componentContext.Resolve<ISettingsViewModel>(),
@@ -48,6 +56,14 @@ public class ViewModelFactory : IViewModelFactory
         var model = _portfoliosManager.GetPortfolio(nodeType);
         var parameters = new TypedParameter(typeof(PortfolioDetail), model);
         var viewModel = _componentContext.Resolve<IPortfolioDetailViewModel>(parameters);
+        return viewModel;
+    }
+
+    private INotifyPropertyChanged CreateDictionariesDohodBondsViewModel(NodeType nodeType)
+    {
+        var bonds = _dohodService.GetBonds(nodeType);
+        var parameters = new TypedParameter(typeof(DohodBonds), bonds);
+        var viewModel = _componentContext.Resolve<IDictionariesDohodBondsViewModel>(parameters);
         return viewModel;
     }
 }

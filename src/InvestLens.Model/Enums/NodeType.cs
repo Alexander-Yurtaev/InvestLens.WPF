@@ -16,7 +16,9 @@ public enum NodeType
     DictionariesDohod,
     DictionariesMoexSecurities,
     DictionariesMoexBonds,
-    DictionariesDohodBonds,
+    DictionariesDohodBondsAAA,
+    DictionariesDohodBondsAA,
+    DictionariesDohodBondsAplus,
     SettingsCommon,
     SettingsPlugins
 }

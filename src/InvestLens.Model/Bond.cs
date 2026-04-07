@@ -4,15 +4,15 @@ namespace InvestLens.Model;
 
 public class Bond
 {
-    public Bond(string secId, string name, string issuer, PeriodType periodType)
+    public Bond(string isin, string name, string issuer, PeriodType periodType)
     {
-        SecId = secId;
+        Isin = isin;
         Name = name;
         PeriodType = periodType;
         Issuer = issuer;
     }
 
-    public string SecId { get; }
+    public string Isin { get; }
     public string Name { get; }
     public string Issuer { get; }
     public PeriodType PeriodType { get; }

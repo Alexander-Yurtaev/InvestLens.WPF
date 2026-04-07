@@ -17,11 +17,16 @@ namespace InvestLens.Tests
             var viewModelFactoryMock = new Mock<IViewModelFactory>();
             var userManagerMock = new Mock<IUserManager>();
             var notificationsManagerMock = new Mock<INotificationsManager>();
+            
             var portfoliosManager = new Mock<IPortfoliosManager>();
             portfoliosManager.Setup(pm => pm.GetPortfoliosMenuItems()).Returns(GetPortfoliosMenuItems());
+
+            var dohodService = new Mock<IDohodService>();
+            dohodService.Setup(pm => pm.GetDohodBondsMenuItems()).Returns(GetDohodBondsMenuItems);
+
             var eventAggregatorMock = new Mock<IEventAggregator>();
             eventAggregatorMock.Setup(ea => ea.GetEvent<SelectMenuNodeEvent>()).Returns(new SelectMenuNodeEvent());
-            var navigationVm = new NavigationViewModel(portfoliosManager.Object, eventAggregatorMock.Object);
+            var navigationVm = new NavigationViewModel(portfoliosManager.Object, dohodService.Object, eventAggregatorMock.Object);
 
             var vm = new MainWindowViewModel(navigationVm, 
                 headerVmMock.Object, 
@@ -69,7 +74,7 @@ namespace InvestLens.Tests
             Assert.NotNull(dohod.Model);
             Assert.Equal("Dohod.ru", dohod.Model.Header);
             Assert.NotNull(dohod.Children);
-            Assert.Single(dohod.Children);
+            Assert.Equal(3, dohod.Children.Count);
 
             divider = vm.NavigationVm.MenuItems[4] as IMenuNode;
             Assert.NotNull(divider);
@@ -109,6 +114,18 @@ namespace InvestLens.Tests
                 new MenuItemModel(NodeType.PortfoliosComplex, "📊", "Составной инвестиционный"),
                 new MenuItemModel(NodeType.PortfoliosFirst, "💰", "Портфель №1"),
                 new MenuItemModel(NodeType.PortfoliosSecond, "💎", "Портфель №2")
+            };
+
+            return result;
+        }
+
+        private List<MenuItemModel> GetDohodBondsMenuItems()
+        {
+            var result = new List<MenuItemModel>
+            {
+                new MenuItemModel(NodeType.DictionariesDohodBondsAAA, "", "AAA"),
+                new MenuItemModel(NodeType.DictionariesDohodBondsAA, "", "AA"),
+                new MenuItemModel(NodeType.DictionariesDohodBondsAplus, "", "A+")
             };
 
             return result;

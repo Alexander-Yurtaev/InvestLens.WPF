@@ -12,7 +12,7 @@ public class BondWrapper
         _model = model;
     }
 
-    public string SecId => _model.SecId;
+    public string Isin => _model.Isin;
     public string Name => _model.Name;
     public string Issuer => _model.Issuer;
     public PeriodType PeriodType => _model.PeriodType;

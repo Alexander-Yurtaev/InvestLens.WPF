@@ -23,7 +23,7 @@ public class PortfolioDetailViewModel : BaseViewModel, IPortfolioDetailViewModel
         Securities = _model.Securities.Select(s => new SecurityInfoWrapper(s)).ToList();
     }
 
-    public string Title => _model.Title + "-title";
+    public string Title => _model.Title;
     public List<StatWrapper> PortfolioStats { get; }
     public List<SecurityInfoWrapper> Securities { get; }
     public List<SecurityOperation> Operations => _model.Operations;

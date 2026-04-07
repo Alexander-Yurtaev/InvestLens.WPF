@@ -10,7 +10,7 @@ public class PortfolioDetail
         Operations = [];
     }
 
-    public string Title { get; set; }
+    public string Title { get; }
     public List<Stat> PortfolioStats { get; }
     public List<SecurityInfo> Securities { get; }
     public List<SecurityOperation> Operations { get; }

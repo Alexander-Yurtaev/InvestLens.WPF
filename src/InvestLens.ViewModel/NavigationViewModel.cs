@@ -8,11 +8,13 @@ namespace InvestLens.ViewModel;
 public class NavigationViewModel : BindableBase, INavigationViewModel
 {
     private readonly IPortfoliosManager _portfoliosManager;
+    private readonly IDohodService _dohodService;
     private readonly IEventAggregator _eventAggregator;
 
-    public NavigationViewModel(IPortfoliosManager portfoliosManager, IEventAggregator eventAggregator)
+    public NavigationViewModel(IPortfoliosManager portfoliosManager, IDohodService dohodService, IEventAggregator eventAggregator)
     {
         _portfoliosManager = portfoliosManager;
+        _dohodService = dohodService;
         _eventAggregator = eventAggregator;
         MenuItems = GetMenuItems();
     }
@@ -43,7 +45,7 @@ public class NavigationViewModel : BindableBase, INavigationViewModel
         var result = new List<MenuItemModel>
         {
             new MenuItemModel(NodeType.DictionariesMoex, "🏛️", "MOEX", GetMoexMenuItems()){Title = "Московская Биржа (MOEX)", Description = "Основные рыночные инструменты и индексы"},
-            new MenuItemModel(NodeType.DictionariesDohod, "🌐", "Dohod.ru", GetDohodMenuItems()){Title = "Dohod.ru", Description = "Агрегатор данных по облигациям"}
+            new MenuItemModel(NodeType.DictionariesDohod, "🌐", "Dohod.ru", _dohodService.GetDohodBondsMenuItems()){Title = "Dohod.ru", Description = "Агрегатор данных по облигациям"}
         };
 
         return result;
@@ -55,16 +57,6 @@ public class NavigationViewModel : BindableBase, INavigationViewModel
         {
             new MenuItemModel(NodeType.DictionariesMoexSecurities, "📈", "Ценные бумаги"){Title = "Ценные бумаги (MOEX)", Description = "Акции, ETF и другие инструменты"},
             new MenuItemModel(NodeType.DictionariesMoexBonds, "📜", "Облигации"){Title = "Облигации (MOEX)", Description = "Облигации на Московской бирже"}
-        };
-
-        return result;
-    }
-
-    private List<MenuItemModel> GetDohodMenuItems()
-    {
-        var result = new List<MenuItemModel>
-        {
-            new MenuItemModel(NodeType.DictionariesDohodBonds, "📜", "Облигации"){Title = "Облигации (Dohod.ru)", Description = "Данные с агрегатора dohod.ru"}
         };
 
         return result;
