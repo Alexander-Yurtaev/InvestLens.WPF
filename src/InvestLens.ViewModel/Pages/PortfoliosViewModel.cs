@@ -3,25 +3,20 @@ using InvestLens.ViewModel.Wrappers;
 
 namespace InvestLens.ViewModel.Pages;
 
-public class PortfoliosViewModel : BindableBase, IPortfoliosViewModel
+public class PortfoliosViewModel : BaseViewModel, IPortfoliosViewModel
 {
-    private IPortfoliosManager _portfoliosManager;
-
-    public PortfoliosViewModel(IPortfoliosManager portfoliosManager)
+    public PortfoliosViewModel(IPortfoliosManager portfoliosManager) : base("Мои портфели",
+        "Управляйте своими инвестиционными портфелями")
     {
-        var welcomeTitle = "Мои портфели";
-        var welcomeDescription = "Управляйте своими инвестиционными портфелями";
         var buttonModels = new List<ButtonModel>
         {
             new ButtonModel("+ Создать портфель", OnCreatePortfolio)
         };
-        ContentHeaderVm = new ContentHeaderViewModel(welcomeTitle, welcomeDescription, buttonModels);
+        ContentHeaderVm.AddButtons(buttonModels);
 
-        _portfoliosManager = portfoliosManager;
-        Cards.AddRange(_portfoliosManager.Cards.Select(c => new CardWrapper(c)));
+        Cards.AddRange(portfoliosManager.Cards.Select(c => new CardWrapper(c)));
     }
 
-    public IContentHeaderViewModel ContentHeaderVm { get; }
     public List<CardWrapper> Cards { get; } = [];
 
     private void OnCreatePortfolio()

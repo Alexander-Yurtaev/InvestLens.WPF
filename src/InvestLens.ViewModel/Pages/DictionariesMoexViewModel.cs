@@ -3,20 +3,13 @@ using InvestLens.ViewModel.Wrappers;
 
 namespace InvestLens.ViewModel.Pages;
 
-public class DictionariesMoexViewModel : BindableBase, IDictionariesMoexViewModel
+public class DictionariesMoexViewModel : BaseViewModel, IDictionariesMoexViewModel
 {
-    private readonly IMoexService _moexService;
-
-    public DictionariesMoexViewModel(IMoexService moexService)
+    public DictionariesMoexViewModel(IMoexService moexService) : base("Московская Биржа (MOEX)",
+        "Основные рыночные инструменты и индексы")
     {
-        var welcomeTitle = "Московская Биржа (MOEX)";
-        var welcomeDescription = "Основные рыночные инструменты и индексы";
-        ContentHeaderVm = new ContentHeaderViewModel(welcomeTitle, welcomeDescription);
-
-        _moexService = moexService;
-        Cards.AddRange(_moexService.Cards.Select(c => new CardWrapper(c)));
+        Cards.AddRange(moexService.Cards.Select(c => new CardWrapper(c)));
     }
 
-    public IContentHeaderViewModel ContentHeaderVm { get; }
     public List<CardWrapper> Cards { get; } = [];
 }

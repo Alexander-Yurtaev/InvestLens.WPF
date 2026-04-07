@@ -1,7 +1,5 @@
-﻿using System.ComponentModel;
+﻿namespace InvestLens.ViewModel.Pages;
 
-namespace InvestLens.ViewModel.Pages;
-
-public interface ISettingsPluginsViewModel : INotifyPropertyChanged
+public interface ISettingsPluginsViewModel : IBaseViewModel
 {
 }

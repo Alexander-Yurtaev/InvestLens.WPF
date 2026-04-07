@@ -1,5 +1,8 @@
 ﻿namespace InvestLens.ViewModel.Pages;
 
-public class DictionariesDohodViewModel : BindableBase, IDictionariesDohodViewModel
+public class DictionariesDohodViewModel : BaseViewModel, IDictionariesDohodViewModel
 {
+    public DictionariesDohodViewModel() : base("Dohod", "DictionariesDohodViewModel")
+    {
+    }
 }

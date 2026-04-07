@@ -1,10 +1,8 @@
 ﻿using System.Collections.ObjectModel;
-using System.ComponentModel;
 
 namespace InvestLens.ViewModel.Pages;
 
-public interface IDictionariesMoexSecuritiesViewModel : INotifyPropertyChanged
+public interface IDictionariesMoexSecuritiesViewModel : IBaseViewModel
 {
-    IContentHeaderViewModel ContentHeaderVm { get; }
     ObservableCollection<TabItemViewModel> Tabs { get; }
 }

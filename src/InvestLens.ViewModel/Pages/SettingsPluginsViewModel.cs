@@ -1,5 +1,8 @@
 ﻿namespace InvestLens.ViewModel.Pages;
 
-public class SettingsPluginsViewModel : BindableBase, ISettingsPluginsViewModel
+public class SettingsPluginsViewModel : BaseViewModel, ISettingsPluginsViewModel
 {
+    public SettingsPluginsViewModel() : base("SettingsPluginsViewModel")
+    {
+    }
 }

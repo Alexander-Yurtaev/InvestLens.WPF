@@ -1,12 +1,10 @@
 ﻿using InvestLens.Model;
 using InvestLens.ViewModel.Wrappers;
-using System.ComponentModel;
 
 namespace InvestLens.ViewModel.Pages;
 
-public interface IPortfolioDetailViewModel : INotifyPropertyChanged
+public interface IPortfolioDetailViewModel : IBaseViewModel
 {
-    IContentHeaderViewModel ContentHeaderVm { get; }
     string Title { get; }
     List<StatWrapper> PortfolioStats { get; }
     List<SecurityInfoWrapper> Securities { get; }

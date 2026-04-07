@@ -3,23 +3,18 @@ using System.Collections.ObjectModel;
 
 namespace InvestLens.ViewModel.Pages;
 
-public class DictionariesMoexBondsViewModel : BindableBase, IDictionariesMoexBondsViewModel
+public class DictionariesMoexBondsViewModel : BaseViewModel, IDictionariesMoexBondsViewModel
 {
     private readonly IDictionariesManager _dictionariesManager;
     private TabItemViewModel? _selectedTab;
 
-    public DictionariesMoexBondsViewModel(IDictionariesManager dictionariesManager)
+    public DictionariesMoexBondsViewModel(IDictionariesManager dictionariesManager) : base("Облигации (MOEX)")
     {
-        var welcomeTitle = "Облигации (MOEX)";
-        var welcomeDescription = "";
-        ContentHeaderVm = new ContentHeaderViewModel(welcomeTitle, welcomeDescription);
-
         _dictionariesManager = dictionariesManager;
         Load();
         SelectedTab = Tabs.FirstOrDefault();
     }
 
-    public IContentHeaderViewModel ContentHeaderVm { get; }
     public ObservableCollection<TabItemViewModel> Tabs { get; } = [];
 
     public TabItemViewModel? SelectedTab

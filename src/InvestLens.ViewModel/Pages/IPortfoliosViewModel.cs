@@ -1,10 +1,8 @@
 ﻿using InvestLens.ViewModel.Wrappers;
-using System.ComponentModel;
 
 namespace InvestLens.ViewModel.Pages;
 
-public interface IPortfoliosViewModel : INotifyPropertyChanged
+public interface IPortfoliosViewModel : IBaseViewModel
 {
-    IContentHeaderViewModel ContentHeaderVm { get; }
     List<CardWrapper> Cards { get; }
 }

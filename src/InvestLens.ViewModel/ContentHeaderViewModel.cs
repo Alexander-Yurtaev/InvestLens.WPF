@@ -10,6 +10,15 @@ public class ContentHeaderViewModel : IContentHeaderViewModel
         WelcomeDescription = welcomeDescription;
         Buttons = [];
 
+        AddButtons(buttonModels);
+    }
+
+    public string WelcomeTitle { get; }
+    public string WelcomeDescription { get; }
+    public List<ButtonInfo> Buttons { get; }
+
+    public void AddButtons(List<ButtonModel>? buttonModels)
+    {
         if (buttonModels is null) return;
 
         foreach (var onButtonModel in buttonModels)
@@ -17,10 +26,6 @@ public class ContentHeaderViewModel : IContentHeaderViewModel
             Buttons.Add(new ButtonInfo(onButtonModel));
         }
     }
-
-    public string WelcomeTitle { get; }
-    public string WelcomeDescription { get; }
-    public List<ButtonInfo> Buttons { get; }
 }
 
 public class ButtonModel

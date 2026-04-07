@@ -3,11 +3,11 @@ using InvestLens.ViewModel.Wrappers;
 
 namespace InvestLens.ViewModel.Pages;
 
-public class PortfolioDetailViewModel : BindableBase, IPortfolioDetailViewModel
+public class PortfolioDetailViewModel : BaseViewModel, IPortfolioDetailViewModel
 {
     private readonly PortfolioDetail _model;
 
-    public PortfolioDetailViewModel(PortfolioDetail model)
+    public PortfolioDetailViewModel(PortfolioDetail model) : base(model.Title)
     {
         _model = model;
 
@@ -16,13 +16,13 @@ public class PortfolioDetailViewModel : BindableBase, IPortfolioDetailViewModel
             new ButtonModel("Редактировать", OnEditPortfolio),
             new ButtonModel("Импортировать", OnImportPortfolio),
         };
-        ContentHeaderVm = new ContentHeaderViewModel(_model.Title, string.Empty, buttonModels);
+        ContentHeaderVm.Buttons.Clear();
+        ContentHeaderVm.AddButtons(buttonModels);
 
         PortfolioStats = model.PortfolioStats.Select(p => new StatWrapper(p)).ToList();
         Securities = _model.Securities.Select(s => new SecurityInfoWrapper(s)).ToList();
     }
 
-    public IContentHeaderViewModel ContentHeaderVm { get; }
     public string Title => _model.Title + "-title";
     public List<StatWrapper> PortfolioStats { get; }
     public List<SecurityInfoWrapper> Securities { get; }
