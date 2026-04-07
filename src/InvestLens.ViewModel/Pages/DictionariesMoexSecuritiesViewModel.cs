@@ -30,13 +30,13 @@ public class DictionariesMoexSecuritiesViewModel : BindableBase, IDictionariesMo
 
     public void Load()
     {
-        var types = _dictionariesManager.GetSecurityTypes();
+        var types = _dictionariesManager.DictionariesMoexManager.GetSecurityTypes();
         foreach (var type in types)
         {
-            var securities = _dictionariesManager.GetSecurities(type);
+            var securities = _dictionariesManager.DictionariesMoexManager.GetSecurities(type);
             var model = new TabItemViewModel(type)
             {
-                Content = securities
+                Content = securities.Cast<object>().ToList()
             };
             Tabs.Add(model);
         }

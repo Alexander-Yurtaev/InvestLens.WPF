@@ -4,8 +4,6 @@ namespace InvestLens.ViewModel.Services;
 
 public interface IDictionariesManager
 {
+    IDictionariesMoexManager DictionariesMoexManager { get; }
     List<Card> Cards { get; }
-
-    List<string> GetSecurityTypes();
-    List<Security> GetSecurities(string type);
 }
