@@ -8,6 +8,7 @@ public class TabItemViewModel : BindableBase
     public TabItemViewModel(string header)
     {
         Header = header;
+        Content = [];
     }
 
     public string Header
