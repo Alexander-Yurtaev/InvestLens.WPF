@@ -1,8 +1,15 @@
-﻿namespace InvestLens.ViewModel.Pages;
+﻿using InvestLens.ViewModel.Services;
+using InvestLens.ViewModel.Wrappers;
+
+namespace InvestLens.ViewModel.Pages;
 
 public class DictionariesDohodViewModel : BaseViewModel, IDictionariesDohodViewModel
 {
-    public DictionariesDohodViewModel() : base("Dohod", "DictionariesDohodViewModel")
+    public DictionariesDohodViewModel(IDohodService dohodService) : base("Dohod.ru",
+        "Агрегатор данных по облигациям")
     {
+        Cards.AddRange(dohodService.Cards.Select(c => new CardWrapper(c)));
     }
+
+    public List<CardWrapper> Cards { get; } = [];
 }

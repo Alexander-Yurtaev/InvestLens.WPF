@@ -1,4 +1,5 @@
-﻿using InvestLens.Model;
+﻿using System.Globalization;
+using InvestLens.Model;
 
 namespace InvestLens.ViewModel.Services;
 

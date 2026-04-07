@@ -22,6 +22,7 @@ namespace InvestLens.App.Startup
             builder.RegisterType<DictionariesMoexManager>().As<IDictionariesMoexManager>().SingleInstance();
             builder.RegisterType<DictionariesManager>().As<IDictionariesManager>().SingleInstance();
             builder.RegisterType<MoexService>().As<IMoexService>().SingleInstance();
+            builder.RegisterType<DohodService>().As<IDohodService>().SingleInstance();
 
             builder.RegisterType<MainWindow>().AsSelf();
             builder.RegisterType<MainWindowViewModel>().As<IMainWindowViewModel>();
