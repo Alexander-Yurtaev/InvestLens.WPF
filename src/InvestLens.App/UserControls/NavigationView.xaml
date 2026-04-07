@@ -4,8 +4,10 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              d:DataContext="{d:DesignInstance viewModel:NavigationViewModel, IsDesignTimeCreatable=True}"
-             xmlns:menu="clr-namespace:InvestLens.Model.Menu;assembly=InvestLens.Model"
+             xmlns:menu="clr-namespace:InvestLens.ViewModel.Wrappers.Menu;assembly=InvestLens.ViewModel"
              xmlns:viewModel="clr-namespace:InvestLens.ViewModel;assembly=InvestLens.ViewModel"
+             xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
+             xmlns:behaviors="clr-namespace:InvestLens.App.Behaviors"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="320">
 
@@ -124,16 +126,17 @@
                     Width="235"
                     HorizontalAlignment="Stretch"/>
         </DataTemplate>
-        <DataTemplate DataType="{x:Type menu:MenuNode}">
+        <DataTemplate DataType="{x:Type menu:MenuItemWrapper}">
             <ToggleButton 
                 Foreground="White"
                 HorizontalContentAlignment="Left"
                 Cursor="Hand"
                 Width="200"
                 BorderThickness="0"
-                Command="{Binding RelativeSource={RelativeSource AncestorType=TreeView}, Path=DataContext.NavigateCommand}"
+                Command="{Binding NavigateCommand}"
                 CommandParameter="{Binding}"
-                IsChecked="{Binding RelativeSource={RelativeSource AncestorType=TreeViewItem}, Mode=TwoWay, Path=IsSelected}">
+                IsChecked="{Binding RelativeSource={RelativeSource AncestorType=TreeViewItem}, Mode=TwoWay, Path=IsSelected}"
+                Checked="ToggleButton_OnChecked">
                 <ToggleButton.Resources>
                     <Style TargetType="TextBlock">
                         <Setter Property="Foreground" Value="#CDD9F0"/>
@@ -186,8 +189,11 @@
                 Padding="12, 0, 12, 24">
             <TreeView ItemsSource="{Binding MenuItems}" 
                       Background="Transparent">
+                <b:Interaction.Behaviors>
+                    <behaviors:SelectFirstTreeItemBehavior/>
+                </b:Interaction.Behaviors>
                 <TreeView.ItemTemplate>
-                    <HierarchicalDataTemplate DataType="{x:Type menu:MenuNode}" 
+                    <HierarchicalDataTemplate DataType="{x:Type menu:MenuItemWrapper}" 
                                               ItemsSource="{Binding Children}">
                         <ContentPresenter Content="{Binding}" />
                     </HierarchicalDataTemplate>

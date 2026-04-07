@@ -2,6 +2,4 @@
 
 namespace InvestLens.ViewModel.Events;
 
-public class SelectMenuNodeEvent : PubSubEvent<MenuNode>
-{
-}
+public class SelectMenuNodeEvent : PubSubEvent<MenuItemModel>;

@@ -68,13 +68,13 @@ public class PortfoliosManager : IPortfoliosManager
 
     public List<Card> Cards { get; } = [];
 
-    public List<MenuNode> GetPortfoliosMenuItems()
+    public List<MenuItemModel> GetPortfoliosMenuItems()
     {
-        var result = new List<MenuNode>
+        var result = new List<MenuItemModel>
         {
-            new MenuNode(NodeType.PortfoliosComplex, "📊", "Составной инвестиционный"){Title = "Составной инвестиционный", Description = "Детальная информация о портфеле"},
-            new MenuNode(NodeType.PortfoliosFirst, "💰", "Портфель №1"){Title = "Портфель №1", Description = "Детальная информация о портфеле"},
-            new MenuNode(NodeType.PortfoliosSecond, "💎", "Портфель №2"){Title = "Портфель №2", Description = "Детальная информация о портфеле"}
+            new MenuItemModel(NodeType.PortfoliosComplex, "📊", "Составной инвестиционный"){Title = "Составной инвестиционный", Description = "Детальная информация о портфеле"},
+            new MenuItemModel(NodeType.PortfoliosFirst, "💰", "Портфель №1"){Title = "Портфель №1", Description = "Детальная информация о портфеле"},
+            new MenuItemModel(NodeType.PortfoliosSecond, "💎", "Портфель №2"){Title = "Портфель №2", Description = "Детальная информация о портфеле"}
         };
 
         return result;

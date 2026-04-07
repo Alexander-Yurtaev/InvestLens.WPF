@@ -1,4 +1,7 @@
-﻿using System.Windows.Controls;
+﻿using InvestLens.ViewModel.Wrappers.Menu;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 
 namespace InvestLens.App.UserControls
 {
@@ -10,6 +13,12 @@ namespace InvestLens.App.UserControls
         public NavigationView()
         {
             InitializeComponent();
+        }
+
+        private void ToggleButton_OnChecked(object sender, RoutedEventArgs e)
+        {
+            var vm = ((ToggleButton)sender).DataContext as MenuItemWrapper;
+            vm?.NavigateCommand?.Execute(vm);
         }
     }
 }

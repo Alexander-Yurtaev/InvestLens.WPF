@@ -7,6 +7,6 @@ public interface IHeaderViewModel
 {
     string Title { get; }
     string Description { get; }
-    void SetModel(MenuNode model);
+    void SetModel(MenuItemModel model);
     event PropertyChangedEventHandler? PropertyChanged;
 }

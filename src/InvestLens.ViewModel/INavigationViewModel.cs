@@ -1,10 +1,10 @@
-﻿using System.ComponentModel;
-using InvestLens.Model.Menu;
+﻿using InvestLens.ViewModel.Wrappers.Menu;
+using System.ComponentModel;
 
 namespace InvestLens.ViewModel;
 
 public interface INavigationViewModel
 {
-    List<MenuItemModel> MenuItems { get; set; }
+    List<IMenuNode> MenuItems { get; set; }
     event PropertyChangedEventHandler? PropertyChanged;
 }

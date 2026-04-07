@@ -9,7 +9,6 @@ namespace InvestLens.ViewModel;
 public class MainWindowViewModel : BindableBase, IMainWindowViewModel
 {
     private readonly IViewModelFactory _viewModelFactory;
-    private readonly IEventAggregator _eventAggregator;
     private INotifyPropertyChanged? _contentVm;
 
     public MainWindowViewModel(INavigationViewModel navigationVm, 
@@ -20,14 +19,13 @@ public class MainWindowViewModel : BindableBase, IMainWindowViewModel
         IEventAggregator eventAggregator)
     {
         _viewModelFactory = viewModelFactory;
-        _eventAggregator = eventAggregator;
         NavigationVm = navigationVm;
         HeaderVm = headerVm;
 
         UserManager = userManager;
         NotificationsManager = notificationsManager;
 
-        _eventAggregator.GetEvent<SelectMenuNodeEvent>().Subscribe(OnSelectMenuNode);
+        eventAggregator.GetEvent<SelectMenuNodeEvent>().Subscribe(OnSelectMenuNode);
     }
 
     public INavigationViewModel NavigationVm { get; }
@@ -42,7 +40,7 @@ public class MainWindowViewModel : BindableBase, IMainWindowViewModel
     public INotificationsManager NotificationsManager { get; }
     public IUserManager UserManager { get; }
 
-    private void OnSelectMenuNode(MenuNode node)
+    private void OnSelectMenuNode(MenuItemModel node)
     {
         HeaderVm.SetModel(node);
         ContentVm = GetContentVm(node.NodeType);

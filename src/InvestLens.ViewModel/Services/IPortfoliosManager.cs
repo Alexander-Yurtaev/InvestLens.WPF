@@ -7,6 +7,6 @@ namespace InvestLens.ViewModel.Services;
 public interface IPortfoliosManager
 {
     List<Card> Cards { get; }
-    List<MenuNode> GetPortfoliosMenuItems();
+    List<MenuItemModel> GetPortfoliosMenuItems();
     PortfolioDetail GetPortfolio(NodeType nodeType);
 }
