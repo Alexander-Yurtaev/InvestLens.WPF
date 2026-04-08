@@ -46,7 +46,13 @@
                    TargetType="Border">
                 <Setter Property="CornerRadius" Value="0 32 32 0"/>
                 <Setter Property="Padding" Value="48"/>
-                <Setter Property="Background" Value="{StaticResource BackgroundPrimary}"/>
+                <Setter Property="Background" Value="{StaticResource BackgroundSecondary}"/>
+            </Style>
+            <Style x:Key="H1Style" 
+                   TargetType="TextBlock">
+                <Setter Property="FontSize" Value="28"/>
+                <Setter Property="FontWeight" Value="Medium"/>
+                <Setter Property="Margin" Value="0 0 0 8"/>
             </Style>
             <Style x:Key="H2Style" 
                    TargetType="TextBlock">
@@ -54,11 +60,43 @@
                 <Setter Property="FontSize" Value="28"/>
                 <Setter Property="FontWeight" Value="Medium"/>
             </Style>
-            <Style x:Key="PStyle" 
+            <Style x:Key="PBlackStyle" 
                    TargetType="TextBlock">
                 <Setter Property="Foreground" Value="{StaticResource BackgroundSecondary}"/>
                 <Setter Property="Opacity" Value="0.8"/>
                 <Setter Property="FontSize" Value="15"/>
+            </Style>
+            <Style x:Key="PWhiteStyle" 
+                   TargetType="TextBlock">
+                <Setter Property="Foreground" Value="#5A6E8A"/>
+                <Setter Property="FontSize" Value="14"/>
+            </Style>
+            <Style TargetType="Label">
+                <Setter Property="FontSize" Value="13"/>
+                <Setter Property="FontWeight" Value="Medium"/>
+                <Setter Property="Foreground" Value="#1E2A3E"/>
+                <Setter Property="Margin" Value="0 0 0 8"/>
+            </Style>
+            <Style TargetType="TextBox">
+                <Setter Property="Padding" Value="16 12"/>
+                <Setter Property="BorderThickness" Value="1"/>
+                <Setter Property="BorderBrush" Value="#E9EDF2"/>
+                <Setter Property="FontSize" Value="14"/>
+                <Setter Property="Background" Value="{StaticResource BackgroundPrimary}"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="TextBox">
+                            <Border BorderThickness="{TemplateBinding BorderThickness}"
+                                    BorderBrush="{TemplateBinding BorderBrush}"
+                                    Background="{TemplateBinding Background}"
+                                    CornerRadius="12">
+                                <ScrollViewer x:Name="PART_ContentHost" 
+                                              Margin="5,0"
+                                              VerticalAlignment="Center"/>
+                            </Border>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
             </Style>
         </ResourceDictionary>
     </Window.Resources>
@@ -78,13 +116,11 @@
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="*"/>
                         <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="*"/>
-                        <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
                     <Border Grid.Row="0" Margin="0 0 0 48">
                         <local:Logo/>
                     </Border>
-                    <StackPanel Grid.Row="2" Orientation="Vertical">
+                    <StackPanel Grid.Row="1" Orientation="Vertical" VerticalAlignment="Center">
                         <StackPanel Margin="0 0 0 16">
                             <TextBlock Text="Начни свой путь" 
                                        Style="{StaticResource H2Style}"/>
@@ -92,29 +128,90 @@
                                        Style="{StaticResource H2Style}"/>
                         </StackPanel>
                         <TextBlock Text="Присоединяйтесь к тысячам инвесторов" 
-                                   Style="{StaticResource PStyle}"/>
+                                   Style="{StaticResource PBlackStyle}"/>
                     </StackPanel>
-                    <StackPanel Grid.Row="4">
+                    <StackPanel Grid.Row="2">
                         <StackPanel Orientation="Horizontal" Margin="0 0 0 20">
-                            <TextBlock Text="📊" Style="{StaticResource PStyle}" Margin="0 0 12 0"/>
-                            <TextBlock Text="Аналитика в реальном времени" Style="{StaticResource PStyle}"/>
+                            <TextBlock Text="📊" Style="{StaticResource PBlackStyle}" Margin="0 0 12 0"/>
+                            <TextBlock Text="Аналитика в реальном времени" Style="{StaticResource PBlackStyle}"/>
                         </StackPanel>
                         <StackPanel Orientation="Horizontal" Margin="0 0 0 20">
-                            <TextBlock Text="📁" Style="{StaticResource PStyle}" Margin="0 0 12 0"/>
-                            <TextBlock Text="Несколько портфелей" Style="{StaticResource PStyle}"/>
+                            <TextBlock Text="📁" Style="{StaticResource PBlackStyle}" Margin="0 0 12 0"/>
+                            <TextBlock Text="Несколько портфелей" Style="{StaticResource PBlackStyle}"/>
                         </StackPanel>
                         <StackPanel Orientation="Horizontal" Margin="0 0 0 20">
-                            <TextBlock Text="🔒" Style="{StaticResource PStyle}" Margin="0 0 12 0"/>
-                            <TextBlock Text="Безопасное хранение данных" Style="{StaticResource PStyle}"/>
+                            <TextBlock Text="🔒" Style="{StaticResource PBlackStyle}" Margin="0 0 12 0"/>
+                            <TextBlock Text="Безопасное хранение данных" Style="{StaticResource PBlackStyle}"/>
                         </StackPanel>
                     </StackPanel>
                 </Grid>
             </Border>
             <Border Grid.Column="1"
                     Style="{StaticResource RightSideStyle}">
-                <StackPanel Orientation="Vertical">
-                    <TextBlock Text="Brand Quate" Foreground="{StaticResource BackgroundSecondary}"/>
-                </StackPanel>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <StackPanel Grid.Row="0"
+                                Margin="0 0 0 28">
+                        <TextBlock Text="Регистрация" 
+                                   Style="{StaticResource H1Style}"/>
+                        <TextBlock Text="Создайте аккаунт для начала работы" 
+                                   Style="{StaticResource PWhiteStyle}"/>
+                    </StackPanel>
+                    <StackPanel Grid.Row="1">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0" Margin="0 0 8 20">
+                                <Label Content="Имя" Target="NameTextBox"/>
+                                <TextBox x:Name="NameTextBox" Text="{Binding Name}"/>
+                            </StackPanel>
+                            <StackPanel Grid.Column="1" Margin="8 0 0 20">
+                                <Label Content="Фамилия" Target="SurnameTextBox"/>
+                                <TextBox x:Name="SurnameTextBox" Text="{Binding Surname}"/>
+                            </StackPanel>
+                        </Grid>
+                        <StackPanel Margin="0 0 0 20">
+                            <Label Content="Email" Target="EmailTextBox"/>
+                            <TextBox x:Name="EmailTextBox" Text="{Binding Email}"/>
+                        </StackPanel>
+                        <StackPanel Margin="0 0 0 20">
+                            <Label Content="Пароль" Target="PasswordTextBox"/>
+                            <TextBox x:Name="PasswordTextBox" Text="{Binding Password}"/>
+                        </StackPanel>
+                        <StackPanel Margin="0 0 0 24">
+                            <Label Content="Подтверждение пароля" Target="ConfirmPasswordTextBox"/>
+                            <TextBox x:Name="ConfirmPasswordTextBox" Text="{Binding ConfirmPassword}"/>
+                        </StackPanel>
+                        <Button Content="Создать аккаунт" 
+                                Padding="14"
+                                FontSize="16"
+                                FontWeight="Bold"
+                                Margin="0 0 0 24"
+                                Style="{StaticResource PrimaryButtonStyle}"/>
+                        <Button Content="Выход" 
+                                Padding="14"
+                                FontSize="16"
+                                FontWeight="Bold"
+                                Margin="0 0 0 24"
+                                Style="{StaticResource SecondaryButtonStyle}"
+                                Click="CloseButton_OnClick"/>
+                    </StackPanel>
+                    <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center">
+                        <TextBlock Text="Уже есть аккаунт?"
+                                   FontSize="14"
+                                   Foreground="#5A6E8A"
+                                   Margin="0 0 4 0"/>
+                        <Button Content="Войти" 
+                                FontWeight="Medium"
+                                Style="{StaticResource LinkStyle}"/>
+                    </StackPanel>
+                </Grid>
             </Border>
         </Grid>
     </Border>

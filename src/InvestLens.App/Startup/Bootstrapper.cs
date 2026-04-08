@@ -1,4 +1,5 @@
 ﻿using Autofac;
+using InvestLens.App.UserControls;
 using InvestLens.ViewModel;
 using InvestLens.ViewModel.Pages;
 using InvestLens.ViewModel.Services;
@@ -26,6 +27,10 @@ namespace InvestLens.App.Startup
 
             builder.RegisterType<MainWindow>().AsSelf();
             builder.RegisterType<MainWindowViewModel>().As<IMainWindowViewModel>();
+
+            builder.RegisterType<RegistrationWindow>().AsSelf();
+            builder.RegisterType<RegistrationViewModel>().As<IRegistrationViewModel>();
+
             builder.RegisterType<NavigationViewModel>().As<INavigationViewModel>();
             builder.RegisterType<HeaderViewModel>().As<IHeaderViewModel>();
 

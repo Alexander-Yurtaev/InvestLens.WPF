@@ -1,5 +1,5 @@
 ﻿using System.Windows;
-using System.Windows.Input;
+using InvestLens.ViewModel;
 
 namespace InvestLens.App.UserControls
 {
@@ -8,9 +8,15 @@ namespace InvestLens.App.UserControls
     /// </summary>
     public partial class RegistrationWindow : Window
     {
-        public RegistrationWindow()
+        public RegistrationWindow(IRegistrationViewModel viewModel)
         {
             InitializeComponent();
+            DataContext = viewModel;
+        }
+
+        private void CloseButton_OnClick(object sender, RoutedEventArgs e)
+        {
+            this.Close();
         }
     }
 }

@@ -2,6 +2,7 @@
 using Autofac;
 using InvestLens.App.Startup;
 using InvestLens.App.UserControls;
+using InvestLens.Model;
 using InvestLens.ViewModel.Services;
 
 namespace InvestLens.App
@@ -43,10 +44,11 @@ namespace InvestLens.App
         {
             base.OnStartup(e);
 
-            var registrationWindow = new RegistrationWindow();
-            registrationWindow.ShowDialog();
-
             var container = Bootstrapper.BootStrap();
+
+            var registrationWindow = container.Resolve<RegistrationWindow>();
+            registrationWindow.ShowDialog();
+            var model = registrationWindow.DataContext;
 
             var userManager = container.Resolve<IUserManager>();
             var userLoadTask = userManager.LoadAsync();
