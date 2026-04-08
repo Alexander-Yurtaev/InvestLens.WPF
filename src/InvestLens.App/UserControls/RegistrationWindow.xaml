@@ -1,0 +1,72 @@
+﻿<Window x:Class="InvestLens.App.UserControls.RegistrationWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:InvestLens.App.UserControls"
+        xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
+        xmlns:behaviors="clr-namespace:InvestLens.App.Behaviors"
+        mc:Ignorable="d"
+        Title="RegistrationWindow" Height="884" Width="1000"
+        WindowStyle="None"
+        AllowsTransparency="True"
+        Background="Transparent"
+        WindowStartupLocation="CenterScreen">
+
+    <b:Interaction.Behaviors>
+        <behaviors:DragMoveBehavior/>
+    </b:Interaction.Behaviors>
+
+    <Window.Resources>
+        <ResourceDictionary>
+            <Style TargetType="Window">
+                <Setter Property="Effect">
+                    <Setter.Value>
+                        <DropShadowEffect BlurRadius="12" 
+                                          ShadowDepth="0" 
+                                          Opacity="0.25" 
+                                          Color="Black"/>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+            <Style x:Key="LeftSideStyle"
+                   TargetType="Border">
+                <Setter Property="CornerRadius" Value="32 0 0 32"/>
+                <Setter Property="Padding" Value="48"/>
+                <Setter Property="Background">
+                    <Setter.Value>
+                        <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                            <GradientStop Color="#002855" Offset="0"/>
+                            <GradientStop Color="#003D7A" Offset="1"/>
+                        </LinearGradientBrush>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+            <Style x:Key="RightSideStyle"
+                   TargetType="Border">
+                <Setter Property="CornerRadius" Value="0 32 32 0"/>
+                <Setter Property="Padding" Value="48"/>
+                <Setter Property="Background" Value="{StaticResource BackgroundPrimary}"/>
+            </Style>
+        </ResourceDictionary>
+    </Window.Resources>
+
+    <Border Background="{StaticResource BackgroundSecondary}"
+            CornerRadius="32"
+            Margin="0">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Border Grid.Column="0"
+                  Style="{StaticResource LeftSideStyle}">
+
+            </Border>
+            <Border Grid.Column="1"
+                    Style="{StaticResource RightSideStyle}">
+
+            </Border>
+        </Grid>
+    </Border>
+</Window>

@@ -1,6 +1,7 @@
 ﻿using System.Windows;
 using Autofac;
 using InvestLens.App.Startup;
+using InvestLens.App.UserControls;
 using InvestLens.ViewModel.Services;
 
 namespace InvestLens.App
@@ -41,6 +42,9 @@ namespace InvestLens.App
         protected override void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
+
+            var registrationWindow = new RegistrationWindow();
+            registrationWindow.ShowDialog();
 
             var container = Bootstrapper.BootStrap();
 
