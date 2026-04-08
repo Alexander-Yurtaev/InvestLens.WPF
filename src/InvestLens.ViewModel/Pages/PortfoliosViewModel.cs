@@ -3,7 +3,7 @@ using InvestLens.ViewModel.Wrappers;
 
 namespace InvestLens.ViewModel.Pages;
 
-public class PortfoliosViewModel : BaseViewModel, IPortfoliosViewModel
+public class PortfoliosViewModel : ViewModelBaseWithContentHeader, IPortfoliosViewModel
 {
     public PortfoliosViewModel(IPortfoliosManager portfoliosManager) : base("Мои портфели",
         "Управляйте своими инвестиционными портфелями")

@@ -3,7 +3,7 @@ using InvestLens.ViewModel.Wrappers;
 
 namespace InvestLens.ViewModel.Pages;
 
-public class DictionariesDohodBondsViewModel : BaseViewModel, IDictionariesDohodBondsViewModel
+public class DictionariesDohodBondsViewModel : ViewModelBaseWithContentHeader, IDictionariesDohodBondsViewModel
 {
     private readonly DohodBonds _model;
 

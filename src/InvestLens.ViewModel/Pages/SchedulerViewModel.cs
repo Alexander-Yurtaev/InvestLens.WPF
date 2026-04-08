@@ -1,6 +1,6 @@
 ﻿namespace InvestLens.ViewModel.Pages;
 
-public class SchedulerViewModel : BaseViewModel, ISchedulerViewModel
+public class SchedulerViewModel : ViewModelBaseWithContentHeader, ISchedulerViewModel
 {
     public SchedulerViewModel() : base("SchedulerViewModel")
     {

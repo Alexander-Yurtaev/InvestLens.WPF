@@ -1,5 +1,5 @@
 ﻿namespace InvestLens.ViewModel.Pages;
 
-public interface ISchedulerViewModel : IBaseViewModel
+public interface ISchedulerViewModel : IViewModelBaseWithContentHeader
 {
 }

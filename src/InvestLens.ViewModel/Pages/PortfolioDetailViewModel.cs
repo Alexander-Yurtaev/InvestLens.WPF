@@ -3,7 +3,7 @@ using InvestLens.ViewModel.Wrappers;
 
 namespace InvestLens.ViewModel.Pages;
 
-public class PortfolioDetailViewModel : BaseViewModel, IPortfolioDetailViewModel
+public class PortfolioDetailViewModel : ViewModelBaseWithContentHeader, IPortfolioDetailViewModel
 {
     private readonly PortfolioDetail _model;
 

@@ -3,7 +3,7 @@ using InvestLens.ViewModel.Wrappers;
 
 namespace InvestLens.ViewModel.Pages;
 
-public class DictionariesViewModel : BaseViewModel, IDictionariesViewModel
+public class DictionariesViewModel : ViewModelBaseWithContentHeader, IDictionariesViewModel
 {
     private readonly IDictionariesManager _dictionariesManager;
 

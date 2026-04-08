@@ -3,7 +3,7 @@ using InvestLens.ViewModel.Services;
 
 namespace InvestLens.ViewModel.Pages;
 
-public class DashboardViewModel : BaseViewModel, IDashboardViewModel
+public class DashboardViewModel : ViewModelBaseWithContentHeader, IDashboardViewModel
 {
     public DashboardViewModel(IUserManager userManager,
         IMetricsManager metricsManager,

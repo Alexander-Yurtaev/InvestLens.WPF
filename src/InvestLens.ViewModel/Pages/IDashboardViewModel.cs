@@ -2,7 +2,7 @@
 
 namespace InvestLens.ViewModel.Pages;
 
-public interface IDashboardViewModel : IBaseViewModel
+public interface IDashboardViewModel : IViewModelBaseWithContentHeader
 {
     List<MetricCard> MetricCards { get; }
     List<ActivityItem> ActivityItems { get; }

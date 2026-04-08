@@ -1,6 +1,6 @@
 ﻿namespace InvestLens.ViewModel.Pages;
 
-public class SettingsCommonViewModel : BaseViewModel, ISettingsCommonViewModel
+public class SettingsCommonViewModel : ViewModelBaseWithContentHeader, ISettingsCommonViewModel
 {
     public SettingsCommonViewModel() : base("SettingsCommonViewModel")
     {

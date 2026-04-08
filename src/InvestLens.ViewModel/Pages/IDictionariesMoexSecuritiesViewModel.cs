@@ -2,7 +2,7 @@
 
 namespace InvestLens.ViewModel.Pages;
 
-public interface IDictionariesMoexSecuritiesViewModel : IBaseViewModel
+public interface IDictionariesMoexSecuritiesViewModel : IViewModelBaseWithContentHeader
 {
     ObservableCollection<TabItemViewModel> Tabs { get; }
 }

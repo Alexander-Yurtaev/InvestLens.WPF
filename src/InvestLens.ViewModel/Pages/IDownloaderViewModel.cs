@@ -1,5 +1,5 @@
 ﻿namespace InvestLens.ViewModel.Pages;
 
-public interface IDownloaderViewModel : IBaseViewModel
+public interface IDownloaderViewModel : IViewModelBaseWithContentHeader
 {
 }

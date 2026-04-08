@@ -3,7 +3,7 @@ using InvestLens.ViewModel.Wrappers;
 
 namespace InvestLens.ViewModel.Pages;
 
-public interface IPortfolioDetailViewModel : IBaseViewModel
+public interface IPortfolioDetailViewModel : IViewModelBaseWithContentHeader
 {
     string Title { get; }
     List<StatWrapper> PortfolioStats { get; }

@@ -1,5 +1,5 @@
 ﻿namespace InvestLens.ViewModel.Pages;
 
-public interface ISettingsViewModel : IBaseViewModel
+public interface ISettingsViewModel : IViewModelBaseWithContentHeader
 {
 }

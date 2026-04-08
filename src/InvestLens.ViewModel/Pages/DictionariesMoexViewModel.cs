@@ -3,7 +3,7 @@ using InvestLens.ViewModel.Wrappers;
 
 namespace InvestLens.ViewModel.Pages;
 
-public class DictionariesMoexViewModel : BaseViewModel, IDictionariesMoexViewModel
+public class DictionariesMoexViewModel : ViewModelBaseWithContentHeader, IDictionariesMoexViewModel
 {
     public DictionariesMoexViewModel(IMoexService moexService) : base("Московская Биржа (MOEX)",
         "Основные рыночные инструменты и индексы")

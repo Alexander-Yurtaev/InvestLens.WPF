@@ -3,7 +3,7 @@ using InvestLens.ViewModel.Services;
 
 namespace InvestLens.ViewModel.Pages;
 
-public class DictionariesMoexSecuritiesViewModel : BaseViewModel, IDictionariesMoexSecuritiesViewModel
+public class DictionariesMoexSecuritiesViewModel : ViewModelBaseWithContentHeader, IDictionariesMoexSecuritiesViewModel
 {
     private readonly IDictionariesManager _dictionariesManager;
     private TabItemViewModel? _selectedTab;

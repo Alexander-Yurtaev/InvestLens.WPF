@@ -2,7 +2,7 @@
 
 namespace InvestLens.ViewModel.Pages;
 
-public interface IBaseViewModel : INotifyPropertyChanged
+public interface IViewModelBaseWithContentHeader : INotifyPropertyChanged
 {
     IContentHeaderViewModel ContentHeaderVm { get; }
 }

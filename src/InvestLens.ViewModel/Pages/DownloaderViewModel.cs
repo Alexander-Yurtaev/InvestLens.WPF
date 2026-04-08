@@ -1,6 +1,6 @@
 ﻿namespace InvestLens.ViewModel.Pages;
 
-public class DownloaderViewModel : BaseViewModel, IDownloaderViewModel
+public class DownloaderViewModel : ViewModelBaseWithContentHeader, IDownloaderViewModel
 {
     public DownloaderViewModel() : base("DownloaderViewModel")
     {

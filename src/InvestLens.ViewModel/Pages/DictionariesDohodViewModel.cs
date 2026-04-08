@@ -3,7 +3,7 @@ using InvestLens.ViewModel.Wrappers;
 
 namespace InvestLens.ViewModel.Pages;
 
-public class DictionariesDohodViewModel : BaseViewModel, IDictionariesDohodViewModel
+public class DictionariesDohodViewModel : ViewModelBaseWithContentHeader, IDictionariesDohodViewModel
 {
     public DictionariesDohodViewModel(IDohodService dohodService) : base("Dohod.ru",
         "Агрегатор данных по облигациям")

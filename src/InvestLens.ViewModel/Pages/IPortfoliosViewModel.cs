@@ -2,7 +2,7 @@
 
 namespace InvestLens.ViewModel.Pages;
 
-public interface IPortfoliosViewModel : IBaseViewModel
+public interface IPortfoliosViewModel : IViewModelBaseWithContentHeader
 {
     List<CardWrapper> Cards { get; }
 }

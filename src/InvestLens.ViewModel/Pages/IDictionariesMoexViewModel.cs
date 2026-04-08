@@ -1,5 +1,5 @@
 ﻿namespace InvestLens.ViewModel.Pages;
 
-public interface IDictionariesMoexViewModel : IBaseViewModel
+public interface IDictionariesMoexViewModel : IViewModelBaseWithContentHeader
 {
 }
