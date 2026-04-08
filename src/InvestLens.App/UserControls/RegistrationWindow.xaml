@@ -48,6 +48,18 @@
                 <Setter Property="Padding" Value="48"/>
                 <Setter Property="Background" Value="{StaticResource BackgroundPrimary}"/>
             </Style>
+            <Style x:Key="H2Style" 
+                   TargetType="TextBlock">
+                <Setter Property="Foreground" Value="{StaticResource BackgroundSecondary}"/>
+                <Setter Property="FontSize" Value="28"/>
+                <Setter Property="FontWeight" Value="Medium"/>
+            </Style>
+            <Style x:Key="PStyle" 
+                   TargetType="TextBlock">
+                <Setter Property="Foreground" Value="{StaticResource BackgroundSecondary}"/>
+                <Setter Property="Opacity" Value="0.8"/>
+                <Setter Property="FontSize" Value="15"/>
+            </Style>
         </ResourceDictionary>
     </Window.Resources>
 
@@ -61,11 +73,48 @@
             </Grid.ColumnDefinitions>
             <Border Grid.Column="0"
                   Style="{StaticResource LeftSideStyle}">
-
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <Border Grid.Row="0" Margin="0 0 0 48">
+                        <local:Logo/>
+                    </Border>
+                    <StackPanel Grid.Row="2" Orientation="Vertical">
+                        <StackPanel Margin="0 0 0 16">
+                            <TextBlock Text="Начни свой путь" 
+                                       Style="{StaticResource H2Style}"/>
+                            <TextBlock Text="в инвестициях" 
+                                       Style="{StaticResource H2Style}"/>
+                        </StackPanel>
+                        <TextBlock Text="Присоединяйтесь к тысячам инвесторов" 
+                                   Style="{StaticResource PStyle}"/>
+                    </StackPanel>
+                    <StackPanel Grid.Row="4">
+                        <StackPanel Orientation="Horizontal" Margin="0 0 0 20">
+                            <TextBlock Text="📊" Style="{StaticResource PStyle}" Margin="0 0 12 0"/>
+                            <TextBlock Text="Аналитика в реальном времени" Style="{StaticResource PStyle}"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" Margin="0 0 0 20">
+                            <TextBlock Text="📁" Style="{StaticResource PStyle}" Margin="0 0 12 0"/>
+                            <TextBlock Text="Несколько портфелей" Style="{StaticResource PStyle}"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" Margin="0 0 0 20">
+                            <TextBlock Text="🔒" Style="{StaticResource PStyle}" Margin="0 0 12 0"/>
+                            <TextBlock Text="Безопасное хранение данных" Style="{StaticResource PStyle}"/>
+                        </StackPanel>
+                    </StackPanel>
+                </Grid>
             </Border>
             <Border Grid.Column="1"
                     Style="{StaticResource RightSideStyle}">
-
+                <StackPanel Orientation="Vertical">
+                    <TextBlock Text="Brand Quate" Foreground="{StaticResource BackgroundSecondary}"/>
+                </StackPanel>
             </Border>
         </Grid>
     </Border>
