@@ -127,16 +127,15 @@
                     HorizontalAlignment="Stretch"/>
         </DataTemplate>
         <DataTemplate DataType="{x:Type menu:MenuItemWrapper}">
-            <ToggleButton 
-                Foreground="White"
-                HorizontalContentAlignment="Left"
-                Cursor="Hand"
-                Width="200"
-                BorderThickness="0"
-                Command="{Binding NavigateCommand}"
-                CommandParameter="{Binding}"
-                IsChecked="{Binding RelativeSource={RelativeSource AncestorType=TreeViewItem}, Mode=TwoWay, Path=IsSelected}"
-                Checked="ToggleButton_OnChecked">
+            <ToggleButton Foreground="{StaticResource BackgroundSecondary}"
+                          HorizontalContentAlignment="Left"
+                          Cursor="Hand"
+                          Width="200"
+                          BorderThickness="0"
+                          Command="{Binding NavigateCommand}"
+                          CommandParameter="{Binding}"
+                          IsChecked="{Binding RelativeSource={RelativeSource AncestorType=TreeViewItem}, Mode=TwoWay, Path=IsSelected}"
+                          Checked="ToggleButton_OnChecked">
                 <ToggleButton.Resources>
                     <Style TargetType="TextBlock">
                         <Setter Property="Foreground" Value="#CDD9F0"/>
@@ -156,7 +155,7 @@
         </DataTemplate>
     </UserControl.Resources>
 
-    <Grid Background="{StaticResource MenuBackgroundBrush}">
+    <Grid Background="{StaticResource BrandBlue}">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition/>
@@ -170,11 +169,11 @@
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
                 <Border Width="36"
                         Height="36"
-                        Background="#C8102E"
+                        Background="{StaticResource BrandRed}"
                         CornerRadius="10">
                     <TextBlock FontWeight="Bold"
                                FontSize="18"
-                               Foreground="White"
+                               Foreground="{StaticResource BackgroundSecondary}"
                                Margin="6"
                                HorizontalAlignment="Center"
                                VerticalAlignment="Center">IL</TextBlock>
@@ -182,7 +181,8 @@
                 <TextBlock FontSize="20"
                            FontWeight="SemiBold"
                            Margin="12"
-                           Foreground="White">Invest Lens</TextBlock>
+                           Foreground="{StaticResource BackgroundSecondary}"
+                           Text="Invest Lens"/>
             </StackPanel>
         </Border>
         <Border Grid.Row="1"

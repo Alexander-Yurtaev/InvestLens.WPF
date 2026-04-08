@@ -3,7 +3,7 @@
                     xmlns:userControls="clr-namespace:InvestLens.App.UserControls">
 
     <Style x:Key="LinkStyle" TargetType="{x:Type Button}">
-        <Setter Property="Foreground" Value="#C8102E"/>
+        <Setter Property="Foreground" Value="{StaticResource BrandRed}"/>
         <Setter Property="FontSize" Value="13"/>
         <Setter Property="Cursor" Value="Hand"/>
         <Setter Property="Template">

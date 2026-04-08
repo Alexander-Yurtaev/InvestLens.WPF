@@ -10,7 +10,7 @@
     <UserControl.Resources>
         <ResourceDictionary>
             <Style x:Key="MetricCardStyle" TargetType="Border">
-                <Setter Property="Background" Value="White"/>
+                <Setter Property="Background" Value="{StaticResource BackgroundSecondary}"/>
                 <Setter Property="CornerRadius" Value="20"/>
                 <Setter Property="Padding" Value="20"/>
                 <Setter Property="Margin" Value="0 0 20 0"/>
@@ -23,7 +23,7 @@
                 <Setter Property="Height" Value="48"/>
                 <Setter Property="Margin" Value="0 0 16 0"/>
                 <Setter Property="CornerRadius" Value="16"/>
-                <Setter Property="Background" Value="#F8FAFE"/>
+                <Setter Property="Background" Value="{StaticResource BackgroundPrimary}"/>
             </Style>
             <Style x:Key="MetricIconTextBlockStyle" TargetType="TextBlock">
                 <Setter Property="FontSize" Value="24"/>
@@ -39,14 +39,14 @@
             <Style x:Key="MetricValueTextBlockStyle" TargetType="TextBlock">
                 <Setter Property="FontSize" Value="24"/>
                 <Setter Property="FontWeight" Value="Bold"/>
-                <Setter Property="Foreground" Value="#002855"/>
+                <Setter Property="Foreground" Value="{StaticResource BrandBlue}"/>
             </Style>
             <Style x:Key="MetricChangeTextBlockStyle" TargetType="TextBlock">
                 <Setter Property="FontSize" Value="12"/>
                 <Setter Property="Margin" Value="0 6 0 0"/>
                 <Style.Triggers>
                     <DataTrigger Binding="{Binding IsPositive}" Value="True">
-                        <Setter Property="Foreground" Value="#2C8C6E"/>
+                        <Setter Property="Foreground" Value="{StaticResource BrandGreen}"/>
                     </DataTrigger>
                 </Style.Triggers>
             </Style>

@@ -22,20 +22,20 @@
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsSelected" Value="True">
-                            <Setter TargetName="Border" Property="Background" Value="#C8102E"/>
-                            <Setter TargetName="HeaderText" Property="Foreground" Value="White"/>
+                            <Setter TargetName="Border" Property="Background" Value="{StaticResource BrandRed}"/>
+                            <Setter TargetName="HeaderText" Property="Foreground" Value="{StaticResource BackgroundSecondary}"/>
                         </Trigger>
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter TargetName="Border" Property="Background" Value="#F8FAFE"/>
-                            <Setter TargetName="HeaderText" Property="Foreground" Value="#C8102E"/>
+                            <Setter TargetName="Border" Property="Background" Value="{StaticResource BackgroundPrimary}"/>
+                            <Setter TargetName="HeaderText" Property="Foreground" Value="{StaticResource BrandRed}"/>
                         </Trigger>
                         <MultiTrigger>
                             <MultiTrigger.Conditions>
                                 <Condition Property="IsSelected" Value="True"/>
                                 <Condition Property="IsMouseOver" Value="True"/>
                             </MultiTrigger.Conditions>
-                            <Setter TargetName="Border" Property="Background" Value="#C8102E"/>
-                            <Setter TargetName="HeaderText" Property="Foreground" Value="White"/>
+                            <Setter TargetName="Border" Property="Background" Value="{StaticResource BrandRed}"/>
+                            <Setter TargetName="HeaderText" Property="Foreground" Value="{StaticResource BackgroundSecondary}"/>
                         </MultiTrigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>

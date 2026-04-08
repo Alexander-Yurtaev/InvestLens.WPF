@@ -15,14 +15,14 @@
             <Setter Property="Padding" Value="32, 20"/>
             <Setter Property="BorderThickness" Value="1"/>
             <Setter Property="BorderBrush" Value="#E9EDF2"/>
-            <Setter Property="Background" Value="White"/>
+            <Setter Property="Background" Value="{StaticResource BackgroundSecondary}"/>
             <Setter Property="VerticalAlignment" Value="Center"/>
         </Style>
         <!--PageInfo-->
         <Style x:Key="PageInfoTitleStyle" TargetType="TextBlock">
             <Setter Property="FontSize" Value="24"/>
             <Setter Property="FontWeight" Value="SemiBold"/>
-            <Setter Property="Foreground" Value="#002855"/>
+            <Setter Property="Foreground" Value="{StaticResource BrandBlue}"/>
             <Setter Property="Margin" Value="0 0 0 4"/>
         </Style>
         <Style x:Key="PageInfoDescriptionStyle" TargetType="TextBlock">
@@ -37,14 +37,14 @@
         </Style>
         <Style x:Key="NotificationBadgeBorderStyle" TargetType="Border">
             <Setter Property="Margin" Value="0 -6 4 0"/>
-            <Setter Property="Background" Value="#C8102E"/>
+            <Setter Property="Background" Value="{StaticResource BrandRed}"/>
             <Setter Property="Padding" Value="6 2"/>
             <Setter Property="Width" Value="20"/>
             <Setter Property="Height" Value="20"/>
             <Setter Property="CornerRadius" Value="20"/>
         </Style>
         <Style x:Key="NotificationBadgeTextBlockStyle" TargetType="TextBlock">
-            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Foreground" Value="{StaticResource BackgroundSecondary}"/>
             <Setter Property="FontSize" Value="10"/>
             <Setter Property="FontWeight" Value="Bold"/>
         </Style>
@@ -67,7 +67,7 @@
         <Style x:Key="AvatarTextBlockStyle" TargetType="TextBlock">
             <Setter Property="Padding" Value="0 0 6 0"/>
             <Setter Property="FontWeight" Value="SemiBold"/>
-            <Setter Property="Foreground" Value="#C8102E"/>
+            <Setter Property="Foreground" Value="{StaticResource BrandRed}"/>
             <Setter Property="HorizontalAlignment" Value="Center"/>
             <Setter Property="VerticalAlignment" Value="Center"/>
         </Style>

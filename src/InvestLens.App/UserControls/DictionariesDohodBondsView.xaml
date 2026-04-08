@@ -22,7 +22,7 @@
 
             <Style TargetType="GridViewColumnHeader">
                 <Setter Property="Height" Value="40"/>
-                <Setter Property="Background" Value="#F8FAFE"/>
+                <Setter Property="Background" Value="{StaticResource BackgroundPrimary}"/>
                 <Setter Property="Foreground" Value="#5A6E8A"/>
                 <Setter Property="FontSize" Value="12"/>
                 <Setter Property="FontWeight" Value="SemiBold"/>
@@ -106,11 +106,11 @@
                     <Setter Property="VerticalContentAlignment" Value="Center"/>
                     <Style.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter Property="Background" Value="#F8FAFE"/>
+                            <Setter Property="Background" Value="{StaticResource BackgroundPrimary}"/>
                         </Trigger>
                         <Trigger Property="IsSelected" Value="True">
                             <Setter Property="Background" Value="#E8EEF8"/>
-                            <Setter Property="BorderBrush" Value="#C8102E"/>
+                            <Setter Property="BorderBrush" Value="{StaticResource BrandRed}"/>
                             <Setter Property="BorderThickness" Value="0,0,0,0"/>
                         </Trigger>
                     </Style.Triggers>
