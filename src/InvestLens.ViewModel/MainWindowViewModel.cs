@@ -11,7 +11,8 @@ public class MainWindowViewModel : BindableBase, IMainWindowViewModel
     private readonly IViewModelFactory _viewModelFactory;
     private INotifyPropertyChanged? _contentVm;
 
-    public MainWindowViewModel(INavigationViewModel navigationVm, 
+    public MainWindowViewModel(
+        INavigationViewModel navigationVm, 
         IHeaderViewModel headerVm,
         IViewModelFactory viewModelFactory, 
         IEventAggregator eventAggregator)

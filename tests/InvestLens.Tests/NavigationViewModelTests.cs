@@ -15,7 +15,6 @@ namespace InvestLens.Tests
         {
             var headerVmMock = new Mock<IHeaderViewModel>();
             var viewModelFactoryMock = new Mock<IViewModelFactory>();
-            var userManagerMock = new Mock<IUserManager>();
             var notificationsManagerMock = new Mock<INotificationsManager>();
             
             var portfoliosManager = new Mock<IPortfoliosManager>();
@@ -28,10 +27,9 @@ namespace InvestLens.Tests
             eventAggregatorMock.Setup(ea => ea.GetEvent<SelectMenuNodeEvent>()).Returns(new SelectMenuNodeEvent());
             var navigationVm = new NavigationViewModel(portfoliosManager.Object, dohodService.Object, eventAggregatorMock.Object);
 
-            var vm = new MainWindowViewModel(navigationVm, 
+            var vm = new MainWindowViewModel(
+                navigationVm, 
                 headerVmMock.Object, 
-                userManagerMock.Object,
-                notificationsManagerMock.Object,
                 viewModelFactoryMock.Object, 
                 eventAggregatorMock.Object);
 
