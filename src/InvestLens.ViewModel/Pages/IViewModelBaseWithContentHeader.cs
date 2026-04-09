@@ -4,5 +4,5 @@ namespace InvestLens.ViewModel.Pages;
 
 public interface IViewModelBaseWithContentHeader : INotifyPropertyChanged
 {
-    IContentHeaderViewModel ContentHeaderVm { get; }
+    public IContentHeaderViewModel ContentHeaderVm { get; }
 }
