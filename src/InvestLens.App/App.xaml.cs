@@ -3,7 +3,6 @@ using Autofac;
 using InvestLens.App.Startup;
 using InvestLens.ViewModel;
 using InvestLens.ViewModel.Services;
-using IDialogService = InvestLens.ViewModel.Services.IDialogService;
 
 namespace InvestLens.App
 {
@@ -46,34 +45,13 @@ namespace InvestLens.App
 
             var container = Bootstrapper.BootStrap();
 
-            var mainWindow = container.Resolve<MainWindow>();
-            var dialogService = container.Resolve<IDialogService>();
+            var windowManager = container.Resolve<IWindowManager>();
+            windowManager.ShowWindow<LoginWindowViewModel>();
 
-            var result = dialogService.ShowDialog(typeof(RegistrationViewModel));
-
-            // Нажали закрыть
-            if (result is null)
-            {
-                mainWindow.Close();
-                return;
-            }
-
-            var messageResult = MessageBox.Show("Авторизация", "Login", MessageBoxButton.YesNo);
-            //var loginWindow = container.Resolve<LoginWindow>();
-            //result = dialogService.ShowDialog(loginWindow);
-            //// Нажали закрыть или не авторизовались
-            //if (result is null or false) return;
-
-            if (messageResult == MessageBoxResult.No)
-            {
-                mainWindow.Close();
-                return;
-            }
-
-            var userManager = container.Resolve<IUserManager>();
-            var userLoadTask = userManager.LoadAsync();
-            userLoadTask.Await();
-            mainWindow.Show();
+            //var userManager = container.Resolve<IUserManager>();
+            //var userLoadTask = userManager.LoadAsync();
+            //userLoadTask.Await();
+            //mainWindow.Show();
         }
     }
 }

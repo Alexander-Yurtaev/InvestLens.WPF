@@ -4,7 +4,7 @@ using System.Windows.Input;
 
 namespace InvestLens.ViewModel;
 
-public interface IRegistrationViewModel
+public interface IRegistrationWindowViewModel
 {
     string Name { get; set; }
     string Surname { get; set; }
@@ -12,7 +12,7 @@ public interface IRegistrationViewModel
     string Password { get; set; }
     string ConfirmPassword { get; set; }
     ICommand RegisterCommand { get; }
-    ICommand HasAccountCommand { get; }
+    ICommand LoginCommand { get; }
     string ErrorMessage { get; set; }
     bool ShowErrorMessage { get; }
     bool HasErrors { get; }

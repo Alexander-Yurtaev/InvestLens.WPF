@@ -1,16 +1,19 @@
-﻿using System.Runtime.CompilerServices;
-using InvestLens.Model;
+﻿using InvestLens.Model;
 using InvestLens.ViewModel;
+using InvestLens.ViewModel.Services;
+using Moq;
 
 namespace InvestLens.Tests;
 
 public class RegistrationViewModelTests
 {
-    private readonly RegistrationViewModel _viewModel;
+    private readonly RegistrationWindowViewModel _viewModel;
 
     public RegistrationViewModelTests()
     {
-        _viewModel = new RegistrationViewModel(new RegistrationModel());
+        var securityServiceMock = new Mock<ISecurityService>();
+        var windowManagerMock = new Mock<IWindowManager>();
+        _viewModel = new RegistrationWindowViewModel(new RegistrationModel(), securityServiceMock.Object, windowManagerMock.Object);
     }
 
     [Fact]
@@ -77,7 +80,7 @@ public class RegistrationViewModelTests
     public void ShouldRaiseErrorsChangedWhenNameIsChanged()
     {
         bool fired = false;
-        _viewModel.ErrorsChanged += (sender, args) =>
+        _viewModel.ErrorsChanged += (_, args) =>
         {
             if (args.PropertyName != nameof(_viewModel.Name)) return;
             fired = true;
@@ -101,7 +104,7 @@ public class RegistrationViewModelTests
     public void ShouldRaiseErrorsChangedWhenSurnameIsChanged()
     {
         bool fired = false;
-        _viewModel.ErrorsChanged += (sender, args) =>
+        _viewModel.ErrorsChanged += (_, args) =>
         {
             if (args.PropertyName != nameof(_viewModel.Surname)) return;
             fired = true;

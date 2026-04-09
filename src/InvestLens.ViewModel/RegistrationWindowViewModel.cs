@@ -4,25 +4,25 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
-using IDialogService = InvestLens.ViewModel.Services.IDialogService;
 
 namespace InvestLens.ViewModel;
 
-public class RegistrationViewModel : ValidationViewModelBase, IRegistrationViewModel
+public class RegistrationWindowViewModel : ValidationViewModelBase, IRegistrationWindowViewModel
 {
     private readonly ISecurityService _securityService;
-    private readonly IDialogService _dialogService;
+    private readonly IWindowManager _windowManager;
     private string _confirmPassword = string.Empty;
     private readonly RegistrationModel _model;
     private string _errorMessage;
 
-    public RegistrationViewModel(RegistrationModel model, ISecurityService securityService, IDialogService dialogService)
+    public RegistrationWindowViewModel(RegistrationModel model, ISecurityService securityService, IWindowManager windowManager)
     {
         _securityService = securityService;
-        _dialogService = dialogService;
+        _windowManager = windowManager;
         _model = model;
         RegisterCommand = new DelegateCommand(OnRegister, CanRegister);
-        HasAccountCommand = new DelegateCommand(OnHasAccount);
+        LoginCommand = new DelegateCommand(OnLogin);
+        CloseCommand = new DelegateCommand(OnClose);
         this.PropertyChanged += OnPropertyChanged;
         InvalidateCommands();
     }
@@ -85,7 +85,8 @@ public class RegistrationViewModel : ValidationViewModelBase, IRegistrationViewM
     }
 
     public ICommand RegisterCommand { get; }
-    public ICommand HasAccountCommand { get; }
+    public ICommand LoginCommand { get; }
+    public ICommand CloseCommand { get; }
 
     public string ErrorMessage
     {
@@ -102,7 +103,8 @@ public class RegistrationViewModel : ValidationViewModelBase, IRegistrationViewM
         var result = _securityService.Register(_model);
         if (result.Success)
         {
-            _dialogService.CloseDialog(true);
+            _windowManager.SetMainWindow<LoginWindowViewModel>();
+            _windowManager.ShowWindow<LoginWindowViewModel>();
         }
 
         ErrorMessage = result.ErrorMessage;
@@ -114,9 +116,16 @@ public class RegistrationViewModel : ValidationViewModelBase, IRegistrationViewM
         return !HasErrors;
     }
 
-    private void OnHasAccount()
+    private void OnLogin()
     {
-        _dialogService.CloseDialog(false);
+        _windowManager.SetMainWindow<LoginWindowViewModel>();
+        _windowManager.ShowWindow<LoginWindowViewModel>();
+        _windowManager.CloseWindow<RegistrationWindowViewModel>();
+    }
+
+    private void OnClose()
+    {
+        _windowManager.CloseWindow<RegistrationWindowViewModel>();
     }
 
     private void OnPropertyChanged(object? sender, PropertyChangedEventArgs e)

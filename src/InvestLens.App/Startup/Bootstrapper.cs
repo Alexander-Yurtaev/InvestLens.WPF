@@ -1,10 +1,10 @@
 ﻿using Autofac;
-using InvestLens.App.UserControls;
+using InvestLens.App.Services;
+using InvestLens.App.Windows;
 using InvestLens.Model;
 using InvestLens.ViewModel;
 using InvestLens.ViewModel.Pages;
 using InvestLens.ViewModel.Services;
-using IDialogService = InvestLens.ViewModel.Services.IDialogService;
 
 namespace InvestLens.App.Startup
 {
@@ -26,7 +26,7 @@ namespace InvestLens.App.Startup
             builder.RegisterType<DictionariesManager>().As<IDictionariesManager>().SingleInstance();
             builder.RegisterType<MoexService>().As<IMoexService>().SingleInstance();
             builder.RegisterType<DohodService>().As<IDohodService>().SingleInstance();
-            builder.RegisterType<InvestLens.App.Services.DialogService>().As<IDialogService>().SingleInstance();
+            builder.RegisterType<WindowManager>().As<IWindowManager>().SingleInstance();
             
             builder.RegisterType<SecurityService>().As<ISecurityService>();
 
@@ -34,8 +34,12 @@ namespace InvestLens.App.Startup
             builder.RegisterType<MainWindowViewModel>().As<IMainWindowViewModel>();
 
             builder.RegisterType<RegistrationWindow>().AsSelf();
-            builder.RegisterType<RegistrationViewModel>().As<IRegistrationViewModel>();
+            builder.RegisterType<RegistrationWindowViewModel>().As<IRegistrationWindowViewModel>();
             builder.RegisterType<RegistrationModel>().AsSelf();
+
+            builder.RegisterType<LoginWindow>().AsSelf();
+            builder.RegisterType<LoginWindowViewModel>().As<ILoginWindowViewModel>();
+            builder.RegisterType<LoginModel>().AsSelf();
 
             builder.RegisterType<NavigationViewModel>().As<INavigationViewModel>();
             builder.RegisterType<HeaderViewModel>().As<IHeaderViewModel>();

@@ -17,4 +17,10 @@
     <ProjectReference Include="..\InvestLens.ViewModel\InvestLens.ViewModel.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Compile Update="Windows\LoginWindow.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+  </ItemGroup>
+
 </Project>

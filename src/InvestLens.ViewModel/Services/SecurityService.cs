@@ -14,4 +14,10 @@ public class SecurityService : ISecurityService
         return (true, "");
         //return (false, "Ошибка при регистрации");
     }
+
+    public Task<(bool Success, string ErrorMessage)> LoginAsync(LoginModel model)
+    {
+        return Task.FromResult((true, ""));
+        // return Task.FromResult((false, "Ошибка при авторизации"));
+    }
 }

@@ -1,7 +1,7 @@
 ﻿using System.Windows;
 using InvestLens.ViewModel;
 
-namespace InvestLens.App
+namespace InvestLens.App.Windows
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
