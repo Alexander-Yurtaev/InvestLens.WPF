@@ -58,20 +58,14 @@ namespace InvestLens.App
                 return;
             }
 
-            // успешная регистрация
-            if (result == true)
-            {
-                //var loginWindow = container.Resolve<LoginWindow>();
-                //result = dialogService.ShowDialog(loginWindow);
-
-                //// Нажали закрыть
-                //if (result is null or false) return;
-            }
+            //var loginWindow = container.Resolve<LoginWindow>();
+            //result = dialogService.ShowDialog(loginWindow);
+            //// Нажали закрыть или не авторизовались
+            //if (result is null or false) return;
 
             var userManager = container.Resolve<IUserManager>();
             var userLoadTask = userManager.LoadAsync();
             userLoadTask.Await();
-
             mainWindow.Show();
         }
     }
