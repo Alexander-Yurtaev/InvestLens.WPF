@@ -1,16 +1,15 @@
-﻿namespace InvestLens.ViewModel.Services;
+﻿namespace InvestLens.Model;
 
-public class UserManager : IUserManager
+public class UserInfo
 {
     public string UserAvatar { get; private set; } = string.Empty;
     public string UserName { get; private set; } = string.Empty;
     public string UserFullNameInShortFormat { get; private set; } = string.Empty;
 
-    public async Task LoadAsync()
+    public void Load()
     {
         UserAvatar = "АЮ";
         UserName = "Александр";
         UserFullNameInShortFormat = "Александр Ю.";
-        await Task.CompletedTask;
     }
 }

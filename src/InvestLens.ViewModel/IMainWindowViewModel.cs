@@ -9,8 +9,5 @@ public interface IMainWindowViewModel
     IHeaderViewModel HeaderVm { get; }
     INotifyPropertyChanged? ContentVm { get; }
 
-    INotificationsManager NotificationsManager { get; }
-    IUserManager UserManager { get; }
-
     event PropertyChangedEventHandler? PropertyChanged;
 }

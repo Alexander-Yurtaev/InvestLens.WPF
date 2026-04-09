@@ -1,6 +1,6 @@
 ﻿using System.Windows.Controls;
 
-namespace InvestLens.App.UserControls
+namespace InvestLens.App.Views
 {
     /// <summary>
     /// Interaction logic for PortfolioDetailView.xaml

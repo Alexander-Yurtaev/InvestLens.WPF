@@ -6,6 +6,7 @@
         xmlns:viewModel="clr-namespace:InvestLens.ViewModel;assembly=InvestLens.ViewModel"
         xmlns:userControls="clr-namespace:InvestLens.App.UserControls"
         xmlns:pages="clr-namespace:InvestLens.ViewModel.Pages;assembly=InvestLens.ViewModel"
+        xmlns:views="clr-namespace:InvestLens.App.Views"
         mc:Ignorable="d"
         d:DataContext="{d:DesignInstance viewModel:MainWindowViewModel, IsDesignTimeCreatable=True}"
         Title="MainWindow" Height="800" Width="1500"
@@ -21,46 +22,46 @@
             </Style>
 
             <DataTemplate DataType="{x:Type pages:DashboardViewModel}">
-                <userControls:DashboardView/>
+                <views:DashboardView/>
             </DataTemplate>
             <DataTemplate DataType="{x:Type pages:PortfoliosViewModel}">
-                <userControls:PortfoliosView/>
+                <views:PortfoliosView/>
             </DataTemplate>
             <DataTemplate DataType="{x:Type pages:PortfolioDetailViewModel}">
-                <userControls:PortfolioDetailView/>
+                <views:PortfolioDetailView/>
             </DataTemplate>
             <DataTemplate DataType="{x:Type pages:DictionariesViewModel}">
-                <userControls:DictionariesView/>
+                <views:DictionariesView/>
             </DataTemplate>
             <DataTemplate DataType="{x:Type pages:DictionariesMoexViewModel}">
-                <userControls:DictionariesMoexView/>
+                <views:DictionariesMoexView/>
             </DataTemplate>
             <DataTemplate DataType="{x:Type pages:DictionariesMoexSecuritiesViewModel}">
-                <userControls:DictionariesMoexSecuritiesView/>
+                <views:DictionariesMoexSecuritiesView/>
             </DataTemplate>
             <DataTemplate DataType="{x:Type pages:DictionariesMoexBondsViewModel}">
-                <userControls:DictionariesMoexBondsView/>
+                <views:DictionariesMoexBondsView/>
             </DataTemplate>
             <DataTemplate DataType="{x:Type pages:DictionariesDohodViewModel}">
-                <userControls:DictionariesDohodView/>
+                <views:DictionariesDohodView/>
             </DataTemplate>
             <DataTemplate DataType="{x:Type pages:DictionariesDohodBondsViewModel}">
-                <userControls:DictionariesDohodBondsView/>
+                <views:DictionariesDohodBondsView/>
             </DataTemplate>
             <DataTemplate DataType="{x:Type pages:DownloaderViewModel}">
-                <userControls:DownloaderView/>
+                <views:DownloaderView/>
             </DataTemplate>
             <DataTemplate DataType="{x:Type pages:SchedulerViewModel}">
-                <userControls:SchedulerView/>
+                <views:SchedulerView/>
             </DataTemplate>
             <DataTemplate DataType="{x:Type pages:SettingsViewModel}">
-                <userControls:SettingsView/>
+                <views:SettingsView/>
             </DataTemplate>
             <DataTemplate DataType="{x:Type pages:SettingsCommonViewModel}">
-                <userControls:SettingsCommonView/>
+                <views:SettingsCommonView/>
             </DataTemplate>
             <DataTemplate DataType="{x:Type pages:SettingsPluginsViewModel}">
-                <userControls:SettingsPluginsView/>
+                <views:SettingsPluginsView/>
             </DataTemplate>
         </ResourceDictionary>
     </Window.Resources>
@@ -75,14 +76,14 @@
             <RowDefinition/>
         </Grid.RowDefinitions>
 
-        <userControls:NavigationView Grid.Column="0"
+        <views:NavigationView Grid.Column="0"
                                      Grid.Row="0"
                                      Grid.RowSpan="2"
                                      DataContext="{Binding NavigationVm}"/>
 
-        <userControls:HeaderView Grid.Column="1"
+        <views:HeaderView Grid.Column="1"
                                  Grid.Row="0"
-                                 DataContext="{Binding}"/>
+                                 DataContext="{Binding HeaderVm}"/>
 
         <Border Grid.Column="1" Grid.Row="1" Style="{StaticResource ContentAreaStyle}">
             <ContentControl Content="{Binding ContentVm}"/>

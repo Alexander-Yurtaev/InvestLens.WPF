@@ -1,8 +1,6 @@
-﻿using System.Windows.Input;
+﻿namespace InvestLens.ViewModel;
 
-namespace InvestLens.ViewModel;
-
-public class ContentHeaderViewModel : IContentHeaderViewModel
+public class ContentHeaderViewModel : BindableBase, IContentHeaderViewModel
 {
     public ContentHeaderViewModel(string welcomeTitle, string welcomeDescription, List<ButtonModel>? buttonModels = null)
     {
@@ -13,7 +11,7 @@ public class ContentHeaderViewModel : IContentHeaderViewModel
         AddButtons(buttonModels);
     }
 
-    public string WelcomeTitle { get; }
+    public string WelcomeTitle { get; private set; }
     public string WelcomeDescription { get; }
     public List<ButtonInfo> Buttons { get; }
 
@@ -26,30 +24,10 @@ public class ContentHeaderViewModel : IContentHeaderViewModel
             Buttons.Add(new ButtonInfo(onButtonModel));
         }
     }
-}
 
-public class ButtonModel
-{
-    public ButtonModel(string content, Action action)
+    public void SetWelcomeTitle(string title)
     {
-        Content = content;
-        Action = action;
+        WelcomeTitle = title;
+        RaisePropertyChanged(nameof(WelcomeTitle));
     }
-
-    public string Content { get; }
-    public Action Action { get; }
-}
-
-public class ButtonInfo
-{
-    private readonly ButtonModel _model;
-
-    public ButtonInfo(ButtonModel model)
-    {
-        _model = model;
-        Command = new DelegateCommand(_model.Action);
-    }
-
-    public string Content => _model.Content;
-    public ICommand Command { get; }
 }

@@ -17,7 +17,6 @@ namespace InvestLens.App.Startup
             builder.RegisterType<EventAggregator>().As<IEventAggregator>().SingleInstance();
             builder.RegisterType<ViewModelFactory>().As<IViewModelFactory>().SingleInstance();
             builder.RegisterType<NotificationsManager>().As<INotificationsManager>().SingleInstance();
-            builder.RegisterType<UserManager>().As<IUserManager>().SingleInstance();
             builder.RegisterType<MetricsManager>().As<IMetricsManager>().SingleInstance();
             builder.RegisterType<ActivityManager>().As<IActivityManager>().SingleInstance();
             builder.RegisterType<PortfolioDynamicsService>().As<IPortfolioDynamicsService>().SingleInstance();

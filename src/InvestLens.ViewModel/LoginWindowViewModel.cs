@@ -1,4 +1,5 @@
 ﻿using InvestLens.Model;
+using InvestLens.ViewModel.Events;
 using InvestLens.ViewModel.Services;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
@@ -11,13 +12,19 @@ public class LoginWindowViewModel : ValidationViewModelBase, ILoginWindowViewMod
 {
     private readonly ISecurityService _securityService;
     private readonly IWindowManager _windowManager;
+    private readonly IEventAggregator _eventAggregator;
     private readonly LoginModel _model;
     private string _errorMessage;
 
-    public LoginWindowViewModel(LoginModel model, ISecurityService securityService, IWindowManager windowManager)
+    public LoginWindowViewModel(
+        LoginModel model, 
+        ISecurityService securityService, 
+        IWindowManager windowManager,
+        IEventAggregator eventAggregator)
     {
         _securityService = securityService;
         _windowManager = windowManager;
+        _eventAggregator = eventAggregator;
         _model = model;
         LoginCommand = new AsyncDelegateCommand(OnLogin, CanLogin);
         RegistrationCommand = new DelegateCommand(OnRegistration);
@@ -72,6 +79,10 @@ public class LoginWindowViewModel : ValidationViewModelBase, ILoginWindowViewMod
         {
             _windowManager.SetMainWindow<MainWindowViewModel>();
             _windowManager.ShowWindow<MainWindowViewModel>();
+
+            var userInfo = new UserInfo();
+            userInfo.Load();
+            _eventAggregator.GetEvent<LoginEvent>().Publish(userInfo);
             _windowManager.CloseWindow<LoginWindowViewModel>();
         }
 

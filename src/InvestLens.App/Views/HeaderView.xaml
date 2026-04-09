@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="InvestLens.App.UserControls.HeaderView"
+﻿<UserControl x:Class="InvestLens.App.Views.HeaderView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -6,7 +6,7 @@
              xmlns:viewModel="clr-namespace:InvestLens.ViewModel;assembly=InvestLens.ViewModel"
              xmlns:conv="clr-namespace:System.Windows.Controls;assembly=PresentationFramework"
              mc:Ignorable="d" 
-             d:DataContext="{d:DesignInstance viewModel:MainWindowViewModel, IsDesignTimeCreatable=True}"
+             d:DataContext="{d:DesignInstance viewModel:HeaderViewModel, IsDesignTimeCreatable=True}"
              d:DesignWidth="800">
     <UserControl.Resources>
         <conv:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
@@ -89,9 +89,9 @@
             </Grid.ColumnDefinitions>
             <StackPanel Orientation="Vertical"
                         Grid.Column="0">
-                <TextBlock Text="{Binding HeaderVm.Title}"
+                <TextBlock Text="{Binding Title}"
                            Style="{StaticResource PageInfoTitleStyle}"/>
-                <TextBlock Text="{Binding HeaderVm.Description}"
+                <TextBlock Text="{Binding Description}"
                            Style="{StaticResource PageInfoDescriptionStyle}"/>
             </StackPanel>
             <Grid Grid.Column="2">
@@ -132,10 +132,10 @@
                     <Border Grid.Column="0" Style="{StaticResource AvatarBorderStyle}">
                         <TextBlock
                             Style="{StaticResource AvatarTextBlockStyle}"
-                            Text="{Binding UserManager.UserAvatar}"/>
+                            Text="{Binding UserAvatar}"/>
                     </Border>
                     <TextBlock Grid.Column="1"  
-                        Text="{Binding UserManager.UserFullNameInShortFormat}"
+                        Text="{Binding UserFullNameInShortFormat}"
                         Style="{StaticResource UserNameStyle}"/>
                 </Grid>
             </Grid>

@@ -13,17 +13,12 @@ public class MainWindowViewModel : BindableBase, IMainWindowViewModel
 
     public MainWindowViewModel(INavigationViewModel navigationVm, 
         IHeaderViewModel headerVm,
-        IUserManager userManager,
-        INotificationsManager notificationsManager,
         IViewModelFactory viewModelFactory, 
         IEventAggregator eventAggregator)
     {
         _viewModelFactory = viewModelFactory;
         NavigationVm = navigationVm;
         HeaderVm = headerVm;
-
-        UserManager = userManager;
-        NotificationsManager = notificationsManager;
 
         eventAggregator.GetEvent<SelectMenuNodeEvent>().Subscribe(OnSelectMenuNode);
     }
@@ -37,12 +32,8 @@ public class MainWindowViewModel : BindableBase, IMainWindowViewModel
         private set => SetProperty(ref _contentVm, value);
     }
 
-    public INotificationsManager NotificationsManager { get; }
-    public IUserManager UserManager { get; }
-
     private void OnSelectMenuNode(MenuItemModel node)
     {
-        HeaderVm.SetModel(node);
         ContentVm = GetContentVm(node.NodeType);
     }
 

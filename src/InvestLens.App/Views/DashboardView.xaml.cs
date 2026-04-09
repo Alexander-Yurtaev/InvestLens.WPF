@@ -1,7 +1,6 @@
-﻿using InvestLens.ViewModel.Pages;
-using System.Windows.Controls;
+﻿using System.Windows.Controls;
 
-namespace InvestLens.App.UserControls
+namespace InvestLens.App.Views
 {
     /// <summary>
     /// Interaction logic for DashboardView.xaml

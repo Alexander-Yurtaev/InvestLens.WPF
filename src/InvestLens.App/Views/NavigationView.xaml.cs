@@ -1,9 +1,9 @@
-﻿using InvestLens.ViewModel.Wrappers.Menu;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
+using InvestLens.ViewModel.Wrappers.Menu;
 
-namespace InvestLens.App.UserControls
+namespace InvestLens.App.Views
 {
     /// <summary>
     /// Interaction logic for NavigationView.xaml
