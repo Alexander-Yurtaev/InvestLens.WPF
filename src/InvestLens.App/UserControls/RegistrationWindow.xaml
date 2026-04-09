@@ -7,7 +7,7 @@
         xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
         xmlns:behaviors="clr-namespace:InvestLens.App.Behaviors"
         mc:Ignorable="d"
-        Title="RegistrationWindow" Height="884" Width="1000"
+        Title="RegistrationWindow" Height="800" Width="1000"
         WindowStyle="None"
         AllowsTransparency="True"
         Background="Transparent"
@@ -19,6 +19,8 @@
 
     <Window.Resources>
         <ResourceDictionary>
+            <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConv"/>
+
             <Style TargetType="Window">
                 <Setter Property="Effect">
                     <Setter.Value>
@@ -220,6 +222,9 @@
                                 Margin="0 0 0 24"
                                 Style="{StaticResource SecondaryButtonStyle}"
                                 Click="CloseButton_OnClick"/>
+                        <TextBlock Text="{Binding ErrorMessage}"
+                                   Visibility="{Binding ShowErrorMessage, Converter={StaticResource BooleanToVisibilityConv}}"
+                                   Style="{StaticResource ErrorMessageStyle}"/>
                     </StackPanel>
                     <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center">
                         <TextBlock Text="Уже есть аккаунт?"

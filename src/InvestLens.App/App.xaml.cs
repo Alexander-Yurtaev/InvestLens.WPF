@@ -1,9 +1,9 @@
 ﻿using System.Windows;
 using Autofac;
 using InvestLens.App.Startup;
-using InvestLens.App.UserControls;
-using InvestLens.Model;
+using InvestLens.ViewModel;
 using InvestLens.ViewModel.Services;
+using IDialogService = InvestLens.ViewModel.Services.IDialogService;
 
 namespace InvestLens.App
 {
@@ -46,15 +46,31 @@ namespace InvestLens.App
 
             var container = Bootstrapper.BootStrap();
 
-            var registrationWindow = container.Resolve<RegistrationWindow>();
-            registrationWindow.ShowDialog();
-            var model = registrationWindow.DataContext;
+            var mainWindow = container.Resolve<MainWindow>();
+            var dialogService = container.Resolve<IDialogService>();
+
+            var result = dialogService.ShowDialog(typeof(RegistrationViewModel));
+
+            // Нажали закрыть
+            if (result is null || result == false)
+            {
+                mainWindow.Close();
+                return;
+            }
+
+            // успешная регистрация
+            if (result == true)
+            {
+                //var loginWindow = container.Resolve<LoginWindow>();
+                //result = dialogService.ShowDialog(loginWindow);
+
+                //// Нажали закрыть
+                //if (result is null or false) return;
+            }
 
             var userManager = container.Resolve<IUserManager>();
             var userLoadTask = userManager.LoadAsync();
             userLoadTask.Await();
-
-            var mainWindow = container.Resolve<MainWindow>();
 
             mainWindow.Show();
         }

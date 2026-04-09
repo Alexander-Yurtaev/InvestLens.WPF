@@ -1,48 +1,54 @@
-﻿using System.ComponentModel;
+﻿using InvestLens.Model;
+using InvestLens.ViewModel.Services;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
-using InvestLens.Model;
+using IDialogService = InvestLens.ViewModel.Services.IDialogService;
 
 namespace InvestLens.ViewModel;
 
 public class RegistrationViewModel : ValidationViewModelBase, IRegistrationViewModel
 {
+    private readonly ISecurityService _securityService;
+    private readonly IDialogService _dialogService;
     private string _confirmPassword = string.Empty;
+    private readonly RegistrationModel _model;
+    private string _errorMessage;
 
-    public RegistrationViewModel(RegistrationModel model)
+    public RegistrationViewModel(RegistrationModel model, ISecurityService securityService, IDialogService dialogService)
     {
-        Model = model;
+        _securityService = securityService;
+        _dialogService = dialogService;
+        _model = model;
         RegisterCommand = new DelegateCommand(OnRegister, CanRegister);
         this.PropertyChanged += OnPropertyChanged;
         InvalidateCommands();
     }
 
-    public RegistrationModel Model { get; }
-
     [Required(ErrorMessage = "Имя должно быть заполнено")]
     public string Name
     {
-        get => Model.Name;
+        get => _model.Name;
         set
         {
-            if (string.Equals(Model.Name, value)) return;
-            Model.Name = value;
+            if (string.Equals(_model.Name, value)) return;
+            _model.Name = value;
             RaisePropertyChanged();
-            ValidateProperty(Model.Name);
+            ValidateProperty(_model.Name);
         }
     }
 
     [Required(ErrorMessage = "Фамилия должна быть заполнена")]
     public string Surname
     {
-        get => Model.Surname;
+        get => _model.Surname;
         set
         {
-            if (string.Equals(Model.Surname, value)) return;
-            Model.Surname = value;
+            if (string.Equals(_model.Surname, value)) return;
+            _model.Surname = value;
             RaisePropertyChanged();
-            ValidateProperty(Model.Surname);
+            ValidateProperty(_model.Surname);
         }
     }
 
@@ -50,23 +56,23 @@ public class RegistrationViewModel : ValidationViewModelBase, IRegistrationViewM
     [EmailAddress(ErrorMessage = "Неверный формат")]
     public string Email
     {
-        get => Model.Email;
+        get => _model.Email;
         set
         {
-            if (string.Equals(Model.Email, value)) return;
-            Model.Email = value;
+            if (string.Equals(_model.Email, value)) return;
+            _model.Email = value;
             RaisePropertyChanged();
-            ValidateProperty(Model.Email);
+            ValidateProperty(_model.Email);
         }
     }
 
     public string Password
     {
-        get => Model.Password;
+        get => _model.Password;
         set
         {
-            if (string.Equals(Model.Password, value)) return;
-            Model.Password = value;
+            if (string.Equals(_model.Password, value)) return;
+            _model.Password = value;
             RaisePropertyChanged();
         }
     }
@@ -79,7 +85,42 @@ public class RegistrationViewModel : ValidationViewModelBase, IRegistrationViewM
 
     public ICommand RegisterCommand { get; }
 
+    public string ErrorMessage
+    {
+        get => _errorMessage;
+        set => SetProperty(ref _errorMessage, value);
+    }
+
+    public bool ShowErrorMessage => !string.IsNullOrEmpty(ErrorMessage);
+
     private void OnRegister()
+    {
+        if (!Validate()) return;
+
+        var result = _securityService.Register(_model);
+        if (result.Success)
+        {
+            _dialogService.CloseDialog(true);
+        }
+
+        ErrorMessage = result.ErrorMessage;
+        RaisePropertyChanged(nameof(ShowErrorMessage));
+    }
+
+    private bool CanRegister()
+    {
+        return !HasErrors;
+    }
+
+    private void OnPropertyChanged(object? sender, PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName == nameof(this.HasErrors))
+        {
+            InvalidateCommands();
+        }
+    }
+
+    private bool Validate()
     {
         var result = new List<ValidationResult>();
         var content = new ValidationContext(this);
@@ -99,19 +140,8 @@ public class RegistrationViewModel : ValidationViewModelBase, IRegistrationViewM
         {
             ClearErrors(null);
         }
-    }
 
-    private bool CanRegister()
-    {
         return !HasErrors;
-    }
-
-    private void OnPropertyChanged(object? sender, PropertyChangedEventArgs e)
-    {
-        if (e.PropertyName == nameof(this.HasErrors))
-        {
-            InvalidateCommands();
-        }
     }
 
     private void ValidateProperty(object? newValue, [CallerMemberName] string? propertyName = null)

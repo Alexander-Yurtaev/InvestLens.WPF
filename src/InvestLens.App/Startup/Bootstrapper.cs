@@ -4,6 +4,7 @@ using InvestLens.Model;
 using InvestLens.ViewModel;
 using InvestLens.ViewModel.Pages;
 using InvestLens.ViewModel.Services;
+using IDialogService = InvestLens.ViewModel.Services.IDialogService;
 
 namespace InvestLens.App.Startup
 {
@@ -25,6 +26,9 @@ namespace InvestLens.App.Startup
             builder.RegisterType<DictionariesManager>().As<IDictionariesManager>().SingleInstance();
             builder.RegisterType<MoexService>().As<IMoexService>().SingleInstance();
             builder.RegisterType<DohodService>().As<IDohodService>().SingleInstance();
+            builder.RegisterType<InvestLens.App.Services.DialogService>().As<IDialogService>().SingleInstance();
+            
+            builder.RegisterType<SecurityService>().As<ISecurityService>();
 
             builder.RegisterType<MainWindow>().AsSelf();
             builder.RegisterType<MainWindowViewModel>().As<IMainWindowViewModel>();
