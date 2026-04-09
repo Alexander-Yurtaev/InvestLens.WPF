@@ -79,11 +79,11 @@ public class LoginWindowViewModel : ValidationViewModelBase, ILoginWindowViewMod
         {
             _windowManager.SetMainWindow<MainWindowViewModel>();
             _windowManager.ShowWindow<MainWindowViewModel>();
+            _windowManager.CloseWindow<LoginWindowViewModel>();
 
             var userInfo = new UserInfo();
             userInfo.Load();
             _eventAggregator.GetEvent<LoginEvent>().Publish(userInfo);
-            _windowManager.CloseWindow<LoginWindowViewModel>();
         }
 
         ErrorMessage = result.ErrorMessage;

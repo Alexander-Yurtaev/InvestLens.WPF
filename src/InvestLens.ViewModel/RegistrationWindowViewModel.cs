@@ -105,6 +105,7 @@ public class RegistrationWindowViewModel : ValidationViewModelBase, IRegistratio
         {
             _windowManager.SetMainWindow<LoginWindowViewModel>();
             _windowManager.ShowWindow<LoginWindowViewModel>();
+            _windowManager.CloseWindow<RegistrationWindowViewModel>();
         }
 
         ErrorMessage = result.ErrorMessage;
