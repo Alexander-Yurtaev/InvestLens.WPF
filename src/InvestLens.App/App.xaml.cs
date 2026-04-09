@@ -52,16 +52,23 @@ namespace InvestLens.App
             var result = dialogService.ShowDialog(typeof(RegistrationViewModel));
 
             // Нажали закрыть
-            if (result is null || result == false)
+            if (result is null)
             {
                 mainWindow.Close();
                 return;
             }
 
+            var messageResult = MessageBox.Show("Авторизация", "Login", MessageBoxButton.YesNo);
             //var loginWindow = container.Resolve<LoginWindow>();
             //result = dialogService.ShowDialog(loginWindow);
             //// Нажали закрыть или не авторизовались
             //if (result is null or false) return;
+
+            if (messageResult == MessageBoxResult.No)
+            {
+                mainWindow.Close();
+                return;
+            }
 
             var userManager = container.Resolve<IUserManager>();
             var userLoadTask = userManager.LoadAsync();

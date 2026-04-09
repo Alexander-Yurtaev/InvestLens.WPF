@@ -22,6 +22,7 @@ public class RegistrationViewModel : ValidationViewModelBase, IRegistrationViewM
         _dialogService = dialogService;
         _model = model;
         RegisterCommand = new DelegateCommand(OnRegister, CanRegister);
+        HasAccountCommand = new DelegateCommand(OnHasAccount);
         this.PropertyChanged += OnPropertyChanged;
         InvalidateCommands();
     }
@@ -84,6 +85,7 @@ public class RegistrationViewModel : ValidationViewModelBase, IRegistrationViewM
     }
 
     public ICommand RegisterCommand { get; }
+    public ICommand HasAccountCommand { get; }
 
     public string ErrorMessage
     {
@@ -110,6 +112,11 @@ public class RegistrationViewModel : ValidationViewModelBase, IRegistrationViewM
     private bool CanRegister()
     {
         return !HasErrors;
+    }
+
+    private void OnHasAccount()
+    {
+        _dialogService.CloseDialog(false);
     }
 
     private void OnPropertyChanged(object? sender, PropertyChangedEventArgs e)

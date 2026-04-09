@@ -233,6 +233,7 @@
                                    Margin="0 0 4 0"/>
                         <Button Content="Войти" 
                                 FontWeight="Medium"
+                                Command="{Binding HasAccountCommand}"
                                 Style="{StaticResource LinkStyle}"/>
                     </StackPanel>
                 </Grid>
