@@ -5,7 +5,10 @@ namespace InvestLens.ViewModel;
 
 public class EditPortfolioWindowViewModel : CreateEditPortfolioWindowViewModel, IEditPortfolioWindowViewModel
 {
-    public EditPortfolioWindowViewModel(CreateEditPortfolioModel model, IWindowManager windowManager) : base(model, windowManager)
+    public EditPortfolioWindowViewModel(
+        CreateEditPortfolioModel model, 
+        IWindowManager windowManager,
+        IPortfoliosManager portfoliosManager) : base(model, windowManager, portfoliosManager)
     {
         Title = $"Редактирование: {Model.Title}";
         ActionTitle = $"Редактирование портфеля:  {Model.Title}";

@@ -7,6 +7,7 @@
         xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
         xmlns:behaviors="clr-namespace:InvestLens.App.Behaviors"
         xmlns:viewModel="clr-namespace:InvestLens.ViewModel;assembly=InvestLens.ViewModel"
+        xmlns:portfolio="clr-namespace:InvestLens.Model.Portfolio;assembly=InvestLens.Model"
         mc:Ignorable="d"
         d:DataContext="{d:DesignInstance viewModel:CreateEditPortfolioWindowViewModel, IsDesignTimeCreatable=True}"
         Title="{Binding Title}" Height="560" Width="580"
@@ -124,16 +125,39 @@
                                 <Bold>Выберите портфели для объединения:</Bold>
                             </TextBlock>
                         </Label>
-                        <ListView Grid.Row="1">
-                            <StackPanel Margin="5" Orientation="Horizontal">
-                                <Label VerticalContentAlignment="Center">Яблоко</Label>
-                            </StackPanel>
-                            <StackPanel Margin="5" Orientation="Horizontal">
-                                <Label VerticalContentAlignment="Center">Киви</Label>
-                            </StackPanel>
-                            <StackPanel Margin="5" Orientation="Horizontal">
-                                <Label VerticalContentAlignment="Center">Лимон</Label>
-                            </StackPanel>
+                        <ListView Grid.Row="1"
+                                  MaxHeight="200"
+                                  ItemsSource="{Binding LookupModels}">
+                            <ListView.ItemTemplate>
+                                <DataTemplate DataType="{x:Type portfolio:LookupModel}">
+                                    <Border Padding="16 12"
+                                            BorderThickness="0 0 0 1"
+                                            BorderBrush="#E9EDF2"
+                                            Cursor="Hand">
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="Auto"/>
+                                                <ColumnDefinition Width="12"/>
+                                                <ColumnDefinition Width="*"/>
+                                            </Grid.ColumnDefinitions>
+                                            <Viewbox Grid.Column="0"
+                                                     Width="18"
+                                                     Height="18">
+                                                <CheckBox IsChecked="{Binding IsChecked}"/>
+                                            </Viewbox>
+                                            <StackPanel Grid.Column="2" 
+                                                        Orientation="Vertical">
+                                                <TextBlock Text="{Binding Title}"
+                                                           FontWeight="Medium"
+                                                           Margin="0 0 0 2"/>
+                                                <TextBlock Text="{Binding Description}"
+                                                           FontSize="11"
+                                                           Foreground="#8E92A8"/>
+                                            </StackPanel>
+                                        </Grid>
+                                    </Border>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
                         </ListView>
                     </Grid>
                 </Grid>

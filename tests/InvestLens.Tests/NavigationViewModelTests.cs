@@ -109,7 +109,7 @@ namespace InvestLens.Tests
         {
             var result = new List<MenuItemModel>
             {
-                new MenuItemModel(NodeType.PortfoliosComplex, "📊", "Составной инвестиционный"),
+                new MenuItemModel(NodeType.PortfoliosComplex, "📊", "Составной"),
                 new MenuItemModel(NodeType.PortfoliosFirst, "💰", "Портфель №1"),
                 new MenuItemModel(NodeType.PortfoliosSecond, "💎", "Портфель №2")
             };

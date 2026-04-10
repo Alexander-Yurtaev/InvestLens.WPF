@@ -5,7 +5,10 @@ namespace InvestLens.ViewModel;
 
 public class CreatePortfolioWindowViewModel : CreateEditPortfolioWindowViewModel, ICreatePortfolioWindowViewModel
 {
-    public CreatePortfolioWindowViewModel(CreateEditPortfolioModel model, IWindowManager windowManager) : base(model, windowManager)
+    public CreatePortfolioWindowViewModel(
+        CreateEditPortfolioModel model, 
+        IWindowManager windowManager, 
+        IPortfoliosManager portfoliosManager) : base(model, windowManager, portfoliosManager)
     {
         Title = "Создание";
         ActionTitle = "Создать портфель";

@@ -8,14 +8,18 @@ public abstract class CreateEditPortfolioWindowViewModel : ValidationViewModelBa
 {
     protected readonly CreateEditPortfolioModel Model;
     protected readonly IWindowManager WindowManager;
-    
-    protected CreateEditPortfolioWindowViewModel(CreateEditPortfolioModel model, IWindowManager windowManager)
+
+    protected CreateEditPortfolioWindowViewModel(
+        CreateEditPortfolioModel model, 
+        IWindowManager windowManager,
+        IPortfoliosManager portfoliosManager)
     {
         Model = model;
         WindowManager = windowManager;
         CloseCommand = new DelegateCommand(OnClose);
         ActionCommand = new DelegateCommand(OnAction);
         IsPortfolioSimpleType = true;
+        LookupModels = portfoliosManager.GetLookupModels().ToList();
     }
 
     public string Title
@@ -96,6 +100,8 @@ public abstract class CreateEditPortfolioWindowViewModel : ValidationViewModelBa
             }
         }
     }
+
+    public List<Model.Portfolio.LookupModel> LookupModels { get; }
 
     public ICommand CloseCommand { get; set; }
     public ICommand ActionCommand { get; set; }

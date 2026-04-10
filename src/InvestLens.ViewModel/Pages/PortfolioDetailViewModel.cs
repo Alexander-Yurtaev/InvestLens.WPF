@@ -8,11 +8,16 @@ public class PortfolioDetailViewModel : ViewModelBaseWithContentHeader, IPortfol
 {
     private readonly PortfolioDetail _model;
     private readonly IWindowManager _windowManager;
+    private readonly IPortfoliosManager _portfoliosManager;
 
-    public PortfolioDetailViewModel(PortfolioDetail model, IWindowManager windowManager) : base(model.Title)
+    public PortfolioDetailViewModel(
+        PortfolioDetail model, 
+        IWindowManager windowManager, 
+        IPortfoliosManager portfoliosManager) : base(model.Title)
     {
         _model = model;
         _windowManager = windowManager;
+        _portfoliosManager = portfoliosManager;
 
         var buttonModels = new List<ButtonModel>
         {
@@ -33,10 +38,12 @@ public class PortfolioDetailViewModel : ViewModelBaseWithContentHeader, IPortfol
 
     private void OnEditPortfolio()
     {
-        var editModel = new CreateEditPortfolioModel();
-        editModel.Title = _model.Title;
+        var editModel = new CreateEditPortfolioModel
+        {
+            Title = _model.Title
+        };
 
-        var viewModel = new EditPortfolioWindowViewModel(editModel, _windowManager);
+        var viewModel = new EditPortfolioWindowViewModel(editModel, _windowManager, _portfoliosManager);
         _windowManager.ShowWindow<EditPortfolioWindowViewModel>(viewModel, asDialog: true);
     }
 

@@ -2,7 +2,6 @@
 
 public enum PortfolioType
 {
-    Primary,
-    Agressive,
-    Dividend
+    Invest,
+    Complex
 }

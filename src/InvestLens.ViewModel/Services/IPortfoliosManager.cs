@@ -9,4 +9,5 @@ public interface IPortfoliosManager
     List<Card> Cards { get; }
     List<MenuItemModel> GetPortfoliosMenuItems();
     PortfolioDetail GetPortfolio(NodeType nodeType);
+    List<Model.Portfolio.LookupModel> GetLookupModels();
 }

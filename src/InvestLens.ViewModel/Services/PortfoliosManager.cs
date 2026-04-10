@@ -8,7 +8,7 @@ public class PortfoliosManager : IPortfoliosManager
 {
     private readonly Dictionary<NodeType, PortfolioDetail> _portfolios = new Dictionary<NodeType, PortfolioDetail>
     {
-        { NodeType.PortfoliosComplex, new PortfolioDetail("Составной инвестиционный")
+        { NodeType.PortfoliosComplex, new PortfolioDetail("Составной")
             {
                 PortfolioStats = {
                     new Stat("Стоимость", 84320, "$", false),
@@ -72,7 +72,7 @@ public class PortfoliosManager : IPortfoliosManager
     {
         var result = new List<MenuItemModel>
         {
-            new MenuItemModel(NodeType.PortfoliosComplex, "📊", "Составной инвестиционный"){Title = "Составной инвестиционный", Description = "Детальная информация о портфеле"},
+            new MenuItemModel(NodeType.PortfoliosComplex, "📊", "Составной"){Title = "Составной", Description = "Детальная информация о портфеле"},
             new MenuItemModel(NodeType.PortfoliosFirst, "💰", "Портфель №1"){Title = "Портфель №1", Description = "Детальная информация о портфеле"},
             new MenuItemModel(NodeType.PortfoliosSecond, "💎", "Портфель №2"){Title = "Портфель №2", Description = "Детальная информация о портфеле"}
         };
@@ -83,6 +83,19 @@ public class PortfoliosManager : IPortfoliosManager
     public PortfolioDetail GetPortfolio(NodeType nodeType)
     {
         return _portfolios[nodeType];
+    }
+
+    public List<Model.Portfolio.LookupModel> GetLookupModels()
+    {
+        var result = new List<Model.Portfolio.LookupModel>();
+
+        foreach (var detail in _portfolios)
+        {
+            var item = new Model.Portfolio.LookupModel(detail.Value.Title);
+            result.Add(item);
+        }
+
+        return result;
     }
 
     private void LoadPortfolioInfos()
@@ -109,10 +122,10 @@ public class PortfoliosManager : IPortfoliosManager
     {
         return title switch
         {
-            "Составной инвестиционный" => PortfolioType.Primary,
-            "Портфель №1" => PortfolioType.Dividend,
-            "Портфель №2" => PortfolioType.Agressive,
-            _ => PortfolioType.Primary
+            "Составной" => PortfolioType.Complex,
+            "Портфель №1" => PortfolioType.Invest,
+            "Портфель №2" => PortfolioType.Invest,
+            _ => throw new ArgumentOutOfRangeException(title)
         };
     }
 
@@ -120,9 +133,8 @@ public class PortfoliosManager : IPortfoliosManager
     {
         return portfolioType switch
         {
-            PortfolioType.Primary => "Основной",
-            PortfolioType.Agressive => "Агрессивный",
-            PortfolioType.Dividend => "Дивидендный",
+            PortfolioType.Complex => "Составной",
+            PortfolioType.Invest => "Портфель №1",
             _ => throw new ArgumentOutOfRangeException()
         };
     }
@@ -131,9 +143,8 @@ public class PortfoliosManager : IPortfoliosManager
     {
         return portfolioType switch
         {
-            PortfolioType.Primary => "#FFC8102E",
-            PortfolioType.Agressive => "#FF2C8C6E",
-            PortfolioType.Dividend => "#FF2C8C6E",
+            PortfolioType.Complex => "#FFC8102E",
+            PortfolioType.Invest => "#FF2C8C6E",
             _ => "0xFFFF4500"
         };
     }
@@ -142,9 +153,8 @@ public class PortfoliosManager : IPortfoliosManager
     {
         return portfolioType switch
         {
-            PortfolioType.Primary => "#1AC8102E",
-            PortfolioType.Agressive => "#1A2C8C6E",
-            PortfolioType.Dividend => "#1A2C8C6E",
+            PortfolioType.Complex => "#1AC8102E",
+            PortfolioType.Invest => "#1A2C8C6E",
             _ => "0xFFFFA500"
         };
     }
