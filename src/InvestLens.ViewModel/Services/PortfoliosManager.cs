@@ -87,15 +87,8 @@ public class PortfoliosManager : IPortfoliosManager
 
     public List<Model.Portfolio.LookupModel> GetLookupModels()
     {
-        var result = new List<Model.Portfolio.LookupModel>();
-
-        foreach (var detail in _portfolios)
-        {
-            var item = new Model.Portfolio.LookupModel(detail.Value.Title);
-            result.Add(item);
-        }
-
-        return result;
+        return _portfolios.Where(p => !p.Value.Title.Contains("Составной"))
+            .Select(detail => new Model.Portfolio.LookupModel(detail.Value.Title)).ToList();
     }
 
     private void LoadPortfolioInfos()
