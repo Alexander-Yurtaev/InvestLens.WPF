@@ -33,7 +33,10 @@ public class PortfolioDetailViewModel : ViewModelBaseWithContentHeader, IPortfol
 
     private void OnEditPortfolio()
     {
-        var viewModel = new EditPortfolioWindowViewModel(_model, _windowManager);
+        var editModel = new CreateEditPortfolioModel();
+        editModel.Title = _model.Title;
+
+        var viewModel = new EditPortfolioWindowViewModel(editModel, _windowManager);
         _windowManager.ShowWindow<EditPortfolioWindowViewModel>(viewModel, asDialog: true);
     }
 

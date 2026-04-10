@@ -9,14 +9,21 @@
         xmlns:viewModel="clr-namespace:InvestLens.ViewModel;assembly=InvestLens.ViewModel"
         mc:Ignorable="d"
         d:DataContext="{d:DesignInstance viewModel:CreateEditPortfolioWindowViewModel, IsDesignTimeCreatable=True}"
-        Title="{Binding Title}" Height="490" Width="580"
+        Title="{Binding Title}" Height="560" Width="580"
         WindowStartupLocation="CenterScreen"
         Style="{StaticResource WindowStyle}"
         ShowInTaskbar="False">
 
     <b:Interaction.Behaviors>
         <behaviors:DragMoveBehavior/>
+        <behaviors:PortfolioTypeBehavior IsPortfolioComplexType="{Binding IsPortfolioComplexType}"/>
     </b:Interaction.Behaviors>
+
+    <Window.Resources>
+        <ResourceDictionary>
+            <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConv"/>
+        </ResourceDictionary>
+    </Window.Resources>
 
     <Border Style="{StaticResource WindowBorderStyle}"
             Padding="28 24">
@@ -55,7 +62,9 @@
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
-                    <StackPanel Grid.Row="0" Orientation="Vertical">
+                    <StackPanel Grid.Row="0" 
+                                Orientation="Vertical"
+                                Margin="0 0 0 24">
                         <Label Target="PortfolioName">
                             <TextBlock>
                                 <Bold>Название портфеля:</Bold>
@@ -65,7 +74,9 @@
                         <TextBox x:Name="PortfolioName"
                                  Text="{Binding Name}"/>
                     </StackPanel>
-                    <StackPanel Grid.Row="1" Orientation="Vertical">
+                    <StackPanel Grid.Row="1" 
+                                Orientation="Vertical"
+                                Margin="0 0 0 24">
                         <Label Target="PortfolioDescription">
                             <TextBlock>
                                 <Bold>Описание портфеля:</Bold>
@@ -76,10 +87,58 @@
                                  MinLines="3"
                                  MaxLines="5"/>
                     </StackPanel>
+                    <StackPanel Grid.Row="2"
+                                Orientation="Vertical"
+                                Margin="0 0 0 24">
+                        <Label>
+                            <TextBlock>
+                                <Bold>Тип портфеля:</Bold>
+                                <Run Foreground="{StaticResource BrandRed}">*</Run>
+                            </TextBlock>
+                        </Label>
+                        <StackPanel Orientation="Horizontal">
+                            <Viewbox Height="30">
+                                <RadioButton IsChecked="{Binding IsPortfolioSimpleType}"
+                                             GroupName="PortfolioType"/>
+                            </Viewbox>
+                            <Label Content="Простой"
+                                   FontWeight="Bold"
+                                   Margin="0 0 24 0"/>
+                            <Viewbox Height="30">
+                                <RadioButton IsChecked="{Binding IsPortfolioComplexType}"
+                                             GroupName="PortfolioType"/>
+                            </Viewbox>
+                            <Label Content="Составной"
+                                   FontWeight="Bold"/>
+                        </StackPanel>
+                    </StackPanel>
+                    <Grid Grid.Row="3" 
+                          Margin="0 0 0 24"
+                          Visibility="{Binding IsPortfolioComplexType, Converter={StaticResource BooleanToVisibilityConv}}">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <Label Grid.Row="0">
+                            <TextBlock>
+                                <Bold>Выберите портфели для объединения:</Bold>
+                            </TextBlock>
+                        </Label>
+                        <ListView Grid.Row="1">
+                            <StackPanel Margin="5" Orientation="Horizontal">
+                                <Label VerticalContentAlignment="Center">Яблоко</Label>
+                            </StackPanel>
+                            <StackPanel Margin="5" Orientation="Horizontal">
+                                <Label VerticalContentAlignment="Center">Киви</Label>
+                            </StackPanel>
+                            <StackPanel Margin="5" Orientation="Horizontal">
+                                <Label VerticalContentAlignment="Center">Лимон</Label>
+                            </StackPanel>
+                        </ListView>
+                    </Grid>
                 </Grid>
             </Border>
             <Border Grid.Row="2"
-                    Margin="0 32 0 0"
                     Padding="0 16 0 0"
                     BorderThickness="0 1 0 0"
                     BorderBrush="{StaticResource BorderBrush}">

@@ -1,10 +1,11 @@
-﻿using InvestLens.ViewModel.Services;
+﻿using InvestLens.Model;
+using InvestLens.ViewModel.Services;
 
 namespace InvestLens.ViewModel;
 
 public class CreatePortfolioWindowViewModel : CreateEditPortfolioWindowViewModel, ICreatePortfolioWindowViewModel
 {
-    public CreatePortfolioWindowViewModel(IWindowManager windowManager) : base(windowManager)
+    public CreatePortfolioWindowViewModel(CreateEditPortfolioModel model, IWindowManager windowManager) : base(model, windowManager)
     {
         Title = "Создание";
         ActionTitle = "Создать портфель";

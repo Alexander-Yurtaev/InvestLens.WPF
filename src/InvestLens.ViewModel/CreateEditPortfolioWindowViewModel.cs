@@ -1,45 +1,100 @@
-﻿using System.Windows.Input;
+﻿using InvestLens.Model;
 using InvestLens.ViewModel.Services;
+using System.Windows.Input;
 
 namespace InvestLens.ViewModel;
 
 public abstract class CreateEditPortfolioWindowViewModel : ValidationViewModelBase, ICreateEditPortfolioWindowViewModel
 {
+    protected readonly CreateEditPortfolioModel Model;
     protected readonly IWindowManager WindowManager;
-    private string _title = string.Empty;
-    private string _actionTitle;
-    private string _name;
-    private string _description;
-
-    protected CreateEditPortfolioWindowViewModel(IWindowManager windowManager)
+    
+    protected CreateEditPortfolioWindowViewModel(CreateEditPortfolioModel model, IWindowManager windowManager)
     {
+        Model = model;
         WindowManager = windowManager;
         CloseCommand = new DelegateCommand(OnClose);
         ActionCommand = new DelegateCommand(OnAction);
+        IsPortfolioSimpleType = true;
     }
 
     public string Title
     {
-        get => _title;
-        set => SetProperty(ref _title, value);
+        get => Model.Title;
+        set
+        {
+            if (!string.Equals(Model.Title, value, StringComparison.InvariantCulture))
+            {
+                Model.Title = value;
+                RaisePropertyChanged();
+            }
+        }
     }
 
     public string ActionTitle
     {
-        get => _actionTitle;
-        set => SetProperty(ref _actionTitle, value);
+        get => Model.ActionTitle;
+        set
+        {
+            if (!string.Equals(Model.ActionTitle, value, StringComparison.InvariantCulture))
+            {
+                Model.ActionTitle = value;
+                RaisePropertyChanged();
+            }
+        }
     }
 
     public string Name
     {
-        get => _name;
-        set => SetProperty(ref _name, value);
+        get => Model.Name;
+        set
+        {
+            if (!string.Equals(Model.Name, value, StringComparison.InvariantCulture))
+            {
+                Model.Name = value;
+                RaisePropertyChanged();
+            }
+        }
     }
 
     public string Description
     {
-        get => _description;
-        set => SetProperty(ref _description, value);
+        get => Model.Description;
+        set
+        {
+            if (!string.Equals(Model.Description, value, StringComparison.InvariantCulture))
+            {
+                Model.Description = value;
+                RaisePropertyChanged();
+            }
+        }
+    }
+
+    public bool IsPortfolioSimpleType
+    {
+        get => Model.IsPortfolioSimpleType;
+        set
+        {
+            if (Model.IsPortfolioSimpleType != value)
+            {
+                Model.IsPortfolioSimpleType = value;
+                RaisePropertyChanged();
+                RaisePropertyChanged(nameof(IsPortfolioComplexType));
+            }
+        }
+    }
+
+    public bool IsPortfolioComplexType
+    {
+        get => !Model.IsPortfolioSimpleType;
+        set
+        {
+            if (Model.IsPortfolioSimpleType == value)
+            {
+                Model.IsPortfolioSimpleType = !value;
+                RaisePropertyChanged();
+            }
+        }
     }
 
     public ICommand CloseCommand { get; set; }

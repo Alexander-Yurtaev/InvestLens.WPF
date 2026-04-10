@@ -5,13 +5,10 @@ namespace InvestLens.ViewModel;
 
 public class EditPortfolioWindowViewModel : CreateEditPortfolioWindowViewModel, IEditPortfolioWindowViewModel
 {
-    private readonly PortfolioDetail _model;
-
-    public EditPortfolioWindowViewModel(PortfolioDetail model, IWindowManager windowManager) : base(windowManager)
+    public EditPortfolioWindowViewModel(CreateEditPortfolioModel model, IWindowManager windowManager) : base(model, windowManager)
     {
-        _model = model;
-        Title = $"Редактирование: {_model.Title}";
-        ActionTitle = $"Редактирование портфеля:  {_model.Title}";
+        Title = $"Редактирование: {Model.Title}";
+        ActionTitle = $"Редактирование портфеля:  {Model.Title}";
     }
 
     #region Overrides of CreateEditPortfolioWindowViewModel
