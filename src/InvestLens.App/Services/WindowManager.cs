@@ -14,9 +14,9 @@ public class WindowManager : IWindowManager
         _lifetimeScope = lifetimeScope;
     }
 
-    public void ShowWindow<TViewModel>(bool asDialog = false) where TViewModel : class
+    public void ShowWindow<TViewModel>(TViewModel? viewModel = null, bool asDialog = false) where TViewModel : class
     {
-        var window = GetWindow(typeof(TViewModel));
+        var window = GetWindow(typeof(TViewModel), viewModel);
         if (asDialog)
         {
             window.Owner = Application.Current.MainWindow;
@@ -44,7 +44,7 @@ public class WindowManager : IWindowManager
         Application.Current.MainWindow = window;
     }
 
-    private Window GetWindow(Type viewModelType)
+    private Window GetWindow(Type viewModelType, object? viewModel = null)
     {
         if (!_windows.TryGetValue(viewModelType, out var window))
         {
@@ -62,6 +62,10 @@ public class WindowManager : IWindowManager
 
             var viewType = Type.GetType(viewFullName) ?? throw new TypeLoadException($"View {viewFullName} not found");
             window = (Window)_lifetimeScope.Resolve(viewType);
+            if (viewModel is not null)
+            {
+                window.DataContext = viewModel;
+            }
             _windows[viewModelType] = window;
         }
         return window;

@@ -1,4 +1,5 @@
 ﻿using InvestLens.Model;
+using InvestLens.ViewModel.Services;
 using InvestLens.ViewModel.Wrappers;
 
 namespace InvestLens.ViewModel.Pages;
@@ -6,10 +7,12 @@ namespace InvestLens.ViewModel.Pages;
 public class PortfolioDetailViewModel : ViewModelBaseWithContentHeader, IPortfolioDetailViewModel
 {
     private readonly PortfolioDetail _model;
+    private readonly IWindowManager _windowManager;
 
-    public PortfolioDetailViewModel(PortfolioDetail model) : base(model.Title)
+    public PortfolioDetailViewModel(PortfolioDetail model, IWindowManager windowManager) : base(model.Title)
     {
         _model = model;
+        _windowManager = windowManager;
 
         var buttonModels = new List<ButtonModel>
         {
@@ -30,7 +33,8 @@ public class PortfolioDetailViewModel : ViewModelBaseWithContentHeader, IPortfol
 
     private void OnEditPortfolio()
     {
-        
+        var viewModel = new EditPortfolioWindowViewModel(_model, _windowManager);
+        _windowManager.ShowWindow<EditPortfolioWindowViewModel>(viewModel, asDialog: true);
     }
 
     private void OnImportPortfolio()

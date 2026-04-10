@@ -14,7 +14,7 @@ public class LoginWindowViewModel : ValidationViewModelBase, ILoginWindowViewMod
     private readonly IWindowManager _windowManager;
     private readonly IEventAggregator _eventAggregator;
     private readonly LoginModel _model;
-    private string _errorMessage;
+    private string _errorMessage = string.Empty;
 
     public LoginWindowViewModel(
         LoginModel model, 

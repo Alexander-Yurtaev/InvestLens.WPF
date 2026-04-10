@@ -1,18 +1,27 @@
 ﻿using System.Collections;
-using System.ComponentModel;
+using System.Windows.Input;
+using InvestLens.ViewModel.Services;
 
 namespace InvestLens.ViewModel;
 
-public interface ICreateEditPortfolioWindowViewModel
+public abstract class CreateEditPortfolioWindowViewModel : ValidationViewModelBase, ICreateEditPortfolioWindowViewModel
 {
-    string Title { get; set; }
-    bool HasErrors { get; }
-    event PropertyChangedEventHandler? PropertyChanged;
-    IEnumerable GetErrors(string? propertyName);
-    event EventHandler<DataErrorsChangedEventArgs>? ErrorsChanged;
-}
+    protected readonly IWindowManager WindowManager;
+    private string _title = string.Empty;
 
-public class CreateEditPortfolioWindowViewModel : ValidationViewModelBase, ICreateEditPortfolioWindowViewModel
-{
-    public string Title { get; set; } = string.Empty;
+    protected CreateEditPortfolioWindowViewModel(IWindowManager windowManager)
+    {
+        WindowManager = windowManager;
+        CloseCommand = new DelegateCommand(OnClose);
+    }
+
+    public string Title
+    {
+        get => _title;
+        set => SetProperty(ref _title, value);
+    }
+
+    public ICommand CloseCommand { get; set; }
+
+    protected abstract void OnClose();
 }

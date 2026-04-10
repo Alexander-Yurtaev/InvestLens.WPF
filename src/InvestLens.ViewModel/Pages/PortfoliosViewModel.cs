@@ -24,6 +24,6 @@ public class PortfoliosViewModel : ViewModelBaseWithContentHeader, IPortfoliosVi
 
     private void OnCreatePortfolio()
     {
-        _windowManager.ShowWindow<CreateEditPortfolioWindowViewModel>(true);
+        _windowManager.ShowWindow<CreatePortfolioWindowViewModel>(asDialog: true);
     }
 }

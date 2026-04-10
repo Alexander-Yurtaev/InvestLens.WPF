@@ -12,5 +12,6 @@
     <SolidColorBrush x:Key="BackgroundSecondary" Color="#FFFFFF"/>
 
     <SolidColorBrush x:Key="BackgroundHover" Color="#1AC8102E"/>
+    <SolidColorBrush x:Key="BorderBrush" Color="#E9EDF2"/>
 
 </ResourceDictionary>

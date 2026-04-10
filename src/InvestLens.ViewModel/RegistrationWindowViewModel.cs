@@ -13,7 +13,7 @@ public class RegistrationWindowViewModel : ValidationViewModelBase, IRegistratio
     private readonly IWindowManager _windowManager;
     private string _confirmPassword = string.Empty;
     private readonly RegistrationModel _model;
-    private string _errorMessage;
+    private string _errorMessage = string.Empty;
 
     public RegistrationWindowViewModel(RegistrationModel model, ISecurityService securityService, IWindowManager windowManager)
     {

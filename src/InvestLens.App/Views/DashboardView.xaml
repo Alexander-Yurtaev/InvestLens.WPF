@@ -7,7 +7,7 @@
              xmlns:pages="clr-namespace:InvestLens.ViewModel.Pages;assembly=InvestLens.ViewModel"
              xmlns:model="clr-namespace:InvestLens.Model;assembly=InvestLens.Model"
              mc:Ignorable="d" 
-             d:DataContext="{d:DesignInstance pages:DashboardWithContentHeader, IsDesignTimeCreatable=True}"
+             d:DataContext="{d:DesignInstance pages:DashboardViewModel, IsDesignTimeCreatable=True}"
              d:DesignHeight="450" d:DesignWidth="800">
 
     <UserControl.Resources>

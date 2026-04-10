@@ -11,6 +11,7 @@
                 <ResourceDictionary Source="/Resources/Button.xaml"/>
                 <ResourceDictionary Source="/Resources/TabControl.xaml"/>
                 <ResourceDictionary Source="/Resources/TextBlock.xaml"/>
+                <ResourceDictionary Source="/Resources/Window.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>

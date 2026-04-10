@@ -2,13 +2,12 @@
 
 public class TabItemViewModel : BindableBase
 {
-    private string _header;
-    private List<object> _content;
+    private string _header = string.Empty;
+    private List<object> _content = [];
 
     public TabItemViewModel(string header)
     {
         Header = header;
-        Content = [];
     }
 
     public string Header

@@ -8,10 +8,8 @@
         xmlns:behaviors="clr-namespace:InvestLens.App.Behaviors"
         mc:Ignorable="d"
         Title="Registration" Height="800" Width="1000"
-        WindowStyle="None"
-        AllowsTransparency="True"
-        Background="Transparent"
-        WindowStartupLocation="CenterScreen">
+        WindowStartupLocation="CenterScreen"
+        Style="{StaticResource WindowStyle}">
 
     <b:Interaction.Behaviors>
         <behaviors:DragMoveBehavior/>

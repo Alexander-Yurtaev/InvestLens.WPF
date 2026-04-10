@@ -8,10 +8,8 @@
         xmlns:behaviors="clr-namespace:InvestLens.App.Behaviors"
         mc:Ignorable="d"
         Title="Login" Height="650" Width="1000"
-        WindowStyle="None"
-        AllowsTransparency="True"
-        Background="Transparent"
-        WindowStartupLocation="CenterScreen">
+        WindowStartupLocation="CenterScreen"
+        Style="{StaticResource WindowStyle}">
 
     <b:Interaction.Behaviors>
         <behaviors:DragMoveBehavior/>
@@ -21,16 +19,6 @@
         <ResourceDictionary>
             <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConv"/>
 
-            <Style TargetType="Window">
-                <Setter Property="Effect">
-                    <Setter.Value>
-                        <DropShadowEffect BlurRadius="12" 
-                                          ShadowDepth="0" 
-                                          Opacity="0.25" 
-                                          Color="Black"/>
-                    </Setter.Value>
-                </Setter>
-            </Style>
             <Style x:Key="LeftSideStyle"
                    TargetType="Border">
                 <Setter Property="CornerRadius" Value="32 0 0 32"/>
@@ -121,9 +109,7 @@
         </ResourceDictionary>
     </Window.Resources>
 
-    <Border Background="{StaticResource BackgroundSecondary}"
-            CornerRadius="32"
-            Margin="0">
+    <Border Style="{StaticResource WindowBorderStyle}">
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition/>
