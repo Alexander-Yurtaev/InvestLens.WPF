@@ -6,23 +6,27 @@
         xmlns:local="clr-namespace:InvestLens.App.Windows"
         xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
         xmlns:behaviors="clr-namespace:InvestLens.App.Behaviors"
+        xmlns:viewModel="clr-namespace:InvestLens.ViewModel;assembly=InvestLens.ViewModel"
         mc:Ignorable="d"
+        d:DataContext="{d:DesignInstance viewModel:CreateEditPortfolioWindowViewModel, IsDesignTimeCreatable=True}"
         Title="{Binding Title}" Height="490" Width="580"
         WindowStartupLocation="CenterScreen"
-        Style="{StaticResource WindowStyle}">
+        Style="{StaticResource WindowStyle}"
+        ShowInTaskbar="False">
 
     <b:Interaction.Behaviors>
         <behaviors:DragMoveBehavior/>
     </b:Interaction.Behaviors>
 
-    <Border Style="{StaticResource WindowBorderStyle}">
+    <Border Style="{StaticResource WindowBorderStyle}"
+            Padding="28 24">
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
             <Border Grid.Row="0"
-                    Padding="28 24 28 16"
                     BorderThickness="0 0 0 1"
                     BorderBrush="{StaticResource BorderBrush}">
                 <Grid>
@@ -44,7 +48,31 @@
             </Border>
             <Border Grid.Row="1"
                     Padding="28 24">
-
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                </Grid>
+            </Border>
+            <Border Grid.Row="2"
+                    Margin="0 32 0 0"
+                    Padding="0 16 0 0"
+                    BorderThickness="0 1 0 0"
+                    BorderBrush="{StaticResource BorderBrush}">
+                <StackPanel Orientation="Horizontal"
+                            HorizontalAlignment="Right">
+                    <Button Content="Отмена"
+                            Margin="0 0 6 0"
+                            Command="{Binding CloseCommand}"
+                            Style="{StaticResource SecondaryButtonStyle}"/>
+                    <Button Content="{Binding ActionTitle}"
+                            Margin="6 0 0 0"
+                            Command="{Binding ActionCommand}"
+                            Style="{StaticResource PrimaryButtonStyle}"/>
+                </StackPanel>
             </Border>
         </Grid>
     </Border>

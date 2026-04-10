@@ -11,12 +11,20 @@ public class EditPortfolioWindowViewModel : CreateEditPortfolioWindowViewModel, 
     {
         _model = model;
         Title = $"Редактирование: {_model.Title}";
+        ActionTitle = $"Редактирование портфеля:  {_model.Title}";
     }
 
     #region Overrides of CreateEditPortfolioWindowViewModel
 
     protected override void OnClose()
     {
+        WindowManager.CloseWindow<EditPortfolioWindowViewModel>();
+    }
+
+    protected override void OnAction()
+    {
+        // Save changes
+        // ...
         WindowManager.CloseWindow<EditPortfolioWindowViewModel>();
     }
 

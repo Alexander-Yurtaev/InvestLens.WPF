@@ -112,6 +112,7 @@
                             Padding="{TemplateBinding Padding}"
                             Style="{StaticResource CardBorderStyle}">
                         <TextBlock Text="{TemplateBinding Content}"
+                                   FontWeight="Bold"
                                    ForceCursor="{TemplateBinding Foreground}"
                                    VerticalAlignment="Center"
                                    HorizontalAlignment="Center"/>
@@ -140,6 +141,7 @@
                             Padding="{TemplateBinding Padding}"
                             Style="{StaticResource CardBorderStyle}">
                         <TextBlock Text="{TemplateBinding Content}"
+                                   FontWeight="Medium"
                                    ForceCursor="{TemplateBinding Foreground}"
                                    VerticalAlignment="Center"
                                    HorizontalAlignment="Center"/>
