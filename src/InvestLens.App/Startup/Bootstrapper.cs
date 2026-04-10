@@ -40,6 +40,9 @@ namespace InvestLens.App.Startup
             builder.RegisterType<LoginWindowViewModel>().As<ILoginWindowViewModel>();
             builder.RegisterType<LoginModel>().AsSelf();
 
+            builder.RegisterType<CreateEditPortfolioWindow>().AsSelf();
+            builder.RegisterType<CreateEditPortfolioWindowViewModel>().As<ICreateEditPortfolioWindowViewModel>();
+            
             builder.RegisterType<NavigationViewModel>().As<INavigationViewModel>();
             builder.RegisterType<HeaderViewModel>().As<IHeaderViewModel>();
 
