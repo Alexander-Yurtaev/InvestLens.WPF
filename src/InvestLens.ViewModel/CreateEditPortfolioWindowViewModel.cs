@@ -8,6 +8,8 @@ public abstract class CreateEditPortfolioWindowViewModel : ValidationViewModelBa
     protected readonly IWindowManager WindowManager;
     private string _title = string.Empty;
     private string _actionTitle;
+    private string _name;
+    private string _description;
 
     protected CreateEditPortfolioWindowViewModel(IWindowManager windowManager)
     {
@@ -26,6 +28,18 @@ public abstract class CreateEditPortfolioWindowViewModel : ValidationViewModelBa
     {
         get => _actionTitle;
         set => SetProperty(ref _actionTitle, value);
+    }
+
+    public string Name
+    {
+        get => _name;
+        set => SetProperty(ref _name, value);
+    }
+
+    public string Description
+    {
+        get => _description;
+        set => SetProperty(ref _description, value);
     }
 
     public ICommand CloseCommand { get; set; }

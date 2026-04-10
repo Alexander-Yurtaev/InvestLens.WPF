@@ -55,6 +55,27 @@
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
+                    <StackPanel Grid.Row="0" Orientation="Vertical">
+                        <Label Target="PortfolioName">
+                            <TextBlock>
+                                <Bold>Название портфеля:</Bold>
+                                <Run Foreground="{StaticResource BrandRed}">*</Run>
+                            </TextBlock>
+                        </Label>
+                        <TextBox x:Name="PortfolioName"
+                                 Text="{Binding Name}"/>
+                    </StackPanel>
+                    <StackPanel Grid.Row="1" Orientation="Vertical">
+                        <Label Target="PortfolioDescription">
+                            <TextBlock>
+                                <Bold>Описание портфеля:</Bold>
+                            </TextBlock>
+                        </Label>
+                        <TextBox x:Name="PortfolioDescription"
+                                 Text="{Binding Description}"
+                                 MinLines="3"
+                                 MaxLines="5"/>
+                    </StackPanel>
                 </Grid>
             </Border>
             <Border Grid.Row="2"
