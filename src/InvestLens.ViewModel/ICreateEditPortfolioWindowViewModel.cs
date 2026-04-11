@@ -5,6 +5,7 @@ namespace InvestLens.ViewModel;
 
 public interface ICreateEditPortfolioWindowViewModel : INotifyPropertyChanged, INotifyDataErrorInfo
 {
-    string Title { get; set; }
+    string Name { get; set; }
+    string Description { get; set; }
     ICommand CloseCommand { get; set; }
 }

@@ -71,7 +71,7 @@
                             </TextBlock>
                         </Label>
                         <TextBox x:Name="PortfolioName"
-                                 Text="{Binding Name}"/>
+                                 Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"/>
                     </StackPanel>
                     <StackPanel Grid.Row="1" 
                                 Orientation="Vertical"

@@ -67,7 +67,7 @@ public abstract class ValidationViewModelBase : BindableBase, INotifyDataErrorIn
         }
     }
 
-    protected bool Validate()
+    protected virtual bool Validate()
     {
         var result = new List<ValidationResult>();
         var content = new ValidationContext(this);
@@ -91,7 +91,7 @@ public abstract class ValidationViewModelBase : BindableBase, INotifyDataErrorIn
         return !HasErrors;
     }
 
-    protected void ValidateProperty(object? newValue, [CallerMemberName] string? propertyName = null)
+    protected virtual void ValidateProperty(object? newValue, [CallerMemberName] string? propertyName = null)
     {
         var result = new List<ValidationResult>();
         var content = new ValidationContext(this) { MemberName = propertyName };

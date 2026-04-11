@@ -10,8 +10,8 @@ public sealed class UpdatePortfolioWindowViewModel : CreateUpdatePortfolioWindow
         IWindowManager windowManager,
         IPortfoliosManager portfoliosManager) : base(model, windowManager, portfoliosManager)
     {
-        Title = $"Редактирование: {Model.Title}";
-        ActionTitle = $"Редактирование портфеля:  {Model.Title}";
+        Name = $"Редактирование: {Model.Name}";
+        ActionTitle = $"Редактирование портфеля:  {Model.Name}";
         InvalidateCommands();
     }
 
@@ -21,15 +21,15 @@ public sealed class UpdatePortfolioWindowViewModel : CreateUpdatePortfolioWindow
 
     #region Overrides of CreateUpdatePortfolioWindowViewModel
 
-    protected override void OnClose()
-    {
-        WindowManager.CloseWindow<UpdatePortfolioWindowViewModel>();
-    }
-
-    protected override void OnAction()
+    protected override void ExecuteAction()
     {
         // Save changes
         // ...
+        WindowManager.CloseWindow<UpdatePortfolioWindowViewModel>();
+    }
+
+    protected override void OnClose()
+    {
         WindowManager.CloseWindow<UpdatePortfolioWindowViewModel>();
     }
 

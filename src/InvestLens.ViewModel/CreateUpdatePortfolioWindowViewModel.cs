@@ -1,4 +1,6 @@
-﻿using InvestLens.ViewModel.Services;
+﻿using System.Collections.ObjectModel;
+using System.ComponentModel.DataAnnotations;
+using InvestLens.ViewModel.Services;
 using System.Windows.Input;
 
 namespace InvestLens.ViewModel;
@@ -18,8 +20,10 @@ public abstract class CreateUpdatePortfolioWindowViewModel : ValidationViewModel
         Model = model;
         WindowManager = windowManager;
         CloseCommand = new DelegateCommand(OnClose);
-        ActionCommand = new DelegateCommand(OnAction);
-        LookupModels = portfoliosManager.GetLookupModels().ToList();
+        ActionCommand = new DelegateCommand(OnAction, CanAction);
+        LookupModels =
+            new ObservableCollection<LookupViewModel>(portfoliosManager.GetLookupModels()
+                .Select(m => new LookupViewModel(m)).ToList());
     }
 
     public string Header
@@ -34,16 +38,16 @@ public abstract class CreateUpdatePortfolioWindowViewModel : ValidationViewModel
         set => SetProperty(ref _actionTitle, value);
     }
 
-    public string Title
+    [Required(ErrorMessage = "Укажите название портфеля")]
+    public string Name
     {
-        get => Model.Title;
+        get => Model.Name;
         set
         {
-            if (!string.Equals(Model.Title, value, StringComparison.InvariantCulture))
-            {
-                Model.Title = value;
-                RaisePropertyChanged();
-            }
+            if (string.Equals(Model.Name, value, StringComparison.InvariantCulture)) return;
+            Model.Name = value;
+            ValidateProperty(value);
+            RaisePropertyChanged();
         }
     }
 
@@ -55,18 +59,31 @@ public abstract class CreateUpdatePortfolioWindowViewModel : ValidationViewModel
             if (!string.Equals(Model.Description, value, StringComparison.InvariantCulture))
             {
                 Model.Description = value;
+                ValidateProperty(value);
                 RaisePropertyChanged();
             }
         }
     }
 
-    public List<Model.Portfolio.LookupModel> LookupModels { get; }
+    public ObservableCollection<LookupViewModel> LookupModels { get; }
 
     public ICommand CloseCommand { get; set; }
     public ICommand ActionCommand { get; set; }
 
+    private void OnAction()
+    {
+        if (!Validate()) return;
+        ExecuteAction();
+    }
+
+    protected abstract void ExecuteAction();
+    
+    protected virtual bool CanAction()
+    {
+        return !HasErrors;
+    }
+
     protected abstract void OnClose();
-    protected abstract void OnAction();
 
     #region Overrides of ValidationViewModelBase
 
