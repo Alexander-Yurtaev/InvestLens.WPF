@@ -3,7 +3,7 @@ using InvestLens.ViewModel.Services;
 
 namespace InvestLens.ViewModel;
 
-public sealed class CreatePortfolioWindowViewModel : CreateEditPortfolioWindowViewModel, ICreatePortfolioWindowViewModel
+public sealed class CreatePortfolioWindowViewModel : CreateUpdatePortfolioWindowViewModel, ICreatePortfolioWindowViewModel
 {
     public CreatePortfolioWindowViewModel(
         Model.Portfolio.CreateModel model, 
@@ -20,14 +20,7 @@ public sealed class CreatePortfolioWindowViewModel : CreateEditPortfolioWindowVi
         get => Model.PortfolioType == PortfolioType.Invest;
         set
         {
-            if (value)
-            {
-                ((Model.Portfolio.CreateModel)Model).SetPortfolioType(PortfolioType.Invest);
-            }
-            else
-            {
-                ((Model.Portfolio.CreateModel)Model).SetPortfolioType(PortfolioType.Complex);
-            }
+            ((Model.Portfolio.CreateModel)Model).SetPortfolioType(value ? PortfolioType.Invest : PortfolioType.Complex);
 
             RaisePropertyChanged();
             RaisePropertyChanged(nameof(IsPortfolioComplexType));
@@ -39,21 +32,14 @@ public sealed class CreatePortfolioWindowViewModel : CreateEditPortfolioWindowVi
         get => Model.PortfolioType == PortfolioType.Complex;
         set
         {
-            if (value)
-            {
-                ((Model.Portfolio.CreateModel)Model).SetPortfolioType(PortfolioType.Complex);
-            }
-            else
-            {
-                ((Model.Portfolio.CreateModel)Model).SetPortfolioType(PortfolioType.Invest);
-            }
+            ((Model.Portfolio.CreateModel)Model).SetPortfolioType(value ? PortfolioType.Complex : PortfolioType.Invest);
 
             RaisePropertyChanged();
             RaisePropertyChanged(nameof(IsPortfolioSimpleType));
         }
     }
 
-    #region Overrides of CreateEditPortfolioWindowViewModel
+    #region Overrides of CreateUpdatePortfolioWindowViewModel
 
     protected override void OnClose()
     {

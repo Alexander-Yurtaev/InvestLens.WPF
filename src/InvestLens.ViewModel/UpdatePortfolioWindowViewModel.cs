@@ -3,7 +3,7 @@ using InvestLens.ViewModel.Services;
 
 namespace InvestLens.ViewModel;
 
-public sealed class UpdatePortfolioWindowViewModel : CreateEditPortfolioWindowViewModel, IUpdatePortfolioWindowViewModel
+public sealed class UpdatePortfolioWindowViewModel : CreateUpdatePortfolioWindowViewModel, IUpdatePortfolioWindowViewModel
 {
     public UpdatePortfolioWindowViewModel(
         Model.Portfolio.UpdateModel model,
@@ -19,7 +19,7 @@ public sealed class UpdatePortfolioWindowViewModel : CreateEditPortfolioWindowVi
 
     public bool IsPortfolioComplexType => Model.PortfolioType == PortfolioType.Complex;
 
-    #region Overrides of CreateEditPortfolioWindowViewModel
+    #region Overrides of CreateUpdatePortfolioWindowViewModel
 
     protected override void OnClose()
     {

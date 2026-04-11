@@ -3,14 +3,14 @@ using System.Windows.Input;
 
 namespace InvestLens.ViewModel;
 
-public abstract class CreateEditPortfolioWindowViewModel : ValidationViewModelBase, ICreateEditPortfolioWindowViewModel
+public abstract class CreateUpdatePortfolioWindowViewModel : ValidationViewModelBase, ICreateEditPortfolioWindowViewModel
 {
     protected readonly Model.Portfolio.BaseModel Model;
     protected readonly IWindowManager WindowManager;
     private string _header = string.Empty;
     private string _actionTitle = string.Empty;
 
-    protected CreateEditPortfolioWindowViewModel(
+    protected CreateUpdatePortfolioWindowViewModel(
         Model.Portfolio.BaseModel model, 
         IWindowManager windowManager,
         IPortfoliosManager portfoliosManager)
