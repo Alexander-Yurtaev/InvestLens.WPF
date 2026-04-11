@@ -1,11 +1,18 @@
 ﻿using System.Collections;
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
+using System.Runtime.CompilerServices;
 
 namespace InvestLens.ViewModel;
 
-public class ValidationViewModelBase : BindableBase, INotifyDataErrorInfo
+public abstract class ValidationViewModelBase : BindableBase, INotifyDataErrorInfo
 {
     private readonly Dictionary<string, List<string>> _errorsByPropertyName = [];
+
+    protected ValidationViewModelBase()
+    {
+        this.PropertyChanged += OnPropertyChanged;
+    }
 
     public bool HasErrors => _errorsByPropertyName.Any();
 
@@ -51,4 +58,58 @@ public class ValidationViewModelBase : BindableBase, INotifyDataErrorInfo
         OnErrorsChanged(new DataErrorsChangedEventArgs(propertyName));
         RaisePropertyChanged(nameof(HasErrors));
     }
+
+    private void OnPropertyChanged(object? sender, PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName == nameof(this.HasErrors))
+        {
+            InvalidateCommands();
+        }
+    }
+
+    protected bool Validate()
+    {
+        var result = new List<ValidationResult>();
+        var content = new ValidationContext(this);
+        Validator.TryValidateObject(this, content, result);
+
+        if (result.Any())
+        {
+            foreach (ValidationResult res in result)
+            {
+                foreach (string memberName in res.MemberNames)
+                {
+                    AddError(res.ErrorMessage ?? "Неизвестная ошибка", memberName);
+                }
+            }
+        }
+        else
+        {
+            ClearErrors(null);
+        }
+
+        return !HasErrors;
+    }
+
+    protected void ValidateProperty(object? newValue, [CallerMemberName] string? propertyName = null)
+    {
+        var result = new List<ValidationResult>();
+        var content = new ValidationContext(this) { MemberName = propertyName };
+        Validator.TryValidateProperty(newValue, content, result);
+
+        if (result.Any())
+        {
+            ClearErrors(propertyName);
+            foreach (ValidationResult res in result)
+            {
+                AddError(res.ErrorMessage ?? "Неизвестная ошибка", propertyName);
+            }
+        }
+        else
+        {
+            ClearErrors(propertyName);
+        }
+    }
+
+    protected abstract void InvalidateCommands();
 }

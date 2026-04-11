@@ -3,7 +3,7 @@ using InvestLens.ViewModel.Services;
 
 namespace InvestLens.ViewModel;
 
-public class CreatePortfolioWindowViewModel : CreateEditPortfolioWindowViewModel, ICreatePortfolioWindowViewModel
+public sealed class CreatePortfolioWindowViewModel : CreateEditPortfolioWindowViewModel, ICreatePortfolioWindowViewModel
 {
     public CreatePortfolioWindowViewModel(
         CreateEditPortfolioModel model, 
@@ -12,6 +12,7 @@ public class CreatePortfolioWindowViewModel : CreateEditPortfolioWindowViewModel
     {
         Title = "Создание";
         ActionTitle = "Создать портфель";
+        InvalidateCommands();
     }
 
     #region Overrides of CreateEditPortfolioWindowViewModel

@@ -2,12 +2,11 @@
 using InvestLens.ViewModel.Services;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-using System.Runtime.CompilerServices;
 using System.Windows.Input;
 
 namespace InvestLens.ViewModel;
 
-public class RegistrationWindowViewModel : ValidationViewModelBase, IRegistrationWindowViewModel
+public sealed class RegistrationWindowViewModel : ValidationViewModelBase, IRegistrationWindowViewModel
 {
     private readonly ISecurityService _securityService;
     private readonly IWindowManager _windowManager;
@@ -137,51 +136,7 @@ public class RegistrationWindowViewModel : ValidationViewModelBase, IRegistratio
         }
     }
 
-    private bool Validate()
-    {
-        var result = new List<ValidationResult>();
-        var content = new ValidationContext(this);
-        Validator.TryValidateObject(this, content, result);
-
-        if (result.Any())
-        {
-            foreach (ValidationResult res in result)
-            {
-                foreach (string memberName in res.MemberNames)
-                {
-                    AddError(res.ErrorMessage ?? "Неизвестная ошибка", memberName);
-                }
-            }
-        }
-        else
-        {
-            ClearErrors(null);
-        }
-
-        return !HasErrors;
-    }
-
-    private void ValidateProperty(object? newValue, [CallerMemberName] string? propertyName = null)
-    {
-        var result = new List<ValidationResult>();
-        var content = new ValidationContext(this) { MemberName = propertyName };
-        Validator.TryValidateProperty(newValue, content, result);
-
-        if (result.Any())
-        {
-            ClearErrors(propertyName);
-            foreach (ValidationResult res in result)
-            {
-                AddError(res.ErrorMessage ?? "Неизвестная ошибка", propertyName);
-            }
-        }
-        else
-        {
-            ClearErrors(propertyName);
-        }
-    }
-
-    private void InvalidateCommands()
+    protected override void InvalidateCommands()
     {
         ((DelegateCommand)RegisterCommand).RaiseCanExecuteChanged();
     }

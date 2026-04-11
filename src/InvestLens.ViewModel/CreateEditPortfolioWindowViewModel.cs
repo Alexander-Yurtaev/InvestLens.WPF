@@ -108,4 +108,13 @@ public abstract class CreateEditPortfolioWindowViewModel : ValidationViewModelBa
 
     protected abstract void OnClose();
     protected abstract void OnAction();
+
+    #region Overrides of ValidationViewModelBase
+
+    protected override void InvalidateCommands()
+    {
+        ((DelegateCommand)ActionCommand).RaiseCanExecuteChanged();
+    }
+
+    #endregion
 }
