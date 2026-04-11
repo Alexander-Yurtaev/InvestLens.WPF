@@ -2,7 +2,7 @@
 
 namespace InvestLens.Model.Portfolio;
 
-public class CreateModel(string title, PortfolioType? portfolioType) : BaseModel(title, portfolioType)
+public class CreateModel(string? title = null, PortfolioType? portfolioType = null) : BaseModel(title ?? "Новый портфел", portfolioType ?? PortfolioType.Invest)
 {
     public void SetPortfolioType(PortfolioType value)
     {

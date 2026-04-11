@@ -22,7 +22,15 @@ public class PortfolioTypeBehavior : Behavior<Window>
     protected override void OnAttached()
     {
         base.OnAttached();
+
         WindowHeight = AssociatedObject.Height;
+        var isPortfolioComplexType = AssociatedObject.DataContext switch
+        {
+            CreatePortfolioWindowViewModel createViewModel => createViewModel.IsPortfolioComplexType,
+            UpdatePortfolioWindowViewModel editViewModel => editViewModel.IsPortfolioComplexType,
+            _ => false
+        };
+        AssociatedObject.Height = isPortfolioComplexType ? this.WindowHeight + 240 : this.WindowHeight;
     }
 
     #endregion
@@ -31,8 +39,9 @@ public class PortfolioTypeBehavior : Behavior<Window>
     {
         var behavior = d as PortfolioTypeBehavior;
         if (behavior?.AssociatedObject is not Window window) return;
-        if (window.DataContext is not CreateEditPortfolioWindowViewModel viewModel) return;
-
-        window.Height = viewModel.IsPortfolioComplexType ? behavior.WindowHeight + 240 : behavior.WindowHeight;
+        if (window.DataContext is CreatePortfolioWindowViewModel createViewModel)
+        {
+            window.Height = createViewModel.IsPortfolioComplexType ? behavior.WindowHeight + 240 : behavior.WindowHeight;
+        } 
     }
 }

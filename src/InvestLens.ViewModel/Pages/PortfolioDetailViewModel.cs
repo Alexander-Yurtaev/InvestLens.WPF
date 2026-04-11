@@ -1,4 +1,5 @@
 ﻿using InvestLens.Model;
+using InvestLens.Model.Portfolio;
 using InvestLens.ViewModel.Services;
 using InvestLens.ViewModel.Wrappers;
 
@@ -38,13 +39,10 @@ public class PortfolioDetailViewModel : ViewModelBaseWithContentHeader, IPortfol
 
     private void OnEditPortfolio()
     {
-        var editModel = new CreateEditPortfolioModel
-        {
-            Title = _model.Title
-        };
+        var editModel = new UpdateModel(_model.Title, _model.PortfolioType);
 
-        var viewModel = new EditPortfolioWindowViewModel(editModel, _windowManager, _portfoliosManager);
-        _windowManager.ShowWindow<EditPortfolioWindowViewModel>(viewModel, asDialog: true);
+        var viewModel = new UpdatePortfolioWindowViewModel(editModel, _windowManager, _portfoliosManager);
+        _windowManager.ShowWindow(viewModel, asDialog: true);
     }
 
     private void OnImportPortfolio()

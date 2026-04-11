@@ -8,7 +8,7 @@ public class PortfoliosManager : IPortfoliosManager
 {
     private readonly Dictionary<NodeType, PortfolioDetail> _portfolios = new Dictionary<NodeType, PortfolioDetail>
     {
-        { NodeType.PortfoliosComplex, new PortfolioDetail("Составной")
+        { NodeType.PortfoliosComplex, new PortfolioDetail("Составной", PortfolioType.Complex)
             {
                 PortfolioStats = {
                     new Stat("Стоимость", 84320, "$", false),
@@ -26,7 +26,7 @@ public class PortfoliosManager : IPortfoliosManager
                 }
             }
         },
-        { NodeType.PortfoliosFirst, new PortfolioDetail("Портфель №1")
+        { NodeType.PortfoliosFirst, new PortfolioDetail("Портфель №1", PortfolioType.Invest)
         {
             PortfolioStats = {
                 new Stat("Стоимость", 24150, "$", false),
@@ -43,7 +43,7 @@ public class PortfoliosManager : IPortfoliosManager
                 new SecurityOperation("MSFT", SecurityOperationType.Buy){Date = new DateTime(2025, 02, 10), Count = 28, Price = 393.2, TotalPrice = 11010},
             }
         } },
-        { NodeType.PortfoliosSecond, new PortfolioDetail("Портфель №2")
+        { NodeType.PortfoliosSecond, new PortfolioDetail("Портфель №2", PortfolioType.Invest)
         {
             PortfolioStats = {
                 new Stat("Стоимость", 16062, "$", false),

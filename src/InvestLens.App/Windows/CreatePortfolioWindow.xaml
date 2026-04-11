@@ -1,4 +1,4 @@
-﻿<Window x:Class="InvestLens.App.Windows.CreateEditPortfolioWindow"
+﻿<Window x:Class="InvestLens.App.Windows.CreatePortfolioWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -9,7 +9,7 @@
         xmlns:viewModel="clr-namespace:InvestLens.ViewModel;assembly=InvestLens.ViewModel"
         xmlns:portfolio="clr-namespace:InvestLens.Model.Portfolio;assembly=InvestLens.Model"
         mc:Ignorable="d"
-        d:DataContext="{d:DesignInstance viewModel:CreateEditPortfolioWindowViewModel, IsDesignTimeCreatable=True}"
+        d:DataContext="{d:DesignInstance viewModel:CreatePortfolioWindowViewModel, IsDesignTimeCreatable=True}"
         Title="{Binding Title}" Height="560" Width="580"
         WindowStartupLocation="CenterScreen"
         Style="{StaticResource WindowStyle}"
@@ -43,7 +43,7 @@
                         <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
                     <TextBlock Grid.Column="0"
-                               Text="{Binding Title}"
+                               Text="{Binding Header}"
                                FontSize="22"
                                FontWeight="Bold"
                                Foreground="{StaticResource BrandBlue}"/>

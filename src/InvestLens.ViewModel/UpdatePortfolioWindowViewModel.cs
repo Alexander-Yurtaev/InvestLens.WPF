@@ -1,12 +1,12 @@
-﻿using InvestLens.Model;
+﻿using InvestLens.Model.Enums;
 using InvestLens.ViewModel.Services;
 
 namespace InvestLens.ViewModel;
 
-public sealed class EditPortfolioWindowViewModel : CreateEditPortfolioWindowViewModel, IEditPortfolioWindowViewModel
+public sealed class UpdatePortfolioWindowViewModel : CreateEditPortfolioWindowViewModel, IUpdatePortfolioWindowViewModel
 {
-    public EditPortfolioWindowViewModel(
-        CreateEditPortfolioModel model, 
+    public UpdatePortfolioWindowViewModel(
+        Model.Portfolio.UpdateModel model,
         IWindowManager windowManager,
         IPortfoliosManager portfoliosManager) : base(model, windowManager, portfoliosManager)
     {
@@ -15,18 +15,22 @@ public sealed class EditPortfolioWindowViewModel : CreateEditPortfolioWindowView
         InvalidateCommands();
     }
 
+    public bool IsPortfolioSimpleType => Model.PortfolioType == PortfolioType.Invest;
+
+    public bool IsPortfolioComplexType => Model.PortfolioType == PortfolioType.Complex;
+
     #region Overrides of CreateEditPortfolioWindowViewModel
 
     protected override void OnClose()
     {
-        WindowManager.CloseWindow<EditPortfolioWindowViewModel>();
+        WindowManager.CloseWindow<UpdatePortfolioWindowViewModel>();
     }
 
     protected override void OnAction()
     {
         // Save changes
         // ...
-        WindowManager.CloseWindow<EditPortfolioWindowViewModel>();
+        WindowManager.CloseWindow<UpdatePortfolioWindowViewModel>();
     }
 
     #endregion

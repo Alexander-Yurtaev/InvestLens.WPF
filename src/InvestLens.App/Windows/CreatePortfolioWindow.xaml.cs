@@ -3,11 +3,14 @@ using InvestLens.ViewModel;
 
 namespace InvestLens.App.Windows
 {
-    public class CreatePortfolioWindow : CreateEditPortfolioWindow
+    /// <summary>
+    /// Interaction logic for CreatePortfolioWindow.xaml
+    /// </summary>
+    public partial class CreatePortfolioWindow : Window
     {
         public CreatePortfolioWindow(ICreatePortfolioWindowViewModel viewModel)
         {
-            //DefaultStyleKeyProperty.OverrideMetadata(typeof(CreatePortfolioWindow), new FrameworkPropertyMetadata(typeof(CreatePortfolioWindow)));
+            InitializeComponent();
             DataContext = viewModel;
         }
     }

@@ -1,16 +1,17 @@
-﻿using InvestLens.Model;
-using InvestLens.ViewModel.Services;
+﻿using InvestLens.ViewModel.Services;
 using System.Windows.Input;
 
 namespace InvestLens.ViewModel;
 
 public abstract class CreateEditPortfolioWindowViewModel : ValidationViewModelBase, ICreateEditPortfolioWindowViewModel
 {
-    protected readonly CreateEditPortfolioModel Model;
+    protected readonly Model.Portfolio.BaseModel Model;
     protected readonly IWindowManager WindowManager;
+    private string _header = string.Empty;
+    private string _actionTitle = string.Empty;
 
     protected CreateEditPortfolioWindowViewModel(
-        CreateEditPortfolioModel model, 
+        Model.Portfolio.BaseModel model, 
         IWindowManager windowManager,
         IPortfoliosManager portfoliosManager)
     {
@@ -18,8 +19,19 @@ public abstract class CreateEditPortfolioWindowViewModel : ValidationViewModelBa
         WindowManager = windowManager;
         CloseCommand = new DelegateCommand(OnClose);
         ActionCommand = new DelegateCommand(OnAction);
-        IsPortfolioSimpleType = true;
         LookupModels = portfoliosManager.GetLookupModels().ToList();
+    }
+
+    public string Header
+    {
+        get => _header;
+        set => SetProperty(ref _header, value);
+    }
+
+    public string ActionTitle
+    {
+        get => _actionTitle;
+        set => SetProperty(ref _actionTitle, value);
     }
 
     public string Title
@@ -35,32 +47,6 @@ public abstract class CreateEditPortfolioWindowViewModel : ValidationViewModelBa
         }
     }
 
-    public string ActionTitle
-    {
-        get => Model.ActionTitle;
-        set
-        {
-            if (!string.Equals(Model.ActionTitle, value, StringComparison.InvariantCulture))
-            {
-                Model.ActionTitle = value;
-                RaisePropertyChanged();
-            }
-        }
-    }
-
-    public string Name
-    {
-        get => Model.Name;
-        set
-        {
-            if (!string.Equals(Model.Name, value, StringComparison.InvariantCulture))
-            {
-                Model.Name = value;
-                RaisePropertyChanged();
-            }
-        }
-    }
-
     public string Description
     {
         get => Model.Description;
@@ -69,33 +55,6 @@ public abstract class CreateEditPortfolioWindowViewModel : ValidationViewModelBa
             if (!string.Equals(Model.Description, value, StringComparison.InvariantCulture))
             {
                 Model.Description = value;
-                RaisePropertyChanged();
-            }
-        }
-    }
-
-    public bool IsPortfolioSimpleType
-    {
-        get => Model.IsPortfolioSimpleType;
-        set
-        {
-            if (Model.IsPortfolioSimpleType != value)
-            {
-                Model.IsPortfolioSimpleType = value;
-                RaisePropertyChanged();
-                RaisePropertyChanged(nameof(IsPortfolioComplexType));
-            }
-        }
-    }
-
-    public bool IsPortfolioComplexType
-    {
-        get => !Model.IsPortfolioSimpleType;
-        set
-        {
-            if (Model.IsPortfolioSimpleType == value)
-            {
-                Model.IsPortfolioSimpleType = !value;
                 RaisePropertyChanged();
             }
         }
