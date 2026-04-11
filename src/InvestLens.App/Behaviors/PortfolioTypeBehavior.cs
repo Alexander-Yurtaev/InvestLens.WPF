@@ -39,9 +39,10 @@ public class PortfolioTypeBehavior : Behavior<Window>
     {
         var behavior = d as PortfolioTypeBehavior;
         if (behavior?.AssociatedObject is not Window window) return;
-        if (window.DataContext is CreatePortfolioWindowViewModel createViewModel)
+        
+        if (window.DataContext is ISupportPortfolioType viewModel)
         {
-            window.Height = createViewModel.IsPortfolioComplexType ? behavior.WindowHeight + 240 : behavior.WindowHeight;
-        } 
+            window.Height = viewModel.IsPortfolioComplexType ? behavior.WindowHeight + 240 : behavior.WindowHeight;
+        }
     }
 }

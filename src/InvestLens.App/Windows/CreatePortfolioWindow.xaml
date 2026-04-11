@@ -3,14 +3,12 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:InvestLens.App.Windows"
         xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
         xmlns:behaviors="clr-namespace:InvestLens.App.Behaviors"
         xmlns:viewModel="clr-namespace:InvestLens.ViewModel;assembly=InvestLens.ViewModel"
-        xmlns:portfolio="clr-namespace:InvestLens.Model.Portfolio;assembly=InvestLens.Model"
         mc:Ignorable="d"
         d:DataContext="{d:DesignInstance viewModel:CreatePortfolioWindowViewModel, IsDesignTimeCreatable=True}"
-        Title="{Binding Title}" Height="560" Width="580"
+        Title="{Binding Header}" Height="560" Width="580"
         WindowStartupLocation="CenterScreen"
         Style="{StaticResource WindowStyle}"
         ShowInTaskbar="False">
@@ -129,7 +127,7 @@
                                   MaxHeight="200"
                                   ItemsSource="{Binding LookupModels}">
                             <ListView.ItemTemplate>
-                                <DataTemplate DataType="{x:Type portfolio:LookupModel}">
+                                <DataTemplate DataType="{x:Type viewModel:LookupViewModel}">
                                     <Border Padding="16 12"
                                             BorderThickness="0 0 0 1"
                                             BorderBrush="#E9EDF2"

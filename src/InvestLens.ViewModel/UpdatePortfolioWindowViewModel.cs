@@ -1,9 +1,10 @@
 ﻿using InvestLens.Model.Enums;
 using InvestLens.ViewModel.Services;
+using System.Runtime.CompilerServices;
 
 namespace InvestLens.ViewModel;
 
-public sealed class UpdatePortfolioWindowViewModel : CreateUpdatePortfolioWindowViewModel, IUpdatePortfolioWindowViewModel
+public sealed class UpdatePortfolioWindowViewModel : CreateUpdatePortfolioWindowViewModel, IUpdatePortfolioWindowViewModel, ISupportPortfolioType
 {
     public UpdatePortfolioWindowViewModel(
         Model.Portfolio.UpdateModel model,
@@ -34,4 +35,32 @@ public sealed class UpdatePortfolioWindowViewModel : CreateUpdatePortfolioWindow
     }
 
     #endregion
+
+    #region Overrides of ValidationViewModelBase
+
+    protected override bool Validate()
+    {
+        var isValid = base.Validate();
+        ValidateProperty(LookupModels, nameof(LookupModels));
+        return !HasErrors;
+    }
+
+    protected override void ValidateProperty(object? newValue, [CallerMemberName] string? propertyName = null)
+    {
+        base.ValidateProperty(newValue, propertyName);
+
+        if (propertyName == nameof(LookupModels) || propertyName == nameof(IsPortfolioSimpleType) || propertyName == nameof(IsPortfolioComplexType))
+        {
+            if (IsPortfolioComplexType && !LookupModels.Any(m => m.IsChecked))
+            {
+                AddError("Укажите портфели из которых состоит составной портфель", nameof(LookupModels));
+            }
+            else
+            {
+                ClearErrors(nameof(LookupModels));
+            }
+        }
+    }
+
+    #endregion Overrides of ValidationViewModelBase
 }

@@ -62,12 +62,14 @@ public class WindowManager : IWindowManager
 
             var viewType = Type.GetType(viewFullName) ?? throw new TypeLoadException($"View {viewFullName} not found");
             window = (Window)_lifetimeScope.Resolve(viewType);
-            if (viewModel is not null)
-            {
-                window.DataContext = viewModel;
-            }
             _windows[viewModelType] = window;
         }
+
+        if (viewModel is not null)
+        {
+            window.DataContext = viewModel;
+        }
+
         return window;
     }
 }

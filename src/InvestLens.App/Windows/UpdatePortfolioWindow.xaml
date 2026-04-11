@@ -3,20 +3,19 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:InvestLens.App.Windows"
         xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
         xmlns:behaviors="clr-namespace:InvestLens.App.Behaviors"
         xmlns:viewModel="clr-namespace:InvestLens.ViewModel;assembly=InvestLens.ViewModel"
-        xmlns:portfolio="clr-namespace:InvestLens.Model.Portfolio;assembly=InvestLens.Model"
         mc:Ignorable="d"
         d:DataContext="{d:DesignInstance viewModel:UpdatePortfolioWindowViewModel, IsDesignTimeCreatable=True}"
-        Title="{Binding Title}" Height="560" Width="580"
+        Title="{Binding Header}" Height="560" Width="580"
         WindowStartupLocation="CenterScreen"
         Style="{StaticResource WindowStyle}"
         ShowInTaskbar="False">
 
     <b:Interaction.Behaviors>
         <behaviors:DragMoveBehavior/>
+        <behaviors:PortfolioTypeBehavior IsPortfolioComplexType="{Binding IsPortfolioComplexType}"/>
     </b:Interaction.Behaviors>
 
     <Window.Resources>
@@ -60,6 +59,7 @@
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
                     <StackPanel Grid.Row="0" 
                                 Orientation="Vertical"
@@ -113,6 +113,53 @@
                                    FontWeight="Bold"/>
                         </StackPanel>
                     </StackPanel>
+                    <Grid Grid.Row="3" 
+                          Margin="0 0 0 24"
+                          Visibility="{Binding IsPortfolioComplexType, Converter={StaticResource BooleanToVisibilityConv}}">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <Label Grid.Row="0">
+                            <TextBlock>
+                                <Bold>Выберите портфели для объединения:</Bold>
+                            </TextBlock>
+                        </Label>
+                        <ListView Grid.Row="1"
+                                  MaxHeight="200"
+                                  ItemsSource="{Binding LookupModels}">
+                            <ListView.ItemTemplate>
+                                <DataTemplate DataType="{x:Type viewModel:LookupViewModel}">
+                                    <Border Padding="16 12"
+                                            BorderThickness="0 0 0 1"
+                                            BorderBrush="#E9EDF2"
+                                            Cursor="Hand">
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="Auto"/>
+                                                <ColumnDefinition Width="12"/>
+                                                <ColumnDefinition Width="*"/>
+                                            </Grid.ColumnDefinitions>
+                                            <Viewbox Grid.Column="0"
+                                                     Width="18"
+                                                     Height="18">
+                                                <CheckBox IsChecked="{Binding IsChecked}"/>
+                                            </Viewbox>
+                                            <StackPanel Grid.Column="2" 
+                                                        Orientation="Vertical">
+                                                <TextBlock Text="{Binding Name}"
+                                                           FontWeight="Medium"
+                                                           Margin="0 0 0 2"/>
+                                                <TextBlock Text="{Binding Description}"
+                                                           FontSize="11"
+                                                           Foreground="#8E92A8"/>
+                                            </StackPanel>
+                                        </Grid>
+                                    </Border>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
+                    </Grid>
                 </Grid>
             </Border>
             <Border Grid.Row="2"

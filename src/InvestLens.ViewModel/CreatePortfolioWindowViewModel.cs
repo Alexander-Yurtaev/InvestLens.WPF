@@ -1,11 +1,10 @@
 ﻿using InvestLens.Model.Enums;
 using InvestLens.ViewModel.Services;
-using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
 namespace InvestLens.ViewModel;
 
-public sealed class CreatePortfolioWindowViewModel : CreateUpdatePortfolioWindowViewModel, ICreatePortfolioWindowViewModel, IDisposable
+public sealed class CreatePortfolioWindowViewModel : CreateUpdatePortfolioWindowViewModel, ICreatePortfolioWindowViewModel, ISupportPortfolioType
 {
     public CreatePortfolioWindowViewModel(
         Model.Portfolio.CreateModel model, 
@@ -14,11 +13,6 @@ public sealed class CreatePortfolioWindowViewModel : CreateUpdatePortfolioWindow
     {
         Header = "Создание";
         ActionTitle = "Создать портфель";
-
-        foreach (var item in LookupModels)
-        {
-            item.PropertyChanged += ItemOnPropertyChanged;
-        }
 
         InvalidateCommands();
     }
@@ -49,11 +43,6 @@ public sealed class CreatePortfolioWindowViewModel : CreateUpdatePortfolioWindow
         }
     }
 
-    private void ItemOnPropertyChanged(object? sender, PropertyChangedEventArgs e)
-    {
-        ValidateProperty(LookupModels, nameof(LookupModels));
-    }
-
     #region Overrides of CreateUpdatePortfolioWindowViewModel
 
     protected override void ExecuteAction()
@@ -72,6 +61,13 @@ public sealed class CreatePortfolioWindowViewModel : CreateUpdatePortfolioWindow
 
     #region Overrides of ValidationViewModelBase
 
+    protected override bool Validate()
+    {
+        base.Validate();
+        ValidateProperty(LookupModels, nameof(LookupModels));
+        return !HasErrors;
+    }
+
     protected override void ValidateProperty(object? newValue, [CallerMemberName] string? propertyName = null)
     {
         base.ValidateProperty(newValue, propertyName);
@@ -89,23 +85,5 @@ public sealed class CreatePortfolioWindowViewModel : CreateUpdatePortfolioWindow
         }
     }
 
-    #endregion
-
-    #region IDisposable
-
-    private void UnsubscribeEvents()
-    {
-        foreach (var item in LookupModels)
-        {
-            item.PropertyChanged -= ItemOnPropertyChanged;
-        }
-        LookupModels.Clear();
-    }
-
-    public void Dispose()
-    {
-        UnsubscribeEvents();
-    }
-
-    #endregion
+    #endregion Overrides of ValidationViewModelBase
 }

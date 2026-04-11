@@ -1,11 +1,12 @@
-﻿using System.Collections.ObjectModel;
+﻿using InvestLens.ViewModel.Services;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-using InvestLens.ViewModel.Services;
 using System.Windows.Input;
 
 namespace InvestLens.ViewModel;
 
-public abstract class CreateUpdatePortfolioWindowViewModel : ValidationViewModelBase, ICreateEditPortfolioWindowViewModel
+public abstract class CreateUpdatePortfolioWindowViewModel : ValidationViewModelBase, ICreateEditPortfolioWindowViewModel, IDisposable
 {
     protected readonly Model.Portfolio.BaseModel Model;
     protected readonly IWindowManager WindowManager;
@@ -23,7 +24,12 @@ public abstract class CreateUpdatePortfolioWindowViewModel : ValidationViewModel
         ActionCommand = new DelegateCommand(OnAction, CanAction);
         LookupModels =
             new ObservableCollection<LookupViewModel>(portfoliosManager.GetLookupModels()
-                .Select(m => new LookupViewModel(m)).ToList());
+                .Select(m =>
+                {
+                    var vm = new LookupViewModel(m);
+                    vm.PropertyChanged += ItemOnPropertyChanged;
+                    return vm;
+                }).ToList());
     }
 
     public string Header
@@ -85,11 +91,34 @@ public abstract class CreateUpdatePortfolioWindowViewModel : ValidationViewModel
 
     protected abstract void OnClose();
 
+    private void ItemOnPropertyChanged(object? sender, PropertyChangedEventArgs e)
+    {
+        ValidateProperty(LookupModels, nameof(LookupModels));
+    }
+
     #region Overrides of ValidationViewModelBase
 
     protected override void InvalidateCommands()
     {
         ((DelegateCommand)ActionCommand).RaiseCanExecuteChanged();
+    }
+
+    #endregion Overrides of ValidationViewModelBase
+
+    #region IDisposable
+
+    private void UnsubscribeEvents()
+    {
+        foreach (var item in LookupModels)
+        {
+            item.PropertyChanged -= ItemOnPropertyChanged;
+        }
+        LookupModels.Clear();
+    }
+
+    public void Dispose()
+    {
+        UnsubscribeEvents();
     }
 
     #endregion
