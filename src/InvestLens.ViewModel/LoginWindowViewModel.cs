@@ -3,7 +3,6 @@ using InvestLens.ViewModel.Events;
 using InvestLens.ViewModel.Services;
 using System.ComponentModel.DataAnnotations;
 using System.Windows.Input;
-using InvestLens.DataAccess;
 
 namespace InvestLens.ViewModel;
 
@@ -16,7 +15,6 @@ public sealed class LoginWindowViewModel : ValidationViewModelBase, ILoginWindow
     private string _errorMessage = string.Empty;
 
     public LoginWindowViewModel(
-        InvestLensDataContext context,
         LoginModel model, 
         ISecurityService securityService, 
         IWindowManager windowManager,
@@ -32,17 +30,16 @@ public sealed class LoginWindowViewModel : ValidationViewModelBase, ILoginWindow
         InvalidateCommands();
     }
 
-    [Required(ErrorMessage = "Адрес должн быть заполнен")]
-    [EmailAddress(ErrorMessage = "Неверный формат")]
-    public string Email
+    [Required(ErrorMessage = "Логин должн быть заполнен")]
+    public string Login
     {
-        get => _model.Email;
+        get => _model.Login;
         set
         {
-            if (string.Equals(_model.Email, value)) return;
-            _model.Email = value;
+            if (string.Equals(_model.Login, value)) return;
+            _model.Login = value;
             RaisePropertyChanged();
-            ValidateProperty(_model.Email);
+            ValidateProperty(_model.Login);
         }
     }
 

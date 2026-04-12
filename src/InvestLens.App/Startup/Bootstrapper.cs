@@ -34,6 +34,8 @@ namespace InvestLens.App.Startup
             
             builder.RegisterType<SecurityService>().As<ISecurityService>();
 
+            builder.RegisterType<UserRepository>().As<IUserRepository>();
+
             builder.RegisterType<MainWindow>().AsSelf();
             builder.RegisterType<MainWindowViewModel>().As<IMainWindowViewModel>();
 

@@ -8,7 +8,7 @@ public interface IRegistrationWindowViewModel
 {
     string Name { get; set; }
     string Surname { get; set; }
-    string Email { get; set; }
+    string Login { get; set; }
     string Password { get; set; }
     string ConfirmPassword { get; set; }
     ICommand RegisterCommand { get; }

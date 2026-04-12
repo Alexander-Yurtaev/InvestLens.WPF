@@ -15,55 +15,6 @@
         <behaviors:DragMoveBehavior/>
     </b:Interaction.Behaviors>
 
-    <Window.Resources>
-        <ResourceDictionary>
-            <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConv"/>
-
-            <Style x:Key="LeftSideStyle"
-                   TargetType="Border">
-                <Setter Property="CornerRadius" Value="32 0 0 32"/>
-                <Setter Property="Padding" Value="48"/>
-                <Setter Property="Background">
-                    <Setter.Value>
-                        <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
-                            <GradientStop Color="#002855" Offset="0"/>
-                            <GradientStop Color="#003D7A" Offset="1"/>
-                        </LinearGradientBrush>
-                    </Setter.Value>
-                </Setter>
-            </Style>
-            <Style x:Key="RightSideStyle"
-                   TargetType="Border">
-                <Setter Property="CornerRadius" Value="0 32 32 0"/>
-                <Setter Property="Padding" Value="48"/>
-                <Setter Property="Background" Value="{StaticResource BackgroundSecondary}"/>
-            </Style>
-            <Style x:Key="H1Style" 
-                   TargetType="TextBlock">
-                <Setter Property="FontSize" Value="28"/>
-                <Setter Property="FontWeight" Value="Medium"/>
-                <Setter Property="Margin" Value="0 0 0 8"/>
-            </Style>
-            <Style x:Key="H2Style" 
-                   TargetType="TextBlock">
-                <Setter Property="Foreground" Value="{StaticResource BackgroundSecondary}"/>
-                <Setter Property="FontSize" Value="28"/>
-                <Setter Property="FontWeight" Value="Medium"/>
-            </Style>
-            <Style x:Key="PBlackStyle" 
-                   TargetType="TextBlock">
-                <Setter Property="Foreground" Value="{StaticResource BackgroundSecondary}"/>
-                <Setter Property="Opacity" Value="0.8"/>
-                <Setter Property="FontSize" Value="15"/>
-            </Style>
-            <Style x:Key="PWhiteStyle" 
-                   TargetType="TextBlock">
-                <Setter Property="Foreground" Value="#5A6E8A"/>
-                <Setter Property="FontSize" Value="14"/>
-            </Style>
-        </ResourceDictionary>
-    </Window.Resources>
-
     <Border Style="{StaticResource WindowBorderStyle}">
         <Grid>
             <Grid.ColumnDefinitions>
@@ -124,8 +75,8 @@
                     </StackPanel>
                     <StackPanel Grid.Row="1">
                         <StackPanel Margin="0 0 0 20">
-                            <Label Content="Email" Target="EmailTextBox"/>
-                            <TextBox x:Name="EmailTextBox" Text="{Binding Email, UpdateSourceTrigger=PropertyChanged}"/>
+                            <Label Content="Login" Target="LoginTextBox"/>
+                            <TextBox x:Name="LoginTextBox" Text="{Binding Login, UpdateSourceTrigger=PropertyChanged}"/>
                         </StackPanel>
                         <StackPanel Margin="0 0 0 20">
                             <Label Content="Пароль" Target="PasswordTextBox"/>

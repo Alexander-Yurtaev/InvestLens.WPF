@@ -6,7 +6,7 @@ namespace InvestLens.ViewModel;
 
 public interface ILoginWindowViewModel
 {
-    string Email { get; set; }
+    string Login { get; set; }
     string Password { get; set; }
     ICommand LoginCommand { get; }
     ICommand RegistrationCommand { get; }

@@ -8,12 +8,16 @@ namespace InvestLens.Tests;
 public class RegistrationViewModelTests
 {
     private readonly RegistrationWindowViewModel _viewModel;
+    private readonly Mock<ISecurityService> _securityServiceMock;
 
     public RegistrationViewModelTests()
     {
-        var securityServiceMock = new Mock<ISecurityService>();
+        var model = new Mock<RegistrationModel>();
+        _securityServiceMock = new Mock<ISecurityService>();
+        _securityServiceMock.Setup(s => s.CheckLoginUniqueAsync(It.IsAny<string>())).ReturnsAsync(true);
+
         var windowManagerMock = new Mock<IWindowManager>();
-        _viewModel = new RegistrationWindowViewModel(new RegistrationModel(), securityServiceMock.Object, windowManagerMock.Object);
+        _viewModel = new RegistrationWindowViewModel(model.Object, _securityServiceMock.Object, windowManagerMock.Object);
     }
 
     [Fact]
@@ -49,30 +53,18 @@ public class RegistrationViewModelTests
     }
 
     [Fact]
-    public void EmailPropertyIsRequired()
+    public void LoginPropertyIsRequired()
     {
         Assert.False(_viewModel.HasErrors);
-        _viewModel.Email = "";
+        _viewModel.Login = "";
         // При первом запуске валидация не выполняется
         Assert.False(_viewModel.HasErrors);
 
-        _viewModel.Email = "bob@smith.com";
+        _viewModel.Login = "TestUser";
         Assert.False(_viewModel.HasErrors);
 
-        _viewModel.Email = "";
+        _viewModel.Login = "";
         // До этого уже были изменения - ошибка есть
-        Assert.True(_viewModel.HasErrors);
-    }
-
-    [Fact]
-    public void EmailPropertyShouldHaveCorrectFormat()
-    {
-        Assert.False(_viewModel.HasErrors);
-        
-        _viewModel.Email = "bob@smith.com";
-        Assert.False(_viewModel.HasErrors);
-        
-        _viewModel.Email = "bob-smith.com";
         Assert.True(_viewModel.HasErrors);
     }
 
@@ -122,5 +114,17 @@ public class RegistrationViewModelTests
         // До этого уже были изменения
         _viewModel.Surname = "";
         Assert.True(fired);
+    }
+
+    [Fact]
+    public void ShouldCallCheckLoginUniqueAsync()
+    {
+        // Arrange
+
+        // Act
+        _viewModel.Login = "TestUser";
+
+        // Assert
+        _securityServiceMock.Verify(s => s.CheckLoginUniqueAsync("TestUser"), Times.Once);
     }
 }

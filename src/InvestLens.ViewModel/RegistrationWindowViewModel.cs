@@ -6,20 +6,26 @@ using System.Windows.Input;
 
 namespace InvestLens.ViewModel;
 
-public sealed class RegistrationWindowViewModel : ValidationViewModelBase, IRegistrationWindowViewModel
+public sealed class RegistrationWindowViewModel : ValidationViewModelBase, IRegistrationWindowViewModel, IConfirmPasswordSupport
 {
     private readonly ISecurityService _securityService;
     private readonly IWindowManager _windowManager;
-    private string _confirmPassword = string.Empty;
     private readonly RegistrationModel _model;
     private string _errorMessage = string.Empty;
+    private string _password;
+    private string _confirmPassword;
+    private string _passwordError;
+    private string _confirmPasswordError;
 
-    public RegistrationWindowViewModel(RegistrationModel model, ISecurityService securityService, IWindowManager windowManager)
+    public RegistrationWindowViewModel(
+        RegistrationModel model, 
+        ISecurityService securityService, 
+        IWindowManager windowManager)
     {
         _securityService = securityService;
         _windowManager = windowManager;
         _model = model;
-        RegisterCommand = new DelegateCommand(OnRegister, CanRegister);
+        RegisterCommand = new AsyncDelegateCommand(OnRegister, CanRegister);
         LoginCommand = new DelegateCommand(OnLogin);
         CloseCommand = new DelegateCommand(OnClose);
         this.PropertyChanged += OnPropertyChanged;
@@ -52,35 +58,53 @@ public sealed class RegistrationWindowViewModel : ValidationViewModelBase, IRegi
         }
     }
 
-    [Required(ErrorMessage = "Адрес должн быть заполнен")]
-    [EmailAddress(ErrorMessage = "Неверный формат")]
-    public string Email
+    [Required(ErrorMessage = "Логин должн быть заполнен")]
+    public string Login
     {
-        get => _model.Email;
+        get => _model.Login;
         set
         {
-            if (string.Equals(_model.Email, value)) return;
-            _model.Email = value;
+            if (string.Equals(_model.Login, value)) return;
+            _model.Login = value;
             RaisePropertyChanged();
-            ValidateProperty(_model.Email);
+            ValidateProperty(_model.Login);
+            ValidateLoginAsync();
         }
     }
 
     public string Password
     {
-        get => _model.Password;
+        get => _password;
         set
         {
-            if (string.Equals(_model.Password, value)) return;
-            _model.Password = value;
+            _password = value;
             RaisePropertyChanged();
+            ValidateProperty(Password);
+            ValidatePassword();
         }
+    }
+
+    public string PasswordError
+    {
+        get => _passwordError;
+        set => SetProperty(ref _passwordError, value);
     }
 
     public string ConfirmPassword
     {
         get => _confirmPassword;
-        set => SetProperty(ref _confirmPassword, value);
+        set
+        {
+            if (!SetProperty(ref _confirmPassword, value)) return;
+            ValidateProperty(ConfirmPassword);
+            ValidatePassword();
+        }
+    }
+
+    public string ConfirmPasswordError
+    {
+        get => _confirmPasswordError;
+        set => SetProperty(ref _confirmPasswordError, value);
     }
 
     public ICommand RegisterCommand { get; }
@@ -95,19 +119,26 @@ public sealed class RegistrationWindowViewModel : ValidationViewModelBase, IRegi
 
     public bool ShowErrorMessage => !string.IsNullOrEmpty(ErrorMessage);
 
-    private void OnRegister()
+    private async Task OnRegister()
     {
         if (!Validate()) return;
 
-        var result = _securityService.Register(_model);
-        if (result.Success)
+        try
         {
-            _windowManager.SetMainWindow<LoginWindowViewModel>();
-            _windowManager.ShowWindow<LoginWindowViewModel>();
-            _windowManager.CloseWindow<RegistrationWindowViewModel>();
-        }
+            var result = await _securityService.RegisterAsync(_model);
+            if (result.Success)
+            {
+                _windowManager.SetMainWindow<LoginWindowViewModel>();
+                _windowManager.ShowWindow<LoginWindowViewModel>();
+                _windowManager.CloseWindow<RegistrationWindowViewModel>();
+            }
 
-        ErrorMessage = result.ErrorMessage;
+            ErrorMessage = result.ErrorMessage;
+        }
+        catch (Exception e)
+        {
+            ErrorMessage = e.Message;
+        }
         RaisePropertyChanged(nameof(ShowErrorMessage));
     }
 
@@ -136,8 +167,35 @@ public sealed class RegistrationWindowViewModel : ValidationViewModelBase, IRegi
         }
     }
 
+    private void ValidatePassword()
+    {
+        if (Password != ConfirmPassword)
+        {
+            PasswordError = "Пароли не совпадают";
+            ConfirmPasswordError = "Пароли не совпадают";
+        }
+        else
+        {
+            PasswordError = "";
+            ConfirmPasswordError = "";
+        }
+    }
+
     protected override void InvalidateCommands()
     {
-        ((DelegateCommand)RegisterCommand).RaiseCanExecuteChanged();
+        ((AsyncDelegateCommand)RegisterCommand).RaiseCanExecuteChanged();
     }
+
+    #region Overrides of ValidationViewModelBase
+
+    private async void ValidateLoginAsync()
+    {
+        var isUnique = await _securityService.CheckLoginUniqueAsync(Login);
+        if (!isUnique)
+        {
+            AddError("Такой пользователь уже зарегистрирован", nameof(Login));
+        }
+    }
+
+    #endregion
 }

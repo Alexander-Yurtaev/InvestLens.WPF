@@ -14,8 +14,8 @@ public class DragMoveBehavior : Behavior<Window>
 
     protected override void OnDetaching()
     {
-        base.OnDetaching();
         AssociatedObject.MouseLeftButtonDown -= AssociatedObjectOnMouseLeftButtonDown;
+        base.OnDetaching();
     }
 
     private void AssociatedObjectOnMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
