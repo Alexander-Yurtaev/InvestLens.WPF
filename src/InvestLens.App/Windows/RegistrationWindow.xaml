@@ -121,6 +121,7 @@
                                 FontSize="16"
                                 FontWeight="Bold"
                                 Margin="0 0 0 24"
+                                IsDefault="True"
                                 Style="{StaticResource PrimaryButtonStyle}"
                                 Command="{Binding RegisterCommand}"/>
                         <Button Content="Выход" 
@@ -128,6 +129,7 @@
                                 FontSize="16"
                                 FontWeight="Bold"
                                 Margin="0 0 0 24"
+                                IsCancel="True"
                                 Style="{StaticResource SecondaryButtonStyle}"
                                 Command="{Binding CloseCommand}"/>
                         <TextBlock Text="{Binding ErrorMessage}"

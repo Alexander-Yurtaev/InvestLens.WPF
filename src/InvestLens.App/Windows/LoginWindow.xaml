@@ -99,6 +99,7 @@
                                 FontSize="16"
                                 FontWeight="Bold"
                                 Margin="0 0 0 24"
+                                IsCancel="True"
                                 Style="{StaticResource SecondaryButtonStyle}"
                                 Command="{Binding CloseCommand}"/>
                         <TextBlock Text="{Binding ErrorMessage}"
