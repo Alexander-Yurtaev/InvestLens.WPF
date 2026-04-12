@@ -3,6 +3,7 @@ using InvestLens.ViewModel.Events;
 using InvestLens.ViewModel.Services;
 using System.ComponentModel.DataAnnotations;
 using System.Windows.Input;
+using InvestLens.DataAccess;
 
 namespace InvestLens.ViewModel;
 
@@ -15,6 +16,7 @@ public sealed class LoginWindowViewModel : ValidationViewModelBase, ILoginWindow
     private string _errorMessage = string.Empty;
 
     public LoginWindowViewModel(
+        InvestLensDataContext context,
         LoginModel model, 
         ISecurityService securityService, 
         IWindowManager windowManager,

@@ -1,10 +1,13 @@
 ﻿using Autofac;
 using InvestLens.App.Services;
 using InvestLens.App.Windows;
+using InvestLens.DataAccess;
 using InvestLens.Model;
 using InvestLens.ViewModel;
 using InvestLens.ViewModel.Pages;
 using InvestLens.ViewModel.Services;
+using Microsoft.EntityFrameworkCore;
+using System.IO;
 
 namespace InvestLens.App.Startup
 {
@@ -13,6 +16,8 @@ namespace InvestLens.App.Startup
         public static IContainer BootStrap()
         {
             var builder = new ContainerBuilder();
+
+            RegisterDataContext(builder);
 
             builder.RegisterType<EventAggregator>().As<IEventAggregator>().SingleInstance();
             builder.RegisterType<ViewModelFactory>().As<IViewModelFactory>().SingleInstance();
@@ -74,6 +79,36 @@ namespace InvestLens.App.Startup
             builder.RegisterType<SettingsPluginsViewModel>().As<ISettingsPluginsViewModel>();
 
             return builder.Build();
+        }
+
+        private static void RegisterDataContext(ContainerBuilder builder)
+        {
+            builder.Register(_ => new InvestLensDataContext(GetDbContextOptions()))
+                .As<InvestLensDataContext>()
+                .InstancePerLifetimeScope();
+        }
+
+        private static DbContextOptions<InvestLensDataContext> GetDbContextOptions()
+        {
+            var optionsBuilder = new DbContextOptionsBuilder<InvestLensDataContext>();
+
+            var dbPath = Path.Combine(
+                Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+                "InvestLens",
+#if DEBUG
+                "DEBUG",
+#endif
+                "database.db");
+
+            var dbDir = Path.GetDirectoryName(dbPath);
+            if (!Directory.Exists(dbDir))
+            {
+                Directory.CreateDirectory(dbDir!);
+            }
+
+            optionsBuilder.UseSqlite($"Data Source={dbPath}");
+
+            return optionsBuilder.Options;
         }
     }
 }
