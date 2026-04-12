@@ -27,16 +27,16 @@ public class SecurityService(IUserRepository userRepository) : ISecurityService
         }
     }
 
-    public async Task<(bool Success, string ErrorMessage)> LoginAsync(LoginModel model)
+    public async Task<(bool Success, User? User, string ErrorMessage)> LoginAsync(LoginModel model)
     {
         var user = await userRepository.GetUserByLogin(model.Login);
         if (user is null)
         {
-            return (false, "Ошибка при авторизации");
+            return (false, null, "Ошибка при авторизации");
         }
 
         var isAuth = PasswordHelper.VerifyPassword(PasswordHelper.GetPasswordAsString(model.Password), user.Password);
 
-        return isAuth ? (true, "") : (false, "Ошибка при авторизации");
+        return isAuth ? (true, user, "") : (false, null, "Ошибка при авторизации");
     }
 }

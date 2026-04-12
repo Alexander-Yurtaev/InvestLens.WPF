@@ -74,6 +74,7 @@
         <Style x:Key="UserNameStyle" TargetType="TextBlock">
             <Setter Property="Margin" Value="6 0 0 0"/>
             <Setter Property="FontWeight" Value="Medium"/>
+            <Setter Property="FontSize" Value="16"/>
             <Setter Property="TextAlignment" Value="Center"/>
             <Setter Property="HorizontalAlignment" Value="Center"/>
             <Setter Property="VerticalAlignment" Value="Center"/>

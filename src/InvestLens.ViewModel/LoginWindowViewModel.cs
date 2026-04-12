@@ -78,8 +78,13 @@ public sealed class LoginWindowViewModel : ValidationViewModelBase, ILoginWindow
             _windowManager.ShowWindow<MainWindowViewModel>();
             _windowManager.CloseWindow<LoginWindowViewModel>();
 
-            var userInfo = new UserInfo();
-            userInfo.Load();
+            var userInfo = new UserInfo
+            {
+                UserAvatar = $"{result.User!.FirstName[0]}{result.User!.LastName[0]}",
+                UserName = result.User!.FirstName,
+                UserFullNameInShortFormat = $"{result.User!.FirstName} {result.User!.LastName[0]}"
+            };
+
             _eventAggregator.GetEvent<LoginEvent>().Publish(userInfo);
         }
 
