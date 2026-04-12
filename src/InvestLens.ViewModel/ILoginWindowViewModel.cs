@@ -4,10 +4,9 @@ using System.Windows.Input;
 
 namespace InvestLens.ViewModel;
 
-public interface ILoginWindowViewModel
+public interface ILoginWindowViewModel : IPasswordSupport
 {
     string Login { get; set; }
-    string Password { get; set; }
     ICommand LoginCommand { get; }
     ICommand RegistrationCommand { get; }
     string ErrorMessage { get; set; }

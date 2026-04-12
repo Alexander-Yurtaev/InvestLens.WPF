@@ -1,4 +1,4 @@
-﻿namespace InvestLens.ViewModel.Helpers;
+﻿namespace InvestLens.Common.Helpers;
 
 public static class PasswordHelper
 {

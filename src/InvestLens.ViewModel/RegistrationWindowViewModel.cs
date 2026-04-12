@@ -6,7 +6,7 @@ using System.Windows.Input;
 
 namespace InvestLens.ViewModel;
 
-public sealed class RegistrationWindowViewModel : ValidationViewModelBase, IRegistrationWindowViewModel, IConfirmPasswordSupport
+public sealed class RegistrationWindowViewModel : ValidationViewModelBase, IRegistrationWindowViewModel
 {
     private readonly ISecurityService _securityService;
     private readonly IWindowManager _windowManager;
@@ -72,14 +72,14 @@ public sealed class RegistrationWindowViewModel : ValidationViewModelBase, IRegi
         }
     }
 
-    public string Password
+    public string PasswordHash
     {
         get => _password;
         set
         {
             _password = value;
             RaisePropertyChanged();
-            ValidateProperty(Password);
+            ValidateProperty(PasswordHash);
             ValidatePassword();
         }
     }
@@ -90,13 +90,13 @@ public sealed class RegistrationWindowViewModel : ValidationViewModelBase, IRegi
         set => SetProperty(ref _passwordError, value);
     }
 
-    public string ConfirmPassword
+    public string ConfirmPasswordHash
     {
         get => _confirmPassword;
         set
         {
             if (!SetProperty(ref _confirmPassword, value)) return;
-            ValidateProperty(ConfirmPassword);
+            ValidateProperty(ConfirmPasswordHash);
             ValidatePassword();
         }
     }
@@ -169,7 +169,7 @@ public sealed class RegistrationWindowViewModel : ValidationViewModelBase, IRegi
 
     private void ValidatePassword()
     {
-        if (Password != ConfirmPassword)
+        if (PasswordHash != ConfirmPasswordHash)
         {
             PasswordError = "Пароли не совпадают";
             ConfirmPasswordError = "Пароли не совпадают";

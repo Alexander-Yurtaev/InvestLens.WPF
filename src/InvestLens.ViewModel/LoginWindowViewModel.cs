@@ -43,7 +43,7 @@ public sealed class LoginWindowViewModel : ValidationViewModelBase, ILoginWindow
         }
     }
 
-    public string Password
+    public string PasswordHash
     {
         get => _model.Password;
         set

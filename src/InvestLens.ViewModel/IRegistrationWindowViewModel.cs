@@ -4,13 +4,11 @@ using System.Windows.Input;
 
 namespace InvestLens.ViewModel;
 
-public interface IRegistrationWindowViewModel
+public interface IRegistrationWindowViewModel : IConfirmPasswordSupport
 {
     string Name { get; set; }
     string Surname { get; set; }
     string Login { get; set; }
-    string Password { get; set; }
-    string ConfirmPassword { get; set; }
     ICommand RegisterCommand { get; }
     ICommand LoginCommand { get; }
     string ErrorMessage { get; set; }

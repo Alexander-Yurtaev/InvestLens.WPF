@@ -2,5 +2,5 @@
 
 public interface IPasswordSupport
 {
-    string Password { get; set; }
+    string PasswordHash { get; set; }
 }

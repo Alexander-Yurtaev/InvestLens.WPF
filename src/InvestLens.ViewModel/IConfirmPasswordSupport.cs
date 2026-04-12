@@ -2,5 +2,5 @@
 
 public interface IConfirmPasswordSupport : IPasswordSupport
 {
-    string ConfirmPassword { get; set; }
+    string ConfirmPasswordHash { get; set; }
 }

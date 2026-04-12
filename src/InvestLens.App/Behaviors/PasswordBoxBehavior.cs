@@ -1,7 +1,8 @@
-﻿using System.Windows;
-using System.Windows.Controls;
+﻿using InvestLens.Common.Helpers;
 using InvestLens.ViewModel;
 using Microsoft.Xaml.Behaviors;
+using System.Windows;
+using System.Windows.Controls;
 
 namespace InvestLens.App.Behaviors;
 
@@ -27,6 +28,6 @@ public class PasswordBoxBehavior : Behavior<PasswordBox>
 
         var prop = vm.GetType().GetProperty(Propertyname);
         if (prop is null) return;
-        prop.SetValue(vm, AssociatedObject.Password);
+        prop.SetValue(vm, PasswordHelper.HashPassword(AssociatedObject.Password));
     }
 }
