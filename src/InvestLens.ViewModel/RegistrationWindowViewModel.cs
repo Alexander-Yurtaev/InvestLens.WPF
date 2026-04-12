@@ -2,7 +2,9 @@
 using InvestLens.ViewModel.Services;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.Security;
 using System.Windows.Input;
+using InvestLens.Common.Helpers;
 
 namespace InvestLens.ViewModel;
 
@@ -12,10 +14,9 @@ public sealed class RegistrationWindowViewModel : ValidationViewModelBase, IRegi
     private readonly IWindowManager _windowManager;
     private readonly RegistrationModel _model;
     private string _errorMessage = string.Empty;
-    private string _password;
-    private string _confirmPassword;
-    private string _passwordError;
-    private string _confirmPasswordError;
+    private SecureString? _confirmPassword;
+    private string _passwordError = string.Empty;
+    private string _confirmPasswordError = string.Empty;
 
     public RegistrationWindowViewModel(
         RegistrationModel model, 
@@ -72,14 +73,14 @@ public sealed class RegistrationWindowViewModel : ValidationViewModelBase, IRegi
         }
     }
 
-    public string PasswordHash
+    public SecureString? Password
     {
-        get => _password;
+        get => _model.Password;
         set
         {
-            _password = value;
+            _model.Password = value;
             RaisePropertyChanged();
-            ValidateProperty(PasswordHash);
+            ValidateProperty(Password);
             ValidatePassword();
         }
     }
@@ -90,13 +91,13 @@ public sealed class RegistrationWindowViewModel : ValidationViewModelBase, IRegi
         set => SetProperty(ref _passwordError, value);
     }
 
-    public string ConfirmPasswordHash
+    public SecureString? ConfirmPassword
     {
         get => _confirmPassword;
         set
         {
             if (!SetProperty(ref _confirmPassword, value)) return;
-            ValidateProperty(ConfirmPasswordHash);
+            ValidateProperty(ConfirmPassword);
             ValidatePassword();
         }
     }
@@ -169,7 +170,7 @@ public sealed class RegistrationWindowViewModel : ValidationViewModelBase, IRegi
 
     private void ValidatePassword()
     {
-        if (PasswordHash != ConfirmPasswordHash)
+        if (PasswordHelper.GetPasswordAsString(Password) != PasswordHelper.GetPasswordAsString(ConfirmPassword))
         {
             PasswordError = "Пароли не совпадают";
             ConfirmPasswordError = "Пароли не совпадают";

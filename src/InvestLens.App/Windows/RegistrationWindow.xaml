@@ -97,7 +97,7 @@
                             <StackPanel>
                                 <PasswordBox x:Name="PasswordTextBox">
                                     <b:Interaction.Behaviors>
-                                        <behaviors:PasswordBoxBehavior Propertyname="PasswordHash"/>
+                                        <behaviors:PasswordBoxBehavior PropertyName="Password"/>
                                     </b:Interaction.Behaviors>
                                 </PasswordBox>
                                 <TextBlock Text="{Binding PasswordError}"
@@ -109,7 +109,7 @@
                             <StackPanel>
                                 <PasswordBox x:Name="ConfirmPasswordBox">
                                     <b:Interaction.Behaviors>
-                                        <behaviors:PasswordBoxBehavior Propertyname="ConfirmPasswordHash"/>
+                                        <behaviors:PasswordBoxBehavior PropertyName="ConfirmPassword"/>
                                     </b:Interaction.Behaviors>
                                 </PasswordBox>
                                 <TextBlock Text="{Binding ConfirmPasswordError}"

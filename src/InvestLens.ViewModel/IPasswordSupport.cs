@@ -1,6 +1,8 @@
-﻿namespace InvestLens.ViewModel;
+﻿using System.Security;
+
+namespace InvestLens.ViewModel;
 
 public interface IPasswordSupport
 {
-    string PasswordHash { get; set; }
+    SecureString? Password { get; set; }
 }

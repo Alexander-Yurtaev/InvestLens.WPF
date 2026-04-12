@@ -80,7 +80,11 @@
                         </StackPanel>
                         <StackPanel Margin="0 0 0 20">
                             <Label Content="Пароль" Target="PasswordTextBox"/>
-                            <PasswordBox x:Name="PasswordTextBox" />
+                            <PasswordBox x:Name="PasswordTextBox">
+                                <b:Interaction.Behaviors>
+                                    <behaviors:PasswordBoxBehavior PropertyName="Password"/>
+                                </b:Interaction.Behaviors>
+                            </PasswordBox>
                         </StackPanel>
                         <Button Content="Войти" 
                                 Padding="14"

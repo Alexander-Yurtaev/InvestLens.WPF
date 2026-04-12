@@ -1,4 +1,4 @@
-﻿using InvestLens.Common.Helpers;
+﻿using System.Security;
 using InvestLens.ViewModel;
 using Microsoft.Xaml.Behaviors;
 using System.Windows;
@@ -8,7 +8,7 @@ namespace InvestLens.App.Behaviors;
 
 public class PasswordBoxBehavior : Behavior<PasswordBox>
 {
-    public required string Propertyname { get; set; }
+    public required string PropertyName { get; set; }
 
     protected override void OnAttached()
     {
@@ -24,10 +24,18 @@ public class PasswordBoxBehavior : Behavior<PasswordBox>
 
     private void AssociatedObjectOnPasswordChanged(object sender, RoutedEventArgs e)
     {
-        if (AssociatedObject.DataContext is not IConfirmPasswordSupport vm) return;
+        if (AssociatedObject.DataContext is not IPasswordSupport) return;
 
-        var prop = vm.GetType().GetProperty(Propertyname);
+        var prop = AssociatedObject.DataContext.GetType().GetProperty(PropertyName);
+
         if (prop is null) return;
-        prop.SetValue(vm, PasswordHelper.HashPassword(AssociatedObject.Password));
+
+        var securePassword = new SecureString();
+        foreach (var c in AssociatedObject.Password)
+        {
+            securePassword.AppendChar(c);
+        }
+
+        prop.SetValue(AssociatedObject.DataContext, securePassword);
     }
 }

@@ -2,6 +2,7 @@
 using InvestLens.ViewModel.Events;
 using InvestLens.ViewModel.Services;
 using System.ComponentModel.DataAnnotations;
+using System.Security;
 using System.Windows.Input;
 
 namespace InvestLens.ViewModel;
@@ -43,12 +44,12 @@ public sealed class LoginWindowViewModel : ValidationViewModelBase, ILoginWindow
         }
     }
 
-    public string PasswordHash
+    public SecureString? Password
     {
         get => _model.Password;
         set
         {
-            if (string.Equals(_model.Password, value)) return;
+            if (Equals(_model.Password, value)) return;
             _model.Password = value;
             RaisePropertyChanged();
         }

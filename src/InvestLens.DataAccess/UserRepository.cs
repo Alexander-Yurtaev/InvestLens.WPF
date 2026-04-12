@@ -3,24 +3,22 @@ using Microsoft.EntityFrameworkCore;
 
 namespace InvestLens.DataAccess;
 
-public class UserRepository : IUserRepository
+public class UserRepository(InvestLensDataContext db) : IUserRepository
 {
-    private readonly InvestLensDataContext _db;
-
-    public UserRepository(InvestLensDataContext db)
-    {
-        _db = db;
-    }
-
     public async Task<bool> CheckLoginUnique(string login)
     {
-        return !await _db.Users.AnyAsync(u => u.Login == login);
+        return !await db.Users.AnyAsync(u => u.Login == login);
     }
 
     public async Task<bool> CreateUser(User user)
     {
-        _db.Users.Add(user);
-        var count = await _db.SaveChangesAsync();
+        db.Users.Add(user);
+        var count = await db.SaveChangesAsync();
         return count > 0;
+    }
+
+    public async Task<User?> GetUserByLogin(string login)
+    {
+        return await db.Users.FirstOrDefaultAsync(u => u.Login == login);
     }
 }
