@@ -1,11 +1,14 @@
 ﻿using InvestLens.Model;
 using InvestLens.Model.Enums;
-using InvestLens.Model.Menu;
+using InvestLens.Model.NavigationTree;
+using InvestLens.ViewModel.NavigationTree;
 
 namespace InvestLens.ViewModel.Services;
 
 public class DohodService : IDohodService
 {
+    private readonly IEventAggregator _eventAggregator;
+
     private readonly List<Card> _cards =
         [
             new Card("Облигации AAA"){Stats =
@@ -31,48 +34,49 @@ public class DohodService : IDohodService
             }},
         ];
 
-    private readonly Dictionary<NodeType, List<Bond>> _bonds = new Dictionary<NodeType, List<Bond>>
+    private readonly Dictionary<PeriodType, List<Bond>> _bonds = new Dictionary<PeriodType, List<Bond>>
     {
-        [NodeType.DictionariesDohodBondsAAA] =
+        [PeriodType.Short] =
         [
             new Bond("RU000A10XXX1", "Краткосрочная облигация 1", "IssuerAAA", PeriodType.Short),
-            new Bond("RU000A10XXX2", "Краткосрочная облигация 2", "IssuerAAA", PeriodType.Long)
+            new Bond("RU000A10XXX2", "Краткосрочная облигация 2", "IssuerAAA", PeriodType.Short)
         ],
-        [NodeType.DictionariesDohodBondsAA] =
+        [PeriodType.Middle] =
         [
-            new Bond("RU000A10YYY1", "Среднесрочная облигация 1", "IssuerAA", PeriodType.Short),
+            new Bond("RU000A10YYY1", "Среднесрочная облигация 1", "IssuerAA", PeriodType.Middle),
             new Bond("RU000A10YYY2", "Среднесрочная облигация 2", "IssuerAA", PeriodType.Middle)
         ],
-        [NodeType.DictionariesDohodBondsAplus] =
+        [PeriodType.Long] =
         [
             new Bond("RU000A10ZZZ1", "Долгосрочная облигация 1", "IssuerA+", PeriodType.Long),
             new Bond("RU000A10ZZZ2", "Долгосрочная облигация 2", "IssuerA+", PeriodType.Long)
         ]
     };
 
-    public DohodService()
+    public DohodService(IEventAggregator eventAggregator)
     {
+        _eventAggregator = eventAggregator;
         LoadCards();
     }
 
     public List<Card> Cards { get; } = [];
 
-    public List<MenuItemModel> GetDohodBondsMenuItems()
+    public List<INavigationTreeItem> GetDohodBondsMenuItems()
     {
-        var result = new List<MenuItemModel>
+        var result = new List<INavigationTreeItem>
         {
-            new MenuItemModel(NodeType.DictionariesDohodBondsAAA, "", "AAA"){Title = "AAA", Description = "Самые надежные облигации"},
-            new MenuItemModel(NodeType.DictionariesDohodBondsAA, "", "AA"){Title = "AA", Description = "Самые надежные облигации"},
-            new MenuItemModel(NodeType.DictionariesDohodBondsAplus, "", "A+"){Title = "A+", Description = "Самые надежные облигации"},
+            new NavigationTreeItem("", "AAA", new DictionariesDohodBondNavigationTreeModel(PeriodType.Short){Title = "AAA", Description = "Самые надежные облигации"}, _eventAggregator),
+            new NavigationTreeItem("", "AA", new DictionariesDohodBondNavigationTreeModel(PeriodType.Middle){Title = "AA", Description = "Самые надежные облигации"}, _eventAggregator),
+            new NavigationTreeItem("", "A+", new DictionariesDohodBondNavigationTreeModel(PeriodType.Long){Title = "A+", Description = "Самые надежные облигации"}, _eventAggregator)
         };
 
         return result;
     }
 
-    public DohodBonds GetBonds(NodeType nodeType)
+    public DohodBonds GetBonds(PeriodType periodType)
     {
-        var bonds = !_bonds.TryGetValue(nodeType, out var bondList) ? [] : bondList.ToList();
-        var model = new DohodBonds(nodeType.ToString());
+        var bonds = !_bonds.TryGetValue(periodType, out var bondList) ? [] : bondList.ToList();
+        var model = new DohodBonds(periodType.ToString());
         model.Bonds.AddRange(bonds);
         return model;
     }

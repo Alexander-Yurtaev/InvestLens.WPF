@@ -1,13 +1,12 @@
 ﻿using InvestLens.Model;
-using InvestLens.Model.Enums;
-using InvestLens.Model.Menu;
+using InvestLens.ViewModel.NavigationTree;
 
 namespace InvestLens.ViewModel.Services;
 
 public interface IPortfoliosManager
 {
     List<Card> Cards { get; }
-    List<MenuItemModel> GetPortfoliosMenuItems();
-    PortfolioDetail GetPortfolio(NodeType nodeType);
+    List<INavigationTreeItem> GetPortfoliosMenuItems();
+    PortfolioDetail GetPortfolio(int id);
     List<Model.Portfolio.LookupModel> GetLookupModels();
 }

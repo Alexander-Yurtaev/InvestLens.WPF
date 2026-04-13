@@ -1,7 +1,7 @@
-﻿using InvestLens.Model.Enums;
-using InvestLens.Model.Menu;
+﻿using System.Collections.ObjectModel;
+using InvestLens.Model.NavigationTree;
+using InvestLens.ViewModel.NavigationTree;
 using InvestLens.ViewModel.Services;
-using InvestLens.ViewModel.Wrappers.Menu;
 
 namespace InvestLens.ViewModel;
 
@@ -19,55 +19,55 @@ public class NavigationViewModel : BindableBase, INavigationViewModel
         MenuItems = GetMenuItems();
     }
 
-    public List<IMenuNode> MenuItems { get; set; }
+    public ObservableCollection<INavigationTreeItem> MenuItems { get; set; }
 
-    private List<IMenuNode> GetMenuItems()
+    private ObservableCollection<INavigationTreeItem> GetMenuItems()
     {
-        var result = new List<IMenuNode>
+        var result = new List<INavigationTreeItem>
         {
-            new MenuItemWrapper(new MenuItemModel(NodeType.Dashboard, "🏠", "Главная"){Title = "Главная", Description = "Обзор инвестиционной активности"}, _eventAggregator),
-            new MenuDivider(),
-            new MenuItemWrapper(new MenuItemModel(NodeType.Portfolios, "📁", "Портфели", _portfoliosManager.GetPortfoliosMenuItems()) {Title = "Портфели", Description = "Управление инвестиционными портфелями"}, _eventAggregator),
-            new MenuItemWrapper(new MenuItemModel(NodeType.Dictionaries, "📚", "Справочники", GetDictionariesMenuItems()){Title = "Справочники", Description = "Источники рыночных данных и справочной информации"}, _eventAggregator),
-            new MenuDivider(),
-            new MenuItemWrapper(new MenuItemModel(NodeType.Downloader, "⬇️", "Менеджер закачек"){Title = "Менеджер закачек", Description = "Управление загрузкой данных"}, _eventAggregator),
-            new MenuDivider(),
-            new MenuItemWrapper(new MenuItemModel(NodeType.Scheduler, "📅", "Планировщик"){Title = "Планировщик", Description = "Управление задачами и напоминаниями"}, _eventAggregator),
-            new MenuDivider(),
-            new MenuItemWrapper(new MenuItemModel(NodeType.Settings, "⚙️", "Настройки", GetSettingsMenuItems()){Title = "Настройки", Description = "Настройка приложения и управление плагинами"}, _eventAggregator)
+            new NavigationTreeItem("🏠", "Главная", new DashboardNavigationTreeModel{Title = "Главная", Description = "Обзор инвестиционной активности"}, _eventAggregator),
+            new NavigationTreeDivider(),
+            new NavigationTreeItem("📁", "Портфели", new PortfoliosNavigationTreeModel{Title = "Портфели", Description = "Управление инвестиционными портфелями"}, _eventAggregator, _portfoliosManager.GetPortfoliosMenuItems()),
+            new NavigationTreeItem("📚", "Справочники", new DictionariesNavigationTreeModel{Title = "Справочники", Description = "Источники рыночных данных и справочной информации"}, _eventAggregator, GetDictionariesMenuItems()),
+            new NavigationTreeDivider(),
+            new NavigationTreeItem("⬇️", "Менеджер закачек", new DownloaderNavigationTreeModel{Title = "Менеджер закачек", Description = "Управление загрузкой данных"}, _eventAggregator),
+            new NavigationTreeDivider(),
+            new NavigationTreeItem("📅", "Планировщик", new SchedulerNavigationTreeModel{Title = "Планировщик", Description = "Управление задачами и напоминаниями"}, _eventAggregator),
+            new NavigationTreeDivider(),
+            new NavigationTreeItem("⚙️", "Настройки", new SettingsNavigationTreeModel{Title = "Настройки", Description = "Настройка приложения и управление плагинами"}, _eventAggregator, GetSettingsMenuItems())
+        };
+
+        return new ObservableCollection<INavigationTreeItem>(result);
+    }
+
+    private List<INavigationTreeItem> GetDictionariesMenuItems()
+    {
+        var result = new List<INavigationTreeItem>
+        {
+            new NavigationTreeItem("🏛️", "MOEX", new DictionariesMoexNavigationTreeModel{Title = "Московская Биржа (MOEX)", Description = "Основные рыночные инструменты и индексы"}, _eventAggregator, GetMoexMenuItems()),
+            new NavigationTreeItem("🌐", "Dohod.ru", new DictionariesDohodNavigationTreeModel{Title = "Dohod.ru", Description = "Агрегатор данных по облигациям"}, _eventAggregator, _dohodService.GetDohodBondsMenuItems())
         };
 
         return result;
     }
 
-    private List<MenuItemModel> GetDictionariesMenuItems()
+    private List<INavigationTreeItem> GetMoexMenuItems()
     {
-        var result = new List<MenuItemModel>
+        var result = new List<INavigationTreeItem>
         {
-            new MenuItemModel(NodeType.DictionariesMoex, "🏛️", "MOEX", GetMoexMenuItems()){Title = "Московская Биржа (MOEX)", Description = "Основные рыночные инструменты и индексы"},
-            new MenuItemModel(NodeType.DictionariesDohod, "🌐", "Dohod.ru", _dohodService.GetDohodBondsMenuItems()){Title = "Dohod.ru", Description = "Агрегатор данных по облигациям"}
+            new NavigationTreeItem("📈", "Ценные бумаги", new DictionariesMoexSecuritiesNavigationTreeModel{Title = "Ценные бумаги (MOEX)", Description = "Акции, ETF и другие инструменты"}, _eventAggregator),
+            new NavigationTreeItem("📜", "Облигации", new DictionariesMoexBondsNavigationTreeModel{Title = "Облигации (MOEX)", Description = "Облигации на Московской бирже"}, _eventAggregator)
         };
 
         return result;
     }
 
-    private List<MenuItemModel> GetMoexMenuItems()
+    private List<INavigationTreeItem> GetSettingsMenuItems()
     {
-        var result = new List<MenuItemModel>
+        var result = new List<INavigationTreeItem>
         {
-            new MenuItemModel(NodeType.DictionariesMoexSecurities, "📈", "Ценные бумаги"){Title = "Ценные бумаги (MOEX)", Description = "Акции, ETF и другие инструменты"},
-            new MenuItemModel(NodeType.DictionariesMoexBonds, "📜", "Облигации"){Title = "Облигации (MOEX)", Description = "Облигации на Московской бирже"}
-        };
-
-        return result;
-    }
-
-    private List<MenuItemModel> GetSettingsMenuItems()
-    {
-        var result = new List<MenuItemModel>
-        {
-            new MenuItemModel(NodeType.SettingsCommon, "🔧", "Общие"){Title = "Общие настройки", Description = "Настройки интерфейса и форматов"},
-            new MenuItemModel(NodeType.SettingsPlugins, "🧩", "Плагины"){Title = "Плагины", Description = "Управление расширениями"}
+            new NavigationTreeItem("🔧", "Общие", new SettingsNavigationTreeModel{Title = "Общие настройки", Description = "Настройки интерфейса и форматов"}, _eventAggregator),
+            new NavigationTreeItem("🧩", "Плагины", new SettingsPluginsNavigationTreeModel{Title = "Плагины", Description = "Управление расширениями"}, _eventAggregator)
         };
 
         return result;

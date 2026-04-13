@@ -81,7 +81,11 @@
                             </Grid.ColumnDefinitions>
                             <StackPanel Grid.Column="0" Margin="0 0 8 20">
                                 <Label Content="Имя" Target="NameTextBox"/>
-                                <TextBox x:Name="NameTextBox" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"/>
+                                <TextBox x:Name="NameTextBox" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}">
+                                    <b:Interaction.Behaviors>
+                                        <behaviors:FocusBehavior/>
+                                    </b:Interaction.Behaviors>
+                                </TextBox>
                             </StackPanel>
                             <StackPanel Grid.Column="1" Margin="8 0 0 20">
                                 <Label Content="Фамилия" Target="SurnameTextBox"/>

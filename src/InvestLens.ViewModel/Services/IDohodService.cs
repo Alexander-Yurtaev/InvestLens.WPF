@@ -1,12 +1,12 @@
 ﻿using InvestLens.Model;
 using InvestLens.Model.Enums;
-using InvestLens.Model.Menu;
+using InvestLens.ViewModel.NavigationTree;
 
 namespace InvestLens.ViewModel.Services;
 
 public interface IDohodService
 {
     List<Card> Cards { get; }
-    List<MenuItemModel> GetDohodBondsMenuItems();
-    DohodBonds GetBonds(NodeType nodeType);
+    List<INavigationTreeItem> GetDohodBondsMenuItems();
+    DohodBonds GetBonds(PeriodType periodType);
 }

@@ -1,8 +1,7 @@
-﻿using System.ComponentModel;
-using InvestLens.Model.Enums;
-using InvestLens.Model.Menu;
+﻿using InvestLens.Model.NavigationTree;
 using InvestLens.ViewModel.Events;
 using InvestLens.ViewModel.Services;
+using System.ComponentModel;
 
 namespace InvestLens.ViewModel;
 
@@ -21,7 +20,7 @@ public class MainWindowViewModel : BindableBase, IMainWindowViewModel
         NavigationVm = navigationVm;
         HeaderVm = headerVm;
 
-        eventAggregator.GetEvent<SelectMenuNodeEvent>().Subscribe(OnSelectMenuNode);
+        eventAggregator.GetEvent<SelectNavigationItemEvent>().Subscribe(OnSelectMenuNode);
     }
 
     public INavigationViewModel NavigationVm { get; }
@@ -33,13 +32,13 @@ public class MainWindowViewModel : BindableBase, IMainWindowViewModel
         private set => SetProperty(ref _contentVm, value);
     }
 
-    private void OnSelectMenuNode(MenuItemModel node)
+    private void OnSelectMenuNode(BaseNavigationTreeModel model)
     {
-        ContentVm = GetContentVm(node.NodeType);
+        ContentVm = GetContentVm(model);
     }
 
-    private INotifyPropertyChanged GetContentVm(NodeType nodeType)
+    private INotifyPropertyChanged GetContentVm(BaseNavigationTreeModel model)
     {
-        return _viewModelFactory.CreateViewModel(nodeType);
+        return _viewModelFactory.CreateViewModel(model);
     }
 }

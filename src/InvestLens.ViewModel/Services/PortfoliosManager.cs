@@ -1,14 +1,17 @@
 ﻿using InvestLens.Model;
 using InvestLens.Model.Enums;
-using InvestLens.Model.Menu;
+using InvestLens.Model.NavigationTree;
+using InvestLens.ViewModel.NavigationTree;
 
 namespace InvestLens.ViewModel.Services;
 
 public class PortfoliosManager : IPortfoliosManager
 {
-    private readonly Dictionary<NodeType, PortfolioDetail> _portfolios = new Dictionary<NodeType, PortfolioDetail>
+    private readonly IEventAggregator _eventAggregator;
+
+    private readonly Dictionary<int, PortfolioDetail> _portfolios = new Dictionary<int, PortfolioDetail>
     {
-        { NodeType.PortfoliosComplex, new PortfolioDetail("Составной", PortfolioType.Complex)
+        { 1, new PortfolioDetail("Составной", PortfolioType.Complex)
             {
                 PortfolioStats = {
                     new Stat("Стоимость", 84320, "$", false),
@@ -26,7 +29,7 @@ public class PortfoliosManager : IPortfoliosManager
                 }
             }
         },
-        { NodeType.PortfoliosFirst, new PortfolioDetail("Портфель №1", PortfolioType.Invest)
+        { 2, new PortfolioDetail("Портфель №1", PortfolioType.Invest)
         {
             PortfolioStats = {
                 new Stat("Стоимость", 24150, "$", false),
@@ -43,7 +46,7 @@ public class PortfoliosManager : IPortfoliosManager
                 new SecurityOperation("MSFT", SecurityOperationType.Buy){Date = new DateTime(2025, 02, 10), Count = 28, Price = 393.2, TotalPrice = 11010},
             }
         } },
-        { NodeType.PortfoliosSecond, new PortfolioDetail("Портфель №2", PortfolioType.Invest)
+        { 3, new PortfolioDetail("Портфель №2", PortfolioType.Invest)
         {
             PortfolioStats = {
                 new Stat("Стоимость", 16062, "$", false),
@@ -61,28 +64,29 @@ public class PortfoliosManager : IPortfoliosManager
         } },
     };
 
-    public PortfoliosManager()
+    public PortfoliosManager(IEventAggregator eventAggregator)
     {
+        _eventAggregator = eventAggregator;
         LoadPortfolioInfos();
     }
 
     public List<Card> Cards { get; } = [];
 
-    public List<MenuItemModel> GetPortfoliosMenuItems()
+    public List<INavigationTreeItem> GetPortfoliosMenuItems()
     {
-        var result = new List<MenuItemModel>
+        var result = new List<INavigationTreeItem>
         {
-            new MenuItemModel(NodeType.PortfoliosComplex, "📊", "Составной"){Title = "Составной", Description = "Детальная информация о портфеле"},
-            new MenuItemModel(NodeType.PortfoliosFirst, "💰", "Портфель №1"){Title = "Портфель №1", Description = "Детальная информация о портфеле"},
-            new MenuItemModel(NodeType.PortfoliosSecond, "💎", "Портфель №2"){Title = "Портфель №2", Description = "Детальная информация о портфеле"}
+            new NavigationTreeItem("📊", "Составной", new PortfolioNavigationTreeModel(1){Title = "Составной", Description = "Детальная информация о портфеле"}, _eventAggregator),
+            new NavigationTreeItem("💰", "Портфель №1", new PortfolioNavigationTreeModel(2){Title = "Портфель №1", Description = "Детальная информация о портфеле"}, _eventAggregator),
+            new NavigationTreeItem("💎", "Портфель №2", new PortfolioNavigationTreeModel(3){Title = "Портфель №2", Description = "Детальная информация о портфеле"}, _eventAggregator)
         };
 
         return result;
     }
 
-    public PortfolioDetail GetPortfolio(NodeType nodeType)
+    public PortfolioDetail GetPortfolio(int id)
     {
-        return _portfolios[nodeType];
+        return _portfolios[id];
     }
 
     public List<Model.Portfolio.LookupModel> GetLookupModels()

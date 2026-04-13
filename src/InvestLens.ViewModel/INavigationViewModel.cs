@@ -1,10 +1,10 @@
-﻿using InvestLens.ViewModel.Wrappers.Menu;
+﻿using System.Collections.ObjectModel;
+using InvestLens.ViewModel.NavigationTree;
 using System.ComponentModel;
 
 namespace InvestLens.ViewModel;
 
-public interface INavigationViewModel
+public interface INavigationViewModel : INotifyPropertyChanged
 {
-    List<IMenuNode> MenuItems { get; set; }
-    event PropertyChangedEventHandler? PropertyChanged;
+    ObservableCollection<INavigationTreeItem> MenuItems { get; set; }
 }

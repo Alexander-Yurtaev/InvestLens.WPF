@@ -1,7 +1,7 @@
-﻿using System.Windows;
+﻿using InvestLens.ViewModel.NavigationTree;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
-using InvestLens.ViewModel.Wrappers.Menu;
 
 namespace InvestLens.App.Views
 {
@@ -17,7 +17,7 @@ namespace InvestLens.App.Views
 
         private void ToggleButton_OnChecked(object sender, RoutedEventArgs e)
         {
-            var vm = ((ToggleButton)sender).DataContext as MenuItemWrapper;
+            var vm = ((ToggleButton)sender).DataContext as NavigationTreeItem;
             vm?.NavigateCommand?.Execute(vm);
         }
     }

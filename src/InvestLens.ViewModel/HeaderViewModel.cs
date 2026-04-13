@@ -1,5 +1,5 @@
 ﻿using InvestLens.Model;
-using InvestLens.Model.Menu;
+using InvestLens.Model.NavigationTree;
 using InvestLens.ViewModel.Events;
 using InvestLens.ViewModel.Services;
 
@@ -8,14 +8,14 @@ namespace InvestLens.ViewModel;
 public class HeaderViewModel : BindableBase, IHeaderViewModel
 {
     public INotificationsManager NotificationsManager { get; }
-    private MenuItemModel? _model;
+    private BaseNavigationTreeModel? _model;
     private UserInfo _userInfo = new UserInfo();
 
     public HeaderViewModel(INotificationsManager notificationsManager, IEventAggregator eventAggregator)
     {
         NotificationsManager = notificationsManager;
         eventAggregator.GetEvent<LoginEvent>().Subscribe(OnLogin);
-        eventAggregator.GetEvent<SelectMenuNodeEvent>().Subscribe(OnSelectMenuNode);
+        eventAggregator.GetEvent<SelectNavigationItemEvent>().Subscribe(OnSelectMenuNode);
     }
 
     public string Title => _model?.Title ?? string.Empty;
@@ -34,7 +34,7 @@ public class HeaderViewModel : BindableBase, IHeaderViewModel
         RaisePropertyChanged(nameof(UserFullNameInShortFormat));
     }
 
-    private void OnSelectMenuNode(MenuItemModel model)
+    private void OnSelectMenuNode(BaseNavigationTreeModel model)
     {
         _model = model;
         RaisePropertyChanged(nameof(Title));

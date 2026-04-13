@@ -1,8 +1,8 @@
 ﻿using Autofac;
-using InvestLens.Model.Enums;
+using InvestLens.Model;
+using InvestLens.Model.NavigationTree;
 using InvestLens.ViewModel.Pages;
 using System.ComponentModel;
-using InvestLens.Model;
 
 namespace InvestLens.ViewModel.Services;
 
@@ -21,47 +21,43 @@ public class ViewModelFactory : IViewModelFactory
         _dohodService = dohodService;
     }
 
-    public INotifyPropertyChanged CreateViewModel(NodeType nodeType)
+    public INotifyPropertyChanged CreateViewModel(BaseNavigationTreeModel model)
     {
-        return nodeType switch
+        return model switch
         {
-            NodeType.Dashboard => _componentContext.Resolve<IDashboardViewModel>(),
-            NodeType.Portfolios => _componentContext.Resolve<IPortfoliosViewModel>(),
+            DashboardNavigationTreeModel => _componentContext.Resolve<IDashboardViewModel>(),
+            PortfoliosNavigationTreeModel => _componentContext.Resolve<IPortfoliosViewModel>(),
 
-            NodeType.PortfoliosComplex => CreatePortfolioViewModel(nodeType),
-            NodeType.PortfoliosFirst => CreatePortfolioViewModel(nodeType),
-            NodeType.PortfoliosSecond => CreatePortfolioViewModel(nodeType),
-            
-            NodeType.Dictionaries => _componentContext.Resolve<IDictionariesViewModel>(),
-            NodeType.DictionariesMoex => _componentContext.Resolve<IDictionariesMoexViewModel>(),
-            NodeType.DictionariesMoexSecurities => _componentContext.Resolve<IDictionariesMoexSecuritiesViewModel>(),
-            NodeType.DictionariesMoexBonds => _componentContext.Resolve<IDictionariesMoexBondsViewModel>(),
-            NodeType.DictionariesDohod => _componentContext.Resolve<IDictionariesDohodViewModel>(),
-            
-            NodeType.DictionariesDohodBondsAAA => CreateDictionariesDohodBondsViewModel(NodeType.DictionariesDohodBondsAAA),
-            NodeType.DictionariesDohodBondsAA => CreateDictionariesDohodBondsViewModel(NodeType.DictionariesDohodBondsAA),
-            NodeType.DictionariesDohodBondsAplus => CreateDictionariesDohodBondsViewModel(NodeType.DictionariesDohodBondsAplus),
+            PortfolioNavigationTreeModel portfolioModel => CreatePortfolioViewModel(portfolioModel),
 
-            NodeType.Downloader => _componentContext.Resolve<IDownloaderViewModel>(),
-            NodeType.Scheduler => _componentContext.Resolve<ISchedulerViewModel>(),
-            NodeType.Settings => _componentContext.Resolve<ISettingsViewModel>(),
-            NodeType.SettingsCommon => _componentContext.Resolve<ISettingsCommonViewModel>(),
-            NodeType.SettingsPlugins => _componentContext.Resolve<ISettingsPluginsViewModel>(),
-            _ => throw new ArgumentOutOfRangeException(nameof(nodeType), nodeType, null)
+            DictionariesNavigationTreeModel => _componentContext.Resolve<IDictionariesViewModel>(),
+            DictionariesMoexNavigationTreeModel => _componentContext.Resolve<IDictionariesMoexViewModel>(),
+            DictionariesMoexSecuritiesNavigationTreeModel => _componentContext.Resolve<IDictionariesMoexSecuritiesViewModel>(),
+            DictionariesMoexBondsNavigationTreeModel => _componentContext.Resolve<IDictionariesMoexBondsViewModel>(),
+            
+            DictionariesDohodNavigationTreeModel => _componentContext.Resolve<IDictionariesDohodViewModel>(),
+            DictionariesDohodBondNavigationTreeModel dohodModel => CreateDictionariesDohodBondsViewModel(dohodModel),
+
+            DownloaderNavigationTreeModel => _componentContext.Resolve<IDownloaderViewModel>(),
+            SchedulerNavigationTreeModel => _componentContext.Resolve<ISchedulerViewModel>(),
+            SettingsNavigationTreeModel => _componentContext.Resolve<ISettingsViewModel>(),
+            SettingsCommonNavigationTreeModel => _componentContext.Resolve<ISettingsCommonViewModel>(),
+            SettingsPluginsNavigationTreeModel => _componentContext.Resolve<ISettingsPluginsViewModel>(),
+            _ => throw new ArgumentOutOfRangeException(nameof(model), model, null)
         };
     }
 
-    private INotifyPropertyChanged CreatePortfolioViewModel(NodeType nodeType)
+    private INotifyPropertyChanged CreatePortfolioViewModel(PortfolioNavigationTreeModel model)
     {
-        var model = _portfoliosManager.GetPortfolio(nodeType);
-        var parameters = new TypedParameter(typeof(PortfolioDetail), model);
+        var portfolioModel = _portfoliosManager.GetPortfolio(model.Id);
+        var parameters = new TypedParameter(typeof(PortfolioDetail), portfolioModel);
         var viewModel = _componentContext.Resolve<IPortfolioDetailViewModel>(parameters);
         return viewModel;
     }
 
-    private INotifyPropertyChanged CreateDictionariesDohodBondsViewModel(NodeType nodeType)
+    private INotifyPropertyChanged CreateDictionariesDohodBondsViewModel(DictionariesDohodBondNavigationTreeModel model)
     {
-        var bonds = _dohodService.GetBonds(nodeType);
+        var bonds = _dohodService.GetBonds(model.PeriodType);
         var parameters = new TypedParameter(typeof(DohodBonds), bonds);
         var viewModel = _componentContext.Resolve<IDictionariesDohodBondsViewModel>(parameters);
         return viewModel;

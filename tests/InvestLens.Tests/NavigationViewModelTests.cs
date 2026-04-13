@@ -1,9 +1,9 @@
 ﻿using InvestLens.Model.Enums;
-using InvestLens.Model.Menu;
+using InvestLens.Model.NavigationTree;
 using InvestLens.ViewModel;
 using InvestLens.ViewModel.Events;
+using InvestLens.ViewModel.NavigationTree;
 using InvestLens.ViewModel.Services;
-using InvestLens.ViewModel.Wrappers.Menu;
 using Moq;
 
 namespace InvestLens.Tests
@@ -15,16 +15,16 @@ namespace InvestLens.Tests
         {
             var headerVmMock = new Mock<IHeaderViewModel>();
             var viewModelFactoryMock = new Mock<IViewModelFactory>();
-            var notificationsManagerMock = new Mock<INotificationsManager>();
-            
-            var portfoliosManager = new Mock<IPortfoliosManager>();
-            portfoliosManager.Setup(pm => pm.GetPortfoliosMenuItems()).Returns(GetPortfoliosMenuItems());
-
-            var dohodService = new Mock<IDohodService>();
-            dohodService.Setup(pm => pm.GetDohodBondsMenuItems()).Returns(GetDohodBondsMenuItems);
 
             var eventAggregatorMock = new Mock<IEventAggregator>();
-            eventAggregatorMock.Setup(ea => ea.GetEvent<SelectMenuNodeEvent>()).Returns(new SelectMenuNodeEvent());
+            eventAggregatorMock.Setup(ea => ea.GetEvent<SelectNavigationItemEvent>()).Returns(new SelectNavigationItemEvent());
+
+            var portfoliosManager = new Mock<IPortfoliosManager>();
+            portfoliosManager.Setup(pm => pm.GetPortfoliosMenuItems()).Returns(GetPortfoliosMenuItems(eventAggregatorMock.Object));
+
+            var dohodService = new Mock<IDohodService>();
+            dohodService.Setup(pm => pm.GetDohodBondsMenuItems()).Returns(GetDohodBondsMenuItems(eventAggregatorMock.Object));
+
             var navigationVm = new NavigationViewModel(portfoliosManager.Object, dohodService.Object, eventAggregatorMock.Object);
 
             var vm = new MainWindowViewModel(
@@ -36,94 +36,102 @@ namespace InvestLens.Tests
             Assert.NotNull(vm.NavigationVm.MenuItems);
             Assert.Equal(10, vm.NavigationVm.MenuItems.Count);
 
-            var dashboard = vm.NavigationVm.MenuItems[0] as MenuItemWrapper;
+            var dashboard = vm.NavigationVm.MenuItems[0] as NavigationTreeItem;
             Assert.NotNull(dashboard);
-            Assert.NotNull(dashboard.Model);
-            Assert.Equal("Главная", dashboard.Model.Header);
+            var dashboardModel = dashboard.Model as DashboardNavigationTreeModel;
+            Assert.NotNull(dashboardModel);
+            Assert.Equal("Главная", dashboardModel.Header);
             Assert.NotNull(dashboard.Children);
             Assert.Empty(dashboard.Children);
 
-            var divider = vm.NavigationVm.MenuItems[1] as IMenuNode;
+            var divider = vm.NavigationVm.MenuItems[1] as NavigationTreeDivider;
             Assert.NotNull(divider);
             
-            var portfolios = vm.NavigationVm.MenuItems[2] as MenuItemWrapper;
+            var portfolios = vm.NavigationVm.MenuItems[2] as NavigationTreeItem;
             Assert.NotNull(portfolios);
-            Assert.NotNull(portfolios.Model);
-            Assert.Equal("Портфели", portfolios.Model.Header);
+            var portfoliosModel = portfolios.Model as PortfoliosNavigationTreeModel;
+            Assert.NotNull(portfoliosModel);
+            Assert.Equal("Портфели", portfoliosModel.Header);
             Assert.NotNull(portfolios.Children);
             Assert.Equal(3, portfolios.Children.Count);
 
-            var dictionaries = vm.NavigationVm.MenuItems[3] as MenuItemWrapper;
+            var dictionaries = vm.NavigationVm.MenuItems[3] as NavigationTreeItem;
             Assert.NotNull(dictionaries);
-            Assert.NotNull(dictionaries.Model);
-            Assert.Equal("Справочники", dictionaries.Model.Header);
+            var dictionariesModel = dictionaries.Model as DictionariesNavigationTreeModel;
+            Assert.NotNull(dictionariesModel);
+            Assert.Equal("Справочники", dictionariesModel.Header);
             Assert.NotNull(dictionaries.Children);
             Assert.Equal(2, dictionaries.Children.Count);
 
-            var moex = dictionaries.Children[0];
+            var moex = dictionaries.Children[0] as NavigationTreeItem;
             Assert.NotNull(moex);
-            Assert.NotNull(moex.Model);
-            Assert.Equal("MOEX", moex.Model.Header);
+            var moexModel = moex.Model as DictionariesMoexNavigationTreeModel;
+            Assert.NotNull(moexModel);
+            Assert.Equal("MOEX", moexModel.Header);
             Assert.NotNull(moex.Children);
             Assert.Equal(2, moex.Children.Count);
 
-            var dohod = dictionaries.Children[1];
+            var dohod = dictionaries.Children[1] as NavigationTreeItem;
             Assert.NotNull(dohod);
-            Assert.NotNull(dohod.Model);
-            Assert.Equal("Dohod.ru", dohod.Model.Header);
+            var dohodModel = dohod.Model as DictionariesDohodNavigationTreeModel;
+            Assert.NotNull(dohodModel);
+            Assert.Equal("Dohod.ru", dohodModel.Header);
             Assert.NotNull(dohod.Children);
             Assert.Equal(3, dohod.Children.Count);
 
-            divider = vm.NavigationVm.MenuItems[4] as IMenuNode;
+            divider = vm.NavigationVm.MenuItems[4] as NavigationTreeDivider;
             Assert.NotNull(divider);
 
-            var downloader = vm.NavigationVm.MenuItems[5] as MenuItemWrapper;
+            var downloader = vm.NavigationVm.MenuItems[5] as NavigationTreeItem;
             Assert.NotNull(downloader);
-            Assert.NotNull(downloader.Model);
-            Assert.Equal("Менеджер закачек", downloader.Model.Header);
+            var downloaderModel = downloader.Model as DownloaderNavigationTreeModel;
+            Assert.NotNull(downloaderModel);
+            Assert.Equal("Менеджер закачек", downloaderModel.Header);
             Assert.NotNull(downloader.Children);
             Assert.Empty(downloader.Children);
 
-            divider = vm.NavigationVm.MenuItems[6] as IMenuNode;
+            divider = vm.NavigationVm.MenuItems[6] as NavigationTreeDivider;
             Assert.NotNull(divider);
 
-            var scheduler = vm.NavigationVm.MenuItems[7] as MenuItemWrapper;
+            var scheduler = vm.NavigationVm.MenuItems[7] as NavigationTreeItem;
             Assert.NotNull(scheduler);
-            Assert.NotNull(scheduler.Model);
-            Assert.Equal("Планировщик", scheduler.Model.Header);
+            var schedulerModel = scheduler.Model as SchedulerNavigationTreeModel;
+            Assert.NotNull(schedulerModel);
+            Assert.Equal("Планировщик", schedulerModel.Header);
             Assert.NotNull(scheduler.Children);
             Assert.Empty(scheduler.Children);
 
-            divider = vm.NavigationVm.MenuItems[8] as IMenuNode;
+            divider = vm.NavigationVm.MenuItems[8] as NavigationTreeDivider;
             Assert.NotNull(divider);
 
-            var settings = vm.NavigationVm.MenuItems[9] as MenuItemWrapper;
+            var settings = vm.NavigationVm.MenuItems[9] as NavigationTreeItem;
             Assert.NotNull(settings);
-            Assert.NotNull(settings.Model);
-            Assert.Equal("Настройки", settings.Model.Header);
+            var settingsModel = settings.Model as SettingsNavigationTreeModel;
+            Assert.NotNull(settingsModel);
+            Assert.Equal("Настройки", settingsModel.Header);
             Assert.NotNull(settings.Children);
             Assert.Equal(2, settings.Children.Count);
         }
 
-        private List<MenuItemModel> GetPortfoliosMenuItems()
+        private List<INavigationTreeItem> GetPortfoliosMenuItems(IEventAggregator eventAggregator)
         {
-            var result = new List<MenuItemModel>
+            var result = new List<INavigationTreeItem>
             {
-                new MenuItemModel(NodeType.PortfoliosComplex, "📊", "Составной"),
-                new MenuItemModel(NodeType.PortfoliosFirst, "💰", "Портфель №1"),
-                new MenuItemModel(NodeType.PortfoliosSecond, "💎", "Портфель №2")
+                new NavigationTreeItem("📊", "Составной", new PortfolioNavigationTreeModel(1), eventAggregator),
+                new NavigationTreeItem("💰", "Портфель №1", new PortfolioNavigationTreeModel(2), eventAggregator),
+                new NavigationTreeItem("💎", "Портфель №2", new PortfolioNavigationTreeModel(3), eventAggregator)
             };
 
             return result;
         }
 
-        private List<MenuItemModel> GetDohodBondsMenuItems()
+        private List<INavigationTreeItem> GetDohodBondsMenuItems(IEventAggregator eventAggregator)
         {
-            var result = new List<MenuItemModel>
+            var result = new List<INavigationTreeItem>
             {
-                new MenuItemModel(NodeType.DictionariesDohodBondsAAA, "", "AAA"),
-                new MenuItemModel(NodeType.DictionariesDohodBondsAA, "", "AA"),
-                new MenuItemModel(NodeType.DictionariesDohodBondsAplus, "", "A+")
+                new NavigationTreeItem("", "AAA", new DictionariesDohodBondNavigationTreeModel(PeriodType.Short), eventAggregator),
+                new NavigationTreeItem("", "AA", new DictionariesDohodBondNavigationTreeModel(PeriodType.Middle), eventAggregator),
+                new NavigationTreeItem("", "A+", new DictionariesDohodBondNavigationTreeModel(PeriodType.Long), eventAggregator)
             };
 
             return result;
