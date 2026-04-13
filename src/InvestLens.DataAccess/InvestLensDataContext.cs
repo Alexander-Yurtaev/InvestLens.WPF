@@ -6,6 +6,7 @@ namespace InvestLens.DataAccess;
 public sealed class InvestLensDataContext : DbContext
 {
     public DbSet<User> Users { get; set; }
+    public DbSet<Portfolio> Portfolios { get; set; }
 
     public InvestLensDataContext(DbContextOptions<InvestLensDataContext> options) : base(options)
     {
@@ -25,6 +26,18 @@ public sealed class InvestLensDataContext : DbContext
             entity.Property(u => u.LastName).IsRequired().HasMaxLength(100);
             entity.HasIndex(u => u.Login).IsUnique();
             entity.Property(u => u.Password).HasMaxLength(100);
+        });
+
+        modelBuilder.Entity<Portfolio>(entity =>
+        {
+            entity.HasKey(p => p.Id);
+            entity.Property(p => p.Name).IsRequired().HasMaxLength(100);
+            entity.Property(p => p.Description).HasMaxLength(200);
+            entity.Property(p => p.PortfolioType).IsRequired();
+            entity.HasOne(p => p.Owner)
+                .WithMany(u => u.Portfolios)
+                .HasForeignKey(p => p.OwnerId)
+                .OnDelete(DeleteBehavior.Cascade);
         });
     }
 

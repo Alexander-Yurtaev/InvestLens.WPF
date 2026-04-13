@@ -1,16 +1,26 @@
 ﻿using InvestLens.Model.Enums;
 using InvestLens.ViewModel.Services;
 using System.Runtime.CompilerServices;
+using InvestLens.DataAccess;
+using InvestLens.Model.Portfolio;
 
 namespace InvestLens.ViewModel;
 
 public sealed class CreatePortfolioWindowViewModel : CreateUpdatePortfolioWindowViewModel, ICreatePortfolioWindowViewModel, ISupportPortfolioType
 {
+    private readonly IAuthManager _authService;
+    private readonly IPortfolioRepository _portfolioRepository;
+
     public CreatePortfolioWindowViewModel(
         Model.Portfolio.CreateModel model, 
-        IWindowManager windowManager, 
+        IWindowManager windowManager,
+        IAuthManager authService,
+        IPortfolioRepository portfolioRepository,
         IPortfoliosManager portfoliosManager) : base(model, windowManager, portfoliosManager)
     {
+        _authService = authService;
+        _portfolioRepository = portfolioRepository;
+
         Header = "Создание";
         ActionTitle = "Создать портфель";
 
@@ -47,8 +57,13 @@ public sealed class CreatePortfolioWindowViewModel : CreateUpdatePortfolioWindow
 
     protected override void ExecuteAction()
     {
-        // Create portfolio
-        // ...
+        // ToDo make DialogService
+        if (_authService.CurrentUser is null) throw new Exception("Вы не авторизованы!");
+
+        var currentUserId = _authService.CurrentUser.Id;
+        var model = (CreateModel) Model;
+        _portfolioRepository.CreatePortfolio(model);
+
         WindowManager.CloseWindow<CreatePortfolioWindowViewModel>();
     }
 

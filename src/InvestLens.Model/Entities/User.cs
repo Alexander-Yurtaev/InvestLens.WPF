@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace InvestLens.Model.Entities;
+﻿namespace InvestLens.Model.Entities;
 
 public class User(string firstName, string lastName, string login, string password)
 {
@@ -13,4 +11,6 @@ public class User(string firstName, string lastName, string login, string passwo
     public string Login { get; set; } = login;
 
     public string Password { get; set; } = password;
+
+    public List<Portfolio> Portfolios { get; set; } = [];
 }

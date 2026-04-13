@@ -37,6 +37,7 @@ namespace InvestLens.App.Startup
             builder.RegisterType<SecurityService>().As<ISecurityService>();
 
             builder.RegisterType<UserRepository>().As<IUserRepository>();
+            builder.RegisterType<PortfolioRepository>().As<IPortfolioRepository>();
 
             builder.RegisterType<MainWindow>().AsSelf();
             builder.RegisterType<MainWindowViewModel>().As<IMainWindowViewModel>();
@@ -49,7 +50,9 @@ namespace InvestLens.App.Startup
             builder.RegisterType<LoginWindowViewModel>().As<ILoginWindowViewModel>();
             builder.RegisterType<LoginModel>().AsSelf();
 
-            builder.RegisterType<Model.Portfolio.CreateModel>().AsSelf();
+            builder.Register(context => new Model.Portfolio.CreateModel(context.Resolve<IAuthManager>().CurrentUser!.Id))
+                .As<Model.Portfolio.CreateModel>()
+                .InstancePerLifetimeScope();
             builder.RegisterType<Model.Portfolio.UpdateModel>().AsSelf();
 
             builder.RegisterType<CreatePortfolioWindow>().AsSelf();
