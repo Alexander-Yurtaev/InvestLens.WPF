@@ -4,6 +4,7 @@ using InvestLens.ViewModel.Services;
 using System.ComponentModel.DataAnnotations;
 using System.Security;
 using System.Windows.Input;
+using InvestLens.DataAccess;
 
 namespace InvestLens.ViewModel;
 
@@ -80,6 +81,7 @@ public sealed class LoginWindowViewModel : ValidationViewModelBase, ILoginWindow
 
             var userInfo = new UserInfo
             {
+                Id = result.User!.Id,
                 UserAvatar = $"{result.User!.FirstName[0]}{result.User!.LastName[0]}",
                 UserName = result.User!.FirstName,
                 UserFullNameInShortFormat = $"{result.User!.FirstName} {result.User!.LastName[0]}"

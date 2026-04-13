@@ -1,7 +1,7 @@
 ﻿using InvestLens.Model;
 using InvestLens.Model.Entities;
 
-namespace InvestLens.ViewModel.Services;
+namespace InvestLens.DataAccess;
 
 public interface ISecurityService
 {

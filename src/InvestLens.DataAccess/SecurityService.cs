@@ -1,9 +1,8 @@
 ﻿using InvestLens.Common.Helpers;
-using InvestLens.DataAccess;
 using InvestLens.Model;
 using InvestLens.Model.Entities;
 
-namespace InvestLens.ViewModel.Services;
+namespace InvestLens.DataAccess;
 
 public class SecurityService(IUserRepository userRepository) : ISecurityService
 {

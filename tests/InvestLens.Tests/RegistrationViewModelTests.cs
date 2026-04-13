@@ -1,4 +1,5 @@
-﻿using InvestLens.Model;
+﻿using InvestLens.DataAccess;
+using InvestLens.Model;
 using InvestLens.ViewModel;
 using InvestLens.ViewModel.Services;
 using Moq;

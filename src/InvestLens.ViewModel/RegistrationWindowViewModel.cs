@@ -5,6 +5,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Security;
 using System.Windows.Input;
 using InvestLens.Common.Helpers;
+using InvestLens.DataAccess;
 
 namespace InvestLens.ViewModel;
 

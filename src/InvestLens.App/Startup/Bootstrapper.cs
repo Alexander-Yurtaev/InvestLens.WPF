@@ -30,7 +30,9 @@ namespace InvestLens.App.Startup
             builder.RegisterType<DictionariesManager>().As<IDictionariesManager>().SingleInstance();
             builder.RegisterType<MoexService>().As<IMoexService>().SingleInstance();
             builder.RegisterType<DohodService>().As<IDohodService>().SingleInstance();
+
             builder.RegisterType<WindowManager>().As<IWindowManager>().SingleInstance();
+            builder.RegisterType<AuthManager>().As<IAuthManager>().SingleInstance();
             
             builder.RegisterType<SecurityService>().As<ISecurityService>();
 
