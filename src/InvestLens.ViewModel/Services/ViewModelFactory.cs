@@ -21,14 +21,14 @@ public class ViewModelFactory : IViewModelFactory
         _dohodService = dohodService;
     }
 
-    public INotifyPropertyChanged CreateViewModel(BaseNavigationTreeModel model)
+    public async Task<INotifyPropertyChanged> CreateViewModel(BaseNavigationTreeModel model)
     {
         return model switch
         {
             DashboardNavigationTreeModel => _componentContext.Resolve<IDashboardViewModel>(),
             PortfoliosNavigationTreeModel => _componentContext.Resolve<IPortfoliosViewModel>(),
 
-            PortfolioNavigationTreeModel portfolioModel => CreatePortfolioViewModel(portfolioModel),
+            PortfolioNavigationTreeModel portfolioModel => await CreatePortfolioViewModel(portfolioModel),
 
             DictionariesNavigationTreeModel => _componentContext.Resolve<IDictionariesViewModel>(),
             DictionariesMoexNavigationTreeModel => _componentContext.Resolve<IDictionariesMoexViewModel>(),
@@ -47,9 +47,9 @@ public class ViewModelFactory : IViewModelFactory
         };
     }
 
-    private INotifyPropertyChanged CreatePortfolioViewModel(PortfolioNavigationTreeModel model)
+    private async Task<INotifyPropertyChanged> CreatePortfolioViewModel(PortfolioNavigationTreeModel model)
     {
-        var portfolioModel = _portfoliosManager.GetPortfolio(model.Id);
+        var portfolioModel = await _portfoliosManager.GetPortfolio(model.Id);
         var parameters = new TypedParameter(typeof(PortfolioDetail), portfolioModel);
         var viewModel = _componentContext.Resolve<IPortfolioDetailViewModel>(parameters);
         return viewModel;

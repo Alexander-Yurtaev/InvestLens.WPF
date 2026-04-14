@@ -46,6 +46,11 @@ public class WindowManager : IWindowManager
 
     private Window GetWindow(Type viewModelType, object? viewModel = null)
     {
+        if (viewModel is not null)
+        {
+            _windows.Remove(viewModelType);
+        }
+
         if (!_windows.TryGetValue(viewModelType, out var window))
         {
             var viewName = viewModelType.Name.Substring(0, viewModelType.Name.LastIndexOf("ViewModel", StringComparison.InvariantCulture));

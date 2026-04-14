@@ -1,4 +1,4 @@
-﻿using InvestLens.DataAccess;
+﻿using InvestLens.DataAccess.Services;
 using InvestLens.Model;
 using InvestLens.ViewModel;
 using InvestLens.ViewModel.Services;

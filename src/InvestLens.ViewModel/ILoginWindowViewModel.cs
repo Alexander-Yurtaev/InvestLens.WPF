@@ -10,7 +10,7 @@ public interface ILoginWindowViewModel : IPasswordSupport
     ICommand LoginCommand { get; }
     ICommand RegistrationCommand { get; }
     string ErrorMessage { get; set; }
-    bool ShowErrorMessage { get; }
+    bool HasErrorMessage { get; }
     bool HasErrors { get; }
     event PropertyChangedEventHandler? PropertyChanged;
     IEnumerable GetErrors(string? propertyName);

@@ -1,68 +1,80 @@
-﻿using InvestLens.Model.Enums;
+﻿using InvestLens.DataAccess.Repositories;
+using InvestLens.Model.Enums;
+using InvestLens.ViewModel.Events;
 using InvestLens.ViewModel.Services;
 using System.Runtime.CompilerServices;
-using InvestLens.DataAccess;
-using InvestLens.Model.Portfolio;
 
 namespace InvestLens.ViewModel;
 
 public sealed class CreatePortfolioWindowViewModel : CreateUpdatePortfolioWindowViewModel, ICreatePortfolioWindowViewModel, ISupportPortfolioType
 {
-    private readonly IAuthManager _authService;
+    private readonly IAuthManager _authManager;
     private readonly IPortfolioRepository _portfolioRepository;
+    private readonly IEventAggregator _eventAggregator;
+
+    private bool _isPortfolioSimpleType;
+    private bool _isPortfolioComplexType;
 
     public CreatePortfolioWindowViewModel(
         Model.Portfolio.CreateModel model, 
         IWindowManager windowManager,
-        IAuthManager authService,
+        IAuthManager authManager,
         IPortfolioRepository portfolioRepository,
-        IPortfoliosManager portfoliosManager) : base(model, windowManager, portfoliosManager)
+        IPortfoliosManager portfoliosManager,
+        IEventAggregator eventAggregator) : base(model, windowManager, authManager, portfoliosManager, portfolioRepository)
     {
-        _authService = authService;
+        _authManager = authManager;
         _portfolioRepository = portfolioRepository;
+        _eventAggregator = eventAggregator;
 
         Header = "Создание";
         ActionTitle = "Создать портфель";
+        IsPortfolioSimpleType = Model.PortfolioType == PortfolioType.Invest;
+        IsPortfolioComplexType = Model.PortfolioType == PortfolioType.Complex;
 
         InvalidateCommands();
     }
 
     public bool IsPortfolioSimpleType
     {
-        get => Model.PortfolioType == PortfolioType.Invest;
+        get => _isPortfolioSimpleType;
         set
         {
-            ((Model.Portfolio.CreateModel)Model).SetPortfolioType(value ? PortfolioType.Invest : PortfolioType.Complex);
+            if(!SetProperty(ref _isPortfolioSimpleType, value)) return;
 
             ValidateProperty(IsPortfolioSimpleType);
             RaisePropertyChanged();
-            RaisePropertyChanged(nameof(IsPortfolioComplexType));
         }
     }
 
     public bool IsPortfolioComplexType
     {
-        get => Model.PortfolioType == PortfolioType.Complex;
+        get => _isPortfolioComplexType;
         set
         {
-            ((Model.Portfolio.CreateModel)Model).SetPortfolioType(value ? PortfolioType.Complex : PortfolioType.Invest);
+            if (!SetProperty(ref _isPortfolioComplexType, value)) return;
 
             ValidateProperty(IsPortfolioComplexType);
             RaisePropertyChanged();
-            RaisePropertyChanged(nameof(IsPortfolioSimpleType));
         }
     }
-
+    
     #region Overrides of CreateUpdatePortfolioWindowViewModel
 
-    protected override void ExecuteAction()
+    protected override async Task ExecuteAction()
     {
         // ToDo make DialogService
-        if (_authService.CurrentUser is null) throw new Exception("Вы не авторизованы!");
+        if (_authManager.CurrentUser is null) throw new SystemException("Вы не авторизованы!");
 
-        var currentUserId = _authService.CurrentUser.Id;
-        var model = (CreateModel) Model;
-        _portfolioRepository.CreatePortfolio(model);
+        var model = (Model.Portfolio.CreateModel)Model;
+
+        model.SetPortfolioType(IsPortfolioSimpleType
+            ? PortfolioType.Invest
+            : PortfolioType.Complex);
+
+        await _portfolioRepository.CreatePortfolio(model);
+
+        _eventAggregator.GetEvent<PortfolioCreatedEvent>().Publish();
 
         WindowManager.CloseWindow<CreatePortfolioWindowViewModel>();
     }

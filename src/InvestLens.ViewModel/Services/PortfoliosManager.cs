@@ -1,4 +1,5 @@
-﻿using InvestLens.Model;
+﻿using InvestLens.DataAccess.Repositories;
+using InvestLens.Model;
 using InvestLens.Model.Enums;
 using InvestLens.Model.NavigationTree;
 using InvestLens.ViewModel.NavigationTree;
@@ -7,6 +8,7 @@ namespace InvestLens.ViewModel.Services;
 
 public class PortfoliosManager : IPortfoliosManager
 {
+    private readonly IPortfolioRepository _portfolioRepository;
     private readonly IEventAggregator _eventAggregator;
 
     private readonly Dictionary<int, PortfolioDetail> _portfolios = new Dictionary<int, PortfolioDetail>
@@ -64,29 +66,34 @@ public class PortfoliosManager : IPortfoliosManager
         } },
     };
 
-    public PortfoliosManager(IEventAggregator eventAggregator)
+    public PortfoliosManager(IPortfolioRepository portfolioRepository, IEventAggregator eventAggregator)
     {
+        _portfolioRepository = portfolioRepository;
         _eventAggregator = eventAggregator;
         LoadPortfolioInfos();
     }
 
     public List<Card> Cards { get; } = [];
 
-    public List<INavigationTreeItem> GetPortfoliosMenuItems()
+    public async Task<List<INavigationTreeItem>> GetPortfoliosMenuItems(int userId)
     {
-        var result = new List<INavigationTreeItem>
-        {
-            new NavigationTreeItem("📊", "Составной", new PortfolioNavigationTreeModel(1){Title = "Составной", Description = "Детальная информация о портфеле"}, _eventAggregator),
-            new NavigationTreeItem("💰", "Портфель №1", new PortfolioNavigationTreeModel(2){Title = "Портфель №1", Description = "Детальная информация о портфеле"}, _eventAggregator),
-            new NavigationTreeItem("💎", "Портфель №2", new PortfolioNavigationTreeModel(3){Title = "Портфель №2", Description = "Детальная информация о портфеле"}, _eventAggregator)
-        };
+        var portfolios = await _portfolioRepository.GetAllPortfolios(userId);
+
+        var result = portfolios.Select(p =>
+            new NavigationTreeItem("", p.Name,
+                new PortfolioNavigationTreeModel(p.Id, p.PortfolioType) { Title = p.Name, Description = p.Description ?? "" },
+                _eventAggregator)).Cast<INavigationTreeItem>().ToList();
 
         return result;
     }
 
-    public PortfolioDetail GetPortfolio(int id)
+    public async Task<PortfolioDetail?> GetPortfolio(int id)
     {
-        return _portfolios[id];
+        var portfolio = await _portfolioRepository.GetPortfolioById(id);
+        if (portfolio is null) return null;
+
+        var detail = new PortfolioDetail(portfolio.Name, portfolio.PortfolioType);
+        return detail;
     }
 
     public List<Model.Portfolio.LookupModel> GetLookupModels()

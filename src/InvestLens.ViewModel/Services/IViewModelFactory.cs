@@ -5,5 +5,5 @@ namespace InvestLens.ViewModel.Services;
 
 public interface IViewModelFactory
 {
-    INotifyPropertyChanged CreateViewModel(BaseNavigationTreeModel model);
+    Task<INotifyPropertyChanged> CreateViewModel(BaseNavigationTreeModel model);
 }

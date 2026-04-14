@@ -1,7 +1,7 @@
 ﻿using InvestLens.Model.Entities;
 using Microsoft.EntityFrameworkCore;
 
-namespace InvestLens.DataAccess;
+namespace InvestLens.DataAccess.Repositories;
 
 public class UserRepository(InvestLensDataContext db) : IUserRepository
 {

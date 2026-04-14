@@ -15,7 +15,7 @@
 
     <b:Interaction.Behaviors>
         <behaviors:DragMoveBehavior/>
-        <behaviors:PortfolioTypeBehavior IsPortfolioComplexType="{Binding IsPortfolioComplexType}"/>
+        <behaviors:PortfolioTypeBehavior IsPortfolioComplexType="{Binding IsPortfolioComplexType, FallbackValue=false}"/>
     </b:Interaction.Behaviors>
 
     <Window.Resources>
@@ -70,8 +70,12 @@
                                 <Run Foreground="{StaticResource BrandRed}">*</Run>
                             </TextBlock>
                         </Label>
-                        <TextBox x:Name="PortfolioName"
-                                 Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"/>
+                        <TextBox x:Name="PortfolioName" 
+                                 Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}">
+                            <b:Interaction.Behaviors>
+                                <behaviors:FocusBehavior/>
+                            </b:Interaction.Behaviors>
+                        </TextBox>
                     </StackPanel>
                     <StackPanel Grid.Row="1" 
                                 Orientation="Vertical"
@@ -97,7 +101,7 @@
                         </Label>
                         <StackPanel Orientation="Horizontal">
                             <Viewbox Height="30">
-                                <RadioButton IsChecked="{Binding IsPortfolioSimpleType, Mode=OneTime}"
+                                <RadioButton IsChecked="{Binding IsPortfolioSimpleType, FallbackValue=false, Mode=OneWay}"
                                              GroupName="PortfolioType"
                                              IsEnabled="False"/>
                             </Viewbox>
@@ -105,7 +109,7 @@
                                    FontWeight="Bold"
                                    Margin="0 0 24 0"/>
                             <Viewbox Height="30">
-                                <RadioButton IsChecked="{Binding IsPortfolioComplexType, Mode=OneTime}"
+                                <RadioButton IsChecked="{Binding IsPortfolioComplexType, FallbackValue=false, Mode=OneWay}"
                                              GroupName="PortfolioType"
                                              IsEnabled="False"/>
                             </Viewbox>

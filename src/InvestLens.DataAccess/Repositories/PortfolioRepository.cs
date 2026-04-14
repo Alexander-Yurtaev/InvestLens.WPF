@@ -3,7 +3,7 @@ using InvestLens.Model.Enums;
 using InvestLens.Model.Portfolio;
 using Microsoft.EntityFrameworkCore;
 
-namespace InvestLens.DataAccess;
+namespace InvestLens.DataAccess.Repositories;
 
 public class PortfolioRepository(InvestLensDataContext db) : IPortfolioRepository
 {
@@ -24,6 +24,12 @@ public class PortfolioRepository(InvestLensDataContext db) : IPortfolioRepositor
         return count == 0 ? null : portfolio;
     }
 
+    public async Task<Portfolio?> GetPortfolioById(int id)
+    {
+        var portfolio = await db.Portfolios.FirstOrDefaultAsync(p => p.Id == id);
+        return portfolio;
+    }
+
     public async Task<List<Portfolio>> GetAllPortfolios(int ownerId)
     {
         return await _db.Portfolios.Where(p => p.OwnerId == ownerId).ToListAsync();
@@ -34,5 +40,11 @@ public class PortfolioRepository(InvestLensDataContext db) : IPortfolioRepositor
         return await _db.Portfolios
             .Where(p => p.OwnerId == ownerId && p.PortfolioType == portfolioType)
             .ToListAsync();
+    }
+
+    public async Task<bool> CheckNameUniqueAsync(int ownerId, string name)
+    {
+        var isExists = await _db.Portfolios.AnyAsync(p => p.OwnerId == ownerId && p.Name == name);
+        return !isExists;
     }
 }

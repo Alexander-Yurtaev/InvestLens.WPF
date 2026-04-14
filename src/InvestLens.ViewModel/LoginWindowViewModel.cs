@@ -3,7 +3,7 @@ using InvestLens.ViewModel.Services;
 using System.ComponentModel.DataAnnotations;
 using System.Security;
 using System.Windows.Input;
-using InvestLens.DataAccess;
+using InvestLens.DataAccess.Services;
 
 namespace InvestLens.ViewModel;
 
@@ -68,7 +68,7 @@ public sealed class LoginWindowViewModel : ValidationViewModelBase, ILoginWindow
         set => SetProperty(ref _errorMessage, value);
     }
 
-    public bool ShowErrorMessage => !string.IsNullOrEmpty(ErrorMessage);
+    public bool HasErrorMessage => !string.IsNullOrEmpty(ErrorMessage);
 
     private async Task OnLogin()
     {
@@ -93,7 +93,7 @@ public sealed class LoginWindowViewModel : ValidationViewModelBase, ILoginWindow
         }
 
         ErrorMessage = result.ErrorMessage;
-        RaisePropertyChanged(nameof(ShowErrorMessage));
+        RaisePropertyChanged(nameof(HasErrorMessage));
     }
 
     private bool CanLogin()

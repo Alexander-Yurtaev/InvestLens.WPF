@@ -1,4 +1,5 @@
-﻿using InvestLens.Model.Enums;
+﻿using InvestLens.DataAccess.Repositories;
+using InvestLens.Model.Enums;
 using InvestLens.ViewModel.Services;
 using System.Runtime.CompilerServices;
 
@@ -9,10 +10,12 @@ public sealed class UpdatePortfolioWindowViewModel : CreateUpdatePortfolioWindow
     public UpdatePortfolioWindowViewModel(
         Model.Portfolio.UpdateModel model,
         IWindowManager windowManager,
-        IPortfoliosManager portfoliosManager) : base(model, windowManager, portfoliosManager)
+        IAuthManager authManager,
+        IPortfoliosManager portfoliosManager,
+        IPortfolioRepository repository) : base(model, windowManager, authManager, portfoliosManager, repository)
     {
-        Name = $"Редактирование: {Model.Name}";
-        ActionTitle = $"Редактирование портфеля:  {Model.Name}";
+        Header = "Редактирование";
+        ActionTitle = "Сохранить";
         InvalidateCommands();
     }
 
@@ -22,7 +25,7 @@ public sealed class UpdatePortfolioWindowViewModel : CreateUpdatePortfolioWindow
 
     #region Overrides of CreateUpdatePortfolioWindowViewModel
 
-    protected override void ExecuteAction()
+    protected override async Task ExecuteAction()
     {
         // Save changes
         // ...

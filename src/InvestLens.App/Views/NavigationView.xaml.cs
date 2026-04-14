@@ -1,4 +1,5 @@
-﻿using InvestLens.ViewModel.NavigationTree;
+﻿using InvestLens.ViewModel;
+using InvestLens.ViewModel.NavigationTree;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
@@ -12,7 +13,16 @@ namespace InvestLens.App.Views
     {
         public NavigationView()
         {
+            this.Loaded += OnLoaded;
             InitializeComponent();
+        }
+
+        private async void OnLoaded(object sender, RoutedEventArgs e)
+        {
+            if (this.DataContext is NavigationViewModel viewModel)
+            {
+                await viewModel.LoadAsync();
+            }
         }
 
         private void ToggleButton_OnChecked(object sender, RoutedEventArgs e)

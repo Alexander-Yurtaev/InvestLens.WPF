@@ -6,7 +6,7 @@ namespace InvestLens.ViewModel.Services;
 public interface IPortfoliosManager
 {
     List<Card> Cards { get; }
-    List<INavigationTreeItem> GetPortfoliosMenuItems();
-    PortfolioDetail GetPortfolio(int id);
+    Task<List<INavigationTreeItem>> GetPortfoliosMenuItems(int userId);
+    Task<PortfolioDetail?> GetPortfolio(int id);
     List<Model.Portfolio.LookupModel> GetLookupModels();
 }

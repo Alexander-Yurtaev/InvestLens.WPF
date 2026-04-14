@@ -1,6 +1,6 @@
 ﻿using InvestLens.Model.Entities;
 
-namespace InvestLens.DataAccess;
+namespace InvestLens.DataAccess.Repositories;
 
 public interface IUserRepository
 {

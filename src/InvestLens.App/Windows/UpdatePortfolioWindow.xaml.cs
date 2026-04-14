@@ -10,8 +10,8 @@ namespace InvestLens.App.Windows
     {
         public UpdatePortfolioWindow(IUpdatePortfolioWindowViewModel viewModel)
         {
-            InitializeComponent();
             DataContext = viewModel;
+            InitializeComponent();
         }
     }
 }

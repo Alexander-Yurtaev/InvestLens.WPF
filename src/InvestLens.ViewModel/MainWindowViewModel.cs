@@ -32,13 +32,13 @@ public class MainWindowViewModel : BindableBase, IMainWindowViewModel
         private set => SetProperty(ref _contentVm, value);
     }
 
-    private void OnSelectMenuNode(BaseNavigationTreeModel model)
+    private async void OnSelectMenuNode(BaseNavigationTreeModel model)
     {
-        ContentVm = GetContentVm(model);
+        ContentVm = await GetContentVm(model);
     }
 
-    private INotifyPropertyChanged GetContentVm(BaseNavigationTreeModel model)
+    private async Task<INotifyPropertyChanged> GetContentVm(BaseNavigationTreeModel model)
     {
-        return _viewModelFactory.CreateViewModel(model);
+        return await _viewModelFactory.CreateViewModel(model);
     }
 }

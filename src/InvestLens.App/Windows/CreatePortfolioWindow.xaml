@@ -71,7 +71,11 @@
                             </TextBlock>
                         </Label>
                         <TextBox x:Name="PortfolioName"
-                                 Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"/>
+                                 Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}">
+                            <b:Interaction.Behaviors>
+                                <behaviors:FocusBehavior/>
+                            </b:Interaction.Behaviors>
+                        </TextBox>
                     </StackPanel>
                     <StackPanel Grid.Row="1" 
                                 Orientation="Vertical"

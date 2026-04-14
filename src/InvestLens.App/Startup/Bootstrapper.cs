@@ -2,6 +2,8 @@
 using InvestLens.App.Services;
 using InvestLens.App.Windows;
 using InvestLens.DataAccess;
+using InvestLens.DataAccess.Repositories;
+using InvestLens.DataAccess.Services;
 using InvestLens.Model;
 using InvestLens.ViewModel;
 using InvestLens.ViewModel.Pages;
@@ -52,7 +54,7 @@ namespace InvestLens.App.Startup
 
             builder.Register(context => new Model.Portfolio.CreateModel(context.Resolve<IAuthManager>().CurrentUser!.Id))
                 .As<Model.Portfolio.CreateModel>()
-                .InstancePerLifetimeScope();
+                .InstancePerDependency();
             builder.RegisterType<Model.Portfolio.UpdateModel>().AsSelf();
 
             builder.RegisterType<CreatePortfolioWindow>().AsSelf();

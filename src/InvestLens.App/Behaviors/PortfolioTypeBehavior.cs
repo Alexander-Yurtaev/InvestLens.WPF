@@ -1,5 +1,4 @@
 ﻿using System.Windows;
-using InvestLens.ViewModel;
 using Microsoft.Xaml.Behaviors;
 
 namespace InvestLens.App.Behaviors;
@@ -7,7 +6,8 @@ namespace InvestLens.App.Behaviors;
 public class PortfolioTypeBehavior : Behavior<Window>
 {
     public static readonly DependencyProperty IsPortfolioComplexTypeProperty = DependencyProperty.Register(
-        nameof(IsPortfolioComplexType), typeof(bool), typeof(PortfolioTypeBehavior), new PropertyMetadata(false, PropertyChangedCallback));
+        nameof(IsPortfolioComplexType), typeof(bool), typeof(PortfolioTypeBehavior),
+        new PropertyMetadata(false, PropertyChangedCallback));
 
     public bool IsPortfolioComplexType
     {
@@ -24,12 +24,7 @@ public class PortfolioTypeBehavior : Behavior<Window>
         base.OnAttached();
 
         WindowHeight = AssociatedObject.Height;
-        var isPortfolioComplexType = AssociatedObject.DataContext switch
-        {
-            CreatePortfolioWindowViewModel createViewModel => createViewModel.IsPortfolioComplexType,
-            UpdatePortfolioWindowViewModel editViewModel => editViewModel.IsPortfolioComplexType,
-            _ => false
-        };
+        var isPortfolioComplexType = IsPortfolioComplexType;
         AssociatedObject.Height = isPortfolioComplexType ? this.WindowHeight + 240 : this.WindowHeight;
     }
 
@@ -38,11 +33,10 @@ public class PortfolioTypeBehavior : Behavior<Window>
     private static void PropertyChangedCallback(DependencyObject d, DependencyPropertyChangedEventArgs e)
     {
         var behavior = d as PortfolioTypeBehavior;
+        if (behavior is null) return;
         if (behavior?.AssociatedObject is not Window window) return;
-        
-        if (window.DataContext is ISupportPortfolioType viewModel)
-        {
-            window.Height = viewModel.IsPortfolioComplexType ? behavior.WindowHeight + 240 : behavior.WindowHeight;
-        }
+
+        var isPortfolioComplexType = behavior.IsPortfolioComplexType;
+        window.Height = isPortfolioComplexType ? behavior.WindowHeight + 240 : behavior.WindowHeight;
     }
 }

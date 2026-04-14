@@ -1,6 +1,9 @@
-﻿namespace InvestLens.Model.NavigationTree;
+﻿using InvestLens.Model.Enums;
 
-public class PortfolioNavigationTreeModel(int id) : BaseNavigationTreeModel
+namespace InvestLens.Model.NavigationTree;
+
+public class PortfolioNavigationTreeModel(int id, PortfolioType portfolioType) : BaseNavigationTreeModel
 {
     public int Id { get; } = id;
+    public PortfolioType PortfolioType { get; set; } = portfolioType;
 }

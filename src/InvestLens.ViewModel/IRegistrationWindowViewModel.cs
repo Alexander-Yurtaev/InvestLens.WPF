@@ -12,7 +12,7 @@ public interface IRegistrationWindowViewModel : IConfirmPasswordSupport
     ICommand RegisterCommand { get; }
     ICommand LoginCommand { get; }
     string ErrorMessage { get; set; }
-    bool ShowErrorMessage { get; }
+    bool HasErrorMessage { get; }
     bool HasErrors { get; }
     event PropertyChangedEventHandler? PropertyChanged;
     IEnumerable GetErrors(string? propertyName);

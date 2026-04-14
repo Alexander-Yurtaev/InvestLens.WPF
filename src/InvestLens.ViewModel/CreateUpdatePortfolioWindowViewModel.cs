@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Windows.Input;
+using InvestLens.DataAccess.Repositories;
 
 namespace InvestLens.ViewModel;
 
@@ -10,18 +11,24 @@ public abstract class CreateUpdatePortfolioWindowViewModel : ValidationViewModel
 {
     protected readonly Model.Portfolio.BaseModel Model;
     protected readonly IWindowManager WindowManager;
+    private readonly IAuthManager _authManager;
+    private readonly IPortfolioRepository _repository;
     private string _header = string.Empty;
     private string _actionTitle = string.Empty;
 
     protected CreateUpdatePortfolioWindowViewModel(
         Model.Portfolio.BaseModel model, 
         IWindowManager windowManager,
-        IPortfoliosManager portfoliosManager)
+        IAuthManager authManager,
+        IPortfoliosManager portfoliosManager,
+        IPortfolioRepository repository)
     {
         Model = model;
         WindowManager = windowManager;
+        _authManager = authManager;
+        _repository = repository;
         CloseCommand = new DelegateCommand(OnClose);
-        ActionCommand = new DelegateCommand(OnAction, CanAction);
+        ActionCommand = new AsyncDelegateCommand(OnAction, CanAction);
         LookupModels =
             new ObservableCollection<LookupViewModel>(portfoliosManager.GetLookupModels()
                 .Select(m =>
@@ -51,8 +58,10 @@ public abstract class CreateUpdatePortfolioWindowViewModel : ValidationViewModel
         set
         {
             if (string.Equals(Model.Name, value, StringComparison.InvariantCulture)) return;
+
             Model.Name = value;
             ValidateProperty(value);
+            ValidateNameAsync();
             RaisePropertyChanged();
         }
     }
@@ -62,12 +71,11 @@ public abstract class CreateUpdatePortfolioWindowViewModel : ValidationViewModel
         get => Model.Description;
         set
         {
-            if (!string.Equals(Model.Description, value, StringComparison.InvariantCulture))
-            {
-                Model.Description = value;
-                ValidateProperty(value);
-                RaisePropertyChanged();
-            }
+            if (string.Equals(Model.Description, value, StringComparison.InvariantCulture)) return;
+
+            Model.Description = value;
+            ValidateProperty(value);
+            RaisePropertyChanged();
         }
     }
 
@@ -76,13 +84,17 @@ public abstract class CreateUpdatePortfolioWindowViewModel : ValidationViewModel
     public ICommand CloseCommand { get; set; }
     public ICommand ActionCommand { get; set; }
 
-    private void OnAction()
+    private async Task OnAction()
     {
         if (!Validate()) return;
-        ExecuteAction();
+        
+        await ValidateNameAsync();
+        if (HasErrors) return;
+
+        await ExecuteAction();
     }
 
-    protected abstract void ExecuteAction();
+    protected abstract Task ExecuteAction();
     
     protected virtual bool CanAction()
     {
@@ -96,11 +108,24 @@ public abstract class CreateUpdatePortfolioWindowViewModel : ValidationViewModel
         ValidateProperty(LookupModels, nameof(LookupModels));
     }
 
+    protected async Task ValidateNameAsync()
+    {
+        if (_authManager.CurrentUser is null) throw new SystemException("Вы не авторизованы!");
+
+        var ownerId = _authManager.CurrentUser!.Id;
+
+        var isUnique = await _repository.CheckNameUniqueAsync(ownerId, Name);
+        if (!isUnique)
+        {
+            AddError("Портфель с таким именем уже создан", nameof(Name));
+        }
+    }
+
     #region Overrides of ValidationViewModelBase
 
     protected override void InvalidateCommands()
     {
-        ((DelegateCommand)ActionCommand).RaiseCanExecuteChanged();
+        ((AsyncDelegateCommand)ActionCommand).RaiseCanExecuteChanged();
     }
 
     #endregion Overrides of ValidationViewModelBase

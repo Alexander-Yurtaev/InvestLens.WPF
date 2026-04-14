@@ -107,7 +107,7 @@
                                 Style="{StaticResource SecondaryButtonStyle}"
                                 Command="{Binding CloseCommand}"/>
                         <TextBlock Text="{Binding ErrorMessage}"
-                                   Visibility="{Binding ShowErrorMessage, Converter={StaticResource BooleanToVisibilityConv}}"
+                                   Visibility="{Binding HasErrorMessage, Converter={StaticResource BooleanToVisibilityConv}}"
                                    Style="{StaticResource ErrorMessageStyle}"/>
                     </StackPanel>
                     <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center">

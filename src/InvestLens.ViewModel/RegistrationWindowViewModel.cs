@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Security;
 using System.Windows.Input;
 using InvestLens.Common.Helpers;
-using InvestLens.DataAccess;
+using InvestLens.DataAccess.Services;
 
 namespace InvestLens.ViewModel;
 
@@ -119,11 +119,11 @@ public sealed class RegistrationWindowViewModel : ValidationViewModelBase, IRegi
         set => SetProperty(ref _errorMessage, value);
     }
 
-    public bool ShowErrorMessage => !string.IsNullOrEmpty(ErrorMessage);
+    public bool HasErrorMessage => !string.IsNullOrEmpty(ErrorMessage);
 
     private async Task OnRegister()
     {
-        if (!Validate()) return;
+        if (!Validate() || !string.IsNullOrEmpty(PasswordError)) return;
 
         try
         {
@@ -141,7 +141,7 @@ public sealed class RegistrationWindowViewModel : ValidationViewModelBase, IRegi
         {
             ErrorMessage = e.Message;
         }
-        RaisePropertyChanged(nameof(ShowErrorMessage));
+        RaisePropertyChanged(nameof(HasErrorMessage));
     }
 
     private bool CanRegister()
