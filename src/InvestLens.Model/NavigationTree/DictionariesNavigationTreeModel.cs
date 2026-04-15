@@ -2,5 +2,8 @@
 
 public class DictionariesNavigationTreeModel : BaseNavigationTreeModel
 {
-    public string Header => "Справочники";
+    public DictionariesNavigationTreeModel() : base("📚", "Справочники")
+    {
+        Description = "Источники рыночных данных и справочной информации";
+    }
 }

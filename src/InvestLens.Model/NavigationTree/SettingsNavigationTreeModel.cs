@@ -2,5 +2,8 @@
 
 public class SettingsNavigationTreeModel : BaseNavigationTreeModel
 {
-    public string Header => "Настройки";
+    public SettingsNavigationTreeModel() : base("⚙️", "Настройки")
+    {
+        Description = "Настройка приложения и управление плагинами";
+    }
 }

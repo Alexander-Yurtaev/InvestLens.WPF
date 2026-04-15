@@ -2,5 +2,8 @@
 
 public class DictionariesDohodNavigationTreeModel : BaseNavigationTreeModel
 {
-    public string Header => "Dohod.ru";
+    public DictionariesDohodNavigationTreeModel() : base("🌐", "Dohod.ru")
+    {
+        Description = "Агрегатор данных по облигациям";
+    }
 }

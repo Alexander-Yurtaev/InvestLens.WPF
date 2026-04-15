@@ -2,5 +2,8 @@
 
 public class DictionariesMoexSecuritiesNavigationTreeModel : BaseNavigationTreeModel
 {
-    public string Header => "Ценные бумаги";
+    public DictionariesMoexSecuritiesNavigationTreeModel() : base("📈", "Ценные бумаги")
+    {
+        Description = "Акции, ETF и другие инструменты";
+    }
 }

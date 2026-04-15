@@ -2,5 +2,8 @@
 
 public class PortfoliosNavigationTreeModel : BaseNavigationTreeModel
 {
-    public string Header => "Портфели";
+    public PortfoliosNavigationTreeModel() : base("📁", "Портфели")
+    {
+        Description = "Управление инвестиционными портфелями";
+    }
 }

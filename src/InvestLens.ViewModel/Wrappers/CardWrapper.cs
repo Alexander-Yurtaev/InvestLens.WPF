@@ -6,6 +6,13 @@ public class CardWrapper : BindableBase
 {
     private readonly Card _model;
 
+#if DEBUG
+    public CardWrapper() : this(new Card("Design"))
+    {
+
+    }
+#endif
+
     public CardWrapper(Card model)
     {
         _model = model;

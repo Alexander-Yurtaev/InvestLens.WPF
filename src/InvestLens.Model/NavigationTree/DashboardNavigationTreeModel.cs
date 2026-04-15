@@ -2,5 +2,8 @@
 
 public class DashboardNavigationTreeModel : BaseNavigationTreeModel
 {
-    public string Header => "Главная";
+    public DashboardNavigationTreeModel() : base("🏠", "Главная")
+    {
+        Description = "Обзор инвестиционной активности";
+    }
 }

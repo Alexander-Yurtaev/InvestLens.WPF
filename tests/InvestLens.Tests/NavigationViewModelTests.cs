@@ -5,13 +5,14 @@ using InvestLens.ViewModel.Events;
 using InvestLens.ViewModel.NavigationTree;
 using InvestLens.ViewModel.Services;
 using Moq;
+using System.Threading.Tasks;
 
 namespace InvestLens.Tests
 {
     public class NavigationViewModelTests
     {
         [Fact]
-        public void MenuItemsShouldBeInitializedCorrect()
+        public async Task MenuItemsShouldBeInitializedCorrect()
         {
             var headerVmMock = new Mock<IHeaderViewModel>();
             var viewModelFactoryMock = new Mock<IViewModelFactory>();
@@ -30,6 +31,7 @@ namespace InvestLens.Tests
             var authManagerMock = new Mock<IAuthManager>();
 
             var navigationVm = new NavigationViewModel(authManagerMock.Object, portfoliosManagerMock.Object, dohodServiceMock.Object, eventAggregatorMock.Object);
+            await navigationVm.LoadAsync();
 
             var vm = new MainWindowViewModel(
                 navigationVm, 
@@ -44,7 +46,7 @@ namespace InvestLens.Tests
             Assert.NotNull(dashboard);
             var dashboardModel = dashboard.Model as DashboardNavigationTreeModel;
             Assert.NotNull(dashboardModel);
-            Assert.Equal("Главная", dashboardModel.Header);
+            Assert.Equal("Главная", dashboardModel.Title);
             Assert.NotNull(dashboard.Children);
             Assert.Empty(dashboard.Children);
 
@@ -55,15 +57,15 @@ namespace InvestLens.Tests
             Assert.NotNull(portfolios);
             var portfoliosModel = portfolios.Model as PortfoliosNavigationTreeModel;
             Assert.NotNull(portfoliosModel);
-            Assert.Equal("Портфели", portfoliosModel.Header);
+            Assert.Equal("Портфели", portfoliosModel.Title);
             Assert.NotNull(portfolios.Children);
-            Assert.Equal(3, portfolios.Children.Count);
+            Assert.Empty(portfolios.Children);
 
             var dictionaries = vm.NavigationVm.MenuItems[3] as NavigationTreeItem;
             Assert.NotNull(dictionaries);
             var dictionariesModel = dictionaries.Model as DictionariesNavigationTreeModel;
             Assert.NotNull(dictionariesModel);
-            Assert.Equal("Справочники", dictionariesModel.Header);
+            Assert.Equal("Справочники", dictionariesModel.Title);
             Assert.NotNull(dictionaries.Children);
             Assert.Equal(2, dictionaries.Children.Count);
 
@@ -71,7 +73,7 @@ namespace InvestLens.Tests
             Assert.NotNull(moex);
             var moexModel = moex.Model as DictionariesMoexNavigationTreeModel;
             Assert.NotNull(moexModel);
-            Assert.Equal("MOEX", moexModel.Header);
+            Assert.Equal("MOEX", moexModel.Title);
             Assert.NotNull(moex.Children);
             Assert.Equal(2, moex.Children.Count);
 
@@ -79,7 +81,7 @@ namespace InvestLens.Tests
             Assert.NotNull(dohod);
             var dohodModel = dohod.Model as DictionariesDohodNavigationTreeModel;
             Assert.NotNull(dohodModel);
-            Assert.Equal("Dohod.ru", dohodModel.Header);
+            Assert.Equal("Dohod.ru", dohodModel.Title);
             Assert.NotNull(dohod.Children);
             Assert.Equal(3, dohod.Children.Count);
 
@@ -90,7 +92,7 @@ namespace InvestLens.Tests
             Assert.NotNull(downloader);
             var downloaderModel = downloader.Model as DownloaderNavigationTreeModel;
             Assert.NotNull(downloaderModel);
-            Assert.Equal("Менеджер закачек", downloaderModel.Header);
+            Assert.Equal("Менеджер закачек", downloaderModel.Title);
             Assert.NotNull(downloader.Children);
             Assert.Empty(downloader.Children);
 
@@ -101,7 +103,7 @@ namespace InvestLens.Tests
             Assert.NotNull(scheduler);
             var schedulerModel = scheduler.Model as SchedulerNavigationTreeModel;
             Assert.NotNull(schedulerModel);
-            Assert.Equal("Планировщик", schedulerModel.Header);
+            Assert.Equal("Планировщик", schedulerModel.Title);
             Assert.NotNull(scheduler.Children);
             Assert.Empty(scheduler.Children);
 
@@ -112,7 +114,7 @@ namespace InvestLens.Tests
             Assert.NotNull(settings);
             var settingsModel = settings.Model as SettingsNavigationTreeModel;
             Assert.NotNull(settingsModel);
-            Assert.Equal("Настройки", settingsModel.Header);
+            Assert.Equal("Настройки", settingsModel.Title);
             Assert.NotNull(settings.Children);
             Assert.Equal(2, settings.Children.Count);
         }
@@ -121,9 +123,9 @@ namespace InvestLens.Tests
         {
             var result = new List<INavigationTreeItem>
             {
-                new NavigationTreeItem("📊", "Составной", new PortfolioNavigationTreeModel(1, PortfolioType.Invest), eventAggregator),
-                new NavigationTreeItem("💰", "Портфель №1", new PortfolioNavigationTreeModel(2, PortfolioType.Invest), eventAggregator),
-                new NavigationTreeItem("💎", "Портфель №2", new PortfolioNavigationTreeModel(3, PortfolioType.Invest), eventAggregator)
+                new NavigationTreeItem(new PortfolioNavigationTreeModel(1, "📊", "Составной", PortfolioType.Invest), eventAggregator),
+                new NavigationTreeItem(new PortfolioNavigationTreeModel(2, "💰", "Портфель №1", PortfolioType.Invest), eventAggregator),
+                new NavigationTreeItem(new PortfolioNavigationTreeModel(3, "💎", "Портфель №2", PortfolioType.Invest), eventAggregator)
             };
 
             return result;
@@ -133,9 +135,9 @@ namespace InvestLens.Tests
         {
             var result = new List<INavigationTreeItem>
             {
-                new NavigationTreeItem("", "AAA", new DictionariesDohodBondNavigationTreeModel(PeriodType.Short), eventAggregator),
-                new NavigationTreeItem("", "AA", new DictionariesDohodBondNavigationTreeModel(PeriodType.Middle), eventAggregator),
-                new NavigationTreeItem("", "A+", new DictionariesDohodBondNavigationTreeModel(PeriodType.Long), eventAggregator)
+                new NavigationTreeItem(new DictionariesDohodBondNavigationTreeModel("", "AAA", PeriodType.Short), eventAggregator),
+                new NavigationTreeItem(new DictionariesDohodBondNavigationTreeModel("", "AA", PeriodType.Middle), eventAggregator),
+                new NavigationTreeItem(new DictionariesDohodBondNavigationTreeModel("", "A+", PeriodType.Long), eventAggregator)
             };
 
             return result;

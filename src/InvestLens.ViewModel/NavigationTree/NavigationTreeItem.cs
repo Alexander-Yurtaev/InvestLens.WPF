@@ -11,15 +11,13 @@ public class NavigationTreeItem : BaseNavigationTreeItem
     private string _header = string.Empty;
 
     public NavigationTreeItem(
-        string icon, 
-        string header, 
         BaseNavigationTreeModel model, 
         IEventAggregator eventAggregator,
         List<INavigationTreeItem>? children = null)
     {
         _eventAggregator = eventAggregator;
-        Icon = icon;
-        Header = header;
+        Icon = model.Icon;
+        Header = model.Title;
         Model = model;
 
         if (children is not null)

@@ -2,5 +2,8 @@
 
 public class SettingsCommonNavigationTreeModel : BaseNavigationTreeModel
 {
-    public string Header => "Общие";
+    public SettingsCommonNavigationTreeModel() : base("🔧", "Общие")
+    {
+        Description = "Настройки интерфейса и форматов";
+    }
 }

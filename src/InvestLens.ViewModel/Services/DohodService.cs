@@ -65,9 +65,9 @@ public class DohodService : IDohodService
     {
         var result = new List<INavigationTreeItem>
         {
-            new NavigationTreeItem("", "AAA", new DictionariesDohodBondNavigationTreeModel(PeriodType.Short){Title = "AAA", Description = "Самые надежные облигации"}, _eventAggregator),
-            new NavigationTreeItem("", "AA", new DictionariesDohodBondNavigationTreeModel(PeriodType.Middle){Title = "AA", Description = "Самые надежные облигации"}, _eventAggregator),
-            new NavigationTreeItem("", "A+", new DictionariesDohodBondNavigationTreeModel(PeriodType.Long){Title = "A+", Description = "Самые надежные облигации"}, _eventAggregator)
+            new NavigationTreeItem(new DictionariesDohodBondNavigationTreeModel("", "AAA", PeriodType.Short){Description = "Самые надежные облигации"}, _eventAggregator),
+            new NavigationTreeItem(new DictionariesDohodBondNavigationTreeModel("", "AA", PeriodType.Middle){Description = "Самые надежные облигации"}, _eventAggregator),
+            new NavigationTreeItem(new DictionariesDohodBondNavigationTreeModel("", "A+", PeriodType.Long){Description = "Самые надежные облигации"}, _eventAggregator)
         };
 
         return result;

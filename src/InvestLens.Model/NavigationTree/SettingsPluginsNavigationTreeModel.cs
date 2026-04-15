@@ -2,5 +2,8 @@
 
 public class SettingsPluginsNavigationTreeModel : BaseNavigationTreeModel
 {
-    public string Header => "Плагины";
+    public SettingsPluginsNavigationTreeModel() : base("🧩", "Плагины")
+    {
+        Description = "Управление расширениями";
+    }
 }

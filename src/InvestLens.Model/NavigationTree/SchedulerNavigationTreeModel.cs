@@ -2,5 +2,8 @@
 
 public class SchedulerNavigationTreeModel : BaseNavigationTreeModel
 {
-    public string Header => "Планировщик";
+    public SchedulerNavigationTreeModel() : base("📅", "Планировщик")
+    {
+        Description = "Управление задачами и напоминаниями";
+    }
 }

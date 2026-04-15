@@ -80,8 +80,8 @@ public class PortfoliosManager : IPortfoliosManager
         var portfolios = await _portfolioRepository.GetAllPortfolios(ownerId);
 
         var result = portfolios.Select(p =>
-            new NavigationTreeItem("", p.Name,
-                new PortfolioNavigationTreeModel(p.Id, p.PortfolioType) { Title = p.Name, Description = p.Description ?? "" },
+            new NavigationTreeItem(
+                new PortfolioNavigationTreeModel(p.Id, "", p.Name, p.PortfolioType) { Title = p.Name, Description = p.Description ?? "" },
                 _eventAggregator)).Cast<INavigationTreeItem>().ToList();
 
         return result;

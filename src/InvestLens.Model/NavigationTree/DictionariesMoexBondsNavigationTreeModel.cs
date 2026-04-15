@@ -2,5 +2,8 @@
 
 public class DictionariesMoexBondsNavigationTreeModel : BaseNavigationTreeModel
 {
-    public string Header => "Облигации";
+    public DictionariesMoexBondsNavigationTreeModel() : base("📜", "Облигации")
+    {
+        Description = "Облигации на Московской бирже";
+    }
 }

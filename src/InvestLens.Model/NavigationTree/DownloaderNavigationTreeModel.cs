@@ -2,5 +2,8 @@
 
 public class DownloaderNavigationTreeModel : BaseNavigationTreeModel
 {
-    public string Header => "Менеджер закачек";
+    public DownloaderNavigationTreeModel() : base("⬇️", "Менеджер закачек")
+    {
+        Description = "Управление загрузкой данных";
+    }
 }

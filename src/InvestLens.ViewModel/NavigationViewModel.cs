@@ -47,22 +47,20 @@ public class NavigationViewModel : BindableBase, INavigationViewModel
     
     private async Task<List<INavigationTreeItem>> GetMenuItems()
     {
-        _portfoliosTreeItem = new NavigationTreeItem("📁", "Портфели",
-            new PortfoliosNavigationTreeModel
-                { Title = "Портфели", Description = "Управление инвестиционными портфелями" }, _eventAggregator);
+        _portfoliosTreeItem = new NavigationTreeItem(new PortfoliosNavigationTreeModel(), _eventAggregator);
 
         var result = new List<INavigationTreeItem>
         {
-            new NavigationTreeItem("🏠", "Главная", new DashboardNavigationTreeModel{Title = "Главная", Description = "Обзор инвестиционной активности"}, _eventAggregator),
+            new NavigationTreeItem(new DashboardNavigationTreeModel(), _eventAggregator),
             new NavigationTreeDivider(),
             _portfoliosTreeItem,
-            new NavigationTreeItem("📚", "Справочники", new DictionariesNavigationTreeModel{Title = "Справочники", Description = "Источники рыночных данных и справочной информации"}, _eventAggregator, GetDictionariesMenuItems()),
+            new NavigationTreeItem(new DictionariesNavigationTreeModel(), _eventAggregator, GetDictionariesMenuItems()),
             new NavigationTreeDivider(),
-            new NavigationTreeItem("⬇️", "Менеджер закачек", new DownloaderNavigationTreeModel{Title = "Менеджер закачек", Description = "Управление загрузкой данных"}, _eventAggregator),
+            new NavigationTreeItem(new DownloaderNavigationTreeModel(), _eventAggregator),
             new NavigationTreeDivider(),
-            new NavigationTreeItem("📅", "Планировщик", new SchedulerNavigationTreeModel{Title = "Планировщик", Description = "Управление задачами и напоминаниями"}, _eventAggregator),
+            new NavigationTreeItem(new SchedulerNavigationTreeModel(), _eventAggregator),
             new NavigationTreeDivider(),
-            new NavigationTreeItem("⚙️", "Настройки", new SettingsNavigationTreeModel{Title = "Настройки", Description = "Настройка приложения и управление плагинами"}, _eventAggregator, GetSettingsMenuItems())
+            new NavigationTreeItem(new SettingsNavigationTreeModel(), _eventAggregator, GetSettingsMenuItems())
         };
 
         return await Task.FromResult(result);
@@ -72,8 +70,8 @@ public class NavigationViewModel : BindableBase, INavigationViewModel
     {
         var result = new List<INavigationTreeItem>
         {
-            new NavigationTreeItem("🏛️", "MOEX", new DictionariesMoexNavigationTreeModel{Title = "Московская Биржа (MOEX)", Description = "Основные рыночные инструменты и индексы"}, _eventAggregator, GetMoexMenuItems()),
-            new NavigationTreeItem("🌐", "Dohod.ru", new DictionariesDohodNavigationTreeModel{Title = "Dohod.ru", Description = "Агрегатор данных по облигациям"}, _eventAggregator, _dohodService.GetDohodBondsMenuItems())
+            new NavigationTreeItem(new DictionariesMoexNavigationTreeModel(), _eventAggregator, GetMoexMenuItems()),
+            new NavigationTreeItem(new DictionariesDohodNavigationTreeModel(), _eventAggregator, _dohodService.GetDohodBondsMenuItems())
         };
 
         return result;
@@ -83,8 +81,8 @@ public class NavigationViewModel : BindableBase, INavigationViewModel
     {
         var result = new List<INavigationTreeItem>
         {
-            new NavigationTreeItem("📈", "Ценные бумаги", new DictionariesMoexSecuritiesNavigationTreeModel{Title = "Ценные бумаги (MOEX)", Description = "Акции, ETF и другие инструменты"}, _eventAggregator),
-            new NavigationTreeItem("📜", "Облигации", new DictionariesMoexBondsNavigationTreeModel{Title = "Облигации (MOEX)", Description = "Облигации на Московской бирже"}, _eventAggregator)
+            new NavigationTreeItem(new DictionariesMoexSecuritiesNavigationTreeModel(), _eventAggregator),
+            new NavigationTreeItem(new DictionariesMoexBondsNavigationTreeModel(), _eventAggregator)
         };
 
         return result;
@@ -94,8 +92,8 @@ public class NavigationViewModel : BindableBase, INavigationViewModel
     {
         var result = new List<INavigationTreeItem>
         {
-            new NavigationTreeItem("🔧", "Общие", new SettingsNavigationTreeModel{Title = "Общие настройки", Description = "Настройки интерфейса и форматов"}, _eventAggregator),
-            new NavigationTreeItem("🧩", "Плагины", new SettingsPluginsNavigationTreeModel{Title = "Плагины", Description = "Управление расширениями"}, _eventAggregator)
+            new NavigationTreeItem(new SettingsNavigationTreeModel(), _eventAggregator),
+            new NavigationTreeItem(new SettingsPluginsNavigationTreeModel(), _eventAggregator)
         };
 
         return result;
