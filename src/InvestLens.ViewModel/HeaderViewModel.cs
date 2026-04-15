@@ -1,4 +1,5 @@
 ﻿using InvestLens.Model;
+using InvestLens.Model.Entities;
 using InvestLens.Model.NavigationTree;
 using InvestLens.ViewModel.Events;
 using InvestLens.ViewModel.Services;
@@ -9,7 +10,7 @@ public class HeaderViewModel : BindableBase, IHeaderViewModel
 {
     public INotificationsManager NotificationsManager { get; }
     private BaseNavigationTreeModel? _model;
-    private UserInfo _userInfo = new UserInfo();
+    private UserInfo? _userInfo;
 
     public HeaderViewModel(INotificationsManager notificationsManager, IEventAggregator eventAggregator)
     {
@@ -22,9 +23,9 @@ public class HeaderViewModel : BindableBase, IHeaderViewModel
 
     public string Description => _model?.Description ?? string.Empty;
 
-    public string UserAvatar => _userInfo.UserAvatar;
-    public string UserName => _userInfo.UserName;
-    public string UserFullNameInShortFormat => _userInfo.UserFullNameInShortFormat;
+    public string UserAvatar => _userInfo?.UserAvatar ?? "";
+    public string UserName => _userInfo?.UserName ?? "";
+    public string UserFullNameInShortFormat => _userInfo?.UserFullNameInShortFormat ?? "";
 
     private void OnLogin(UserInfo userInfo)
     {
