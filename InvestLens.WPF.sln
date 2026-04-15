@@ -20,6 +20,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "architecture", "architecture", "{71A5A21E-DA2C-47BB-808C-83C658BD10DB}"
 	ProjectSection(SolutionItems) = preProject
 		architecture\LoginCodeMap.dgml = architecture\LoginCodeMap.dgml
+		architecture\PortfolioCodeMap.dgml = architecture\PortfolioCodeMap.dgml
 	EndProjectSection
 EndProject
 Global

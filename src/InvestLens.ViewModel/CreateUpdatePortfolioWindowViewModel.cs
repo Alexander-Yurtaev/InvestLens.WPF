@@ -56,8 +56,8 @@ public abstract class CreateUpdatePortfolioWindowViewModel : ValidationViewModel
 
             Model.Name = value;
             ValidateProperty(value);
-            ValidateNameAsync();
             RaisePropertyChanged();
+            var _ = ValidateNameAsync();
         }
     }
 

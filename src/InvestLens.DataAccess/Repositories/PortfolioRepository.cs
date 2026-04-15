@@ -26,7 +26,7 @@ public class PortfolioRepository(InvestLensDataContext db) : IPortfolioRepositor
 
     public async Task<Portfolio?> GetPortfolioById(int id)
     {
-        var portfolio = await db.Portfolios.FirstOrDefaultAsync(p => p.Id == id);
+        var portfolio = await _db.Portfolios.FirstOrDefaultAsync(p => p.Id == id);
         return portfolio;
     }
 

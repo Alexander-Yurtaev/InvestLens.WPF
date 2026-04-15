@@ -37,6 +37,7 @@ public sealed class UpdatePortfolioWindowViewModel : CreateUpdatePortfolioWindow
     {
         // Save changes
         // ...
+        await Task.Delay(0);
         WindowManager.CloseWindow<UpdatePortfolioWindowViewModel>();
     }
 

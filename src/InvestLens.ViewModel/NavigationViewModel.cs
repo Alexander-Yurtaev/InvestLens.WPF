@@ -13,7 +13,7 @@ public class NavigationViewModel : BindableBase, INavigationViewModel
     private readonly IPortfoliosManager _portfoliosManager;
     private readonly IDohodService _dohodService;
     private readonly IEventAggregator _eventAggregator;
-    private NavigationTreeItem _portfoliosTreeItem;
+    private NavigationTreeItem? _portfoliosTreeItem;
 
     public NavigationViewModel(
         IAuthManager authManager,
@@ -65,7 +65,7 @@ public class NavigationViewModel : BindableBase, INavigationViewModel
             new NavigationTreeItem("⚙️", "Настройки", new SettingsNavigationTreeModel{Title = "Настройки", Description = "Настройка приложения и управление плагинами"}, _eventAggregator, GetSettingsMenuItems())
         };
 
-        return result;
+        return await Task.FromResult(result);
     }
 
     private List<INavigationTreeItem> GetDictionariesMenuItems()
@@ -118,14 +118,14 @@ public class NavigationViewModel : BindableBase, INavigationViewModel
         foreach (NavigationTreeItem portfolio in portfolios.Cast<NavigationTreeItem>())
         {
             var portfolioId = ((PortfolioNavigationTreeModel)portfolio.Model).Id;
-            var existPortfolio = _portfoliosTreeItem
+            var existPortfolio = _portfoliosTreeItem?
                 .Children
                 .Cast<NavigationTreeItem>()
                 .FirstOrDefault(item => ((PortfolioNavigationTreeModel)item.Model).Id == portfolioId);
 
             if (existPortfolio is not null) continue;
 
-            _portfoliosTreeItem.Children.Add(portfolio);
+            _portfoliosTreeItem?.Children.Add(portfolio);
         }
     }
 }
