@@ -2,7 +2,7 @@
 
 namespace InvestLens.Model.Portfolio;
 
-public abstract class BaseModel(string title, PortfolioType portfolioType) : LookupModel(title)
+public abstract class BaseModel(int id, string title, PortfolioType portfolioType) : LookupModel(id, title)
 {
     protected PortfolioType _portfolioType = portfolioType;
     

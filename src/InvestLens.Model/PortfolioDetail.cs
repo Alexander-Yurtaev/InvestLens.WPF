@@ -4,8 +4,9 @@ namespace InvestLens.Model;
 
 public class PortfolioDetail
 {
-    public PortfolioDetail(string title, PortfolioType portfolioType)
+    public PortfolioDetail(int id, string title, PortfolioType portfolioType)
     {
+        Id = id;
         Title = title;
         PortfolioType = portfolioType;
         PortfolioStats = [];
@@ -13,6 +14,7 @@ public class PortfolioDetail
         Operations = [];
     }
 
+    public int Id { get; }
     public string Title { get; }
     public PortfolioType PortfolioType { get; set; }
     public List<Stat> PortfolioStats { get; }

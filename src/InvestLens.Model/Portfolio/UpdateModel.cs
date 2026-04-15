@@ -4,12 +4,12 @@ namespace InvestLens.Model.Portfolio;
 
 public class UpdateModel : BaseModel
 {
-    public UpdateModel() : base("Ошибка", PortfolioType.Invest)
+    public UpdateModel() : base(0, "Ошибка", PortfolioType.Invest)
     {
         
     }
 
-    public UpdateModel(string title, PortfolioType portfolioType) : base(title, portfolioType)
+    public UpdateModel(int id, string title, PortfolioType portfolioType) : base(id, title, portfolioType)
     {
         
     }

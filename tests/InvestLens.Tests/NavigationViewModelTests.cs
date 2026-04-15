@@ -17,15 +17,19 @@ namespace InvestLens.Tests
             var viewModelFactoryMock = new Mock<IViewModelFactory>();
 
             var eventAggregatorMock = new Mock<IEventAggregator>();
+            eventAggregatorMock.Setup(ea => ea.GetEvent<LoginEvent>()).Returns(new LoginEvent());
             eventAggregatorMock.Setup(ea => ea.GetEvent<SelectNavigationItemEvent>()).Returns(new SelectNavigationItemEvent());
+            eventAggregatorMock.Setup(ea => ea.GetEvent<PortfolioCreatedEvent>()).Returns(new PortfolioCreatedEvent());
 
-            var portfoliosManager = new Mock<IPortfoliosManager>();
-            portfoliosManager.Setup(pm => pm.GetPortfoliosMenuItems(It.IsAny<int>())).ReturnsAsync(GetPortfoliosMenuItems(eventAggregatorMock.Object));
+            var portfoliosManagerMock = new Mock<IPortfoliosManager>();
+            portfoliosManagerMock.Setup(pm => pm.GetPortfoliosMenuItems(It.IsAny<int>())).ReturnsAsync(GetPortfoliosMenuItems(eventAggregatorMock.Object));
 
-            var dohodService = new Mock<IDohodService>();
-            dohodService.Setup(pm => pm.GetDohodBondsMenuItems()).Returns(GetDohodBondsMenuItems(eventAggregatorMock.Object));
+            var dohodServiceMock = new Mock<IDohodService>();
+            dohodServiceMock.Setup(pm => pm.GetDohodBondsMenuItems()).Returns(GetDohodBondsMenuItems(eventAggregatorMock.Object));
 
-            var navigationVm = new NavigationViewModel(portfoliosManager.Object, dohodService.Object, eventAggregatorMock.Object);
+            var authManagerMock = new Mock<IAuthManager>();
+
+            var navigationVm = new NavigationViewModel(authManagerMock.Object, portfoliosManagerMock.Object, dohodServiceMock.Object, eventAggregatorMock.Object);
 
             var vm = new MainWindowViewModel(
                 navigationVm, 
@@ -117,9 +121,9 @@ namespace InvestLens.Tests
         {
             var result = new List<INavigationTreeItem>
             {
-                new NavigationTreeItem("📊", "Составной", new PortfolioNavigationTreeModel(1), eventAggregator),
-                new NavigationTreeItem("💰", "Портфель №1", new PortfolioNavigationTreeModel(2), eventAggregator),
-                new NavigationTreeItem("💎", "Портфель №2", new PortfolioNavigationTreeModel(3), eventAggregator)
+                new NavigationTreeItem("📊", "Составной", new PortfolioNavigationTreeModel(1, PortfolioType.Invest), eventAggregator),
+                new NavigationTreeItem("💰", "Портфель №1", new PortfolioNavigationTreeModel(2, PortfolioType.Invest), eventAggregator),
+                new NavigationTreeItem("💎", "Портфель №2", new PortfolioNavigationTreeModel(3, PortfolioType.Invest), eventAggregator)
             };
 
             return result;

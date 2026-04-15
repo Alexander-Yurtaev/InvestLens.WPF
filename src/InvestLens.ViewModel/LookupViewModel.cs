@@ -6,6 +6,8 @@ public class LookupViewModel(LookupModel model) : BindableBase
 {
     private bool _isChecked;
 
+    public int Id => model.Id;
+
     public string Name => model.Name;
 
     public string Description => model.Description;

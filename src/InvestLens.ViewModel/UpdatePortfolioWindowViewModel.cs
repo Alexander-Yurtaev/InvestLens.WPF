@@ -16,6 +16,14 @@ public sealed class UpdatePortfolioWindowViewModel : CreateUpdatePortfolioWindow
     {
         Header = "Редактирование";
         ActionTitle = "Сохранить";
+
+        foreach (var id in Model.Portfolios)
+        {
+            var lm = LookupModels.FirstOrDefault(lm => lm.Id == id);
+            if (lm is null) continue;
+            lm.IsChecked = true;
+        }
+
         InvalidateCommands();
     }
 

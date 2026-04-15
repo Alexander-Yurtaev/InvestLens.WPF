@@ -7,11 +7,12 @@ using InvestLens.DataAccess.Repositories;
 
 namespace InvestLens.ViewModel;
 
-public abstract class CreateUpdatePortfolioWindowViewModel : ValidationViewModelBase, ICreateEditPortfolioWindowViewModel, IDisposable
+public abstract class CreateUpdatePortfolioWindowViewModel : ValidationViewModelBase, ICreateEditPortfolioWindowViewModel, ILoadableViewModel, IDisposable
 {
     protected readonly Model.Portfolio.BaseModel Model;
     protected readonly IWindowManager WindowManager;
     private readonly IAuthManager _authManager;
+    private readonly IPortfoliosManager _portfoliosManager;
     private readonly IPortfolioRepository _repository;
     private string _header = string.Empty;
     private string _actionTitle = string.Empty;
@@ -26,17 +27,11 @@ public abstract class CreateUpdatePortfolioWindowViewModel : ValidationViewModel
         Model = model;
         WindowManager = windowManager;
         _authManager = authManager;
+        _portfoliosManager = portfoliosManager;
         _repository = repository;
         CloseCommand = new DelegateCommand(OnClose);
         ActionCommand = new AsyncDelegateCommand(OnAction, CanAction);
-        LookupModels =
-            new ObservableCollection<LookupViewModel>(portfoliosManager.GetLookupModels()
-                .Select(m =>
-                {
-                    var vm = new LookupViewModel(m);
-                    vm.PropertyChanged += ItemOnPropertyChanged;
-                    return vm;
-                }).ToList());
+        LookupModels = [];
     }
 
     public string Header
@@ -83,6 +78,26 @@ public abstract class CreateUpdatePortfolioWindowViewModel : ValidationViewModel
 
     public ICommand CloseCommand { get; set; }
     public ICommand ActionCommand { get; set; }
+
+    public async Task Load()
+    {
+        if (_authManager.CurrentUser is null) throw new SystemException("Не авторизован!");
+
+        var userId = _authManager.CurrentUser.Id;
+        var lookupModels = (await _portfoliosManager.GetLookupModels(userId, Model.Id > 0 ? Model.Id : null))
+            .Select(m =>
+            {
+                var vm = new LookupViewModel(m);
+                vm.PropertyChanged += ItemOnPropertyChanged;
+                return vm;
+            }).ToList();
+
+        LookupModels.Clear();
+        foreach (var lookupModel in lookupModels)
+        {
+            LookupModels.Add(lookupModel);
+        }
+    }
 
     private async Task OnAction()
     {

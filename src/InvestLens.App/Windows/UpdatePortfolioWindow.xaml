@@ -14,6 +14,7 @@
         ShowInTaskbar="False">
 
     <b:Interaction.Behaviors>
+        <behaviors:LoadBehavior/>
         <behaviors:DragMoveBehavior/>
         <behaviors:PortfolioTypeBehavior IsPortfolioComplexType="{Binding IsPortfolioComplexType, FallbackValue=false}"/>
     </b:Interaction.Behaviors>

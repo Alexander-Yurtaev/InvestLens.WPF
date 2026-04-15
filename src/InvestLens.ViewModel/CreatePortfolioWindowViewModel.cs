@@ -72,6 +72,9 @@ public sealed class CreatePortfolioWindowViewModel : CreateUpdatePortfolioWindow
             ? PortfolioType.Invest
             : PortfolioType.Complex);
 
+        model.Portfolios.Clear();
+        model.Portfolios.AddRange(LookupModels.Where(lm => lm.IsChecked).Select(lm => lm.Id));
+
         await _portfolioRepository.CreatePortfolio(model);
 
         _eventAggregator.GetEvent<PortfolioCreatedEvent>().Publish();

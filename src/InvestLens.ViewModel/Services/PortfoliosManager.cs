@@ -13,7 +13,7 @@ public class PortfoliosManager : IPortfoliosManager
 
     private readonly Dictionary<int, PortfolioDetail> _portfolios = new Dictionary<int, PortfolioDetail>
     {
-        { 1, new PortfolioDetail("Составной", PortfolioType.Complex)
+        { 1, new PortfolioDetail(1, "Составной", PortfolioType.Complex)
             {
                 PortfolioStats = {
                     new Stat("Стоимость", 84320, "$", false),
@@ -31,7 +31,7 @@ public class PortfoliosManager : IPortfoliosManager
                 }
             }
         },
-        { 2, new PortfolioDetail("Портфель №1", PortfolioType.Invest)
+        { 2, new PortfolioDetail(2, "Портфель №1", PortfolioType.Invest)
         {
             PortfolioStats = {
                 new Stat("Стоимость", 24150, "$", false),
@@ -48,7 +48,7 @@ public class PortfoliosManager : IPortfoliosManager
                 new SecurityOperation("MSFT", SecurityOperationType.Buy){Date = new DateTime(2025, 02, 10), Count = 28, Price = 393.2, TotalPrice = 11010},
             }
         } },
-        { 3, new PortfolioDetail("Портфель №2", PortfolioType.Invest)
+        { 3, new PortfolioDetail(3, "Портфель №2", PortfolioType.Invest)
         {
             PortfolioStats = {
                 new Stat("Стоимость", 16062, "$", false),
@@ -75,9 +75,9 @@ public class PortfoliosManager : IPortfoliosManager
 
     public List<Card> Cards { get; } = [];
 
-    public async Task<List<INavigationTreeItem>> GetPortfoliosMenuItems(int userId)
+    public async Task<List<INavigationTreeItem>> GetPortfoliosMenuItems(int ownerId)
     {
-        var portfolios = await _portfolioRepository.GetAllPortfolios(userId);
+        var portfolios = await _portfolioRepository.GetAllPortfolios(ownerId);
 
         var result = portfolios.Select(p =>
             new NavigationTreeItem("", p.Name,
@@ -92,14 +92,16 @@ public class PortfoliosManager : IPortfoliosManager
         var portfolio = await _portfolioRepository.GetPortfolioById(id);
         if (portfolio is null) return null;
 
-        var detail = new PortfolioDetail(portfolio.Name, portfolio.PortfolioType);
+        var detail = new PortfolioDetail(portfolio.Id, portfolio.Name, portfolio.PortfolioType);
         return detail;
     }
 
-    public List<Model.Portfolio.LookupModel> GetLookupModels()
+    public async Task<List<Model.Portfolio.LookupModel>> GetLookupModels(int ownerId, int? portfolioId = null)
     {
-        return _portfolios.Where(p => !p.Value.Title.Contains("Составной"))
-            .Select(detail => new Model.Portfolio.LookupModel(detail.Value.Title)).ToList();
+        var portfolios = (await _portfolioRepository.GetAllPortfolios(ownerId))
+            .Where(p => portfolioId is null || p.Id != portfolioId.Value && p.PortfolioType != PortfolioType.Complex);
+
+        return portfolios.Select(p => new Model.Portfolio.LookupModel(p.Id, p.Name)).ToList();
     }
 
     private void LoadPortfolioInfos()
