@@ -35,9 +35,9 @@
                     <StackPanel Grid.Row="1" Orientation="Vertical" VerticalAlignment="Center">
                         <StackPanel Margin="0 0 0 16">
                             <TextBlock Text="Начни свой путь" 
-                                       Style="{StaticResource H2Style}"/>
+                                       Style="{StaticResource H2BlaskStyle}"/>
                             <TextBlock Text="в инвестициях" 
-                                       Style="{StaticResource H2Style}"/>
+                                       Style="{StaticResource H2BlaskStyle}"/>
                         </StackPanel>
                         <TextBlock Text="Присоединяйтесь к тысячам инвесторов" 
                                    Style="{StaticResource PBlackStyle}"/>

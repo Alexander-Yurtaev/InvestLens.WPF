@@ -35,9 +35,9 @@
                     <StackPanel Grid.Row="1" Orientation="Vertical" VerticalAlignment="Center">
                         <StackPanel Margin="0 0 0 16">
                             <TextBlock Text="Начни свой путь" 
-                                       Style="{StaticResource H2Style}"/>
+                                       Style="{StaticResource H2BlaskStyle}"/>
                             <TextBlock Text="в инвестициях" 
-                                       Style="{StaticResource H2Style}"/>
+                                       Style="{StaticResource H2BlaskStyle}"/>
                         </StackPanel>
                         <TextBlock Text="Присоединяйтесь к тысячам инвесторов" 
                                    Style="{StaticResource PBlackStyle}"/>
@@ -92,7 +92,6 @@
                         </StackPanel>
                         <Button Content="Войти" 
                                 Padding="14"
-                                FontSize="16"
                                 FontWeight="Bold"
                                 Margin="0 0 0 24"
                                 IsDefault="True"

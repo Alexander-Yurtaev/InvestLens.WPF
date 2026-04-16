@@ -32,9 +32,15 @@
         <Setter Property="FontWeight" Value="Medium"/>
         <Setter Property="Margin" Value="0 0 0 8"/>
     </Style>
-    <Style x:Key="H2Style" 
+    <Style x:Key="H2BlaskStyle" 
            TargetType="TextBlock">
         <Setter Property="Foreground" Value="{StaticResource BackgroundSecondary}"/>
+        <Setter Property="FontSize" Value="28"/>
+        <Setter Property="FontWeight" Value="Medium"/>
+    </Style>
+    <Style x:Key="H2WhiteStyle" 
+           TargetType="TextBlock">
+        <Setter Property="Foreground" Value="{StaticResource BrandBlue}"/>
         <Setter Property="FontSize" Value="28"/>
         <Setter Property="FontWeight" Value="Medium"/>
     </Style>

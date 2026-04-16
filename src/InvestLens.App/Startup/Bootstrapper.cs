@@ -2,12 +2,14 @@
 using AutoMapper.Contrib.Autofac.DependencyInjection;
 using InvestLens.App.Services;
 using InvestLens.App.Windows;
+using InvestLens.App.Windows.Dialogs;
 using InvestLens.DataAccess;
 using InvestLens.DataAccess.Repositories;
 using InvestLens.DataAccess.Services;
 using InvestLens.Model;
 using InvestLens.Model.Crud.Portfolio;
 using InvestLens.ViewModel;
+using InvestLens.ViewModel.Dialogs;
 using InvestLens.ViewModel.Pages;
 using InvestLens.ViewModel.Services;
 using Microsoft.EntityFrameworkCore;
@@ -47,6 +49,9 @@ namespace InvestLens.App.Startup
 
             builder.RegisterType<MainWindow>().AsSelf();
             builder.RegisterType<MainWindowViewModel>().As<IMainWindowViewModel>();
+
+            builder.RegisterType<ConfirmDeleteDialog>().AsSelf();
+            builder.RegisterType<ConfirmDeleteDialogViewModel>().As<IConfirmDeleteDialogViewModel>();
 
             builder.RegisterType<RegistrationWindow>().AsSelf();
             builder.RegisterType<RegistrationWindowViewModel>().As<IRegistrationWindowViewModel>();

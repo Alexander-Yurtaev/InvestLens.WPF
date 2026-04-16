@@ -19,7 +19,9 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <local:ContentHeader Grid.Row="0" DataContext="{Binding ContentHeaderVm}" Style="{StaticResource ContentHeaderStyle}"/>
+        <local:ContentHeader Grid.Row="0" 
+                             DataContext="{Binding ContentHeaderVm}" 
+                             Style="{StaticResource ContentHeaderStyle}"/>
         <Grid Grid.Row="1">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>

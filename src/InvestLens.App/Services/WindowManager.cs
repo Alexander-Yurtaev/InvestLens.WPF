@@ -1,4 +1,5 @@
 ﻿using Autofac;
+using InvestLens.ViewModel.Dialogs;
 using InvestLens.ViewModel.Services;
 using System.Windows;
 
@@ -24,7 +25,12 @@ public class WindowManager : IWindowManager
     {
         var window = GetWindow(typeof(TViewModel), viewModel);
         window.Owner = Application.Current.MainWindow;
-        return window.ShowDialog();
+        var result = window.ShowDialog();
+        if (window.DataContext is IConfirmable confirmable)
+        {
+            return confirmable.IsConfermed;
+        }
+        return result;
     }
 
     public void CloseWindow<TViewModel>() where TViewModel : class
@@ -57,6 +63,10 @@ public class WindowManager : IWindowManager
             if (viewName.EndsWith("Window"))
             {
                 viewFullName = $"InvestLens.App.Windows.{viewName}";
+            }
+            else if (viewName.EndsWith("Dialog"))
+            {
+                viewFullName = $"InvestLens.App.Windows.Dialogs.{viewName}";
             }
             else
             {

@@ -48,6 +48,7 @@
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
                     <Button Style="{StaticResource PrimaryButtonStyle}" 
+                            FontSize="18"
                             Command="{Binding Command}"
                             Content="{Binding Content}"/>
                 </DataTemplate>

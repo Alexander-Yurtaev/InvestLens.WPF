@@ -78,7 +78,6 @@
                            VerticalAlignment="Center"/>
                 <Button  Grid.Column="1"
                          Content="🗑️"
-                         FontSize="24"
                          Padding="4"
                          Margin="0"
                          Visibility="{Binding CanDelete, Converter={StaticResource BooleanToVisibilityConv}}"

@@ -1,4 +1,5 @@
 ﻿using InvestLens.DataAccess.Repositories;
+using InvestLens.ViewModel.Dialogs;
 using InvestLens.ViewModel.Events;
 using InvestLens.ViewModel.Services;
 using InvestLens.ViewModel.Wrappers;
@@ -13,9 +14,9 @@ public class PortfoliosViewModel : ViewModelBaseWithContentHeader, IPortfoliosVi
     private readonly IEventAggregator _eventAggregator;
 
     public PortfoliosViewModel(
-        IPortfoliosManager portfoliosManager, 
+        IPortfoliosManager portfoliosManager,
         IWindowManager windowManager,
-        IEventAggregator eventAggregator) 
+        IEventAggregator eventAggregator)
         : base("Мои портфели", "Управляйте своими инвестиционными портфелями")
     {
         _portfoliosManager = portfoliosManager;
@@ -48,6 +49,13 @@ public class PortfoliosViewModel : ViewModelBaseWithContentHeader, IPortfoliosVi
 
     private async Task OnDeleteCommand(CardWrapper wrapper)
     {
+        var viewModel = new ConfirmDeleteDialogViewModel(_windowManager)
+        {
+            PortfolioName = wrapper.Title
+        };
+
+        var confirmed = _windowManager.ShowDialogWindow<ConfirmDeleteDialogViewModel>(viewModel);
+        if (confirmed != true) return;
         await _portfoliosManager.Delete(wrapper.Id);
     }
 
