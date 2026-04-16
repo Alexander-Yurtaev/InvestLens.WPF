@@ -20,11 +20,10 @@ namespace InvestLens.Tests
             var eventAggregatorMock = new Mock<IEventAggregator>();
             eventAggregatorMock.Setup(ea => ea.GetEvent<LoginEvent>()).Returns(new LoginEvent());
             eventAggregatorMock.Setup(ea => ea.GetEvent<SelectNavigationItemEvent>()).Returns(new SelectNavigationItemEvent());
-            eventAggregatorMock.Setup(ea => ea.GetEvent<PortfolioCreatedEvent>()).Returns(new PortfolioCreatedEvent());
-            eventAggregatorMock.Setup(ea => ea.GetEvent<PortfolioDeletedEvent>()).Returns(new PortfolioDeletedEvent());
+            eventAggregatorMock.Setup(ea => ea.GetEvent<PortfoliosRefreshedEvent>()).Returns(new PortfoliosRefreshedEvent());
 
             var portfoliosManagerMock = new Mock<IPortfoliosManager>();
-            portfoliosManagerMock.Setup(pm => pm.GetPortfoliosMenuItems(It.IsAny<int>())).ReturnsAsync(GetPortfoliosMenuItems(eventAggregatorMock.Object));
+            portfoliosManagerMock.Setup(pm => pm.GetPortfoliosMenuItems(It.IsAny<int>())).Returns(GetPortfoliosMenuItems(eventAggregatorMock.Object));
 
             var dohodServiceMock = new Mock<IDohodService>();
             dohodServiceMock.Setup(pm => pm.GetDohodBondsMenuItems()).Returns(GetDohodBondsMenuItems(eventAggregatorMock.Object));

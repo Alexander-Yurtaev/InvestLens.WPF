@@ -14,6 +14,7 @@ public class AuthManager : IAuthManager
     }
 
     public UserInfo? CurrentUser { get; private set; }
+
     public void SetCurrentUser(UserInfo info)
     {
         CurrentUser = info;
