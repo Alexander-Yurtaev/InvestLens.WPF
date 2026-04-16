@@ -1,8 +1,9 @@
 ﻿using InvestLens.ViewModel.Wrappers;
+using System.Collections.ObjectModel;
 
 namespace InvestLens.ViewModel.Pages;
 
-public interface IPortfoliosViewModel : IViewModelBaseWithContentHeader
+public interface IPortfoliosViewModel : IViewModelBaseWithContentHeader, ILoadableViewModel
 {
-    List<CardWrapper> Cards { get; }
+    ObservableCollection<CardWrapper> Cards { get; }
 }

@@ -1,15 +1,22 @@
-﻿using InvestLens.DataAccess.Repositories;
+﻿using Autofac.Features.OwnedInstances;
+using AutoMapper;
+using InvestLens.DataAccess.Repositories;
 using InvestLens.Model;
+using InvestLens.Model.Crud.Portfolio;
 using InvestLens.Model.Enums;
 using InvestLens.Model.NavigationTree;
+using InvestLens.ViewModel.Events;
 using InvestLens.ViewModel.NavigationTree;
 
 namespace InvestLens.ViewModel.Services;
 
 public class PortfoliosManager : IPortfoliosManager
 {
+    private readonly IMapper _mapper;
+    private readonly IAuthManager _authManager;
     private readonly IPortfolioRepository _portfolioRepository;
     private readonly IEventAggregator _eventAggregator;
+    private readonly SemaphoreSlim _loadSemaphoreSlim = new SemaphoreSlim(1);
 
     private readonly Dictionary<int, PortfolioDetail> _portfolios = new Dictionary<int, PortfolioDetail>
     {
@@ -66,20 +73,27 @@ public class PortfoliosManager : IPortfoliosManager
         } },
     };
 
-    public PortfoliosManager(IPortfolioRepository portfolioRepository, IEventAggregator eventAggregator)
+    private readonly Dictionary<int, Model.Crud.Portfolio.PortfolioModel> _portfolioCache = [];
+
+    public PortfoliosManager(
+        IMapper mapper,
+        IAuthManager authManager,
+        IPortfolioRepository portfolioRepository, 
+        IEventAggregator eventAggregator)
     {
+        _mapper = mapper;
+        _authManager = authManager;
         _portfolioRepository = portfolioRepository;
         _eventAggregator = eventAggregator;
-        LoadPortfolioInfos();
+
+        _eventAggregator.GetEvent<LoginEvent>().Subscribe(OnLogin);
     }
 
     public List<Card> Cards { get; } = [];
 
-    public async Task<List<INavigationTreeItem>> GetPortfoliosMenuItems(int ownerId)
+    public List<INavigationTreeItem> GetPortfoliosMenuItems(int ownerId)
     {
-        var portfolios = await _portfolioRepository.GetAllPortfolios(ownerId);
-
-        var result = portfolios.Select(p =>
+        var result = _portfolioCache.Values.Select(p =>
             new NavigationTreeItem(
                 new PortfolioNavigationTreeModel(p.Id, "", p.Name, p.PortfolioType) { Title = p.Name, Description = p.Description ?? "" },
                 _eventAggregator)).Cast<INavigationTreeItem>().ToList();
@@ -96,32 +110,12 @@ public class PortfoliosManager : IPortfoliosManager
         return detail;
     }
 
-    public async Task<List<Model.Portfolio.LookupModel>> GetLookupModels(int ownerId, int? portfolioId = null)
+    public async Task<List<LookupModel>> GetLookupModels(int ownerId, int? portfolioId = null)
     {
         var portfolios = (await _portfolioRepository.GetAllPortfolios(ownerId))
             .Where(p => portfolioId is null || p.Id != portfolioId.Value && p.PortfolioType != PortfolioType.Complex);
 
-        return portfolios.Select(p => new Model.Portfolio.LookupModel(p.Id, p.Name)).ToList();
-    }
-
-    private void LoadPortfolioInfos()
-    {
-        var result = _portfolios.Select(p =>
-        {
-            var portfolioType = TitleToPortfolioType(p.Value.Title);
-            var card = new Card(p.Value.Title)
-            {
-                CardType = PortfolioTypeToStringConverter(portfolioType),
-                CardTypeForeground = PortfolioTypeToForegroundConverter(portfolioType),
-                CardTypeBackground = PortfolioTypeToBackgroundConverter(portfolioType),
-                LastDateUpdate = "сегодня"
-            };
-            card.Stats.AddRange(p.Value.PortfolioStats);
-            return card;
-        }).ToList();
-
-        Cards.Clear();
-        Cards.AddRange(result);
+        return portfolios.Select(p => new Model.Crud.Portfolio.LookupModel(p.Id, p.Name, p.PortfolioType)).ToList();
     }
 
     private PortfolioType TitleToPortfolioType(string title)
@@ -140,7 +134,7 @@ public class PortfoliosManager : IPortfoliosManager
         return portfolioType switch
         {
             PortfolioType.Complex => "Составной",
-            PortfolioType.Invest => "Портфель №1",
+            PortfolioType.Invest => "Инвест",
             _ => throw new ArgumentOutOfRangeException()
         };
     }
@@ -163,5 +157,77 @@ public class PortfoliosManager : IPortfoliosManager
             PortfolioType.Invest => "#1A2C8C6E",
             _ => "0xFFFFA500"
         };
+    }
+
+    private async void OnLogin(UserInfo info)
+    {
+        await Refresh(info.Id);
+    }
+
+    private async Task Refresh(int ownerId)
+    {
+        await _loadSemaphoreSlim.WaitAsync();
+
+        try
+        {
+            var portfolios = await _portfolioRepository.GetAllPortfolios(ownerId);
+
+            _portfolioCache.Clear();
+            foreach (var portfolio in portfolios)
+            {
+                _portfolioCache[portfolio.Id] = _mapper.Map<PortfolioModel>(portfolio);
+            }
+
+            RefreshCards();
+        }
+        finally
+        {
+            _loadSemaphoreSlim.Release();
+        }
+
+        _eventAggregator.GetEvent<PortfoliosRefreshedEvent>().Publish();
+    }
+
+    private void RefreshCards()
+    {
+        var result = _portfolioCache.Values.Select(p =>
+        {
+            var card = new Card(p.Id, p.Name, true)
+            {
+                CardType = PortfolioTypeToStringConverter(p.PortfolioType),
+                CardTypeForeground = PortfolioTypeToForegroundConverter(p.PortfolioType),
+                CardTypeBackground = PortfolioTypeToBackgroundConverter(p.PortfolioType),
+                LastDateUpdate = "сегодня"
+            };
+            //card.Stats.AddRange(p.PortfolioStats);
+            return card;
+        }).ToList();
+
+        Cards.Clear();
+        Cards.AddRange(result);
+    }
+
+    public async Task Create(CreateModel model)
+    {
+        var portfolio = _mapper.Map<InvestLens.Model.Entities.Portfolio>(model);
+        await _portfolioRepository.CreatePortfolio(portfolio);
+        await Refresh(model.OwnerId);
+        _eventAggregator.GetEvent<PortfoliosRefreshedEvent>().Publish();
+    }
+
+    public async Task Delete(int id)
+    {
+        await _portfolioRepository.Delete(id);
+        _portfolioCache.Remove(id);
+
+        var userId = _authManager.CurrentUser!.Id;
+        await Refresh(userId);
+
+        _eventAggregator.GetEvent<PortfoliosRefreshedEvent>().Publish();
+    }
+
+    public async Task<bool> CheckNameUniqueAsync(int ownerId, string name)
+    {
+        return await _portfolioRepository.CheckNameUniqueAsync(ownerId, name);
     }
 }

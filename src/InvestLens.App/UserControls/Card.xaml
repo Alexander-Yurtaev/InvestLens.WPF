@@ -13,7 +13,7 @@
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
             <Grid Grid.Row="0" Margin="0 0 0 16">
@@ -74,7 +74,17 @@
                 <TextBlock Grid.Column="0" 
                            FontSize="12"
                            Foreground="#8E92A8"
-                           Text="{Binding LastDateUpdate}"/>
+                           Text="{Binding LastDateUpdate}"
+                           VerticalAlignment="Center"/>
+                <Button  Grid.Column="1"
+                         Content="🗑️"
+                         FontSize="24"
+                         Padding="4"
+                         Margin="0"
+                         Visibility="{Binding CanDelete, Converter={StaticResource BooleanToVisibilityConv}}"
+                         Command="{Binding DeleteCommand}"
+                         CommandParameter="{Binding}"
+                         Style="{StaticResource SecondaryButtonStyle}"/>
             </Grid>
         </Grid>
     </Border>

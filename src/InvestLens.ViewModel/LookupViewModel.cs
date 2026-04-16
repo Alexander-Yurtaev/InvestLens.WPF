@@ -1,4 +1,4 @@
-﻿using InvestLens.Model.Portfolio;
+﻿using InvestLens.Model.Crud.Portfolio;
 
 namespace InvestLens.ViewModel;
 

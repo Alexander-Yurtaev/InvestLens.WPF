@@ -1,4 +1,5 @@
 ﻿using InvestLens.DataAccess.Repositories;
+using InvestLens.Model.Crud.Portfolio;
 using InvestLens.Model.Enums;
 using InvestLens.ViewModel.Services;
 using System.Runtime.CompilerServices;
@@ -8,11 +9,10 @@ namespace InvestLens.ViewModel;
 public sealed class UpdatePortfolioWindowViewModel : CreateUpdatePortfolioWindowViewModel, IUpdatePortfolioWindowViewModel, ISupportPortfolioType
 {
     public UpdatePortfolioWindowViewModel(
-        Model.Portfolio.UpdateModel model,
+        UpdateModel model,
         IWindowManager windowManager,
         IAuthManager authManager,
-        IPortfoliosManager portfoliosManager,
-        IPortfolioRepository repository) : base(model, windowManager, authManager, portfoliosManager, repository)
+        IPortfoliosManager portfoliosManager) : base(model, windowManager, authManager, portfoliosManager)
     {
         Header = "Редактирование";
         ActionTitle = "Сохранить";

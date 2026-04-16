@@ -27,7 +27,7 @@ public class NavigationViewModel : BindableBase, INavigationViewModel
         _eventAggregator = eventAggregator;
 
         _eventAggregator.GetEvent<LoginEvent>().Subscribe(OnLogin);
-        _eventAggregator.GetEvent<PortfolioCreatedEvent>().Subscribe(OnPortfolioCreated);
+        _eventAggregator.GetEvent<PortfoliosRefreshedEvent>().Subscribe(OnPortfoliosRefreshed);
         
         MenuItems = [];
     }
@@ -99,31 +99,46 @@ public class NavigationViewModel : BindableBase, INavigationViewModel
         return result;
     }
 
-    private async void OnLogin(UserInfo info)
+    private void OnLogin(UserInfo info)
     {
-        await RefreshPortfolioList();
+        RefreshPortfolioList();
     }
 
-    private async void OnPortfolioCreated()
+    private void OnPortfoliosRefreshed()
     {
-        await RefreshPortfolioList();
+        RefreshPortfolioList();
     }
 
-    private async Task RefreshPortfolioList()
+    private void RefreshPortfolioList()
     {
-        var portfolios = await _portfoliosManager.GetPortfoliosMenuItems(_authManager.CurrentUser!.Id);
-
-        foreach (NavigationTreeItem portfolio in portfolios.Cast<NavigationTreeItem>())
+        var portfolios = _portfoliosManager
+            .GetPortfoliosMenuItems(_authManager.CurrentUser!.Id)
+            .Cast<NavigationTreeItem>()
+            .ToList();
+        
+        // Add
+        foreach (NavigationTreeItem portfolio in portfolios)
         {
             var portfolioId = ((PortfolioNavigationTreeModel)portfolio.Model).Id;
-            var existPortfolio = _portfoliosTreeItem?
+            var existPortfolio = _portfoliosTreeItem!
                 .Children
                 .Cast<NavigationTreeItem>()
                 .FirstOrDefault(item => ((PortfolioNavigationTreeModel)item.Model).Id == portfolioId);
 
             if (existPortfolio is not null) continue;
 
-            _portfoliosTreeItem?.Children.Add(portfolio);
+            _portfoliosTreeItem!.Children.Add(portfolio);
+        }
+
+        // Delete
+        foreach (NavigationTreeItem portfolio in _portfoliosTreeItem!.Children.ToList())
+        {
+            var portfolioId = ((PortfolioNavigationTreeModel)portfolio.Model).Id;
+            var isExistPortfolio = portfolios.Any(p => ((PortfolioNavigationTreeModel)p.Model).Id == portfolioId);
+
+            if (isExistPortfolio) continue;
+
+            _portfoliosTreeItem!.Children.Remove(portfolio);
         }
     }
 }

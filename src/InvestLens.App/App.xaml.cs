@@ -1,5 +1,7 @@
 ﻿using System.Windows;
 using Autofac;
+using AutoMapper;
+using InvestLens.App.Profiles;
 using InvestLens.App.Startup;
 using InvestLens.ViewModel;
 using InvestLens.ViewModel.Services;
@@ -47,11 +49,6 @@ namespace InvestLens.App
 
             var windowManager = container.Resolve<IWindowManager>();
             windowManager.ShowWindow<LoginWindowViewModel>();
-
-            //var userManager = container.Resolve<IUserManager>();
-            //var userLoadTask = userManager.LoadAsync();
-            //userLoadTask.Await();
-            //mainWindow.Show();
         }
     }
 }

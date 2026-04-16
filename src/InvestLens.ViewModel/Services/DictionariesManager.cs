@@ -17,7 +17,7 @@ public class DictionariesManager : IDictionariesManager
     {
         var results = new List<Card>
         {
-            new Card("Московская Биржа (MOEX)")
+            new Card(0, "Московская Биржа (MOEX)")
             {
                 CardType = "Официальные данные",
                 Stats =
@@ -29,7 +29,7 @@ public class DictionariesManager : IDictionariesManager
                 CardTypeBackground = "#1AC8102E",
                 LastDateUpdate = "10:23"
             },
-            new Card("Dohod.ru")
+            new Card(0, "Dohod.ru")
             {
                 CardType = "Агрегатор",
                 Stats =

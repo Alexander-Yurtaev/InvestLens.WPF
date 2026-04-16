@@ -2,12 +2,19 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
+             xmlns:behaviors="clr-namespace:InvestLens.App.Behaviors"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:InvestLens.App.UserControls"
              xmlns:wrappers="clr-namespace:InvestLens.ViewModel.Wrappers;assembly=InvestLens.ViewModel"
              xmlns:converters="clr-namespace:InvestLens.App.Converters"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
+
+    <b:Interaction.Behaviors>
+        <behaviors:LoadBehavior/>
+    </b:Interaction.Behaviors>
+
     <UserControl.Resources>
         <ResourceDictionary>
             <Style x:Key="PortfolioCard" TargetType="{x:Type Button}">

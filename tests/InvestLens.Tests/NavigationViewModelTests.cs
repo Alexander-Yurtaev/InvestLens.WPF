@@ -21,6 +21,7 @@ namespace InvestLens.Tests
             eventAggregatorMock.Setup(ea => ea.GetEvent<LoginEvent>()).Returns(new LoginEvent());
             eventAggregatorMock.Setup(ea => ea.GetEvent<SelectNavigationItemEvent>()).Returns(new SelectNavigationItemEvent());
             eventAggregatorMock.Setup(ea => ea.GetEvent<PortfolioCreatedEvent>()).Returns(new PortfolioCreatedEvent());
+            eventAggregatorMock.Setup(ea => ea.GetEvent<PortfolioDeletedEvent>()).Returns(new PortfolioDeletedEvent());
 
             var portfoliosManagerMock = new Mock<IPortfoliosManager>();
             portfoliosManagerMock.Setup(pm => pm.GetPortfoliosMenuItems(It.IsAny<int>())).ReturnsAsync(GetPortfoliosMenuItems(eventAggregatorMock.Object));

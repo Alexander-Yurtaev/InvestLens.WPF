@@ -1,6 +1,6 @@
 ﻿using InvestLens.DataAccess.Repositories;
 using InvestLens.Model;
-using InvestLens.Model.Portfolio;
+using InvestLens.Model.Crud.Portfolio;
 using InvestLens.ViewModel.Services;
 using InvestLens.ViewModel.Wrappers;
 
@@ -12,21 +12,18 @@ public class PortfolioDetailViewModel : ViewModelBaseWithContentHeader, IPortfol
     private readonly IWindowManager _windowManager;
     private readonly IAuthManager _authManager;
     private readonly IPortfoliosManager _portfoliosManager;
-    private readonly IPortfolioRepository _repository;
 
     public PortfolioDetailViewModel(
         PortfolioDetail model, 
         IWindowManager windowManager, 
         IAuthManager authManager,
-        IPortfoliosManager portfoliosManager,
-        IPortfolioRepository repository) : base(model.Title)
+        IPortfoliosManager portfoliosManager) : base(model.Title)
     {
         _model = model;
         _windowManager = windowManager;
         _authManager = authManager;
         _portfoliosManager = portfoliosManager;
-        _repository = repository;
-
+        
         var buttonModels = new List<ButtonModel>
         {
             new ButtonModel("Редактировать", OnEditPortfolio),
@@ -48,7 +45,7 @@ public class PortfolioDetailViewModel : ViewModelBaseWithContentHeader, IPortfol
     {
         var editModel = new UpdateModel(_model.Id, _model.Title, _model.PortfolioType);
 
-        var viewModel = new UpdatePortfolioWindowViewModel(editModel, _windowManager, _authManager, _portfoliosManager, _repository);
+        var viewModel = new UpdatePortfolioWindowViewModel(editModel, _windowManager, _authManager, _portfoliosManager);
         _windowManager.ShowWindow(viewModel, asDialog: true);
     }
 

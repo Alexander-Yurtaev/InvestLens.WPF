@@ -1,6 +1,5 @@
 ﻿using InvestLens.Model.Entities;
 using InvestLens.Model.Enums;
-using InvestLens.Model.Portfolio;
 using Microsoft.EntityFrameworkCore;
 
 namespace InvestLens.DataAccess.Repositories;
@@ -9,15 +8,8 @@ public class PortfolioRepository(InvestLensDataContext db) : IPortfolioRepositor
 {
     private readonly InvestLensDataContext _db = db;
 
-    public async Task<Portfolio?> CreatePortfolio(CreateModel model)
+    public async Task<Portfolio?> CreatePortfolio(Portfolio portfolio)
     {
-        var portfolio = new Portfolio
-        {
-            Name = model.Name,
-            Description = model.Description,
-            PortfolioType = model.PortfolioType,
-            OwnerId = model.OwnerId
-        };
         _db.Portfolios.Add(portfolio);
         var count = await _db.SaveChangesAsync();
 
@@ -46,5 +38,18 @@ public class PortfolioRepository(InvestLensDataContext db) : IPortfolioRepositor
     {
         var isExists = await _db.Portfolios.AnyAsync(p => p.OwnerId == ownerId && p.Name == name);
         return !isExists;
+    }
+
+    public async Task<bool?> Delete(int id)
+    {
+        var portfolio = await _db.Portfolios.FirstOrDefaultAsync(p => p.Id == id);
+        if (portfolio is null)
+        {
+            return null;
+        }
+
+        _db.Portfolios.Remove(portfolio);
+        var count = await _db.SaveChangesAsync();
+        return count > 0;
     }
 }

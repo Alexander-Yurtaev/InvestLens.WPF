@@ -2,5 +2,5 @@
 
 public interface ILoadableViewModel
 {
-    Task Load();
+    Task Load(bool? force=false);
 }

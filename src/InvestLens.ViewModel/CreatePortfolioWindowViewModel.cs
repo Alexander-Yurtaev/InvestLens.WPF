@@ -1,4 +1,5 @@
 ﻿using InvestLens.DataAccess.Repositories;
+using InvestLens.Model.Crud.Portfolio;
 using InvestLens.Model.Enums;
 using InvestLens.ViewModel.Events;
 using InvestLens.ViewModel.Services;
@@ -9,22 +10,19 @@ namespace InvestLens.ViewModel;
 public sealed class CreatePortfolioWindowViewModel : CreateUpdatePortfolioWindowViewModel, ICreatePortfolioWindowViewModel, ISupportPortfolioType
 {
     private readonly IAuthManager _authManager;
-    private readonly IPortfolioRepository _portfolioRepository;
     private readonly IEventAggregator _eventAggregator;
 
     private bool _isPortfolioSimpleType;
     private bool _isPortfolioComplexType;
 
     public CreatePortfolioWindowViewModel(
-        Model.Portfolio.CreateModel model, 
+        CreateModel model, 
         IWindowManager windowManager,
         IAuthManager authManager,
-        IPortfolioRepository portfolioRepository,
         IPortfoliosManager portfoliosManager,
-        IEventAggregator eventAggregator) : base(model, windowManager, authManager, portfoliosManager, portfolioRepository)
+        IEventAggregator eventAggregator) : base(model, windowManager, authManager, portfoliosManager)
     {
         _authManager = authManager;
-        _portfolioRepository = portfolioRepository;
         _eventAggregator = eventAggregator;
 
         Header = "Создание";
@@ -66,18 +64,14 @@ public sealed class CreatePortfolioWindowViewModel : CreateUpdatePortfolioWindow
         // ToDo make DialogService
         if (_authManager.CurrentUser is null) throw new SystemException("Вы не авторизованы!");
 
-        var model = (Model.Portfolio.CreateModel)Model;
+        var model = (CreateModel)Model;
 
-        model.SetPortfolioType(IsPortfolioSimpleType
-            ? PortfolioType.Invest
-            : PortfolioType.Complex);
+        model.PortfolioType = IsPortfolioSimpleType ? PortfolioType.Invest : PortfolioType.Complex;
 
         model.Portfolios.Clear();
         model.Portfolios.AddRange(LookupModels.Where(lm => lm.IsChecked).Select(lm => lm.Id));
 
-        await _portfolioRepository.CreatePortfolio(model);
-
-        _eventAggregator.GetEvent<PortfolioCreatedEvent>().Publish();
+        await PortfoliosManager.Create(model);
 
         WindowManager.CloseWindow<CreatePortfolioWindowViewModel>();
     }

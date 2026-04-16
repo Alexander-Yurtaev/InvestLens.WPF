@@ -1,4 +1,5 @@
 ﻿using InvestLens.Model;
+using InvestLens.Model.Crud.Portfolio;
 using InvestLens.ViewModel.NavigationTree;
 
 namespace InvestLens.ViewModel.Services;
@@ -6,7 +7,10 @@ namespace InvestLens.ViewModel.Services;
 public interface IPortfoliosManager
 {
     List<Card> Cards { get; }
-    Task<List<INavigationTreeItem>> GetPortfoliosMenuItems(int userId);
+    List<INavigationTreeItem> GetPortfoliosMenuItems(int userId);
     Task<PortfolioDetail?> GetPortfolio(int id);
-    Task<List<Model.Portfolio.LookupModel>> GetLookupModels(int ownerId, int? portfolioId = null);
+    Task<List<LookupModel>> GetLookupModels(int ownerId, int? portfolioId = null);
+    Task<bool> CheckNameUniqueAsync(int ownerId, string name);
+    Task Create(CreateModel model);
+    Task Delete(int id);
 }

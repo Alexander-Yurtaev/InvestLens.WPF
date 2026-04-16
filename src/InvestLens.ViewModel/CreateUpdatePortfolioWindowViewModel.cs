@@ -4,31 +4,28 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Windows.Input;
 using InvestLens.DataAccess.Repositories;
+using InvestLens.Model.Crud.Portfolio;
 
 namespace InvestLens.ViewModel;
 
 public abstract class CreateUpdatePortfolioWindowViewModel : ValidationViewModelBase, ICreateEditPortfolioWindowViewModel, ILoadableViewModel, IDisposable
 {
-    protected readonly Model.Portfolio.BaseModel Model;
+    protected readonly BaseModel Model;
     protected readonly IWindowManager WindowManager;
     private readonly IAuthManager _authManager;
-    private readonly IPortfoliosManager _portfoliosManager;
-    private readonly IPortfolioRepository _repository;
     private string _header = string.Empty;
     private string _actionTitle = string.Empty;
 
     protected CreateUpdatePortfolioWindowViewModel(
-        Model.Portfolio.BaseModel model, 
+        BaseModel model, 
         IWindowManager windowManager,
         IAuthManager authManager,
-        IPortfoliosManager portfoliosManager,
-        IPortfolioRepository repository)
+        IPortfoliosManager portfoliosManager)
     {
         Model = model;
         WindowManager = windowManager;
         _authManager = authManager;
-        _portfoliosManager = portfoliosManager;
-        _repository = repository;
+        PortfoliosManager = portfoliosManager;
         CloseCommand = new DelegateCommand(OnClose);
         ActionCommand = new AsyncDelegateCommand(OnAction, CanAction);
         LookupModels = [];
@@ -79,12 +76,12 @@ public abstract class CreateUpdatePortfolioWindowViewModel : ValidationViewModel
     public ICommand CloseCommand { get; set; }
     public ICommand ActionCommand { get; set; }
 
-    public async Task Load()
+    public async Task Load(bool? force=false)
     {
         if (_authManager.CurrentUser is null) throw new SystemException("Не авторизован!");
 
         var userId = _authManager.CurrentUser.Id;
-        var lookupModels = (await _portfoliosManager.GetLookupModels(userId, Model.Id > 0 ? Model.Id : null))
+        var lookupModels = (await PortfoliosManager.GetLookupModels(userId, Model.Id > 0 ? Model.Id : null))
             .Select(m =>
             {
                 var vm = new LookupViewModel(m);
@@ -98,6 +95,8 @@ public abstract class CreateUpdatePortfolioWindowViewModel : ValidationViewModel
             LookupModels.Add(lookupModel);
         }
     }
+
+    protected IPortfoliosManager PortfoliosManager {  get; }
 
     private async Task OnAction()
     {
@@ -129,7 +128,7 @@ public abstract class CreateUpdatePortfolioWindowViewModel : ValidationViewModel
 
         var ownerId = _authManager.CurrentUser!.Id;
 
-        var isUnique = await _repository.CheckNameUniqueAsync(ownerId, Name);
+        var isUnique = await PortfoliosManager.CheckNameUniqueAsync(ownerId, Name);
         if (!isUnique)
         {
             AddError("Портфель с таким именем уже создан", nameof(Name));

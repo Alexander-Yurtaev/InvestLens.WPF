@@ -2,11 +2,14 @@
 
 public class Card
 {
-    public Card(string title)
+    public Card(int id, string title, bool canDelete=false)
     {
+        Id = id;
         Title = title;
+        CanDelete = canDelete;
     }
 
+    public int Id { get; init; }
     public string Title { get; }
     public string CardType { get; init; } = string.Empty;
     public string CardTypeForeground { get; init; } = "#00000000";
@@ -15,5 +18,6 @@ public class Card
     public List<Stat> Stats { get; } = [];
 
     public string LastDateUpdate { get; init; } = "-";
+    public bool CanDelete { get; }
 }
 

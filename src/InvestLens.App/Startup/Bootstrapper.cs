@@ -1,10 +1,12 @@
 ﻿using Autofac;
+using AutoMapper.Contrib.Autofac.DependencyInjection;
 using InvestLens.App.Services;
 using InvestLens.App.Windows;
 using InvestLens.DataAccess;
 using InvestLens.DataAccess.Repositories;
 using InvestLens.DataAccess.Services;
 using InvestLens.Model;
+using InvestLens.Model.Crud.Portfolio;
 using InvestLens.ViewModel;
 using InvestLens.ViewModel.Pages;
 using InvestLens.ViewModel.Services;
@@ -20,6 +22,8 @@ namespace InvestLens.App.Startup
             var builder = new ContainerBuilder();
 
             RegisterDataContext(builder);
+         
+            builder.RegisterAutoMapper(typeof(App).Assembly);
 
             builder.RegisterType<EventAggregator>().As<IEventAggregator>().SingleInstance();
             builder.RegisterType<ViewModelFactory>().As<IViewModelFactory>().SingleInstance();
@@ -52,10 +56,10 @@ namespace InvestLens.App.Startup
             builder.RegisterType<LoginWindowViewModel>().As<ILoginWindowViewModel>();
             builder.RegisterType<LoginModel>().AsSelf();
 
-            builder.Register(context => new Model.Portfolio.CreateModel(context.Resolve<IAuthManager>().CurrentUser!.Id))
-                .As<Model.Portfolio.CreateModel>()
+            builder.Register(context => new Model.Crud.Portfolio.CreateModel(context.Resolve<IAuthManager>().CurrentUser!.Id))
+                .As<CreateModel>()
                 .InstancePerDependency();
-            builder.RegisterType<Model.Portfolio.UpdateModel>().AsSelf();
+            builder.RegisterType<UpdateModel>().AsSelf();
 
             builder.RegisterType<CreatePortfolioWindow>().AsSelf();
             builder.RegisterType<CreatePortfolioWindowViewModel>().As<ICreatePortfolioWindowViewModel>();

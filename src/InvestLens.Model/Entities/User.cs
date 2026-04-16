@@ -1,16 +1,30 @@
 ﻿namespace InvestLens.Model.Entities;
 
-public class User(string firstName, string lastName, string login, string password)
+public class User : BaseEntity
 {
-    public int Id { get; set; }
+    public User(string firstName, string lastName, string login, string password)
+    {
+        FirstName = firstName;
+        LastName = lastName;
+        Login = login;
+        Password = password;
+    }
 
-    public string FirstName { get; set; } = firstName;
+    public User(int id, string firstName, string lastName, string login, string password) : base(id)
+    {
+        FirstName = firstName;
+        LastName = lastName;
+        Login = login;
+        Password = password;
+    }
 
-    public string LastName { get; set; } = lastName;
+    public string FirstName { get; set; } = string.Empty;
 
-    public string Login { get; set; } = login;
+    public string LastName { get; set; } = string.Empty;
 
-    public string Password { get; set; } = password;
+    public string Login { get; set; } = string.Empty;
+
+    public string Password { get; set; } = string.Empty;
 
     public List<Portfolio> Portfolios { get; set; } = [];
 }
