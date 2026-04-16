@@ -14,18 +14,17 @@ public class WindowManager : IWindowManager
         _lifetimeScope = lifetimeScope;
     }
 
-    public void ShowWindow<TViewModel>(TViewModel? viewModel = null, bool asDialog = false) where TViewModel : class
+    public void ShowWindow<TViewModel>(TViewModel? viewModel = null) where TViewModel : class
     {
         var window = GetWindow(typeof(TViewModel), viewModel);
-        if (asDialog)
-        {
-            window.Owner = Application.Current.MainWindow;
-            window.ShowDialog();
-        }
-        else
-        {
-            window.Show();
-        }
+        window.Show();
+    }
+
+    public bool? ShowDialogWindow<TViewModel>(TViewModel? viewModel = null) where TViewModel : class
+    {
+        var window = GetWindow(typeof(TViewModel), viewModel);
+        window.Owner = Application.Current.MainWindow;
+        return window.ShowDialog();
     }
 
     public void CloseWindow<TViewModel>() where TViewModel : class

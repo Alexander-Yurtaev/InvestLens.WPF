@@ -46,7 +46,7 @@ public class PortfolioDetailViewModel : ViewModelBaseWithContentHeader, IPortfol
         var editModel = new UpdateModel(_model.Id, _model.Title, _model.PortfolioType);
 
         var viewModel = new UpdatePortfolioWindowViewModel(editModel, _windowManager, _authManager, _portfoliosManager);
-        _windowManager.ShowWindow(viewModel, asDialog: true);
+        _windowManager.ShowDialogWindow(viewModel);
     }
 
     private void OnImportPortfolio()
