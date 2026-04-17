@@ -1,3 +1,8 @@
-﻿namespace InvestLens.ViewModel.NavigationTree;
+﻿using System.Collections.ObjectModel;
 
-public interface INavigationTreeItem;
+namespace InvestLens.ViewModel.NavigationTree;
+
+public interface INavigationTreeItem
+{
+    ObservableCollection<INavigationTreeItem> Children { get; set; }
+}

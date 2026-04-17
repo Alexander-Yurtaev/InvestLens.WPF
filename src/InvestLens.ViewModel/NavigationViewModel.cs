@@ -14,6 +14,7 @@ public class NavigationViewModel : BindableBase, INavigationViewModel
     private readonly IDohodService _dohodService;
     private readonly IEventAggregator _eventAggregator;
     private NavigationTreeItem? _portfoliosTreeItem;
+    private INavigationTreeItem _selectedItem;
 
     public NavigationViewModel(
         IAuthManager authManager,
@@ -35,6 +36,12 @@ public class NavigationViewModel : BindableBase, INavigationViewModel
     }
 
     public ObservableCollection<INavigationTreeItem> MenuItems { get; set; }
+
+    public INavigationTreeItem SelectedItem 
+    { 
+        get => _selectedItem; 
+        set => SetProperty(ref _selectedItem, value); 
+    }
 
     public async Task LoadAsync()
     {
@@ -135,6 +142,7 @@ public class NavigationViewModel : BindableBase, INavigationViewModel
         var index = _portfoliosTreeItem!.Children.IndexOf(currentPortfolio);
 
         _portfoliosTreeItem!.Children[index] = updatedPortfolio;
+        SelectedItem = updatedPortfolio;
         _eventAggregator.GetEvent<SelectNavigationItemEvent>().Publish(updatedPortfolio.Model);
     }
 

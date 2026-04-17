@@ -175,6 +175,7 @@
                       Background="Transparent">
                 <b:Interaction.Behaviors>
                     <behaviors:SelectFirstTreeItemBehavior/>
+                    <behaviors:SelectedItemBehavior SelectedItem="{Binding SelectedItem}"/>
                 </b:Interaction.Behaviors>
                 <TreeView.ItemTemplate>
                     <HierarchicalDataTemplate DataType="{x:Type navigationTree:NavigationTreeItem}" 
