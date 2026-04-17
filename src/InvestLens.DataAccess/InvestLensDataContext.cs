@@ -41,7 +41,7 @@ public sealed class InvestLensDataContext : DbContext
             entity.HasMany(p => p.ChildrenPortfolios)
                   .WithOne(p => p.ParentPortfolio)
                   .HasForeignKey(p => p.ParentPortfolioId)
-                  .OnDelete(DeleteBehavior.SetNull);
+                  .OnDelete(DeleteBehavior.Restrict);
         });
     }
 

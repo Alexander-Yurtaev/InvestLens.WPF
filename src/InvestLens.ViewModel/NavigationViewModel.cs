@@ -29,6 +29,7 @@ public class NavigationViewModel : BindableBase, INavigationViewModel
         _eventAggregator.GetEvent<PortfoliosLoadedEvent>().Subscribe(OnPortfoliosLoaded);
         _eventAggregator.GetEvent<PortfolioCreatedEvent>().Subscribe(OnPortfolioCreated);
         _eventAggregator.GetEvent<PortfolioUpdatedEvent>().Subscribe(OnPortfolioUpdated);
+        _eventAggregator.GetEvent<PortfolioDeletedEvent>().Subscribe(OnPortfolioDeleted);
 
         MenuItems = [];
     }
@@ -135,6 +136,17 @@ public class NavigationViewModel : BindableBase, INavigationViewModel
 
         _portfoliosTreeItem!.Children[index] = updatedPortfolio;
         _eventAggregator.GetEvent<SelectNavigationItemEvent>().Publish(updatedPortfolio.Model);
+    }
+
+    private void OnPortfolioDeleted(int id)
+    {
+        var deletedPortfolio = _portfoliosTreeItem!.Children
+            .Cast<NavigationTreeItem>()
+            .FirstOrDefault(p => (p.Model as PortfolioNavigationTreeModel)?.Id == id);
+        
+        if (deletedPortfolio is null) return;
+        
+        _portfoliosTreeItem!.Children.Remove(deletedPortfolio);
     }
 
     private void RefreshPortfolioList()

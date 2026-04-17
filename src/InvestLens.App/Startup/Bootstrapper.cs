@@ -124,7 +124,11 @@ namespace InvestLens.App.Startup
                 Directory.CreateDirectory(dbDir!);
             }
 
-            optionsBuilder.UseSqlite($"Data Source={dbPath}");
+            optionsBuilder.UseSqlite($"Data Source={dbPath}", options =>
+            {
+                options.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery);
+                options.CommandTimeout(30);
+            });
 
             return optionsBuilder.Options;
         }

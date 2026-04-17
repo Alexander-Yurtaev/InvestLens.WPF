@@ -69,13 +69,35 @@ public class PortfoliosManager : IPortfoliosManager
 
     public async Task Create(CreateModel model)
     {
-        var portfolio = _mapper.Map<InvestLens.Model.Entities.Portfolio>(model);
-        await _portfolioRepository.CreatePortfolio(portfolio);
-        await _portfolioRepository.Save();
+        using (var transaction = await _portfolioRepository.BeginTransactionAsync())
+        {
+            try
+            {
+                var portfolio = await _portfolioRepository.CreatePortfolio(model);
+                await _portfolioRepository.Save();
+                
+                if (model.Portfolios.Any())
+                {
+                    foreach (var childId in model.Portfolios)
+                    {
+                        var childPortfolio = await _portfolioRepository.GetPortfolioById(childId);
+                        childPortfolio!.ParentPortfolioId = portfolio!.Id;
+                    }
+                    await _portfolioRepository.Save();
+                }
+                
+                await _portfolioRepository.CommitTransactionAsync();
 
-        _portfolioCache[portfolio.Id] = _mapper.Map<PortfolioModel>(portfolio);
-        Cards.Add(CreateCard(_portfolioCache[portfolio.Id]));
-        _eventAggregator.GetEvent<PortfolioCreatedEvent>().Publish(portfolio.Id);
+                _portfolioCache[portfolio.Id] = _mapper.Map<PortfolioModel>(portfolio);
+                Cards.Add(CreateCard(_portfolioCache[portfolio.Id]));
+                _eventAggregator.GetEvent<PortfolioCreatedEvent>().Publish(portfolio.Id);
+            }
+            catch
+            {
+                await _portfolioRepository.RollbackTransactionAsync();
+                throw;
+            }
+        }
     }
 
     public async Task Update(UpdateModel model)

@@ -1,13 +1,18 @@
 ﻿using InvestLens.Model.Crud.Portfolio;
 using InvestLens.Model.Entities;
 using InvestLens.Model.Enums;
+using Microsoft.EntityFrameworkCore.Storage;
 
 namespace InvestLens.DataAccess.Repositories
 {
     public interface IPortfolioRepository
     {
+        Task<IDbContextTransaction> BeginTransactionAsync();
+        Task CommitTransactionAsync();
+        Task RollbackTransactionAsync();
+
         Task<bool> CheckNameUniqueAsync(int portfolioId, int ownerId, string name);
-        Task CreatePortfolio(Portfolio portfolio);
+        Task<Portfolio> CreatePortfolio(CreateModel model);
         Task Delete(int id);
         Task<List<Portfolio>> GetAllPortfolios(int ownerId);
         Task<List<Portfolio>> GetAllPortfolios(int ownerId, PortfolioType portfolioType);

@@ -2,6 +2,7 @@
 using InvestLens.Model.Entities;
 using InvestLens.Model.Enums;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 
 namespace InvestLens.DataAccess.Repositories;
 
@@ -10,10 +11,19 @@ public class PortfolioRepository(InvestLensDataContext db, IMapper mapper) : IPo
     private readonly InvestLensDataContext _db = db;
     private readonly IMapper _mapper = mapper;
 
-    public async Task CreatePortfolio(Portfolio portfolio)
+    public async Task<IDbContextTransaction> BeginTransactionAsync()
     {
-        _db.Portfolios.Add(portfolio);
-        await Task.Delay(0);
+        return await _db.Database.BeginTransactionAsync();
+    }
+
+    public async Task CommitTransactionAsync()
+    {
+        await _db.Database.CommitTransactionAsync();
+    }
+
+    public async Task RollbackTransactionAsync()
+    {
+        await _db.Database.RollbackTransactionAsync();
     }
 
     public async Task<Portfolio?> GetPortfolioById(int id)
@@ -46,6 +56,13 @@ public class PortfolioRepository(InvestLensDataContext db, IMapper mapper) : IPo
                            && p.Name == name);
 
         return !isExists;
+    }
+
+    public async Task<Portfolio> CreatePortfolio(InvestLens.Model.Crud.Portfolio.CreateModel model)
+    {
+        var portfolio = _mapper.Map<Portfolio>(model);
+        _db.Portfolios.Add(portfolio);
+        return await Task.FromResult(portfolio);
     }
 
     public async Task Update(InvestLens.Model.Crud.Portfolio.UpdateModel model)
