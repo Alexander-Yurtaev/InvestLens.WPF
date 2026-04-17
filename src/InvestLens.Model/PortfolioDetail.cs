@@ -18,7 +18,7 @@ public class PortfolioDetail
 
     public int Id { get; }
     public string Title { get; }
-    public string Description { get; init; }
+    public string Description { get; init; } = string.Empty;
     public PortfolioType PortfolioType { get; set; }
     public List<int> Portfolios { get; }
     public List<Stat> PortfolioStats { get; }
