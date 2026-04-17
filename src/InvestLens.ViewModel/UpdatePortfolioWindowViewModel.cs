@@ -1,6 +1,8 @@
 ﻿using InvestLens.DataAccess.Repositories;
 using InvestLens.Model.Crud.Portfolio;
+using InvestLens.Model.Entities;
 using InvestLens.Model.Enums;
+using InvestLens.ViewModel.Events;
 using InvestLens.ViewModel.Services;
 using System.Runtime.CompilerServices;
 
@@ -35,9 +37,8 @@ public sealed class UpdatePortfolioWindowViewModel : CreateUpdatePortfolioWindow
 
     protected override async Task ExecuteAction()
     {
-        // Save changes
-        // ...
-        await Task.Delay(0);
+        var updateModel = (UpdateModel)Model;
+        await PortfoliosManager.Update(updateModel);
         WindowManager.CloseWindow<UpdatePortfolioWindowViewModel>();
     }
 

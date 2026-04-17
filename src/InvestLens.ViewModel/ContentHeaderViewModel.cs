@@ -1,4 +1,6 @@
-﻿namespace InvestLens.ViewModel;
+﻿using InvestLens.ViewModel.Wrappers;
+
+namespace InvestLens.ViewModel;
 
 public class ContentHeaderViewModel : BindableBase, IContentHeaderViewModel
 {
@@ -13,7 +15,7 @@ public class ContentHeaderViewModel : BindableBase, IContentHeaderViewModel
 
     public string WelcomeTitle { get; private set; }
     public string WelcomeDescription { get; }
-    public List<ButtonInfo> Buttons { get; }
+    public List<ButtonWrapper> Buttons { get; }
 
     public void AddButtons(List<ButtonModel>? buttonModels)
     {
@@ -21,7 +23,7 @@ public class ContentHeaderViewModel : BindableBase, IContentHeaderViewModel
 
         foreach (var onButtonModel in buttonModels)
         {
-            Buttons.Add(new ButtonInfo(onButtonModel));
+            Buttons.Add(new ButtonWrapper(onButtonModel));
         }
     }
 

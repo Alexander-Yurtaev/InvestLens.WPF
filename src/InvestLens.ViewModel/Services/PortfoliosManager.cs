@@ -3,6 +3,7 @@ using AutoMapper;
 using InvestLens.DataAccess.Repositories;
 using InvestLens.Model;
 using InvestLens.Model.Crud.Portfolio;
+using InvestLens.Model.Entities;
 using InvestLens.Model.Enums;
 using InvestLens.Model.NavigationTree;
 using InvestLens.ViewModel.Events;
@@ -17,61 +18,6 @@ public class PortfoliosManager : IPortfoliosManager
     private readonly IPortfolioRepository _portfolioRepository;
     private readonly IEventAggregator _eventAggregator;
     private readonly SemaphoreSlim _loadSemaphoreSlim = new SemaphoreSlim(1);
-
-    private readonly Dictionary<int, PortfolioDetail> _portfolios = new Dictionary<int, PortfolioDetail>
-    {
-        { 1, new PortfolioDetail(1, "Составной", PortfolioType.Complex)
-            {
-                PortfolioStats = {
-                    new Stat("Стоимость", 84320, "$", false),
-                    new Stat("Доходность", 15.2, "%"),
-                    new Stat("Активов", 12)
-                },
-                Securities =
-                {
-                    new SecurityInfo("AAPL", "Apple Inc"){Count = 125, AveragePrice = 168.2, CurrentPrice = 175.32, TotalPrice = 21915, Profit = 890}
-                },
-                Operations =
-                {
-                    new SecurityOperation("AAPL", SecurityOperationType.Sell){Date = new DateTime(2025, 03, 15), Count = 50, Price = 172.5, TotalPrice = 8625},
-                    new SecurityOperation("AAPL", SecurityOperationType.Buy){Date = new DateTime(2025, 02, 15), Count = 75, Price = 165.8, TotalPrice = 12435},
-                }
-            }
-        },
-        { 2, new PortfolioDetail(2, "Портфель №1", PortfolioType.Invest)
-        {
-            PortfolioStats = {
-                new Stat("Стоимость", 24150, "$", false),
-                new Stat("Доходность", -8.4, "%"),
-                new Stat("Активов", 8)
-            },
-            Securities =
-            {
-                new SecurityInfo("MSFT", "Microsoft"){Count = 48, AveragePrice = 398.5, CurrentPrice = 420.75, TotalPrice = 20196, Profit = 1068}
-            },
-            Operations =
-            {
-                new SecurityOperation("MSFT", SecurityOperationType.Sell){Date = new DateTime(2025, 03, 10), Count = 20, Price = 405.3, TotalPrice = 8106},
-                new SecurityOperation("MSFT", SecurityOperationType.Buy){Date = new DateTime(2025, 02, 10), Count = 28, Price = 393.2, TotalPrice = 11010},
-            }
-        } },
-        { 3, new PortfolioDetail(3, "Портфель №2", PortfolioType.Invest)
-        {
-            PortfolioStats = {
-                new Stat("Стоимость", 16062, "$", false),
-                new Stat("Доходность", 22.1, "%"),
-                new Stat("Активов", 6)
-            },
-            Securities =
-            {
-                new SecurityInfo("SPY", "S&P 500 ETF"){Count = 32, AveragePrice = 465.1, CurrentPrice = 478.20, TotalPrice = 15302, Profit = 419}
-            },
-            Operations =
-            {
-                new SecurityOperation("SPY", SecurityOperationType.Buy){Date = new DateTime(2025, 03, 01), Count = 15, Price = 470.2, TotalPrice = 7053}
-            }
-        } },
-    };
 
     private readonly Dictionary<int, Model.Crud.Portfolio.PortfolioModel> _portfolioCache = [];
 
@@ -106,7 +52,10 @@ public class PortfoliosManager : IPortfoliosManager
         var portfolio = await _portfolioRepository.GetPortfolioById(id);
         if (portfolio is null) return null;
 
-        var detail = new PortfolioDetail(portfolio.Id, portfolio.Name, portfolio.PortfolioType);
+        var detail = new PortfolioDetail(portfolio.Id, portfolio.Name, portfolio.PortfolioType)
+        {
+            Description = portfolio.Description ?? ""
+        };
         return detail;
     }
 
@@ -118,6 +67,53 @@ public class PortfoliosManager : IPortfoliosManager
         return portfolios.Select(p => new Model.Crud.Portfolio.LookupModel(p.Id, p.Name, p.PortfolioType)).ToList();
     }
 
+    public async Task Create(CreateModel model)
+    {
+        var portfolio = _mapper.Map<InvestLens.Model.Entities.Portfolio>(model);
+        await _portfolioRepository.CreatePortfolio(portfolio);
+        await _portfolioRepository.Save();
+
+        _portfolioCache[portfolio.Id] = _mapper.Map<PortfolioModel>(portfolio);
+        Cards.Add(CreateCard(_portfolioCache[portfolio.Id]));
+        _eventAggregator.GetEvent<PortfolioCreatedEvent>().Publish(portfolio.Id);
+    }
+
+    public async Task Update(UpdateModel model)
+    {
+        await _portfolioRepository.Update(model);
+        await _portfolioRepository.Save();
+        var portfolio = await _portfolioRepository.GetPortfolioById(model.Id);
+        if (portfolio is null)
+        {
+            await Task.FromException(new KeyNotFoundException($"Портфель с {model.Id} не найден."));
+            return;
+        }
+
+        _portfolioCache[portfolio.Id] = _mapper.Map<PortfolioModel>(portfolio);
+
+        var index = Cards.FindIndex(card => card.Id == portfolio.Id);
+        Cards[index] = CreateCard(_portfolioCache[portfolio.Id]);
+
+        _eventAggregator.GetEvent<PortfolioUpdatedEvent>().Publish(model.Id);
+    }
+
+    public async Task Delete(int portfolioId)
+    {
+        await _portfolioRepository.Delete(portfolioId);
+        await _portfolioRepository.Save();
+
+        _portfolioCache.Remove(portfolioId);
+
+        var card = Cards.First(card => card.Id == portfolioId);
+        Cards.Remove(card);
+
+        _eventAggregator.GetEvent<PortfolioDeletedEvent>().Publish(portfolioId);
+    }
+
+    public async Task<bool> CheckNameUniqueAsync(int portfolioId, int ownerId, string name)
+    {
+        return await _portfolioRepository.CheckNameUniqueAsync(portfolioId, ownerId, name);
+    }
     private PortfolioType TitleToPortfolioType(string title)
     {
         return title switch
@@ -161,10 +157,10 @@ public class PortfoliosManager : IPortfoliosManager
 
     private async void OnLogin(UserInfo info)
     {
-        await Refresh(info.Id);
+        await LoadPortfolios(info.Id);
     }
 
-    private async Task Refresh(int ownerId)
+    private async Task LoadPortfolios(int ownerId)
     {
         await _loadSemaphoreSlim.WaitAsync();
 
@@ -185,49 +181,26 @@ public class PortfoliosManager : IPortfoliosManager
             _loadSemaphoreSlim.Release();
         }
 
-        _eventAggregator.GetEvent<PortfoliosRefreshedEvent>().Publish();
+        _eventAggregator.GetEvent<PortfoliosLoadedEvent>().Publish();
     }
 
     private void RefreshCards()
     {
-        var result = _portfolioCache.Values.Select(p =>
-        {
-            var card = new Card(p.Id, p.Name, true)
-            {
-                CardType = PortfolioTypeToStringConverter(p.PortfolioType),
-                CardTypeForeground = PortfolioTypeToForegroundConverter(p.PortfolioType),
-                CardTypeBackground = PortfolioTypeToBackgroundConverter(p.PortfolioType),
-                LastDateUpdate = "сегодня"
-            };
-            //card.Stats.AddRange(p.PortfolioStats);
-            return card;
-        }).ToList();
-
+        var result = _portfolioCache.Values.Select(CreateCard).ToList();
         Cards.Clear();
         Cards.AddRange(result);
     }
 
-    public async Task Create(CreateModel model)
+    private Card CreateCard(PortfolioModel portfolio)
     {
-        var portfolio = _mapper.Map<InvestLens.Model.Entities.Portfolio>(model);
-        await _portfolioRepository.CreatePortfolio(portfolio);
-        await Refresh(model.OwnerId);
-        _eventAggregator.GetEvent<PortfoliosRefreshedEvent>().Publish();
-    }
-
-    public async Task Delete(int id)
-    {
-        await _portfolioRepository.Delete(id);
-        _portfolioCache.Remove(id);
-
-        var userId = _authManager.CurrentUser!.Id;
-        await Refresh(userId);
-
-        _eventAggregator.GetEvent<PortfoliosRefreshedEvent>().Publish();
-    }
-
-    public async Task<bool> CheckNameUniqueAsync(int ownerId, string name)
-    {
-        return await _portfolioRepository.CheckNameUniqueAsync(ownerId, name);
+        var card = new Card(portfolio.Id, portfolio.Name, true)
+        {
+            CardType = PortfolioTypeToStringConverter(portfolio.PortfolioType),
+            CardTypeForeground = PortfolioTypeToForegroundConverter(portfolio.PortfolioType),
+            CardTypeBackground = PortfolioTypeToBackgroundConverter(portfolio.PortfolioType),
+            LastDateUpdate = "сегодня"
+        };
+        //card.Stats.AddRange(p.PortfolioStats);
+        return card;
     }
 }

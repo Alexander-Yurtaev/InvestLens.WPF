@@ -28,18 +28,29 @@ public class PortfoliosViewModel : ViewModelBaseWithContentHeader, IPortfoliosVi
         };
         ContentHeaderVm.AddButtons(buttonModels);
 
-        _eventAggregator.GetEvent<PortfoliosRefreshedEvent>().Subscribe(OnPortfoliosRefreshed);
+        OnPortfoliosLoaded();
+
+        _eventAggregator.GetEvent<PortfolioCreatedEvent>().Subscribe(OnPortfolioCreated);
+        _eventAggregator.GetEvent<PortfoliosLoadedEvent>().Subscribe(OnPortfoliosLoaded);
     }
 
     public ObservableCollection<CardWrapper> Cards { get; } = [];
 
-    private void OnCreatePortfolio()
+    public async Task Load(bool? force = false)
     {
-        _windowManager.ShowDialogWindow<CreatePortfolioWindowViewModel>();
+        await Task.Delay(0);
     }
 
-    private void OnPortfoliosRefreshed()
+    private async Task OnCreatePortfolio()
     {
+        _windowManager.ShowDialogWindow<CreatePortfolioWindowViewModel>();
+        await Task.Delay(0);
+    }
+
+    private void OnPortfolioCreated(int id)
+    {
+
+
         Cards.Clear();
         foreach (var card in _portfoliosManager.Cards.Select(c => new CardWrapper(c, OnDeleteCommand)))
         {
@@ -49,19 +60,18 @@ public class PortfoliosViewModel : ViewModelBaseWithContentHeader, IPortfoliosVi
 
     private async Task OnDeleteCommand(CardWrapper wrapper)
     {
-        var viewModel = new ConfirmDeleteDialogViewModel(_windowManager)
-        {
-            PortfolioName = wrapper.Title
-        };
-
+        var viewModel = new ConfirmDeleteDialogViewModel(_windowManager, wrapper.Title);
         var confirmed = _windowManager.ShowDialogWindow<ConfirmDeleteDialogViewModel>(viewModel);
         if (confirmed != true) return;
         await _portfoliosManager.Delete(wrapper.Id);
     }
 
-    public async Task Load(bool? force = false)
+    private void OnPortfoliosLoaded()
     {
-        OnPortfoliosRefreshed();
-        await Task.Delay(0);
+        Cards.Clear();
+        foreach (var card in _portfoliosManager.Cards.Select(c => new CardWrapper(c, OnDeleteCommand)))
+        {
+            Cards.Add(card);
+        }
     }
 }

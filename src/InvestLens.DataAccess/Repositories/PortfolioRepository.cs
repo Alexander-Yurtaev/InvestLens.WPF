@@ -1,30 +1,34 @@
-﻿using InvestLens.Model.Entities;
+﻿using AutoMapper;
+using InvestLens.Model.Entities;
 using InvestLens.Model.Enums;
 using Microsoft.EntityFrameworkCore;
 
 namespace InvestLens.DataAccess.Repositories;
 
-public class PortfolioRepository(InvestLensDataContext db) : IPortfolioRepository
+public class PortfolioRepository(InvestLensDataContext db, IMapper mapper) : IPortfolioRepository
 {
     private readonly InvestLensDataContext _db = db;
+    private readonly IMapper _mapper = mapper;
 
-    public async Task<Portfolio?> CreatePortfolio(Portfolio portfolio)
+    public async Task CreatePortfolio(Portfolio portfolio)
     {
         _db.Portfolios.Add(portfolio);
-        var count = await _db.SaveChangesAsync();
-
-        return count == 0 ? null : portfolio;
+        await Task.Delay(0);
     }
 
     public async Task<Portfolio?> GetPortfolioById(int id)
     {
-        var portfolio = await _db.Portfolios.FirstOrDefaultAsync(p => p.Id == id);
+        var portfolio = await _db.Portfolios
+            .FirstOrDefaultAsync(p => p.Id == id);
+
         return portfolio;
     }
 
     public async Task<List<Portfolio>> GetAllPortfolios(int ownerId)
     {
-        return await _db.Portfolios.Where(p => p.OwnerId == ownerId).ToListAsync();
+        return await _db.Portfolios
+            .Where(p => p.OwnerId == ownerId)
+            .ToListAsync();
     }
 
     public async Task<List<Portfolio>> GetAllPortfolios(int ownerId, PortfolioType portfolioType)
@@ -34,22 +38,39 @@ public class PortfolioRepository(InvestLensDataContext db) : IPortfolioRepositor
             .ToListAsync();
     }
 
-    public async Task<bool> CheckNameUniqueAsync(int ownerId, string name)
+    public async Task<bool> CheckNameUniqueAsync(int portfolioId, int ownerId, string name)
     {
-        var isExists = await _db.Portfolios.AnyAsync(p => p.OwnerId == ownerId && p.Name == name);
+        var isExists = await _db.Portfolios
+            .AnyAsync(p => p.OwnerId == ownerId 
+                           && (portfolioId == 0 || p.Id != portfolioId) 
+                           && p.Name == name);
+
         return !isExists;
     }
 
-    public async Task<bool?> Delete(int id)
+    public async Task Update(InvestLens.Model.Crud.Portfolio.UpdateModel model)
     {
-        var portfolio = await _db.Portfolios.FirstOrDefaultAsync(p => p.Id == id);
+        var portfolio = await GetPortfolioById(model.Id);
         if (portfolio is null)
         {
-            return null;
+            await Task.FromException(new KeyNotFoundException($"Портфель с {model.Id} не найден."));
+            return;
         }
 
+        _mapper.Map(model, portfolio);
+    }
+
+    public async Task Delete(int id)
+    {
+        var portfolio = await _db.Portfolios
+            .FirstOrDefaultAsync(p => p.Id == id);
+        if (portfolio is null) return;
+
         _db.Portfolios.Remove(portfolio);
-        var count = await _db.SaveChangesAsync();
-        return count > 0;
+    }
+
+    public async Task<int> Save()
+    {
+        return await _db.SaveChangesAsync();
     }
 }

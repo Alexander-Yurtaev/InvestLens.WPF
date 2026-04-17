@@ -1,6 +1,7 @@
 ﻿using InvestLens.DataAccess.Repositories;
 using InvestLens.Model;
 using InvestLens.Model.Crud.Portfolio;
+using InvestLens.ViewModel.Dialogs;
 using InvestLens.ViewModel.Services;
 using InvestLens.ViewModel.Wrappers;
 
@@ -17,7 +18,7 @@ public class PortfolioDetailViewModel : ViewModelBaseWithContentHeader, IPortfol
         PortfolioDetail model, 
         IWindowManager windowManager, 
         IAuthManager authManager,
-        IPortfoliosManager portfoliosManager) : base(model.Title)
+        IPortfoliosManager portfoliosManager) : base(model.Title, model.Description)
     {
         _model = model;
         _windowManager = windowManager;
@@ -27,6 +28,7 @@ public class PortfolioDetailViewModel : ViewModelBaseWithContentHeader, IPortfol
         var buttonModels = new List<ButtonModel>
         {
             new ButtonModel("Редактировать", OnEditPortfolio),
+            new ButtonModel("Удалить", OnDeletePortfolio),
             new ButtonModel("Импортировать", OnImportPortfolio),
         };
         ContentHeaderVm.Buttons.Clear();
@@ -41,16 +43,28 @@ public class PortfolioDetailViewModel : ViewModelBaseWithContentHeader, IPortfol
     public List<SecurityInfoWrapper> Securities { get; }
     public List<SecurityOperation> Operations => _model.Operations;
 
-    private void OnEditPortfolio()
+    private async Task OnEditPortfolio()
     {
-        var editModel = new UpdateModel(_model.Id, _model.Title, _model.PortfolioType);
+        var editModel = new UpdateModel(_model.Id, _model.Title, _model.PortfolioType)
+        {
+            Description = _model.Description
+        };
 
         var viewModel = new UpdatePortfolioWindowViewModel(editModel, _windowManager, _authManager, _portfoliosManager);
         _windowManager.ShowDialogWindow(viewModel);
+        await Task.Delay(0);
     }
 
-    private void OnImportPortfolio()
+    private async Task OnDeletePortfolio()
     {
-        
+        var viewModel = new ConfirmDeleteDialogViewModel(_windowManager, _model.Title);
+        var confirmed = _windowManager.ShowDialogWindow<ConfirmDeleteDialogViewModel>(viewModel);
+        if (confirmed != true) return;
+        await _portfoliosManager.Delete(_model.Id);
+    }
+
+    private async Task OnImportPortfolio()
+    {
+        await Task.Delay(0);
     }
 }

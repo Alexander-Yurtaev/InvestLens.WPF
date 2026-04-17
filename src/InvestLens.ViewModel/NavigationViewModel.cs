@@ -26,9 +26,10 @@ public class NavigationViewModel : BindableBase, INavigationViewModel
         _dohodService = dohodService;
         _eventAggregator = eventAggregator;
 
-        _eventAggregator.GetEvent<LoginEvent>().Subscribe(OnLogin);
-        _eventAggregator.GetEvent<PortfoliosRefreshedEvent>().Subscribe(OnPortfoliosRefreshed);
-        
+        _eventAggregator.GetEvent<PortfoliosLoadedEvent>().Subscribe(OnPortfoliosLoaded);
+        _eventAggregator.GetEvent<PortfolioCreatedEvent>().Subscribe(OnPortfolioCreated);
+        _eventAggregator.GetEvent<PortfolioUpdatedEvent>().Subscribe(OnPortfolioUpdated);
+
         MenuItems = [];
     }
 
@@ -99,14 +100,41 @@ public class NavigationViewModel : BindableBase, INavigationViewModel
         return result;
     }
 
-    private void OnLogin(UserInfo info)
+    private void OnPortfoliosLoaded()
     {
         RefreshPortfolioList();
     }
 
-    private void OnPortfoliosRefreshed()
+    private void OnPortfolioCreated(int id)
     {
-        RefreshPortfolioList();
+        var portfolio = _portfoliosManager
+            .GetPortfoliosMenuItems(_authManager.CurrentUser!.Id)
+            .Cast<NavigationTreeItem>()
+            .FirstOrDefault(p => (p.Model as PortfolioNavigationTreeModel)?.Id == id);
+
+        if (portfolio is null) return;
+        _portfoliosTreeItem!.Children.Add(portfolio);
+    }
+
+    private void OnPortfolioUpdated(int id)
+    {
+        var updatedPortfolio = _portfoliosManager
+            .GetPortfoliosMenuItems(_authManager.CurrentUser!.Id)
+            .Cast<NavigationTreeItem>()
+            .FirstOrDefault(p => (p.Model as PortfolioNavigationTreeModel)?.Id == id);
+
+        if (updatedPortfolio is null) return;
+
+        var currentPortfolio = _portfoliosTreeItem!.Children
+            .Cast<NavigationTreeItem>()
+            .FirstOrDefault(p => (p.Model as PortfolioNavigationTreeModel)?.Id == id);
+        
+        if (currentPortfolio is null) return;
+
+        var index = _portfoliosTreeItem!.Children.IndexOf(currentPortfolio);
+
+        _portfoliosTreeItem!.Children[index] = updatedPortfolio;
+        _eventAggregator.GetEvent<SelectNavigationItemEvent>().Publish(updatedPortfolio.Model);
     }
 
     private void RefreshPortfolioList()
@@ -116,7 +144,7 @@ public class NavigationViewModel : BindableBase, INavigationViewModel
             .Cast<NavigationTreeItem>()
             .ToList();
         
-        // Add
+        // Update
         foreach (NavigationTreeItem portfolio in portfolios)
         {
             var portfolioId = ((PortfolioNavigationTreeModel)portfolio.Model).Id;
@@ -125,9 +153,15 @@ public class NavigationViewModel : BindableBase, INavigationViewModel
                 .Cast<NavigationTreeItem>()
                 .FirstOrDefault(item => ((PortfolioNavigationTreeModel)item.Model).Id == portfolioId);
 
-            if (existPortfolio is not null) continue;
-
-            _portfoliosTreeItem!.Children.Add(portfolio);
+            if (existPortfolio is not null)
+            {
+                var index = _portfoliosTreeItem!.Children.IndexOf(existPortfolio);
+                _portfoliosTreeItem!.Children[index] = portfolio;
+            }
+            else
+            {
+                _portfoliosTreeItem!.Children.Add(portfolio);
+            }   
         }
 
         // Delete

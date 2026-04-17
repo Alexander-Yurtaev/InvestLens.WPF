@@ -1,15 +1,15 @@
 ﻿using System.Windows.Input;
 
-namespace InvestLens.ViewModel;
+namespace InvestLens.ViewModel.Wrappers;
 
-public class ButtonInfo
+public class ButtonWrapper
 {
     private readonly ButtonModel _model;
 
-    public ButtonInfo(ButtonModel model)
+    public ButtonWrapper(ButtonModel model)
     {
         _model = model;
-        Command = new DelegateCommand(_model.Action);
+        Command = new AsyncDelegateCommand(_model.Action);
     }
 
     public string Content => _model.Content;

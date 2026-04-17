@@ -2,12 +2,12 @@
 
 public class ButtonModel
 {
-    public ButtonModel(string content, Action action)
+    public ButtonModel(string content, Func<Task> action)
     {
         Content = content;
         Action = action;
     }
 
     public string Content { get; }
-    public Action Action { get; }
+    public Func<Task> Action { get; }
 }

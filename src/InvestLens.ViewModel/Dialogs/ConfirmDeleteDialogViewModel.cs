@@ -7,11 +7,11 @@ public class ConfirmDeleteDialogViewModel : BindableBase, IConfirmDeleteDialogVi
 {
     private readonly IWindowManager _windowManager;
     private bool _isAgree;
-    private bool? _dialogResult;
-    private string _portfolioName;
+    private string _portfolioName = string.Empty;
 
-    public ConfirmDeleteDialogViewModel(IWindowManager windowManager)
+    public ConfirmDeleteDialogViewModel(IWindowManager windowManager, string portfolioName="")
     {
+        PortfolioName = portfolioName;
         CloseCommand = new DelegateCommand(OnClose);
         DeleteCommand = new DelegateCommand(OnDelete, () => IsAgree);
         _windowManager = windowManager;
