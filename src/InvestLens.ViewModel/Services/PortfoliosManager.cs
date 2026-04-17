@@ -56,13 +56,14 @@ public class PortfoliosManager : IPortfoliosManager
         {
             Description = portfolio.Description ?? ""
         };
+        detail.Portfolios.AddRange(portfolio.ChildrenPortfolios.Select(c => c.Id));
         return detail;
     }
 
     public async Task<List<LookupModel>> GetLookupModels(int ownerId, int? portfolioId = null)
     {
         var portfolios = (await _portfolioRepository.GetAllPortfolios(ownerId))
-            .Where(p => portfolioId is null || p.Id != portfolioId.Value && p.PortfolioType != PortfolioType.Complex);
+            .Where(p => (portfolioId is null || p.Id != portfolioId.Value) && p.PortfolioType != PortfolioType.Complex);
 
         return portfolios.Select(p => new Model.Crud.Portfolio.LookupModel(p.Id, p.Name, p.PortfolioType)).ToList();
     }

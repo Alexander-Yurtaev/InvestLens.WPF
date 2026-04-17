@@ -1,4 +1,5 @@
-﻿using InvestLens.Model.Enums;
+﻿using InvestLens.Model.Entities;
+using InvestLens.Model.Enums;
 
 namespace InvestLens.Model;
 
@@ -9,6 +10,7 @@ public class PortfolioDetail
         Id = id;
         Title = title;
         PortfolioType = portfolioType;
+        Portfolios = [];
         PortfolioStats = [];
         Securities = [];
         Operations = [];
@@ -18,6 +20,7 @@ public class PortfolioDetail
     public string Title { get; }
     public string Description { get; init; }
     public PortfolioType PortfolioType { get; set; }
+    public List<int> Portfolios { get; }
     public List<Stat> PortfolioStats { get; }
     public List<SecurityInfo> Securities { get; }
     public List<SecurityOperation> Operations { get; }

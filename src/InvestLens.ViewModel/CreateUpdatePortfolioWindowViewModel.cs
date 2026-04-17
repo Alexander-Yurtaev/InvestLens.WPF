@@ -76,7 +76,7 @@ public abstract class CreateUpdatePortfolioWindowViewModel : ValidationViewModel
     public ICommand CloseCommand { get; set; }
     public ICommand ActionCommand { get; set; }
 
-    public async Task Load(bool? force=false)
+    public virtual async Task Load(bool? force=false)
     {
         if (_authManager.CurrentUser is null) throw new SystemException("Не авторизован!");
 

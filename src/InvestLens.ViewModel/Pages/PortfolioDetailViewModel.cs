@@ -49,6 +49,7 @@ public class PortfolioDetailViewModel : ViewModelBaseWithContentHeader, IPortfol
         {
             Description = _model.Description
         };
+        editModel.Portfolios.AddRange(_model.Portfolios);
 
         var viewModel = new UpdatePortfolioWindowViewModel(editModel, _windowManager, _authManager, _portfoliosManager);
         _windowManager.ShowDialogWindow(viewModel);

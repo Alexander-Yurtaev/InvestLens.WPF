@@ -3,6 +3,7 @@ using InvestLens.Model.Entities;
 using InvestLens.Model.Enums;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
+using System.Linq;
 
 namespace InvestLens.DataAccess.Repositories;
 
@@ -75,6 +76,19 @@ public class PortfolioRepository(InvestLensDataContext db, IMapper mapper) : IPo
         }
 
         _mapper.Map(model, portfolio);
+        foreach(var id in model.Portfolios.ToArray())
+        {
+            if (portfolio.ChildrenPortfolios.Any(c => c.Id == id)) continue;
+            var childPortfolio = await GetPortfolioById(id);
+            portfolio.ChildrenPortfolios.Add(childPortfolio!);
+        }
+
+        foreach(var childPortfolio in portfolio.ChildrenPortfolios.ToArray())
+        {
+            var deletedChildPortfolioId = model.Portfolios.FirstOrDefault(p => p == childPortfolio.Id);
+            if (deletedChildPortfolioId > 0) continue;
+            portfolio.ChildrenPortfolios.Remove(childPortfolio);
+        }
     }
 
     public async Task Delete(int id)

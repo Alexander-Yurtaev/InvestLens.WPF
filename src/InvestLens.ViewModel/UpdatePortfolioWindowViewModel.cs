@@ -19,13 +19,6 @@ public sealed class UpdatePortfolioWindowViewModel : CreateUpdatePortfolioWindow
         Header = "Редактирование";
         ActionTitle = "Сохранить";
 
-        foreach (var id in Model.Portfolios)
-        {
-            var lm = LookupModels.FirstOrDefault(lm => lm.Id == id);
-            if (lm is null) continue;
-            lm.IsChecked = true;
-        }
-
         InvalidateCommands();
     }
 
@@ -35,9 +28,25 @@ public sealed class UpdatePortfolioWindowViewModel : CreateUpdatePortfolioWindow
 
     #region Overrides of CreateUpdatePortfolioWindowViewModel
 
+    public override async Task Load(bool? force = false)
+    {
+        await base.Load(force);
+
+        foreach (var id in Model.Portfolios)
+        {
+            var lm = LookupModels.FirstOrDefault(lm => lm.Id == id);
+            if (lm is null) continue;
+            lm.IsChecked = true;
+        }
+    }
+
     protected override async Task ExecuteAction()
     {
         var updateModel = (UpdateModel)Model;
+
+        updateModel.Portfolios.Clear();
+        updateModel.Portfolios.AddRange(LookupModels.Where(lm => lm.IsChecked).Select(lm => lm.Id));
+
         await PortfoliosManager.Update(updateModel);
         WindowManager.CloseWindow<UpdatePortfolioWindowViewModel>();
     }
