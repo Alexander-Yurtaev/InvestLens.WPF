@@ -14,7 +14,7 @@ public class NavigationViewModel : BindableBase, INavigationViewModel
     private readonly IDohodService _dohodService;
     private readonly IEventAggregator _eventAggregator;
     private NavigationTreeItem? _portfoliosTreeItem;
-    private INavigationTreeItem _selectedItem;
+    private INavigationTreeItem? _selectedItem;
 
     public NavigationViewModel(
         IAuthManager authManager,
@@ -37,7 +37,7 @@ public class NavigationViewModel : BindableBase, INavigationViewModel
 
     public ObservableCollection<INavigationTreeItem> MenuItems { get; set; }
 
-    public INavigationTreeItem SelectedItem 
+    public INavigationTreeItem? SelectedItem 
     { 
         get => _selectedItem; 
         set => SetProperty(ref _selectedItem, value); 
