@@ -4,6 +4,7 @@ using InvestLens.ViewModel.Events;
 using InvestLens.ViewModel.Services;
 using InvestLens.ViewModel.Wrappers;
 using System.Collections.ObjectModel;
+using System.Windows.Input;
 
 namespace InvestLens.ViewModel.Pages;
 
@@ -28,6 +29,8 @@ public class PortfoliosViewModel : ViewModelBaseWithContentHeader, IPortfoliosVi
         };
         ContentHeaderVm.AddButtons(buttonModels);
 
+        SelectPortfolioCommand = new DelegateCommand<CardWrapper>(OnSelectPortfolio);
+
         OnPortfoliosLoaded();
 
         _eventAggregator.GetEvent<PortfolioCreatedEvent>().Subscribe(OnPortfolioCreated);
@@ -40,6 +43,8 @@ public class PortfoliosViewModel : ViewModelBaseWithContentHeader, IPortfoliosVi
     {
         await Task.Delay(0);
     }
+
+    public ICommand SelectPortfolioCommand {  get; }
 
     private async Task OnCreatePortfolio()
     {
@@ -79,5 +84,10 @@ public class PortfoliosViewModel : ViewModelBaseWithContentHeader, IPortfoliosVi
         {
             Cards.Add(card);
         }
+    }
+
+    private void OnSelectPortfolio(CardWrapper wrapper)
+    {
+        _eventAggregator.GetEvent<SelectPortfolioEvent>().Publish(wrapper.Id);
     }
 }

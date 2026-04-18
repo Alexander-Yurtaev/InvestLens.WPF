@@ -11,21 +11,10 @@ public class SelectedItemBehavior : Behavior<TreeView>
     public static readonly DependencyProperty SelectedItemProperty =
         DependencyProperty.Register("SelectedItem", typeof(INavigationTreeItem), typeof(SelectedItemBehavior), new PropertyMetadata(null, SelectedItemChangedCallback));
 
-    public INavigationTreeItem SelectedItem
+    public INavigationTreeItem? SelectedItem
     {
-        get { return (INavigationTreeItem)GetValue(SelectedItemProperty); }
+        get { return (INavigationTreeItem?)GetValue(SelectedItemProperty); }
         set { SetValue(SelectedItemProperty, value); }
-    }
-
-    protected override void OnAttached()
-    {
-        base.OnAttached();
-        AssociatedObject.SelectedItemChanged += AssociatedObject_SelectedItemChanged;
-    }
-
-    private void AssociatedObject_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
-    {
-        
     }
 
     private static void SelectedItemChangedCallback(DependencyObject d, DependencyPropertyChangedEventArgs e)

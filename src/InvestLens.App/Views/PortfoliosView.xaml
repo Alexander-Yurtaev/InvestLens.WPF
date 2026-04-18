@@ -36,7 +36,9 @@
                 <ItemsControl.ItemTemplate>
                     <DataTemplate DataType="{x:Type wrappers:CardWrapper}">
                         <Button Style="{StaticResource CardStyle}" 
-                                Content="{Binding Title}"/>
+                                Content="{Binding Title}"
+                                Command="{Binding DataContext.SelectPortfolioCommand, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
+                                CommandParameter="{Binding}"/>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
