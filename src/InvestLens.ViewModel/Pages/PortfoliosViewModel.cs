@@ -49,8 +49,6 @@ public class PortfoliosViewModel : ViewModelBaseWithContentHeader, IPortfoliosVi
 
     private void OnPortfolioCreated(int id)
     {
-
-
         Cards.Clear();
         foreach (var card in _portfoliosManager.Cards.Select(c => new CardWrapper(c, OnDeleteCommand)))
         {
