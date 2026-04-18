@@ -2,6 +2,6 @@
 {
     public interface IConfirmable
     {
-        bool IsConfermed { get; }
+        bool IsConfirmed { get; }
     }
 }

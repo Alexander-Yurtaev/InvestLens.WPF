@@ -33,20 +33,20 @@ public class ConfirmDeleteDialogViewModel : BindableBase, IConfirmDeleteDialogVi
         }
     }
 
-    public bool IsConfermed { get; private set; }
+    public bool IsConfirmed { get; private set; }
 
     public ICommand CloseCommand { get; set; }
     public ICommand DeleteCommand { get; set; }
 
     private void OnClose()
     {
-        IsConfermed = false;
+        IsConfirmed = false;
         _windowManager.CloseWindow<ConfirmDeleteDialogViewModel>();
     }
 
     private void OnDelete()
     {
-        IsConfermed = true;
+        IsConfirmed = true;
         _windowManager.CloseWindow<ConfirmDeleteDialogViewModel>();
     }
 }

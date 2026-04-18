@@ -28,7 +28,7 @@ public class WindowManager : IWindowManager
         var result = window.ShowDialog();
         if (window.DataContext is IConfirmable confirmable)
         {
-            return confirmable.IsConfermed;
+            return confirmable.IsConfirmed;
         }
         return result;
     }
