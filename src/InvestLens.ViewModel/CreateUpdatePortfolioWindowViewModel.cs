@@ -78,7 +78,13 @@ public abstract class CreateUpdatePortfolioWindowViewModel : ValidationViewModel
 
     public virtual async Task Load(bool? force=false)
     {
-        if (_authManager.CurrentUser is null) throw new SystemException("Не авторизован!");
+        if (_authManager.CurrentUser is null)
+        {
+            WindowManager.ShowErrorDialog("Вы не авторизованы!");
+            WindowManager.CloseWindow<CreatePortfolioWindowViewModel>();
+            WindowManager.ShowDialogWindow<LoginWindowViewModel>();
+            return;
+        }
 
         var userId = _authManager.CurrentUser.Id;
         var lookupModels = (await PortfoliosManager.GetLookupModels(userId, Model.Id > 0 ? Model.Id : null))
@@ -124,7 +130,13 @@ public abstract class CreateUpdatePortfolioWindowViewModel : ValidationViewModel
 
     protected async Task ValidateNameAsync()
     {
-        if (_authManager.CurrentUser is null) throw new SystemException("Вы не авторизованы!");
+        if (_authManager.CurrentUser is null)
+        {
+            WindowManager.ShowErrorDialog("Вы не авторизованы!");
+            WindowManager.CloseWindow<CreatePortfolioWindowViewModel>();
+            WindowManager.ShowDialogWindow<LoginWindowViewModel>();
+            return;
+        }
 
         var ownerId = _authManager.CurrentUser!.Id;
 

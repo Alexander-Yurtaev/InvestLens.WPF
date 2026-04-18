@@ -16,6 +16,7 @@ public class PortfoliosManager : IPortfoliosManager
     private readonly IMapper _mapper;
     private readonly IAuthManager _authManager;
     private readonly IPortfolioRepository _portfolioRepository;
+    private readonly IWindowManager _windowManager;
     private readonly IEventAggregator _eventAggregator;
     private readonly SemaphoreSlim _loadSemaphoreSlim = new SemaphoreSlim(1);
 
@@ -25,11 +26,13 @@ public class PortfoliosManager : IPortfoliosManager
         IMapper mapper,
         IAuthManager authManager,
         IPortfolioRepository portfolioRepository, 
+        IWindowManager windowManager,
         IEventAggregator eventAggregator)
     {
         _mapper = mapper;
         _authManager = authManager;
         _portfolioRepository = portfolioRepository;
+        _windowManager = windowManager;
         _eventAggregator = eventAggregator;
 
         _eventAggregator.GetEvent<LoginEvent>().Subscribe(OnLogin);
@@ -93,10 +96,10 @@ public class PortfoliosManager : IPortfoliosManager
                 Cards.Add(CreateCard(_portfolioCache[portfolio.Id]));
                 _eventAggregator.GetEvent<PortfolioCreatedEvent>().Publish(portfolio.Id);
             }
-            catch
+            catch (Exception ex)
             {
                 await _portfolioRepository.RollbackTransactionAsync();
-                throw;
+                _windowManager.ShowErrorDialog(ex.Message);
             }
         }
     }
@@ -120,10 +123,11 @@ public class PortfoliosManager : IPortfoliosManager
         _eventAggregator.GetEvent<PortfolioUpdatedEvent>().Publish(model.Id);
     }
 
-    public async Task Delete(int portfolioId)
+    public async Task<bool> Delete(int portfolioId)
     {
         await _portfolioRepository.Delete(portfolioId);
-        await _portfolioRepository.Save();
+        var count = await _portfolioRepository.Save();
+        if (count == 0) return false;
 
         _portfolioCache.Remove(portfolioId);
 
@@ -131,31 +135,27 @@ public class PortfoliosManager : IPortfoliosManager
         Cards.Remove(card);
 
         _eventAggregator.GetEvent<PortfolioDeletedEvent>().Publish(portfolioId);
+
+        return true;
     }
 
     public async Task<bool> CheckNameUniqueAsync(int portfolioId, int ownerId, string name)
     {
         return await _portfolioRepository.CheckNameUniqueAsync(portfolioId, ownerId, name);
     }
-    private PortfolioType TitleToPortfolioType(string title)
-    {
-        return title switch
-        {
-            "Составной" => PortfolioType.Complex,
-            "Портфель №1" => PortfolioType.Invest,
-            "Портфель №2" => PortfolioType.Invest,
-            _ => throw new ArgumentOutOfRangeException(title)
-        };
-    }
-
+    
     private string PortfolioTypeToStringConverter(PortfolioType portfolioType)
     {
-        return portfolioType switch
+        switch (portfolioType)
         {
-            PortfolioType.Complex => "Составной",
-            PortfolioType.Invest => "Инвест",
-            _ => throw new ArgumentOutOfRangeException()
-        };
+            case PortfolioType.Invest:
+                return "Инвест";
+            case PortfolioType.Complex:
+                return "Составной";
+            default:
+                _windowManager.ShowWarningDialog($"Неизвестный тип портфеля {portfolioType}", "OK");
+                return "";
+        }
     }
 
     private string PortfolioTypeToForegroundConverter(PortfolioType portfolioType)

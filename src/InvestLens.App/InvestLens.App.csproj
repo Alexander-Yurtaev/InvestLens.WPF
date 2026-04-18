@@ -21,6 +21,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="Windows\Dialogs\ModalDialog.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="Windows\UpdatePortfolioWindow.xaml.cs">
       <SubType>Code</SubType>
     </Compile>

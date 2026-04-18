@@ -12,6 +12,6 @@ public interface IPortfoliosManager
     Task<List<LookupModel>> GetLookupModels(int ownerId, int? portfolioId = null);
     Task<bool> CheckNameUniqueAsync(int portfolioId, int ownerId, string name);
     Task Create(CreateModel model);
-    Task Delete(int id);
+    Task<bool> Delete(int id);
     Task Update(UpdateModel model);
 }

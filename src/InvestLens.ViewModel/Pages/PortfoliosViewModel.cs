@@ -60,10 +60,18 @@ public class PortfoliosViewModel : ViewModelBaseWithContentHeader, IPortfoliosVi
 
     private async Task OnDeleteCommand(CardWrapper wrapper)
     {
-        var viewModel = new ConfirmDeleteDialogViewModel(_windowManager, wrapper.Title);
-        var confirmed = _windowManager.ShowDialogWindow<ConfirmDeleteDialogViewModel>(viewModel);
-        if (confirmed != true) return;
-        await _portfoliosManager.Delete(wrapper.Id);
+        var confirmed = _windowManager.ShowConfirmDialog($"Вы собираетесь удалить портфель \"{wrapper.Title}\". " +
+            $"Это действие нельзя отменить. Все данные портфеля будут потеряны.", "Удалить");
+
+        if (confirmed == true)
+        {
+            var result = await _portfoliosManager.Delete(wrapper.Id);
+            if (result == true)
+            {
+                var card = Cards.First(c => c.Id == wrapper.Id);
+                Cards.Remove(card);
+            }
+        }
     }
 
     private void OnPortfoliosLoaded()

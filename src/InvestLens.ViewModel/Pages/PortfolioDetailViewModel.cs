@@ -58,10 +58,13 @@ public class PortfolioDetailViewModel : ViewModelBaseWithContentHeader, IPortfol
 
     private async Task OnDeletePortfolio()
     {
-        var viewModel = new ConfirmDeleteDialogViewModel(_windowManager, _model.Title);
-        var confirmed = _windowManager.ShowDialogWindow<ConfirmDeleteDialogViewModel>(viewModel);
-        if (confirmed != true) return;
-        await _portfoliosManager.Delete(_model.Id);
+        var confirmed = _windowManager.ShowConfirmDialog($"Вы собираетесь удалить портфель \"{_model.Title}\". " +
+            $"Это действие нельзя отменить. Все данные портфеля будут потеряны.", "Удалить");
+
+        if (confirmed == true)
+        {
+            await _portfoliosManager.Delete(_model.Id);
+        }
     }
 
     private async Task OnImportPortfolio()

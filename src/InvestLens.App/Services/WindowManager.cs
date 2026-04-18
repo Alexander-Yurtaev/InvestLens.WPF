@@ -15,6 +15,37 @@ public class WindowManager : IWindowManager
         _lifetimeScope = lifetimeScope;
     }
 
+    public void ShowErrorDialog(string message)
+    {
+        var viewModel = new ErrorDialogViewModel(this, message);
+        ShowModalDialog(viewModel);
+    }
+
+    public void ShowWarningDialog(string message, string actionContext)
+    {
+        var viewModel = new WarningDialogViewModel(this, message, actionContext);
+        ShowModalDialog(viewModel);
+    }
+
+    public void ShowInformationDialog(string message, string actionContext)
+    {
+        var viewModel = new InformationDialogViewModel(this, message);
+        ShowModalDialog(viewModel);
+    }
+
+    public void ShowSuccessDialog(string message, string actionContext)
+    {
+        var viewModel = new SuccessDialogViewModel(this, message);
+        ShowModalDialog(viewModel);
+    }
+
+    public bool? ShowConfirmDialog(string message, string actionContext)
+    {
+        var viewModel = new ConfirmDialogViewModel(this, message);
+        var result = ShowModalDialog(viewModel);
+        return result;
+    }
+
     public void ShowWindow<TViewModel>(TViewModel? viewModel = null) where TViewModel : class
     {
         var window = GetWindow(typeof(TViewModel), viewModel);
@@ -49,6 +80,18 @@ public class WindowManager : IWindowManager
         Application.Current.MainWindow = window;
     }
 
+    private bool? ShowModalDialog<TViewModel>(TViewModel viewModel)
+    {
+        var window = GetWindow(typeof(TViewModel), viewModel);
+        window.Owner = Application.Current.MainWindow;
+        var result = window.ShowDialog();
+        if (window.DataContext is IConfirmable confirmable)
+        {
+            return confirmable.IsConfirmed;
+        }
+        return result;
+    }
+
     private Window GetWindow(Type viewModelType, object? viewModel = null)
     {
         if (viewModel is not null)
@@ -56,7 +99,14 @@ public class WindowManager : IWindowManager
             _windows.Remove(viewModelType);
         }
 
-        if (!_windows.TryGetValue(viewModelType, out var window))
+        Window? window = null;
+        if (viewModel is IViewableViewModel viewable)
+        {
+            var viewName = viewable.ViewName;
+            var viewFullName = $"InvestLens.App.Windows.Dialogs.{viewName}";
+            window = ResolveWindowByViewFullName(viewFullName);
+        }
+        else if (!_windows.TryGetValue(viewModelType, out window))
         {
             var viewName = viewModelType.Name.Substring(0, viewModelType.Name.LastIndexOf("ViewModel", StringComparison.InvariantCulture));
             string viewFullName;
@@ -74,16 +124,35 @@ public class WindowManager : IWindowManager
                 viewFullName = $"InvestLens.App.Views.{viewName}";
             }
 
-            var viewType = Type.GetType(viewFullName) ?? throw new TypeLoadException($"View {viewFullName} not found");
-            window = (Window)_lifetimeScope.Resolve(viewType);
-            _windows[viewModelType] = window;
+            window = ResolveWindowByViewFullName(viewFullName);
+            
         }
 
+        if (window is null)
+        {
+            throw new Exception($"Ошибка при построении окна для {viewModelType}");
+        }
+
+        _windows[viewModelType] = window;
         if (viewModel is not null)
         {
             window.DataContext = viewModel;
         }
 
         return window;
+    }
+
+    private Window? ResolveWindowByViewFullName(string viewFullName)
+    {
+        var viewType = Type.GetType(viewFullName);
+        if (viewType is null)
+        {
+            ShowErrorDialog($"View {viewFullName} not found");
+            return null;
+        }
+        else
+        {
+            return (Window)_lifetimeScope.Resolve(viewType);
+        }   
     }
 }

@@ -53,6 +53,13 @@ namespace InvestLens.App.Startup
             builder.RegisterType<ConfirmDeleteDialog>().AsSelf();
             builder.RegisterType<ConfirmDeleteDialogViewModel>().As<IConfirmDeleteDialogViewModel>();
 
+            builder.RegisterType<ModalDialog>().AsSelf();
+            builder.RegisterType<ConfirmDialogViewModel>().As<IConfirmDialogViewModel>();
+            builder.RegisterType<ErrorDialogViewModel>().As<IErrorDialogViewModel>();
+            builder.RegisterType<InformationDialogViewModel>().As<IInformationDialogViewModel>();
+            builder.RegisterType<SuccessDialogViewModel>().As<ISuccessDialogViewModel>();
+            builder.RegisterType<WarningDialogViewModel>().As<IWarningDialogViewModel>();
+
             builder.RegisterType<RegistrationWindow>().AsSelf();
             builder.RegisterType<RegistrationWindowViewModel>().As<IRegistrationWindowViewModel>();
             builder.RegisterType<RegistrationModel>().AsSelf();
