@@ -1,7 +1,5 @@
-﻿using InvestLens.DataAccess.Repositories;
-using InvestLens.Model.Crud.Portfolio;
+﻿using InvestLens.Model.Crud.Portfolio;
 using InvestLens.Model.Enums;
-using InvestLens.ViewModel.Events;
 using InvestLens.ViewModel.Services;
 using System.Runtime.CompilerServices;
 

@@ -20,7 +20,7 @@ public abstract class ValidationViewModelBase : BindableBase, INotifyDataErrorIn
     {
         return propertyName is not null && _errorsByPropertyName.TryGetValue(propertyName, out var errors)
             ? errors
-            : Enumerable.Empty<string>();
+            : [];
     }
     
     public event EventHandler<DataErrorsChangedEventArgs>? ErrorsChanged;
@@ -111,5 +111,8 @@ public abstract class ValidationViewModelBase : BindableBase, INotifyDataErrorIn
         }
     }
 
-    protected abstract void InvalidateCommands();
+    protected virtual void InvalidateCommands()
+    {
+
+    }
 }

@@ -65,7 +65,13 @@ public sealed class LoginWindowViewModel : ValidationViewModelBase, ILoginWindow
     public string ErrorMessage
     {
         get => _errorMessage;
-        set => SetProperty(ref _errorMessage, value);
+        set
+        {
+            if (SetProperty(ref _errorMessage, value))
+            {
+                RaisePropertyChanged(nameof(HasErrorMessage));
+            }
+        }
     }
 
     public bool HasErrorMessage => !string.IsNullOrEmpty(ErrorMessage);
@@ -87,13 +93,9 @@ public sealed class LoginWindowViewModel : ValidationViewModelBase, ILoginWindow
         }
 
         ErrorMessage = result.ErrorMessage;
-        RaisePropertyChanged(nameof(HasErrorMessage));
     }
 
-    private bool CanLogin()
-    {
-        return !HasErrors;
-    }
+    private bool CanLogin() => !HasErrors;
 
     private void OnRegistration()
     {
@@ -106,8 +108,6 @@ public sealed class LoginWindowViewModel : ValidationViewModelBase, ILoginWindow
     {
         _windowManager.CloseWindow<LoginWindowViewModel>();
     }
-
-    
 
     protected override void InvalidateCommands()
     {

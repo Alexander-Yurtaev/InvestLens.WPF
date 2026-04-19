@@ -3,7 +3,7 @@ using System.Windows.Input;
 
 namespace InvestLens.ViewModel.Windows.Dialogs;
 
-public abstract class BaseDialogViewModel : BindableBase, IBaseDialogViewModel
+public abstract class BaseDialogViewModel : ValidationViewModelBase, IBaseDialogViewModel
 {
     protected readonly IWindowManager WindowManager;
 

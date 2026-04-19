@@ -76,14 +76,16 @@
                     <StackPanel Grid.Row="1">
                         <StackPanel Margin="0 0 0 20">
                             <Label Content="Login" Target="LoginTextBox"/>
-                            <TextBox x:Name="LoginTextBox" Text="{Binding Login, UpdateSourceTrigger=PropertyChanged}">
+                            <TextBox x:Name="LoginTextBox" 
+                                     Text="{Binding Login, UpdateSourceTrigger=PropertyChanged}">
                                 <b:Interaction.Behaviors>
                                     <behaviors:FocusBehavior/>
                                 </b:Interaction.Behaviors>
                             </TextBox>
                         </StackPanel>
                         <StackPanel Margin="0 0 0 20">
-                            <Label Content="Пароль" Target="PasswordTextBox"/>
+                            <Label Content="Пароль" 
+                                   Target="PasswordTextBox"/>
                             <PasswordBox x:Name="PasswordTextBox">
                                 <b:Interaction.Behaviors>
                                     <behaviors:PasswordBoxBehavior PropertyName="Password"/>

@@ -9,7 +9,7 @@
         xmlns:behaviors="clr-namespace:InvestLens.App.Behaviors"
         mc:Ignorable="d"
         Title="{Binding Header}" 
-        Height="600" Width="500"
+        Height="640" Width="500"
         WindowStartupLocation="CenterScreen"
         ShowInTaskbar="False"
         Style="{StaticResource WindowStyle}">
@@ -97,6 +97,21 @@
                 </DataTrigger>
             </Style.Triggers>
         </Style>
+        <Style x:Key="ImportModeBorderStyle"
+               TargetType="{x:Type Border}">
+            <Setter Property="Background" Value="#F8FAFE"/>
+            <Setter Property="CornerRadius" Value="16"/>
+            <Setter Property="Padding" Value="16"/>
+            <Setter Property="Margin" Value="0 0 0 24"/>
+        </Style>
+        <Style x:Key="ImportModeRadioStyle"
+               TargetType="{x:Type RadioButton}">
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Foreground" Value="#1E2A3E"/>
+            <Setter Property="Margin" Value="0 0 0 8"/>
+            <Setter Property="Padding" Value="0 8"/>
+        </Style>
     </Window.Resources>
 
     <Border Style="{StaticResource WindowBorderStyle}"
@@ -129,13 +144,21 @@
                              Style="{StaticResource SecondaryButtonStyle}"/>
                 </Grid>
             </Border>
-            <StackPanel Grid.Row="1">
-                <Label Content="Файл для импорта"/>
-                <Border Style="{StaticResource FileAreaStyle}">
+            <Grid Grid.Row="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Label Grid.Row="0" 
+                       Content="Файл для импорта"/>
+                <Border Grid.Row="1" 
+                        Style="{StaticResource FileAreaStyle}">
                     <Button Style="{StaticResource ImportFileAreaStyle}"
                             Command="{Binding SelectFileCommand}"/>
                 </Border>
-                <Border Style="{StaticResource FileSelectedNotificationStyle}">
+                <Border Grid.Row="1"
+                        Style="{StaticResource FileSelectedNotificationStyle}">
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"/>
@@ -162,15 +185,31 @@
                             HorizontalAlignment="Center"/>
                     </Grid>
                 </Border>
-                <Grid>
+                <Grid Grid.Row="2">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
                     <Label Grid.Row="0"
                            Content="Режим импорта"/>
+                    <Border Grid.Row="1"
+                            Style="{StaticResource ImportModeBorderStyle}">
+                        <StackPanel>
+                            <RadioButton GroupName="ImportMode"
+                                         Content="Объединить с существующими данными"
+                                         IsChecked="{Binding MergeMode}"
+                                         Style="{StaticResource ImportModeRadioStyle}"/>
+                            <RadioButton GroupName="ImportMode"
+                                         Content="Заменить текущий портфель"
+                                         IsChecked="{Binding RecreateMode}"
+                                         Style="{StaticResource ImportModeRadioStyle}"/>
+                            <TextBlock Text="{Binding ErrorMessage}"
+                                       Visibility="{Binding HasErrorMessage, Converter={StaticResource BooleanToVisibilityConv}}"
+                                       Style="{StaticResource ErrorMessageStyle}"/>
+                        </StackPanel>
+                    </Border>
                 </Grid>
-            </StackPanel>
+            </Grid>
             <Border Grid.Row="2"
                     Padding="28 16 28 24"
                     BorderThickness="0 1 0 0"
