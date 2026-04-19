@@ -39,7 +39,7 @@ public abstract class BaseDialogViewModel : BindableBase, IBaseDialogViewModel
         CloseWindow();
     }
 
-    protected virtual void OnClose()
+    protected void OnClose()
     {
         CloseWindow();
     }

@@ -76,6 +76,9 @@ public class PortfolioDetailViewModel : ViewModelBaseWithContentHeader, IPortfol
     private async Task OnImportPortfolio()
     {
         var viewModel = _windowManager.ShowModalDialog<PortfolioImportDialogViewModel>();
+
+        if (viewModel?.IsConfirmed != true) return;
+
         var fileFullName = viewModel?.FileFullName ?? "";
 
         try

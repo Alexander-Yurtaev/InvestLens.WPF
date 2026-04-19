@@ -64,7 +64,7 @@
                             Margin="0 0 6 0"
                             IsCancel="True"
                             Style="{StaticResource SecondaryButtonStyle}"
-                            Command="{Binding CloseCommand}"
+                            Command="{Binding CancelCommand}"
                             Visibility="{Binding ShowCancelButton, Converter={StaticResource BooleanToVisibilityConv}}"/>
                     <Button Content="{Binding ActionContext}"
                             Margin="6 0 0 0"

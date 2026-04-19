@@ -2,7 +2,7 @@
 
 namespace InvestLens.ViewModel.Windows.Dialogs
 {
-    public interface IPortfolioImportDialogViewModel
+    public interface IPortfolioImportDialogViewModel : IConfirmable
     {
         string FileFullName { get; set; }
         string FileName { get; }

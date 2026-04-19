@@ -9,7 +9,7 @@
         xmlns:behaviors="clr-namespace:InvestLens.App.Behaviors"
         mc:Ignorable="d"
         Title="{Binding Header}" 
-        Height="500" Width="500"
+        Height="600" Width="500"
         WindowStartupLocation="CenterScreen"
         ShowInTaskbar="False"
         Style="{StaticResource WindowStyle}">
@@ -129,28 +129,19 @@
                              Style="{StaticResource SecondaryButtonStyle}"/>
                 </Grid>
             </Border>
-            <Border Grid.Row="1"
-                        Style="{StaticResource FileAreaStyle}">
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="*"/>
-                    </Grid.RowDefinitions>
-                    <Label Grid.Row="0"
-                           Content="Файл для импорта"/>
-                    <Button Grid.Row="1"
-                            Style="{StaticResource ImportFileAreaStyle}"
+            <StackPanel Grid.Row="1">
+                <Label Content="Файл для импорта"/>
+                <Border Style="{StaticResource FileAreaStyle}">
+                    <Button Style="{StaticResource ImportFileAreaStyle}"
                             Command="{Binding SelectFileCommand}"/>
-                </Grid>
-            </Border>
-            <Border Grid.Row="1"
-                    Style="{StaticResource FileSelectedNotificationStyle}">
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="Auto"/>
-                    </Grid.ColumnDefinitions>
-                    <TextBlock Grid.Column="0"
+                </Border>
+                <Border Style="{StaticResource FileSelectedNotificationStyle}">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="0"
                                Text="{Binding FileName}"
                                TextWrapping="WrapWithOverflow"
                                FontSize="13"
@@ -159,7 +150,7 @@
                                FontWeight="Medium"
                                VerticalAlignment="Center"
                                HorizontalAlignment="Center"/>
-                    <Button Grid.Column="1"
+                        <Button Grid.Column="1"
                             Content="X"
                             FontSize="18"
                             Cursor="Hand"
@@ -169,8 +160,17 @@
                             Command="{Binding CancelSelectFileCommand}"
                             VerticalAlignment="Center"
                             HorizontalAlignment="Center"/>
+                    </Grid>
+                </Border>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <Label Grid.Row="0"
+                           Content="Режим импорта"/>
                 </Grid>
-            </Border>
+            </StackPanel>
             <Border Grid.Row="2"
                     Padding="28 16 28 24"
                     BorderThickness="0 1 0 0"
@@ -181,7 +181,7 @@
                             Margin="0 0 6 0"
                             IsCancel="True"
                             Style="{StaticResource SecondaryButtonStyle}"
-                            Command="{Binding CloseCommand}"
+                            Command="{Binding CancelCommand}"
                             Visibility="{Binding ShowCancelButton, Converter={StaticResource BooleanToVisibilityConv}}"/>
                     <Button Content="{Binding ActionContext}"
                             Margin="6 0 0 0"

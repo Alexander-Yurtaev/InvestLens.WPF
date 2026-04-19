@@ -34,6 +34,22 @@ public class PortfolioImportDialogViewModel : BaseDialogViewModel, IPortfolioImp
     public ICommand SelectFileCommand { get; set; }
     public ICommand CancelSelectFileCommand { get; set; }
 
+    public bool IsConfirmed { get; private set; }
+
+
+    protected override void OnAccept()
+    {
+        IsConfirmed = true;
+        base.OnAccept();
+    }
+
+    protected override void OnCancel()
+    {
+        FileFullName = "";
+        IsConfirmed = false;
+        base.OnCancel();
+    }
+
     protected override void CloseWindow()
     {
         WindowManager.CloseWindow<PortfolioImportDialogViewModel>();
@@ -43,7 +59,7 @@ public class PortfolioImportDialogViewModel : BaseDialogViewModel, IPortfolioImp
 
     private void OnSelectFile()
     {
-        _fileFullName = WindowManager.ShowSelectFileDialog("Импорт сделок", "CSV|*.csv");
+        FileFullName = WindowManager.ShowSelectFileDialog("Импорт сделок", "CSV|*.csv");
         RaisePropertyChanged(nameof(FileName));
         RaisePropertyChanged(nameof(IsSelected));
         ((DelegateCommand)AcceptCommand).RaiseCanExecuteChanged();
@@ -51,7 +67,7 @@ public class PortfolioImportDialogViewModel : BaseDialogViewModel, IPortfolioImp
 
     private void OnCancelSelectFile()
     {
-        _fileFullName = "";
+        FileFullName = "";
         RaisePropertyChanged(nameof(FileName));
         RaisePropertyChanged(nameof(IsSelected));
         ((DelegateCommand)AcceptCommand).RaiseCanExecuteChanged();
