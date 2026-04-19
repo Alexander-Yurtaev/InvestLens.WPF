@@ -3,8 +3,8 @@ using Autofac;
 using AutoMapper;
 using InvestLens.App.Profiles;
 using InvestLens.App.Startup;
-using InvestLens.ViewModel;
 using InvestLens.ViewModel.Services;
+using InvestLens.ViewModel.Windows;
 
 namespace InvestLens.App
 {

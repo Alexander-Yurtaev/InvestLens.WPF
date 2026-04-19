@@ -1,0 +1,77 @@
+﻿<Window x:Class="InvestLens.App.Windows.Dialogs.PortfolioImportDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:InvestLens.App.Windows.Dialogs"
+        xmlns:usercontrols="clr-namespace:InvestLens.App.UserControls"
+        xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
+        xmlns:behaviors="clr-namespace:InvestLens.App.Behaviors"
+        mc:Ignorable="d"
+        Title="{Binding Header}" 
+        Height="287" Width="500"
+        WindowStartupLocation="CenterScreen"
+        ShowInTaskbar="False"
+        Style="{StaticResource WindowStyle}">
+
+    <b:Interaction.Behaviors>
+        <behaviors:DragMoveBehavior/>
+    </b:Interaction.Behaviors>
+
+    <Border Style="{StaticResource WindowBorderStyle}"
+            Padding="28 24 28 16">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <Border Grid.Row="0"
+                    BorderThickness="0 0 0 1"
+                    BorderBrush="{StaticResource BorderBrush}">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <StackPanel Grid.Column="0"
+                            Orientation="Horizontal">
+                        <TextBlock Text="{Binding Icon}"
+                                   Style="{StaticResource H2WhiteStyle}"/>
+                        <TextBlock Text="{Binding Header}"
+                                   Margin="12 0 0 0"
+                                   Style="{StaticResource H2WhiteStyle}"/>
+                    </StackPanel>
+                    <Button  Grid.Column="1"
+                             Content="X"
+                             Command="{Binding CloseCommand}"
+                             Style="{StaticResource SecondaryButtonStyle}"/>
+                </Grid>
+            </Border>
+            <Border Grid.Row="1"
+                    Padding="28">
+                <TextBlock Text="{Binding Message}"
+                           FontSize="18"
+                           TextWrapping="WrapWithOverflow"/>
+            </Border>
+            <Border Grid.Row="2"
+                    Padding="28 16 28 24"
+                    BorderThickness="0 1 0 0"
+                    BorderBrush="#E9EDF2">
+                <StackPanel Orientation="Horizontal"
+                            HorizontalAlignment="Right">
+                    <Button Content="Отмена"
+                            Margin="0 0 6 0"
+                            IsCancel="True"
+                            Style="{StaticResource SecondaryButtonStyle}"
+                            Command="{Binding CloseCommand}"
+                            Visibility="{Binding ShowCancelButton, Converter={StaticResource BooleanToVisibilityConv}}"/>
+                    <Button Content="{Binding ActionContext}"
+                            Margin="6 0 0 0"
+                            Style="{StaticResource PrimaryButtonStyle}"
+                            Command="{Binding AcceptCommand}"/>
+                </StackPanel>
+            </Border>
+        </Grid>
+    </Border>
+</Window>

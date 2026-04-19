@@ -1,5 +1,5 @@
 ﻿using System.Windows;
-using InvestLens.ViewModel;
+using InvestLens.ViewModel.Windows;
 
 namespace InvestLens.App.Windows
 {

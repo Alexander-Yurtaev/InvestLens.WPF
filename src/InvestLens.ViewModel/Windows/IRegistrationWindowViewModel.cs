@@ -2,7 +2,7 @@
 using System.ComponentModel;
 using System.Windows.Input;
 
-namespace InvestLens.ViewModel;
+namespace InvestLens.ViewModel.Windows;
 
 public interface IRegistrationWindowViewModel : IConfirmPasswordSupport
 {

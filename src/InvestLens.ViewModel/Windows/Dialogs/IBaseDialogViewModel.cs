@@ -1,6 +1,6 @@
 ﻿using System.Windows.Input;
 
-namespace InvestLens.ViewModel.Dialogs
+namespace InvestLens.ViewModel.Windows.Dialogs
 {
     public interface IBaseDialogViewModel : IViewableViewModel
     {

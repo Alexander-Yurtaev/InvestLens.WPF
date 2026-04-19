@@ -9,9 +9,10 @@ using InvestLens.DataAccess.Services;
 using InvestLens.Model;
 using InvestLens.Model.Crud.Portfolio;
 using InvestLens.ViewModel;
-using InvestLens.ViewModel.Dialogs;
 using InvestLens.ViewModel.Pages;
 using InvestLens.ViewModel.Services;
+using InvestLens.ViewModel.Windows;
+using InvestLens.ViewModel.Windows.Dialogs;
 using Microsoft.EntityFrameworkCore;
 using System.IO;
 

@@ -5,7 +5,7 @@ using System.Security;
 using System.Windows.Input;
 using InvestLens.DataAccess.Services;
 
-namespace InvestLens.ViewModel;
+namespace InvestLens.ViewModel.Windows;
 
 public sealed class LoginWindowViewModel : ValidationViewModelBase, ILoginWindowViewModel
 {

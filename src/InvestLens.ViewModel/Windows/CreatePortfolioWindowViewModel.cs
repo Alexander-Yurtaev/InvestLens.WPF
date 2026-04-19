@@ -5,7 +5,7 @@ using InvestLens.ViewModel.Events;
 using InvestLens.ViewModel.Services;
 using System.Runtime.CompilerServices;
 
-namespace InvestLens.ViewModel;
+namespace InvestLens.ViewModel.Windows;
 
 public sealed class CreatePortfolioWindowViewModel : CreateUpdatePortfolioWindowViewModel, ICreatePortfolioWindowViewModel, ISupportPortfolioType
 {

@@ -6,9 +6,9 @@ using System.Windows.Input;
 using InvestLens.DataAccess.Repositories;
 using InvestLens.Model.Crud.Portfolio;
 
-namespace InvestLens.ViewModel;
+namespace InvestLens.ViewModel.Windows;
 
-public abstract class CreateUpdatePortfolioWindowViewModel : ValidationViewModelBase, ICreateEditPortfolioWindowViewModel, ILoadableViewModel, IDisposable
+public abstract class CreateUpdatePortfolioWindowViewModel : ValidationViewModelBase, ICreateUpdatePortfolioWindowViewModel, ILoadableViewModel, IDisposable
 {
     protected readonly BaseModel Model;
     protected readonly IWindowManager WindowManager;

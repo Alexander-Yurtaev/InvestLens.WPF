@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel;
 using InvestLens.ViewModel.Services;
 
-namespace InvestLens.ViewModel;
+namespace InvestLens.ViewModel.Windows;
 
 public interface IMainWindowViewModel
 {

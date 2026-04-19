@@ -1,7 +1,7 @@
 ﻿using InvestLens.ViewModel.Services;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 
-namespace InvestLens.ViewModel.Dialogs;
+namespace InvestLens.ViewModel.Windows.Dialogs;
 
 public class SuccessDialogViewModel : BaseDialogViewModel, ISuccessDialogViewModel
 {

@@ -1,7 +1,6 @@
-﻿using InvestLens.DataAccess.Repositories;
-using InvestLens.ViewModel.Dialogs;
-using InvestLens.ViewModel.Events;
+﻿using InvestLens.ViewModel.Events;
 using InvestLens.ViewModel.Services;
+using InvestLens.ViewModel.Windows;
 using InvestLens.ViewModel.Wrappers;
 using System.Collections.ObjectModel;
 using System.Windows.Input;

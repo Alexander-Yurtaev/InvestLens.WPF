@@ -1,6 +1,4 @@
-﻿using InvestLens.ViewModel.Dialogs;
-
-namespace InvestLens.ViewModel.Services;
+﻿namespace InvestLens.ViewModel.Services;
 
 public interface IWindowManager
 {

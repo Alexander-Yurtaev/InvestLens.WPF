@@ -3,7 +3,7 @@ using InvestLens.ViewModel.Events;
 using InvestLens.ViewModel.Services;
 using System.ComponentModel;
 
-namespace InvestLens.ViewModel;
+namespace InvestLens.ViewModel.Windows;
 
 public class MainWindowViewModel : BindableBase, IMainWindowViewModel
 {

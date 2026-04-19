@@ -1,4 +1,4 @@
-﻿using InvestLens.ViewModel;
+﻿using InvestLens.ViewModel.Windows;
 using System.Windows;
 
 namespace InvestLens.App.Windows

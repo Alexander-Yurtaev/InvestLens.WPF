@@ -1,4 +1,4 @@
-﻿using InvestLens.ViewModel.Dialogs;
+﻿using InvestLens.ViewModel.Windows.Dialogs;
 using System.Windows;
 
 namespace InvestLens.App.Windows.Dialogs

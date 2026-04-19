@@ -4,8 +4,8 @@ using InvestLens.ViewModel;
 using InvestLens.ViewModel.Events;
 using InvestLens.ViewModel.NavigationTree;
 using InvestLens.ViewModel.Services;
+using InvestLens.ViewModel.Windows;
 using Moq;
-using System.Threading.Tasks;
 
 namespace InvestLens.Tests
 {

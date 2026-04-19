@@ -7,7 +7,7 @@ using System.Windows.Input;
 using InvestLens.Common.Helpers;
 using InvestLens.DataAccess.Services;
 
-namespace InvestLens.ViewModel;
+namespace InvestLens.ViewModel.Windows;
 
 public sealed class RegistrationWindowViewModel : ValidationViewModelBase, IRegistrationWindowViewModel
 {
@@ -30,7 +30,7 @@ public sealed class RegistrationWindowViewModel : ValidationViewModelBase, IRegi
         RegisterCommand = new AsyncDelegateCommand(OnRegister, CanRegister);
         LoginCommand = new DelegateCommand(OnLogin);
         CloseCommand = new DelegateCommand(OnClose);
-        this.PropertyChanged += OnPropertyChanged;
+        PropertyChanged += OnPropertyChanged;
         InvalidateCommands();
     }
 
@@ -163,7 +163,7 @@ public sealed class RegistrationWindowViewModel : ValidationViewModelBase, IRegi
 
     private void OnPropertyChanged(object? sender, PropertyChangedEventArgs e)
     {
-        if (e.PropertyName == nameof(this.HasErrors))
+        if (e.PropertyName == nameof(HasErrors))
         {
             InvalidateCommands();
         }

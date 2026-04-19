@@ -1,6 +1,6 @@
 ﻿using Autofac;
-using InvestLens.ViewModel.Dialogs;
 using InvestLens.ViewModel.Services;
+using InvestLens.ViewModel.Windows.Dialogs;
 using System.Windows;
 
 namespace InvestLens.App.Services;

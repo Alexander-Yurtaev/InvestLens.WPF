@@ -1,8 +1,8 @@
 ﻿using InvestLens.DataAccess.Repositories;
 using InvestLens.Model;
 using InvestLens.Model.Crud.Portfolio;
-using InvestLens.ViewModel.Dialogs;
 using InvestLens.ViewModel.Services;
+using InvestLens.ViewModel.Windows;
 using InvestLens.ViewModel.Wrappers;
 
 namespace InvestLens.ViewModel.Pages;
@@ -69,13 +69,6 @@ public class PortfolioDetailViewModel : ViewModelBaseWithContentHeader, IPortfol
 
     private async Task OnImportPortfolio()
     {
-        // ToDo:
-        // 1. Создать PortfolioImportWindow
-        // 2. Создать PortfolioImportWindowViewModel
-        // 3. _windowManager.ShowDialogWindow<PortfolioImportWindow>();
-        // 4. После получения файла (открыть файловый поток) вызвать TransactionHelper.Convert(streamReader)
-        // 5. Полученные данные сохранить в БД (Создать репозиторий)
-        // 6. Обновить данные в UI
         await Task.Delay(0);
     }
 }

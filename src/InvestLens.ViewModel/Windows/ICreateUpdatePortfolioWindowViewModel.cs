@@ -1,9 +1,9 @@
 ﻿using System.ComponentModel;
 using System.Windows.Input;
 
-namespace InvestLens.ViewModel;
+namespace InvestLens.ViewModel.Windows;
 
-public interface ICreateEditPortfolioWindowViewModel : INotifyPropertyChanged, INotifyDataErrorInfo
+public interface ICreateUpdatePortfolioWindowViewModel : INotifyPropertyChanged, INotifyDataErrorInfo
 {
     string Name { get; set; }
     string Description { get; set; }

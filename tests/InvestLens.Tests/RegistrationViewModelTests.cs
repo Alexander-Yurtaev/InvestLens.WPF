@@ -1,7 +1,7 @@
 ﻿using InvestLens.DataAccess.Services;
 using InvestLens.Model;
-using InvestLens.ViewModel;
 using InvestLens.ViewModel.Services;
+using InvestLens.ViewModel.Windows;
 using Moq;
 
 namespace InvestLens.Tests;
