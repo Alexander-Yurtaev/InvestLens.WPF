@@ -1,6 +1,8 @@
-﻿using InvestLens.DataAccess.Repositories;
+﻿using AutoMapper;
+using InvestLens.DataAccess.Repositories;
 using InvestLens.Model;
 using InvestLens.Model.Crud.Portfolio;
+using InvestLens.ViewModel.Helpers;
 using InvestLens.ViewModel.Services;
 using InvestLens.ViewModel.Windows;
 using InvestLens.ViewModel.Windows.Dialogs;
@@ -10,17 +12,20 @@ namespace InvestLens.ViewModel.Pages;
 
 public class PortfolioDetailViewModel : ViewModelBaseWithContentHeader, IPortfolioDetailViewModel
 {
+    private readonly IMapper _mapper;
     private readonly PortfolioDetail _model;
     private readonly IWindowManager _windowManager;
     private readonly IAuthManager _authManager;
     private readonly IPortfoliosManager _portfoliosManager;
 
     public PortfolioDetailViewModel(
+        IMapper mapper,
         PortfolioDetail model, 
         IWindowManager windowManager, 
         IAuthManager authManager,
         IPortfoliosManager portfoliosManager) : base(model.Title, model.Description)
     {
+        _mapper = mapper;
         _model = model;
         _windowManager = windowManager;
         _authManager = authManager;
@@ -71,6 +76,22 @@ public class PortfolioDetailViewModel : ViewModelBaseWithContentHeader, IPortfol
     private async Task OnImportPortfolio()
     {
         var viewModel = _windowManager.ShowModalDialog<PortfolioImportDialogViewModel>();
+        var fileFullName = viewModel?.FileFullName ?? "";
+
+        try
+        {
+            using var reader = File.OpenText(fileFullName);
+            var transactionModels = TransactionHelper.Convert(reader);
+            var transactions = _mapper.Map<List<Model.Entities.Transaction>>(transactionModels);
+            foreach ( var transaction in transactions)
+            {
+                transaction.PortfolioId = _model.Id;
+            }
+        }
+        catch (Exception ex)
+        {
+            _windowManager.ShowErrorDialog(ex.Message);
+        }
 
         await Task.Delay(0);
     }

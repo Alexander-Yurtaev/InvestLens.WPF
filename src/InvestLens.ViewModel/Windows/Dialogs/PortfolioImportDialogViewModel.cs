@@ -1,4 +1,5 @@
 ﻿using InvestLens.ViewModel.Services;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion.Internal;
 using System.Windows.Input;
 
 namespace InvestLens.ViewModel.Windows.Dialogs;
@@ -20,9 +21,15 @@ public class PortfolioImportDialogViewModel : BaseDialogViewModel, IPortfolioImp
 
     public override bool ShowCancelButton => true;
 
-    public string FileName => IsSelected ? Path.GetFileName(_fileFullName) : "";
+    public string FileFullName
+    { 
+        get => string.IsNullOrEmpty(_fileFullName) ? "" : _fileFullName; 
+        set => SetProperty(ref _fileFullName, string.IsNullOrEmpty(value) ? "" : value); 
+    }
 
-    public bool IsSelected => !string.IsNullOrEmpty(_fileFullName);
+    public string FileName => IsSelected ? Path.GetFileName(FileFullName) : "";
+
+    public bool IsSelected => !string.IsNullOrEmpty(FileFullName);
 
     public ICommand SelectFileCommand { get; set; }
     public ICommand CancelSelectFileCommand { get; set; }

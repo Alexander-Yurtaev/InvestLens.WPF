@@ -1,16 +1,15 @@
 ﻿using CsvHelper;
 using CsvHelper.Configuration;
 using CsvHelper.TypeConversion;
-using System.Globalization;
+using InvestLens.Model.Enums;
 
 namespace InvestLens.ViewModel.Helpers.TypeConverters;
 
-public class NullableBoolConverter : ITypeConverter
+public class CustomEnumConverter : ITypeConverter
 {
     public object? ConvertFromString(string? text, IReaderRow row, MemberMapData memberMapData)
     {
-        if (string.IsNullOrEmpty(text)) return null;
-        return bool.Parse(text);
+        return Enum.Parse<TransactionEvents>(text, true);
     }
 
     public string? ConvertToString(object? value, IWriterRow row, MemberMapData memberMapData)

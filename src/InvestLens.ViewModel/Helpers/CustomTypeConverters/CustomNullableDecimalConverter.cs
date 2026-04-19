@@ -5,7 +5,7 @@ using System.Globalization;
 
 namespace InvestLens.ViewModel.Helpers.TypeConverters;
 
-public class NullableDecimalConverter : ITypeConverter
+public class CustomNullableDecimalConverter : ITypeConverter
 {
     public object? ConvertFromString(string? text, IReaderRow row, MemberMapData memberMapData)
     {

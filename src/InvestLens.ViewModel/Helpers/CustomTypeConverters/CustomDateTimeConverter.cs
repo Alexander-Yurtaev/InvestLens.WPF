@@ -5,12 +5,12 @@ using System.Globalization;
 
 namespace InvestLens.ViewModel.Helpers.TypeConverters;
 
-public class DateTymeConverter : ITypeConverter
+public class CustomDateTimeConverter : ITypeConverter
 {
     public object? ConvertFromString(string? text, IReaderRow row, MemberMapData memberMapData)
     {
         if (string.IsNullOrEmpty(text)) return null;
-        return DateTime.ParseExact(text, "yyyy-MM-dd", CultureInfo.InvariantCulture);
+        return DateTime.ParseExact(text, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture);
     }
 
     public string? ConvertToString(object? value, IWriterRow row, MemberMapData memberMapData)

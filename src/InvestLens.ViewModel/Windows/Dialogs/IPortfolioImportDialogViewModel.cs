@@ -4,6 +4,7 @@ namespace InvestLens.ViewModel.Windows.Dialogs
 {
     public interface IPortfolioImportDialogViewModel
     {
+        string FileFullName { get; set; }
         string FileName { get; }
         bool IsSelected { get; }
         ICommand SelectFileCommand { get; set; }
