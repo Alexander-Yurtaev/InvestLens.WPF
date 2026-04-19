@@ -3,6 +3,7 @@ using InvestLens.Model;
 using InvestLens.Model.Crud.Portfolio;
 using InvestLens.ViewModel.Services;
 using InvestLens.ViewModel.Windows;
+using InvestLens.ViewModel.Windows.Dialogs;
 using InvestLens.ViewModel.Wrappers;
 
 namespace InvestLens.ViewModel.Pages;
@@ -69,6 +70,8 @@ public class PortfolioDetailViewModel : ViewModelBaseWithContentHeader, IPortfol
 
     private async Task OnImportPortfolio()
     {
+        var viewModel = _windowManager.ShowModalDialog<PortfolioImportDialogViewModel>();
+
         await Task.Delay(0);
     }
 }

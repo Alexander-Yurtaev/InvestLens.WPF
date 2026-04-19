@@ -1,5 +1,4 @@
 ﻿using InvestLens.ViewModel.Services;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace InvestLens.ViewModel.Windows.Dialogs;
 
@@ -8,9 +7,10 @@ public class InformationDialogViewModel : BaseDialogViewModel, IInformationDialo
     public InformationDialogViewModel(IWindowManager windowManager, string message) 
         : base(windowManager, message)
     {
-        Icon = "ℹ️";
-        Header = "Информация";
     }
+
+    public override string Icon => "ℹ️";
+    public override string Header => "Информация";
 
     protected override void CloseWindow()
     {

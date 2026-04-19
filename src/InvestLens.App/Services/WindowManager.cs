@@ -1,6 +1,7 @@
 ﻿using Autofac;
 using InvestLens.ViewModel.Services;
 using InvestLens.ViewModel.Windows.Dialogs;
+using Microsoft.Win32;
 using System.Windows;
 
 namespace InvestLens.App.Services;
@@ -42,8 +43,8 @@ public class WindowManager : IWindowManager
     public bool? ShowConfirmDialog(string message, string actionContext)
     {
         var viewModel = new ConfirmDialogViewModel(this, message);
-        var result = ShowModalDialog(viewModel);
-        return result;
+        var result = ShowModalDialog(viewModel) as IConfirmable;
+        return result?.IsConfirmed ?? false;
     }
 
     public void ShowWindow<TViewModel>(TViewModel? viewModel = null) where TViewModel : class
@@ -80,16 +81,13 @@ public class WindowManager : IWindowManager
         Application.Current.MainWindow = window;
     }
 
-    private bool? ShowModalDialog<TViewModel>(TViewModel viewModel)
+    public TViewModel? ShowModalDialog<TViewModel>(TViewModel? viewModel = null) 
+        where TViewModel : class
     {
         var window = GetWindow(typeof(TViewModel), viewModel);
         window.Owner = Application.Current.MainWindow;
-        var result = window.ShowDialog();
-        if (window.DataContext is IConfirmable confirmable)
-        {
-            return confirmable.IsConfirmed;
-        }
-        return result;
+        window.ShowDialog();
+        return window.DataContext as TViewModel;
     }
 
     private Window GetWindow(Type viewModelType, object? viewModel = null)
@@ -154,5 +152,21 @@ public class WindowManager : IWindowManager
         {
             return (Window)_lifetimeScope.Resolve(viewType);
         }   
+    }
+
+    public string ShowSelectFileDialog(string title, string? filter = "")
+    {
+        var dialog = new OpenFileDialog();
+        dialog.Title = title;
+        dialog.Filter = filter;
+        dialog.CheckFileExists = true;
+
+        var result = dialog.ShowDialog();
+        if (result == true)
+        {
+            return dialog.FileName;
+        }
+
+        return "";
     }
 }

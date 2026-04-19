@@ -1,5 +1,4 @@
 ﻿using InvestLens.ViewModel.Services;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace InvestLens.ViewModel.Windows.Dialogs;
 
@@ -8,9 +7,10 @@ public class WarningDialogViewModel : BaseDialogViewModel, IWarningDialogViewMod
     public WarningDialogViewModel(IWindowManager windowManager, string message, string actionContext) 
         : base(windowManager, message)
     {
-        Icon = "⚠️";
-        Header = "Предупреждение";
     }
+
+    public override string Icon => "⚠️";
+    public override string Header => "Предупреждение";
 
     protected override void CloseWindow()
     {

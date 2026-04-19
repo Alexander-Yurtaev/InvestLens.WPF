@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using InvestLens.ViewModel.Windows.Dialogs;
+using System.Windows;
 
 namespace InvestLens.App.Windows.Dialogs
 {
@@ -7,9 +8,10 @@ namespace InvestLens.App.Windows.Dialogs
     /// </summary>
     public partial class PortfolioImportDialog : Window
     {
-        public PortfolioImportDialog()
+        public PortfolioImportDialog(IPortfolioImportDialogViewModel viewModel)
         {
             InitializeComponent();
+            DataContext = viewModel;
         }
     }
 }

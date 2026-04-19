@@ -1,4 +1,6 @@
-﻿namespace InvestLens.ViewModel.Services;
+﻿using InvestLens.ViewModel.Windows.Dialogs;
+
+namespace InvestLens.ViewModel.Services;
 
 public interface IWindowManager
 {
@@ -9,6 +11,8 @@ public interface IWindowManager
     void ShowSuccessDialog(string message, string actionContext);
     void ShowWindow<TViewModel>(TViewModel? viewModel = null) where TViewModel : class;
     bool? ShowDialogWindow<TViewModel>(TViewModel? viewModel = null) where TViewModel : class;
+    TViewModel? ShowModalDialog<TViewModel>(TViewModel? viewModel = null) where TViewModel : class;
     void CloseWindow<TViewModel>() where TViewModel : class;
     void SetMainWindow<TViewModel>() where TViewModel : class;
+    string ShowSelectFileDialog(string title, string? filter = "");
 }

@@ -60,6 +60,9 @@ namespace InvestLens.App.Startup
             builder.RegisterType<InformationDialogViewModel>().As<IInformationDialogViewModel>();
             builder.RegisterType<SuccessDialogViewModel>().As<ISuccessDialogViewModel>();
             builder.RegisterType<WarningDialogViewModel>().As<IWarningDialogViewModel>();
+            
+            builder.RegisterType<PortfolioImportDialog>().AsSelf();
+            builder.RegisterType<PortfolioImportDialogViewModel>().As<IPortfolioImportDialogViewModel>();
 
             builder.RegisterType<RegistrationWindow>().AsSelf();
             builder.RegisterType<RegistrationWindowViewModel>().As<IRegistrationWindowViewModel>();

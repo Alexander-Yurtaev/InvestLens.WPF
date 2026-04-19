@@ -1,5 +1,4 @@
 ﻿using InvestLens.ViewModel.Services;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace InvestLens.ViewModel.Windows.Dialogs;
 
@@ -8,9 +7,10 @@ public class ErrorDialogViewModel : BaseDialogViewModel, IErrorDialogViewModel
     public ErrorDialogViewModel(IWindowManager windowManager, string message) 
         : base(windowManager, message)
     {
-        Icon = "❌";
-        Header = "Ошибка";
     }
+
+    public override string Icon => "❌";
+    public override string Header => "Ошибка";
 
     protected override void CloseWindow()
     {

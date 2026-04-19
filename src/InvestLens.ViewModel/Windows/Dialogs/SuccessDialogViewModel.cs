@@ -1,5 +1,4 @@
 ﻿using InvestLens.ViewModel.Services;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace InvestLens.ViewModel.Windows.Dialogs;
 
@@ -8,9 +7,10 @@ public class SuccessDialogViewModel : BaseDialogViewModel, ISuccessDialogViewMod
     public SuccessDialogViewModel(IWindowManager windowManager, string message) 
         : base(windowManager, message)
     {
-        Icon = "✅";
-        Header = "Успех";
     }
+
+    public override string Icon => "✅";
+    public override string Header => "Успех";
 
     protected override void CloseWindow()
     {

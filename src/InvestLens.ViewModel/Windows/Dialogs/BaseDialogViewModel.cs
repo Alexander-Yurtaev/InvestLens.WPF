@@ -3,29 +3,31 @@ using System.Windows.Input;
 
 namespace InvestLens.ViewModel.Windows.Dialogs;
 
-public abstract class BaseDialogViewModel : IBaseDialogViewModel
+public abstract class BaseDialogViewModel : BindableBase, IBaseDialogViewModel
 {
     protected readonly IWindowManager WindowManager;
 
-    protected BaseDialogViewModel(IWindowManager windowManager, string message)
+    protected BaseDialogViewModel(IWindowManager windowManager, string? message = "")
     {
-        Message = message;
+        Message = message ?? "";
         WindowManager = windowManager;
         CancelCommand = new DelegateCommand(OnCancel);
-        AcceptCommand = new DelegateCommand(OnAccept);
+        AcceptCommand = new DelegateCommand(OnAccept, CanAccept);
         CloseCommand = new DelegateCommand(OnClose);
     }
 
-    public string Icon { get; init; } = string.Empty;
-    public string Header { get; init; } = string.Empty;
+    public virtual string Icon => string.Empty;
+    public virtual string Header => string.Empty;
     public string Message { get; }
-    public string ActionContext { get; init; } = "OK";
+    public virtual string ActionContext => "OK";
     public virtual bool ShowCancelButton => false;
     public string ViewName => "ModalDialog";
 
     public ICommand CancelCommand { get; set; }
     public ICommand AcceptCommand { get; set; }
     public ICommand CloseCommand { get; set; }
+
+    protected virtual bool CanAccept() => true;
 
     protected virtual void OnCancel()
     {
