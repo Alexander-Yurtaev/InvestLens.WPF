@@ -86,16 +86,25 @@ public class PortfolioDetailViewModel : ViewModelBaseWithContentHeader, IPortfol
             using var reader = File.OpenText(fileFullName);
             var transactionModels = TransactionHelper.Convert(reader);
             var transactions = _mapper.Map<List<Model.Entities.Transaction>>(transactionModels);
+
             foreach ( var transaction in transactions)
             {
                 transaction.PortfolioId = _model.Id;
             }
+
+            if (viewModel?.MergeMode == true)
+            {
+                await _portfoliosManager.Merge(transactions);
+            }
+            else if (viewModel?.RecreateMode == true)
+            {
+                await _portfoliosManager.Recreate(transactions);
+            }
         }
         catch (Exception ex)
         {
-            _windowManager.ShowErrorDialog(ex.Message);
+            var message = ex.InnerException?.Message ?? ex.Message;
+            _windowManager.ShowErrorDialog(message);
         }
-
-        await Task.Delay(0);
     }
 }

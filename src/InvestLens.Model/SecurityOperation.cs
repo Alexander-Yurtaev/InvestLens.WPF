@@ -4,16 +4,11 @@ namespace InvestLens.Model;
 
 public class SecurityOperation
 {
-    public SecurityOperation(string secId, SecurityOperationType operationType)
-    {
-        SecId = secId;
-        OperationType = operationType;
-    }
-
-    public string SecId { get; }
+    public string SecId { get; } = string.Empty;
     public DateTime Date { get; init; }
-    public SecurityOperationType OperationType { get; }
+    public TransactionEvents OperationType { get; }
     public decimal Count { get; set; }
     public double Price { get; init; }
     public decimal TotalPrice { get; init; }
+    public string Description { get; init; } = string.Empty;
 }

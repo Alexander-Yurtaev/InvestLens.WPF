@@ -9,7 +9,7 @@
         xmlns:behaviors="clr-namespace:InvestLens.App.Behaviors"
         mc:Ignorable="d"
         Title="{Binding Header}" 
-        Height="287" Width="500"
+        Height="350" Width="500"
         WindowStartupLocation="CenterScreen"
         ShowInTaskbar="False"
         Style="{StaticResource WindowStyle}">
@@ -50,9 +50,12 @@
             </Border>
             <Border Grid.Row="1"
                     Padding="28">
-                <TextBlock Text="{Binding Message}"
+                <ScrollViewer HorizontalScrollBarVisibility="Disabled"
+                              VerticalScrollBarVisibility="Auto">
+                    <TextBlock Text="{Binding Message}"
                            FontSize="18"
                            TextWrapping="WrapWithOverflow"/>
+                </ScrollViewer>
             </Border>
             <Border Grid.Row="2"
                     Padding="28 16 28 24"

@@ -1,4 +1,5 @@
 ﻿using InvestLens.ViewModel.Helpers;
+using System.Text;
 
 namespace InvestLens.Tests;
 
@@ -7,31 +8,28 @@ public class TransactionServiceTests
     private string[] lines = 
         [
             "Event,Date,Symbol,Price,Quantity,Currency,FeeTax,Exchange,NKD,FeeCurrency,DoNotAdjustCash,Note",
-            "Cash_In,2020-02-01,RUB,1,100000,RUB,0,,,,,",
-            "Cash_Convert,2020-02-01,USD,65000,1000,RUB,1,,,USD,,",
-            "Buy,2020-03-06,AAPL,100,10,USD,1,,,,,\"Test\"",
-            "Sell,2020-03-09,AAPL,110,5,USD,1,,,,,",
-            "Buy,2020-10-30,SBER,224.6,10,RUB,30,MCX,,,,",
-            "Dividend,2020-03-07,AAPL,0.76,7.6,USD,0.76,,,,,",
-            "Fee,2020-04-01,,0,0,USD,10,,,,,"
+            "BUY,2021-04-05 10:58:32,MTB,\"150,16666667\",\"0,12\",USD,\"0,02\",NYSE,\"\",\"\",\"False\",\"\"",
+            "BUY,2021-04-05 11:03:21,MCD,\"225,05\",\"1\",USD,\"0,13\",NYSE,\"\",\"\",\"False\",\"\"",
+            "SPLIT,2021-04-12 03:00:00,OBLG,\"10\",\"0\",RUB,\"0\",MCX,\"0\",\"\",\"\",\"\"",
+            "SELL,2021-05-05 10:32:11,FXTB,\"762\",\"4\",RUB,\"1,83\",MCX,\"\",\"\",\"False\",\"\"",
+            "DIVIDEND,2021-05-14 00:00:00,T,\"0\",\"0,52\",USD,\"0,05\",NYSE,\"\",\"\",\"False\",\"\"",
+            "DIVIDEND,2021-05-20 00:00:00,MTB,\"0\",\"0,18\",USD,\"0,02\",NYSE,\"\",\"\",\"True\",\"\"",
+            "BUY,2021-06-03 10:40:13,FXIM,\"85,35\",\"6\",RUB,\"0,31\",MCX,\"\",\"\",\"False\",\"\""
         ];
 
     [Fact]
     public void ConvertShouldParseLinesAndReturnsListOfModels()
     {
-        using var memory = new MemoryStream();
-        using var streamWriter = new StreamWriter(memory);
+        var builder = new StringBuilder();
         foreach (var line in lines)
         {
-            streamWriter.WriteLine(line);
+            builder.AppendLine(line);
         }
-        streamWriter.Flush();
-        memory.Position = 0;
 
-        using var streamReader = new StreamReader(memory);
-        var models = TransactionHelper.Convert(streamReader);
-
-        Assert.NotNull(models);
-        Assert.Equal(7, models.Count);
+        using var textReader = new StringReader(builder.ToString());
+        var items = TransactionHelper.Convert(textReader);
+        
+        Assert.NotNull(items);
+        Assert.Equal(7, items.Count);
     }
 }

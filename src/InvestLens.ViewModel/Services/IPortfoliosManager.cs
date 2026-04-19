@@ -1,5 +1,6 @@
 ﻿using InvestLens.Model;
 using InvestLens.Model.Crud.Portfolio;
+using InvestLens.Model.Entities;
 using InvestLens.ViewModel.NavigationTree;
 
 namespace InvestLens.ViewModel.Services;
@@ -14,4 +15,6 @@ public interface IPortfoliosManager
     Task Create(CreateModel model);
     Task<bool> Delete(int id);
     Task Update(UpdateModel model);
+    Task Merge(List<Transaction> transactions);
+    Task Recreate(List<Transaction> transactions);
 }

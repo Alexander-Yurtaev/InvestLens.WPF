@@ -9,7 +9,10 @@ public static class TransactionHelper
 {
     public static List<TransactionModel> Convert(TextReader streamReader)
     {
-        var config = new CsvConfiguration(CultureInfo.InvariantCulture);
+        var config = new CsvConfiguration(new CultureInfo("ru-RU"))
+        {
+            Delimiter = ","
+        };
 
         using var csv = new CsvReader(streamReader, config);
         csv.Context.RegisterClassMap<TransactionMap>();

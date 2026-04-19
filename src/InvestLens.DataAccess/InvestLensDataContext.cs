@@ -55,9 +55,9 @@ public sealed class InvestLensDataContext : DbContext
             entity.Property(p => p.Currency).IsRequired();
             entity.Property(p => p.FeeTax).IsRequired();
             entity.Property(p => p.Exchange).IsRequired();
-            entity.Property(p => p.NKD).IsRequired();
-            entity.Property(p => p.FeeCurrency).IsRequired();
-            entity.Property(p => p.DoNotAdjustCash).IsRequired();
+            entity.Property(p => p.NKD);
+            entity.Property(p => p.FeeCurrency).HasDefaultValue("");
+            entity.Property(p => p.DoNotAdjustCash);
             entity.Property(p => p.Note).HasDefaultValue("");
             entity.HasOne(t => t.Portfolio)
                   .WithMany(p => p.Transactions)

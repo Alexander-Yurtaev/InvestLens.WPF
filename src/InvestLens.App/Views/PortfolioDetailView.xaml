@@ -182,7 +182,7 @@
                             <GridViewColumn Header="Дата" Width="100">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
-                                        <TextBlock Text="{Binding Date, StringFormat=dd.MM.yyyy}" 
+                                        <TextBlock Text="{Binding Date, StringFormat=dd.MM.yyyy HH:mm:ss}" 
                                                    TextAlignment="Right"/>
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
@@ -220,18 +220,18 @@
                             <GridViewColumn Header="Цена" Width="120">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
-                                        <TextBlock Text="{Binding Price, StringFormat=C2}"
+                                        <TextBlock Text="{Binding Price, StringFormat=F2}"
                                                    TextAlignment="Right"/>
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
 
-                            <GridViewColumn Header="Сумма" Width="120">
+                            <GridViewColumn Header="Комментарий" Width="120">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
-                                        <TextBlock Text="{Binding TotalPrice, StringFormat=C2}"
+                                        <TextBlock Text="{Binding Description}"
                                                    TextAlignment="Right"
-                                                   FontWeight="SemiBold"/>
+                                                   ToolTip="{Binding Description}"/>
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>

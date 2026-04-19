@@ -59,6 +59,17 @@ public class PortfoliosManager : IPortfoliosManager
         {
             Description = portfolio.Description ?? ""
         };
+
+        var securities = portfolio.Transactions
+            .Select(t => t.Symbol)
+            .Distinct()
+            .Order()
+            .Select(s => new SecurityInfo(s, s));
+        detail.Securities.AddRange(securities);
+
+        var operations = _mapper.Map<List<SecurityOperation>>(portfolio.Transactions); 
+        detail.Operations.AddRange(operations);
+
         detail.Portfolios.AddRange(portfolio.ChildrenPortfolios.Select(c => c.Id));
         return detail;
     }
@@ -225,5 +236,15 @@ public class PortfoliosManager : IPortfoliosManager
         };
         //card.Stats.AddRange(p.PortfolioStats);
         return card;
+    }
+
+    public async Task Merge(List<Transaction> transactions)
+    {
+        await _portfolioRepository.Merge(transactions);
+    }
+
+    public async Task Recreate(List<Transaction> transactions)
+    {
+        await _portfolioRepository.Recreate(transactions);
     }
 }

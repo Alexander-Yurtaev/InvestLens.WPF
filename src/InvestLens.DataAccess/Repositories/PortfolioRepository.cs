@@ -30,6 +30,7 @@ public class PortfolioRepository(InvestLensDataContext db, IMapper mapper) : IPo
     public async Task<Portfolio?> GetPortfolioById(int id)
     {
         var portfolio = await _db.Portfolios
+            .Include(p => p.Transactions)
             .FirstOrDefaultAsync(p => p.Id == id);
 
         return portfolio;
@@ -103,5 +104,47 @@ public class PortfolioRepository(InvestLensDataContext db, IMapper mapper) : IPo
     public async Task<int> Save()
     {
         return await _db.SaveChangesAsync();
+    }
+
+    public async Task Merge(List<Transaction> transactions)
+    {
+        await MergeInMemoty(transactions);
+    }
+
+    public async Task Recreate(List<Transaction> transactions)
+    {
+        await _db.Transactions.ExecuteDeleteAsync();
+        await _db.Transactions.AddRangeAsync(transactions);
+        await _db.SaveChangesAsync();
+    }
+
+    private async Task MergeInMemoty(List<Transaction> transactions)
+    {
+        var dbTransactions = await _db.Transactions.ToListAsync();
+        foreach (var external in transactions)
+        {
+            // Event,Date,Symbol,Price,Quantity,Currency,FeeTax,Exchange,NKD,FeeCurrency,DoNotAdjustCash,Note
+            var existing = dbTransactions.SingleOrDefault(
+                t => t.Event == external.Event &&
+                     t.Date == external.Date &&
+                     t.Symbol == external.Symbol &&
+                     t.Price == external.Price &&
+                     t.Quantity == external.Quantity &&
+                     t.Currency == external.Currency
+                );
+
+            if (existing != null)
+            {
+                external.Id = existing.Id;
+                var entity = _db.Entry(existing);
+                entity.CurrentValues.SetValues(external);
+            }
+            else
+            {
+                _db.Transactions.Add(external);
+            }
+        }
+
+        await _db.SaveChangesAsync();
     }
 }
