@@ -29,4 +29,6 @@ public class Portfolio : BaseEntity
     public virtual ICollection<Portfolio> ChildrenPortfolios { get; set; } = [];
     public required int OwnerId { get; set; }
     public virtual User? Owner { get; set; }
+
+    public virtual List<Transaction> Transactions { get; set; }
 }

@@ -7,6 +7,7 @@ public sealed class InvestLensDataContext : DbContext
 {
     public DbSet<User> Users { get; set; }
     public DbSet<Portfolio> Portfolios { get; set; }
+    public DbSet<Transaction> Transactions { get; set; }
 
     public InvestLensDataContext(DbContextOptions<InvestLensDataContext> options) : base(options)
     {
@@ -42,6 +43,26 @@ public sealed class InvestLensDataContext : DbContext
                   .WithOne(p => p.ParentPortfolio)
                   .HasForeignKey(p => p.ParentPortfolioId)
                   .OnDelete(DeleteBehavior.Restrict);
+        });
+
+        modelBuilder.Entity<Transaction>(entity =>
+        {
+            entity.Property(p => p.Event).IsRequired();
+            entity.Property(p => p.Date).IsRequired();
+            entity.Property(p => p.Symbol).IsRequired();
+            entity.Property(p => p.Price).IsRequired();
+            entity.Property(p => p.Quantity).IsRequired();
+            entity.Property(p => p.Currency).IsRequired();
+            entity.Property(p => p.FeeTax).IsRequired();
+            entity.Property(p => p.Exchange).IsRequired();
+            entity.Property(p => p.NKD).IsRequired();
+            entity.Property(p => p.FeeCurrency).IsRequired();
+            entity.Property(p => p.DoNotAdjustCash).IsRequired();
+            entity.Property(p => p.Note).HasDefaultValue("");
+            entity.HasOne(t => t.Portfolio)
+                  .WithMany(p => p.Transactions)
+                  .HasForeignKey(t => t.PortfolioId)
+                  .OnDelete(DeleteBehavior.Cascade);
         });
     }
 
