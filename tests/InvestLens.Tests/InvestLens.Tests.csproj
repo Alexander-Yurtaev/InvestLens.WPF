@@ -22,6 +22,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\src\InvestLens.App\InvestLens.App.csproj" />
     <ProjectReference Include="..\..\src\InvestLens.Model\InvestLens.Model.csproj" />
     <ProjectReference Include="..\..\src\InvestLens.ViewModel\InvestLens.ViewModel.csproj" />
   </ItemGroup>

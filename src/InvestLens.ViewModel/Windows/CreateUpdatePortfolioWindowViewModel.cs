@@ -101,6 +101,7 @@ public abstract class CreateUpdatePortfolioWindowViewModel : ValidationViewModel
         {
             LookupModels.Add(lookupModel);
         }
+        await Task.Delay(0);
     }
 
     protected IPortfoliosManager PortfoliosManager {  get; }
@@ -146,6 +147,8 @@ public abstract class CreateUpdatePortfolioWindowViewModel : ValidationViewModel
         {
             AddError("Портфель с таким именем уже создан", nameof(Name));
         }
+
+        await Task.Delay(0);
     }
 
     #region Overrides of ValidationViewModelBase
