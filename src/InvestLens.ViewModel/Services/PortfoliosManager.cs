@@ -1,5 +1,4 @@
-﻿using Autofac.Features.OwnedInstances;
-using AutoMapper;
+﻿using AutoMapper;
 using InvestLens.DataAccess.Repositories;
 using InvestLens.Model;
 using InvestLens.Model.Crud.Portfolio;
@@ -8,7 +7,6 @@ using InvestLens.Model.Enums;
 using InvestLens.Model.NavigationTree;
 using InvestLens.ViewModel.Events;
 using InvestLens.ViewModel.NavigationTree;
-using System.Collections.Generic;
 
 namespace InvestLens.ViewModel.Services;
 
@@ -248,9 +246,14 @@ public class PortfoliosManager : IPortfoliosManager
         return true;
     }
 
-    public async Task<bool> CheckNameUniqueAsync(int portfolioId, int ownerId, string name)
+    public bool CheckNameUnique(int portfolioId, int ownerId, string name)
     {
-        return await _portfolioRepository.CheckNameUniqueAsync(portfolioId, ownerId, name);
+        var isExists = _portfolioCache.Values
+                            .Any(p => p.OwnerId == ownerId
+                                      && (portfolioId == 0 || p.Id != portfolioId)
+                                      && p.Name == name);
+
+        return !isExists;
     }
 
     private string PortfolioTypeToStringConverter(PortfolioType portfolioType)

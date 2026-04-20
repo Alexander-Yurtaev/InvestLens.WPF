@@ -10,7 +10,6 @@ namespace InvestLens.DataAccess.Repositories
         Task<IDbContextTransaction> BeginTransactionAsync();
         Task CommitTransactionAsync();
         Task RollbackTransactionAsync();
-        Task<bool> CheckNameUniqueAsync(int portfolioId, int ownerId, string name);
         Task<Portfolio> CreatePortfolio(CreateModel model);
         Task Delete(int id);
         Task<List<Portfolio>> GetAllPortfolios(int ownerId);

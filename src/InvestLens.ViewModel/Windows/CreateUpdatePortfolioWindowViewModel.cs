@@ -140,7 +140,7 @@ public abstract class CreateUpdatePortfolioWindowViewModel : ValidationViewModel
 
         var ownerId = _authManager.CurrentUser!.Id;
 
-        var isUnique = await PortfoliosManager.CheckNameUniqueAsync(Model.Id, ownerId, Name);
+        var isUnique = PortfoliosManager.CheckNameUnique(Model.Id, ownerId, Name);
         if (!isUnique)
         {
             AddError("Портфель с таким именем уже создан", nameof(Name));

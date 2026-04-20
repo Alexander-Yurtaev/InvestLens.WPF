@@ -41,16 +41,6 @@ public class PortfolioRepository(InvestLensDataContext db, IMapper mapper) : IPo
             .ToListAsync();
     }
 
-    public async Task<bool> CheckNameUniqueAsync(int portfolioId, int ownerId, string name)
-    {
-        var isExists = await _db.Portfolios
-            .AnyAsync(p => p.OwnerId == ownerId 
-                           && (portfolioId == 0 || p.Id != portfolioId) 
-                           && p.Name == name);
-
-        return !isExists;
-    }
-
     public async Task<Portfolio> CreatePortfolio(InvestLens.Model.Crud.Portfolio.CreateModel model)
     {
         var portfolio = _mapper.Map<Portfolio>(model);
