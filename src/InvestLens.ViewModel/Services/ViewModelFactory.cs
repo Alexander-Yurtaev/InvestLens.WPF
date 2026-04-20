@@ -49,8 +49,8 @@ public class ViewModelFactory : IViewModelFactory
 
     private async Task<INotifyPropertyChanged> CreatePortfolioViewModel(PortfolioNavigationTreeModel model)
     {
-        var portfolioModel = await _portfoliosManager.GetPortfolio(model.Id);
-        var parameters = new TypedParameter(typeof(PortfolioDetail), portfolioModel);
+        var portfolioModel = await _portfoliosManager.GetPortfolioDetiails(model.Id);
+        var parameters = new TypedParameter(typeof(PortfolioDetails), portfolioModel);
         var viewModel = _componentContext.Resolve<IPortfolioDetailViewModel>(parameters);
         return viewModel;
     }

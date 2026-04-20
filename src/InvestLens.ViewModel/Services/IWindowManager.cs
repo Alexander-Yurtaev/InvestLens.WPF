@@ -1,14 +1,12 @@
-﻿using InvestLens.ViewModel.Windows.Dialogs;
-
-namespace InvestLens.ViewModel.Services;
+﻿namespace InvestLens.ViewModel.Services;
 
 public interface IWindowManager
 {
     void ShowErrorDialog(string message);
     void ShowWarningDialog(string message, string actionContext);
-    void ShowInformationDialog(string message, string actionContext);
+    void ShowInformationDialog(string message);
     bool? ShowConfirmDialog(string message, string actionContext);
-    void ShowSuccessDialog(string message, string actionContext);
+    void ShowSuccessDialog(string message);
     void ShowWindow<TViewModel>(TViewModel? viewModel = null) where TViewModel : class;
     bool? ShowDialogWindow<TViewModel>(TViewModel? viewModel = null) where TViewModel : class;
     TViewModel? ShowModalDialog<TViewModel>(TViewModel? viewModel = null) where TViewModel : class;

@@ -8,6 +8,7 @@ using InvestLens.Model.Enums;
 using InvestLens.Model.NavigationTree;
 using InvestLens.ViewModel.Events;
 using InvestLens.ViewModel.NavigationTree;
+using System.Collections.Generic;
 
 namespace InvestLens.ViewModel.Services;
 
@@ -50,12 +51,12 @@ public class PortfoliosManager : IPortfoliosManager
         return result;
     }
 
-    public async Task<PortfolioDetail?> GetPortfolio(int id)
+    public async Task<PortfolioDetails?> GetPortfolioDetiails(int id)
     {
         var portfolio = await _portfolioRepository.GetPortfolioById(id);
         if (portfolio is null) return null;
 
-        var detail = new PortfolioDetail(portfolio.Id, portfolio.Name, portfolio.PortfolioType)
+        var detail = new PortfolioDetails(portfolio.Id, portfolio.Name, portfolio.PortfolioType)
         {
             Description = portfolio.Description ?? ""
         };
@@ -130,7 +131,8 @@ public class PortfoliosManager : IPortfoliosManager
                 await _portfolioRepository.CommitTransactionAsync();
 
                 _portfolioCache[portfolio.Id] = _mapper.Map<PortfolioModel>(portfolio);
-                Cards.Add(CreateCard(_portfolioCache[portfolio.Id]));
+                var card = await CreateCard(_portfolioCache[portfolio.Id]);
+                Cards.Add(card);
                 _eventAggregator.GetEvent<PortfolioCreatedEvent>().Publish(portfolio.Id);
             }
             catch (Exception ex)
@@ -155,7 +157,7 @@ public class PortfoliosManager : IPortfoliosManager
         _portfolioCache[portfolio.Id] = _mapper.Map<PortfolioModel>(portfolio);
 
         var index = Cards.FindIndex(card => card.Id == portfolio.Id);
-        Cards[index] = CreateCard(_portfolioCache[portfolio.Id]);
+        Cards[index] = await CreateCard(_portfolioCache[portfolio.Id]);
 
         _eventAggregator.GetEvent<PortfolioUpdatedEvent>().Publish(model.Id);
     }
@@ -234,7 +236,7 @@ public class PortfoliosManager : IPortfoliosManager
                 _portfolioCache[portfolio.Id] = _mapper.Map<PortfolioModel>(portfolio);
             }
 
-            RefreshCards();
+            RefreshCardsAsync();
         }
         finally
         {
@@ -244,33 +246,40 @@ public class PortfoliosManager : IPortfoliosManager
         _eventAggregator.GetEvent<PortfoliosLoadedEvent>().Publish();
     }
 
-    private void RefreshCards()
+    private async Task RefreshCardsAsync()
     {
-        var result = _portfolioCache.Values.Select(CreateCard).ToList();
+        var result = new List<Card>();
+        foreach (var model in _portfolioCache.Values)
+        {
+            var card = await CreateCard(model);
+            result.Add(card);
+        }
+
         Cards.Clear();
         Cards.AddRange(result);
     }
 
-    private Card CreateCard(PortfolioModel portfolio)
+    private async Task<Card> CreateCard(PortfolioModel model)
     {
-        var card = new Card(portfolio.Id, portfolio.Name, true)
+        var card = new Card(model.Id, model.Name, true)
         {
-            CardType = PortfolioTypeToStringConverter(portfolio.PortfolioType),
-            CardTypeForeground = PortfolioTypeToForegroundConverter(portfolio.PortfolioType),
-            CardTypeBackground = PortfolioTypeToBackgroundConverter(portfolio.PortfolioType),
+            CardType = PortfolioTypeToStringConverter(model.PortfolioType),
+            CardTypeForeground = PortfolioTypeToForegroundConverter(model.PortfolioType),
+            CardTypeBackground = PortfolioTypeToBackgroundConverter(model.PortfolioType),
             LastDateUpdate = "сегодня"
         };
-        //card.Stats.AddRange(p.PortfolioStats);
+        var details = await GetPortfolioDetiails(model.Id);
+        card.Stats.AddRange(details.PortfolioStats);
         return card;
     }
 
-    public async Task Merge(List<Transaction> transactions)
+    public async Task<int> Merge(List<Transaction> transactions)
     {
-        await _portfolioRepository.Merge(transactions);
+        return await _portfolioRepository.Merge(transactions);
     }
 
-    public async Task Recreate(List<Transaction> transactions)
+    public async Task<int> Recreate(List<Transaction> transactions)
     {
-        await _portfolioRepository.Recreate(transactions);
+        return await _portfolioRepository.Recreate(transactions);
     }
 }

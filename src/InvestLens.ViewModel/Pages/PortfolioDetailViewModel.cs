@@ -15,7 +15,7 @@ namespace InvestLens.ViewModel.Pages;
 public class PortfolioDetailViewModel : ViewModelBaseWithContentHeader, IPortfolioDetailViewModel
 {
     private readonly IMapper _mapper;
-    private readonly PortfolioDetail _model;
+    private readonly PortfolioDetails _model;
     private readonly IWindowManager _windowManager;
     private readonly IAuthManager _authManager;
     private readonly IPortfoliosManager _portfoliosManager;
@@ -24,7 +24,7 @@ public class PortfolioDetailViewModel : ViewModelBaseWithContentHeader, IPortfol
 
     public PortfolioDetailViewModel(
         IMapper mapper,
-        PortfolioDetail model, 
+        PortfolioDetails model, 
         IWindowManager windowManager, 
         IAuthManager authManager,
         IPortfoliosManager portfoliosManager) : base(model.Title, model.Description)
@@ -110,17 +110,19 @@ public class PortfolioDetailViewModel : ViewModelBaseWithContentHeader, IPortfol
                 transaction.PortfolioId = _model.Id;
             }
 
+            int acceptedCount = 0;
             if (viewModel?.MergeMode == true)
             {
-                await _portfoliosManager.Merge(transactions);
+                acceptedCount = await _portfoliosManager.Merge(transactions);
             }
             else if (viewModel?.RecreateMode == true)
             {
-                await _portfoliosManager.Recreate(transactions);
+                acceptedCount = await _portfoliosManager.Recreate(transactions);
             }
 
             RaisePropertyChanged(nameof(SecuritiesView));
             RaisePropertyChanged(nameof(Operations));
+            _windowManager.ShowSuccessDialog($"Было импортированно {acceptedCount} записей");
         }
         catch (Exception ex)
         {

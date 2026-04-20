@@ -28,13 +28,13 @@ public class WindowManager : IWindowManager
         ShowModalDialog(viewModel);
     }
 
-    public void ShowInformationDialog(string message, string actionContext)
+    public void ShowInformationDialog(string message)
     {
         var viewModel = new InformationDialogViewModel(this, message);
         ShowModalDialog(viewModel);
     }
 
-    public void ShowSuccessDialog(string message, string actionContext)
+    public void ShowSuccessDialog(string message)
     {
         var viewModel = new SuccessDialogViewModel(this, message);
         ShowModalDialog(viewModel);
@@ -42,7 +42,7 @@ public class WindowManager : IWindowManager
 
     public bool? ShowConfirmDialog(string message, string actionContext)
     {
-        var viewModel = new ConfirmDialogViewModel(this, message);
+        var viewModel = new ConfirmDialogViewModel(this, message, actionContext);
         var result = ShowModalDialog(viewModel) as IConfirmable;
         return result?.IsConfirmed ?? false;
     }

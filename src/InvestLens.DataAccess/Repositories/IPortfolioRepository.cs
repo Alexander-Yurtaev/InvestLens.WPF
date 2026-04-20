@@ -19,7 +19,7 @@ namespace InvestLens.DataAccess.Repositories
         Task<Portfolio?> GetPortfolioById(int id);
         Task<int> Save();
         Task Update(UpdateModel model);
-        Task Merge(List<Transaction> transactions);
-        Task Recreate(List<Transaction> transactions);
+        Task<int> Merge(List<Transaction> transactions);
+        Task<int> Recreate(List<Transaction> transactions);
     }
 }

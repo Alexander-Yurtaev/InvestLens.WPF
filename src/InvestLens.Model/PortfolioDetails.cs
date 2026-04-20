@@ -3,9 +3,9 @@ using InvestLens.Model.Enums;
 
 namespace InvestLens.Model;
 
-public class PortfolioDetail
+public class PortfolioDetails
 {
-    public PortfolioDetail(int id, string title, PortfolioType portfolioType)
+    public PortfolioDetails(int id, string title, PortfolioType portfolioType)
     {
         Id = id;
         Title = title;

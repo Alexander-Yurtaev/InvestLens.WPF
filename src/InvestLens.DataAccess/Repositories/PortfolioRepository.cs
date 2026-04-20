@@ -3,7 +3,6 @@ using InvestLens.Model.Entities;
 using InvestLens.Model.Enums;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
-using System.Linq;
 
 namespace InvestLens.DataAccess.Repositories;
 
@@ -106,19 +105,26 @@ public class PortfolioRepository(InvestLensDataContext db, IMapper mapper) : IPo
         return await _db.SaveChangesAsync();
     }
 
-    public async Task Merge(List<Transaction> transactions)
+    public async Task<int> Merge(List<Transaction> transactions)
     {
-        await MergeInMemoty(transactions);
+        return await MergeInMemoty(transactions);
     }
 
-    public async Task Recreate(List<Transaction> transactions)
+    public async Task<int> Recreate(List<Transaction> transactions)
     {
-        await _db.Transactions.ExecuteDeleteAsync();
+        if (!transactions.Any()) return 0;
+        var portfolioId = transactions.Select(t => t.PortfolioId).Distinct().Single();
+        var delTransactions = await _db.Transactions
+            .Where(t => t.PortfolioId == portfolioId)
+            .ToListAsync();
+
+        _db.Transactions.RemoveRange(delTransactions);
+
         await _db.Transactions.AddRangeAsync(transactions);
-        await _db.SaveChangesAsync();
+        return await _db.SaveChangesAsync();
     }
 
-    private async Task MergeInMemoty(List<Transaction> transactions)
+    private async Task<int> MergeInMemoty(List<Transaction> transactions)
     {
         var dbTransactions = await _db.Transactions.ToListAsync();
         foreach (var external in transactions)
@@ -145,6 +151,6 @@ public class PortfolioRepository(InvestLensDataContext db, IMapper mapper) : IPo
             }
         }
 
-        await _db.SaveChangesAsync();
+        return await _db.SaveChangesAsync();
     }
 }
