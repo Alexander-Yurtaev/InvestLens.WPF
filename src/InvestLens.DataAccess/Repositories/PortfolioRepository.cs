@@ -30,6 +30,7 @@ public class PortfolioRepository(InvestLensDataContext db, IMapper mapper) : IPo
     {
         var portfolio = await _db.Portfolios
             .Include(p => p.Transactions)
+            .Include(p => p.ChildrenPortfolios)
             .FirstOrDefaultAsync(p => p.Id == id);
 
         return portfolio;

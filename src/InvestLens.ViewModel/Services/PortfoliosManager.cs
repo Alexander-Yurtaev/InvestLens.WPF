@@ -26,7 +26,7 @@ public class PortfoliosManager : IPortfoliosManager
     public PortfoliosManager(
         IMapper mapper,
         IAuthManager authManager,
-        IPortfolioRepository portfolioRepository, 
+        IPortfolioRepository portfolioRepository,
         IWindowManager windowManager,
         IEventAggregator eventAggregator)
     {
@@ -56,49 +56,96 @@ public class PortfoliosManager : IPortfoliosManager
         var portfolio = await _portfolioRepository.GetPortfolioById(id);
         if (portfolio is null) return null;
 
-        var detail = new PortfolioDetails(portfolio.Id, portfolio.Name, portfolio.PortfolioType)
+        var details = new PortfolioDetails(portfolio.Id, portfolio.Name, portfolio.PortfolioType)
         {
             Description = portfolio.Description ?? ""
         };
 
+        if (details.PortfolioType == PortfolioType.Invest)
+        {
+            FillInvestPortfolio(portfolio, details);
+        }
+        else
+        {
+            FillComplexPortfolio(portfolio, details);
+        }
+
+        var portfolioStats = CreateStat(details);
+        details.PortfolioStats.AddRange(portfolioStats);
+
+        var operations = _mapper
+            .Map<List<SecurityOperation>>(portfolio.Transactions)
+            .OrderBy(o => o.Date);
+
+        details.Operations.AddRange(operations);
+
+        return details;
+    }
+
+    private void FillInvestPortfolio(Portfolio portfolio, PortfolioDetails details)
+    {
         var securityInfos = portfolio.Transactions
-            .GroupBy(t => t.Symbol)
-            .Select(g =>
-            {
-                var count = g.Where(t => t.Event == TransactionEvents.Buy).Sum(t => t.Quantity)
-                            -
-                            g.Where(t => t.Event == TransactionEvents.Sell).Sum(t => t.Quantity);
-                var totalPrice = g.Where(t => t.Event == TransactionEvents.Buy).Sum(t => t.Price)
-                                 -
-                                 g.Where(t => t.Event == TransactionEvents.Sell).Sum(t => t.Price);
-                
-                var dividendCount = g.Where(t => t.Event == TransactionEvents.Dividend)
-                                 .Sum(t => t.Quantity);
-                
-                return new SecurityInfo(g.Key, g.Key)
+                .GroupBy(t => t.Symbol)
+                .Select(g =>
                 {
-                    Count = count,
-                    DividendCount = dividendCount,
-                    TotalPrice = totalPrice,
-                    AveragePrice = count > 0 ? totalPrice / count : 0
-                };
-            });
+                    var count = g.Where(t => t.Event == TransactionEvents.Buy).Sum(t => t.Quantity)
+                                -
+                                g.Where(t => t.Event == TransactionEvents.Sell).Sum(t => t.Quantity);
+                    var totalPrice = g.Where(t => t.Event == TransactionEvents.Buy).Sum(t => t.Price)
+                                     -
+                                     g.Where(t => t.Event == TransactionEvents.Sell).Sum(t => t.Price);
 
-        detail.Securities.AddRange(securityInfos);
+                    var dividendCount = g.Where(t => t.Event == TransactionEvents.Dividend)
+                                     .Sum(t => t.Quantity);
 
+                    return new SecurityInfo(g.Key, g.Key)
+                    {
+                        Count = count,
+                        DividendCount = dividendCount,
+                        TotalPrice = totalPrice
+                    };
+                });
+
+        details.Securities.AddRange(securityInfos);
+    }
+
+    private List<Stat> CreateStat(PortfolioDetails details)
+    {
         var portfolioStats = new List<Stat>
         {
-            new Stat("Количество", detail.Securities.Sum(s => s.Count)),
-            new Stat("Стоимость", detail.Securities.Sum(s => s.TotalPrice), "₽"),
-            new Stat("Дивиденды", detail.Securities.Sum(s => s.DividendCount), "₽"),
+            new Stat("Количество", details.Securities.Sum(s => s.Count)),
+            new Stat("Стоимость", details.Securities.Sum(s => s.TotalPrice), "₽"),
+            new Stat("Дивиденды", details.Securities.Sum(s => s.DividendCount), "₽"),
         };
-        detail.PortfolioStats.AddRange(portfolioStats);
+        return portfolioStats;
+    }
 
-        var operations = _mapper.Map<List<SecurityOperation>>(portfolio.Transactions); 
-        detail.Operations.AddRange(operations);
+    private void FillComplexPortfolio(Portfolio portfolio, PortfolioDetails details)
+    {
+        foreach (var childPortfolio in portfolio.ChildrenPortfolios)
+        {
+            var childDetails = new PortfolioDetails(0, "", PortfolioType.Invest);
+            FillInvestPortfolio(childPortfolio, childDetails);
 
-        detail.Portfolios.AddRange(portfolio.ChildrenPortfolios.Select(c => c.Id));
-        return detail;
+            foreach (var childSecurityInfo in childDetails.Securities)
+            {
+                var info = details.Securities.FirstOrDefault(s => s.SecId == childSecurityInfo.SecId);
+                if (info is null)
+                {
+                    details.Securities.Add((SecurityInfo)childSecurityInfo.Clone());
+                }
+                else
+                {
+                    info.Count += childSecurityInfo.Count;
+                    info.DividendCount += childSecurityInfo.DividendCount;
+                    info.TotalPrice += childSecurityInfo.TotalPrice;
+                }
+            }
+
+            
+        }
+
+        details.Portfolios.AddRange(portfolio.ChildrenPortfolios.Select(c => c.Id));
     }
 
     public async Task<List<LookupModel>> GetLookupModels(int ownerId, int? portfolioId = null)
@@ -117,7 +164,7 @@ public class PortfoliosManager : IPortfoliosManager
             {
                 var portfolio = await _portfolioRepository.CreatePortfolio(model);
                 await _portfolioRepository.Save();
-                
+
                 if (model.Portfolios.Any())
                 {
                     foreach (var childId in model.Portfolios)
@@ -127,12 +174,16 @@ public class PortfoliosManager : IPortfoliosManager
                     }
                     await _portfolioRepository.Save();
                 }
-                
+
                 await _portfolioRepository.CommitTransactionAsync();
 
                 _portfolioCache[portfolio.Id] = _mapper.Map<PortfolioModel>(portfolio);
                 var card = await CreateCard(_portfolioCache[portfolio.Id]);
-                Cards.Add(card);
+                if (card is not null)
+                {
+                    Cards.Add(card);
+                }
+
                 _eventAggregator.GetEvent<PortfolioCreatedEvent>().Publish(portfolio.Id);
             }
             catch (Exception ex)
@@ -157,7 +208,11 @@ public class PortfoliosManager : IPortfoliosManager
         _portfolioCache[portfolio.Id] = _mapper.Map<PortfolioModel>(portfolio);
 
         var index = Cards.FindIndex(card => card.Id == portfolio.Id);
-        Cards[index] = await CreateCard(_portfolioCache[portfolio.Id]);
+        var card = await CreateCard(_portfolioCache[portfolio.Id]);
+        if (card is not null)
+        {
+            Cards[index] = card;
+        }
 
         _eventAggregator.GetEvent<PortfolioUpdatedEvent>().Publish(model.Id);
     }
@@ -182,7 +237,7 @@ public class PortfoliosManager : IPortfoliosManager
     {
         return await _portfolioRepository.CheckNameUniqueAsync(portfolioId, ownerId, name);
     }
-    
+
     private string PortfolioTypeToStringConverter(PortfolioType portfolioType)
     {
         switch (portfolioType)
@@ -252,14 +307,17 @@ public class PortfoliosManager : IPortfoliosManager
         foreach (var model in _portfolioCache.Values)
         {
             var card = await CreateCard(model);
-            result.Add(card);
+            if (card is not null)
+            {
+                result.Add(card);
+            }
         }
 
         Cards.Clear();
         Cards.AddRange(result);
     }
 
-    private async Task<Card> CreateCard(PortfolioModel model)
+    private async Task<Card?> CreateCard(PortfolioModel model)
     {
         var card = new Card(model.Id, model.Name, true)
         {
@@ -269,6 +327,12 @@ public class PortfoliosManager : IPortfoliosManager
             LastDateUpdate = "сегодня"
         };
         var details = await GetPortfolioDetiails(model.Id);
+        if (details is null)
+        {
+            _windowManager.ShowErrorDialog($"Ошибка при получении данных для портфеля '{model.Name}'");
+            return null;
+        }
+
         card.Stats.AddRange(details.PortfolioStats);
         return card;
     }
