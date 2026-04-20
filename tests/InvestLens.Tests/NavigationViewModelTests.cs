@@ -1,5 +1,6 @@
 ﻿using InvestLens.Model.Enums;
 using InvestLens.Model.NavigationTree;
+using InvestLens.Model.Services;
 using InvestLens.ViewModel;
 using InvestLens.ViewModel.Events;
 using InvestLens.ViewModel.NavigationTree;

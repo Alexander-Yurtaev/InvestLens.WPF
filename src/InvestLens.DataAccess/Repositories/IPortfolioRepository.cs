@@ -12,13 +12,15 @@ namespace InvestLens.DataAccess.Repositories
         Task RollbackTransactionAsync();
         Task<Portfolio> CreatePortfolio(CreateModel model);
         Task Delete(int id);
-        Task<List<Portfolio>> GetAllPortfolios(int ownerId);
-        Task<List<Portfolio>> GetAllPortfolios(int ownerId, PortfolioType portfolioType);
+        Task<List<Portfolio>> GetAllPortfolios();
+        Task<List<Portfolio>> GetAllPortfolios(PortfolioType portfolioType);
         Task<Portfolio?> GetPortfolioById(int id);
         Task<int> Save();
         Task Update(UpdateModel model);
         Task<int> Merge(List<Transaction> transactions);
         Task<int> Recreate(List<Transaction> transactions);
         Task<List<Transaction>> GetTransactions(int portfolioId);
+        Task<List<Transaction>> GetAllTransactions();
+        Task<List<Transaction>> GetLastTtransactions(int count);
     }
 }

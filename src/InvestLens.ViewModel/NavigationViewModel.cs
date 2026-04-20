@@ -1,6 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 using InvestLens.Model;
 using InvestLens.Model.NavigationTree;
+using InvestLens.Model.Services;
 using InvestLens.ViewModel.Events;
 using InvestLens.ViewModel.NavigationTree;
 using InvestLens.ViewModel.Services;

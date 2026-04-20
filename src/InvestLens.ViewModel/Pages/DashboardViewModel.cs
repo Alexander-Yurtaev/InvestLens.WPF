@@ -1,4 +1,5 @@
 ﻿using InvestLens.Model;
+using InvestLens.Model.Services;
 using InvestLens.ViewModel.Events;
 using InvestLens.ViewModel.Services;
 using InvestLens.ViewModel.Windows;
@@ -58,7 +59,7 @@ public class DashboardViewModel : ViewModelBaseWithContentHeader, IDashboardView
             MetricCards.Add(metric);
         }
 
-        var activityItems = _activityManager.GetActivityItems();
+        var activityItems = await _activityManager.GetActivityItems();
         ActivityItems.Clear();
         foreach (var activityItem in activityItems)
         {

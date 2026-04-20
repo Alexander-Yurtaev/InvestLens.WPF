@@ -5,6 +5,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Windows.Input;
 using InvestLens.DataAccess.Repositories;
 using InvestLens.Model.Crud.Portfolio;
+using InvestLens.Model.Services;
 
 namespace InvestLens.ViewModel.Windows;
 

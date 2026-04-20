@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using InvestLens.Model;
 using InvestLens.Model.Crud.Portfolio;
+using InvestLens.Model.Services;
 using InvestLens.ViewModel.Helpers;
 using InvestLens.ViewModel.Services;
 using InvestLens.ViewModel.Windows;

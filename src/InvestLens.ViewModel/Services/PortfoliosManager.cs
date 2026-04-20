@@ -5,6 +5,7 @@ using InvestLens.Model.Crud.Portfolio;
 using InvestLens.Model.Entities;
 using InvestLens.Model.Enums;
 using InvestLens.Model.NavigationTree;
+using InvestLens.Model.Services;
 using InvestLens.ViewModel.Events;
 using InvestLens.ViewModel.Helpers;
 using InvestLens.ViewModel.NavigationTree;
@@ -302,7 +303,7 @@ public class PortfoliosManager : IPortfoliosManager
 
         try
         {
-            var portfolios = await _portfolioRepository.GetAllPortfolios(ownerId);
+            var portfolios = await _portfolioRepository.GetAllPortfolios();
 
             _portfolioCache.Clear();
             foreach (var portfolio in portfolios)
@@ -371,5 +372,11 @@ public class PortfoliosManager : IPortfoliosManager
         return _portfolioCache.Values
             .Where(p => p.PortfolioType == portfolioType)
             .ToList();
+    }
+
+    public async Task<List<Transaction>> GetLastTtransactions(int count)
+    {
+        var transactions = await _portfolioRepository.GetLastTtransactions(count);
+        return transactions;
     }
 }

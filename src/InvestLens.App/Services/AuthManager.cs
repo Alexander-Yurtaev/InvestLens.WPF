@@ -1,6 +1,6 @@
 ﻿using InvestLens.Model;
+using InvestLens.Model.Services;
 using InvestLens.ViewModel.Events;
-using InvestLens.ViewModel.Services;
 
 namespace InvestLens.App.Services;
 

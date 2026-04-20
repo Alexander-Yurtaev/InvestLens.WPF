@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Security;
 using System.Windows.Input;
 using InvestLens.DataAccess.Services;
+using InvestLens.Model.Services;
 
 namespace InvestLens.ViewModel.Windows;
 

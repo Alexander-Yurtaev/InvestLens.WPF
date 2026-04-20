@@ -1,15 +1,19 @@
 ﻿using AutoMapper;
 using InvestLens.Model.Entities;
 using InvestLens.Model.Enums;
+using InvestLens.Model.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 
 namespace InvestLens.DataAccess.Repositories;
 
-public class PortfolioRepository(InvestLensDataContext db, IMapper mapper) : IPortfolioRepository
+public class PortfolioRepository(InvestLensDataContext db, 
+    IMapper mapper,
+    IAuthManager authManager) : IPortfolioRepository
 {
     private readonly InvestLensDataContext _db = db;
     private readonly IMapper _mapper = mapper;
+    private readonly IAuthManager _authManager = authManager;
 
     public async Task<IDbContextTransaction> BeginTransactionAsync()
     {
@@ -26,15 +30,17 @@ public class PortfolioRepository(InvestLensDataContext db, IMapper mapper) : IPo
         await _db.Database.RollbackTransactionAsync();
     }
 
-    public async Task<List<Portfolio>> GetAllPortfolios(int ownerId)
+    public async Task<List<Portfolio>> GetAllPortfolios()
     {
+        var ownerId = GetOwnerId();
         return await _db.Portfolios
             .Where(p => p.OwnerId == ownerId)
             .ToListAsync();
     }
 
-    public async Task<List<Portfolio>> GetAllPortfolios(int ownerId, PortfolioType portfolioType)
+    public async Task<List<Portfolio>> GetAllPortfolios(PortfolioType portfolioType)
     {
+        var ownerId = GetOwnerId();
         return await _db.Portfolios
             .Include(p => p.ChildrenPortfolios)
             .Where(p => p.OwnerId == ownerId && p.PortfolioType == portfolioType)
@@ -115,6 +121,16 @@ public class PortfolioRepository(InvestLensDataContext db, IMapper mapper) : IPo
         return portfolio;
     }
 
+    private int GetOwnerId()
+    {
+        if (_authManager.CurrentUser is null)
+        {
+            throw new InvalidOperationException("Вы не авторизованы!");
+        }
+
+        return _authManager.CurrentUser.Id;
+    }
+
     private async Task<int> MergeInMemoty(List<Transaction> transactions)
     {
         var dbTransactions = await _db.Transactions.ToListAsync();
@@ -149,6 +165,36 @@ public class PortfolioRepository(InvestLensDataContext db, IMapper mapper) : IPo
     {
         var transactions = await _db.Transactions
             .Where(t => t.PortfolioId == portfolioId)
+            .ToListAsync();
+
+        return transactions;
+    }
+
+    public async Task<List<Transaction>> GetAllTransactions()
+    {
+        var ownerId = GetOwnerId();
+
+        var transactions = await _db.Transactions
+            .Include(t => t.Portfolio)
+            .Where(t => t.Portfolio != null &&
+                        t.Portfolio.PortfolioType == PortfolioType.Invest &&
+                        t.Portfolio!.OwnerId == ownerId)
+            .ToListAsync();
+
+        return transactions;
+    }
+
+    public async Task<List<Transaction>> GetLastTtransactions(int count)
+    {
+        var ownerId = GetOwnerId();
+
+        var transactions = await _db.Transactions
+            .Include(t => t.Portfolio)
+            .Where(t => t.Portfolio != null &&
+                        t.Portfolio.PortfolioType == PortfolioType.Invest &&
+                        t.Portfolio!.OwnerId == ownerId)
+            .OrderByDescending(t => t.Date)
+            .Take(count)
             .ToListAsync();
 
         return transactions;

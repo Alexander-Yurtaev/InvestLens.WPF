@@ -1,6 +1,6 @@
 ﻿using InvestLens.Model;
 
-namespace InvestLens.ViewModel.Services;
+namespace InvestLens.Model.Services;
 
 public interface IAuthManager
 {

@@ -240,7 +240,7 @@
                         <TextBlock Grid.Column="0" 
                                    Style="{StaticResource CardHeaderStyle}"
                                    Text="Последние операции"/>
-                        <Button Grid.Column="2" Content="Все →" Style="{StaticResource LinkStyle}"/>
+                        <!--<Button Grid.Column="2" Content="Все →" Style="{StaticResource LinkStyle}"/>-->
                     </Grid>
                     <Border Grid.Row="1" Style="{StaticResource ChartPlaceholderStyle}">
                         <ListView ItemsSource="{Binding ActivityItems}"
