@@ -14,10 +14,10 @@ public class SecurityInfoWrapper
 
     public string SecId => _model.SecId;
     public string Name => _model.Name;
-    public int Count => _model.Count;
-    public double AveragePrice => _model.AveragePrice;
-    public double CurrentPrice => _model.CurrentPrice;
-    public double TotalPrice => _model.TotalPrice;
+    public decimal Count => _model.Count;
+    public decimal AveragePrice => _model.AveragePrice;
+    public decimal CurrentPrice => _model.CurrentPrice;
+    public decimal TotalPrice => _model.TotalPrice;
 
     public string ProfitDisplay
     {

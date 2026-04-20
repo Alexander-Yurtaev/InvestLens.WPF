@@ -10,7 +10,7 @@ public class StatWrapperTests
     [InlineData(15.2, "%", true, "+15.2%")]
     [InlineData(-15.2, "%", true, "-15.2%")]
     [InlineData(12, "", false, "12")]
-    public void ValueDisplayShouldReturnCorrectFormat(double value, string unit, bool suffix, string expected)
+    public void ValueDisplayShouldReturnCorrectFormat(decimal value, string unit, bool suffix, string expected)
     {
         var model = new Stat("", value, unit, suffix);
         var vm = new StatWrapper(model);

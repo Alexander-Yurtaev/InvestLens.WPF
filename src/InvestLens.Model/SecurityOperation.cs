@@ -8,7 +8,7 @@ public class SecurityOperation
     public DateTime Date { get; init; }
     public TransactionEvents OperationType { get; }
     public decimal Count { get; set; }
-    public double Price { get; init; }
+    public decimal Price { get; init; }
     public decimal TotalPrice { get; init; }
     public string Description { get; init; } = string.Empty;
 }

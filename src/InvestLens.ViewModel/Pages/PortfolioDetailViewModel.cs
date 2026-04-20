@@ -100,6 +100,9 @@ public class PortfolioDetailViewModel : ViewModelBaseWithContentHeader, IPortfol
             {
                 await _portfoliosManager.Recreate(transactions);
             }
+
+            RaisePropertyChanged(nameof(Securities));
+            RaisePropertyChanged(nameof(Operations));
         }
         catch (Exception ex)
         {

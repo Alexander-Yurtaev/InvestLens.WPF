@@ -10,9 +10,9 @@ public class SecurityInfo
 
     public string SecId { get; }
     public string Name { get; }
-    public int Count { get; init; }
-    public double AveragePrice { get; init; }
-    public double CurrentPrice { get; init; }
-    public double TotalPrice { get; init; }
-    public double Profit { get; init; }
+    public decimal Count { get; init; }
+    public decimal AveragePrice { get; init; }
+    public decimal CurrentPrice { get; init; }
+    public decimal TotalPrice { get; init; }
+    public decimal Profit { get; init; }
 }

@@ -60,12 +60,22 @@ public class PortfoliosManager : IPortfoliosManager
             Description = portfolio.Description ?? ""
         };
 
-        var securities = portfolio.Transactions
-            .Select(t => t.Symbol)
-            .Distinct()
-            .Order()
-            .Select(s => new SecurityInfo(s, s));
-        detail.Securities.AddRange(securities);
+        var securityInfos = portfolio.Transactions
+            .GroupBy(t => t.Symbol)
+            .Select(g =>
+            {
+                var count = g.Sum(t => t.Quantity);
+                var totalPrice = g.Sum(t => t.Price);
+
+                return new SecurityInfo(g.Key, g.Key)
+                {
+                    Count = count,
+                    TotalPrice = totalPrice,
+                    AveragePrice = count > 0 ? totalPrice / count : 0
+                };
+            });
+
+        detail.Securities.AddRange(securityInfos);
 
         var operations = _mapper.Map<List<SecurityOperation>>(portfolio.Transactions); 
         detail.Operations.AddRange(operations);
