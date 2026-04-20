@@ -65,13 +65,13 @@ public class NavigationViewModel : BindableBase, INavigationViewModel
             new NavigationTreeItem(new DashboardNavigationTreeModel(), _eventAggregator),
             new NavigationTreeDivider(),
             _portfoliosTreeItem,
-            new NavigationTreeItem(new DictionariesNavigationTreeModel(), _eventAggregator, GetDictionariesMenuItems()),
-            new NavigationTreeDivider(),
-            new NavigationTreeItem(new DownloaderNavigationTreeModel(), _eventAggregator),
-            new NavigationTreeDivider(),
-            new NavigationTreeItem(new SchedulerNavigationTreeModel(), _eventAggregator),
-            new NavigationTreeDivider(),
-            new NavigationTreeItem(new SettingsNavigationTreeModel(), _eventAggregator, GetSettingsMenuItems())
+            //new NavigationTreeItem(new DictionariesNavigationTreeModel(), _eventAggregator, GetDictionariesMenuItems()),
+            //new NavigationTreeDivider(),
+            //new NavigationTreeItem(new DownloaderNavigationTreeModel(), _eventAggregator),
+            //new NavigationTreeDivider(),
+            //new NavigationTreeItem(new SchedulerNavigationTreeModel(), _eventAggregator),
+            //new NavigationTreeDivider(),
+            //new NavigationTreeItem(new SettingsNavigationTreeModel(), _eventAggregator, GetSettingsMenuItems())
         };
 
         return await Task.FromResult(result);
