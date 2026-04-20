@@ -88,8 +88,8 @@ public class PortfoliosManager : IPortfoliosManager
         var portfolioStats = new List<Stat>
         {
             new Stat("Количество", detail.Securities.Sum(s => s.Count)),
-            new Stat("Стоимость", detail.Securities.Sum(s => s.TotalPrice)),
-            new Stat("Дивиденды", detail.Securities.Sum(s => s.DividendCount)),
+            new Stat("Стоимость", detail.Securities.Sum(s => s.TotalPrice), "₽"),
+            new Stat("Дивиденды", detail.Securities.Sum(s => s.DividendCount), "₽"),
         };
         detail.PortfolioStats.AddRange(portfolioStats);
 
