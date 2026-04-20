@@ -1,5 +1,6 @@
 ﻿using InvestLens.Model.Entities;
 using InvestLens.Model.Enums;
+using System.Collections.ObjectModel;
 
 namespace InvestLens.Model;
 

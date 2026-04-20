@@ -1,5 +1,6 @@
 ﻿using InvestLens.Model;
 using InvestLens.ViewModel.Wrappers;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 
 namespace InvestLens.ViewModel.Pages;
@@ -7,7 +8,7 @@ namespace InvestLens.ViewModel.Pages;
 public interface IPortfolioDetailViewModel : IViewModelBaseWithContentHeader
 {
     string Title { get; }
-    List<StatWrapper> PortfolioStats { get; }
+    ObservableCollection<StatWrapper> PortfolioStats { get; }
     ICollectionView SecuritiesView { get; }
-    List<SecurityOperation> Operations { get; }
+    ObservableCollection<SecurityOperation> Operations { get; }
 }

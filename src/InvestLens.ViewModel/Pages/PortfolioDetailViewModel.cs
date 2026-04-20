@@ -6,6 +6,7 @@ using InvestLens.ViewModel.Services;
 using InvestLens.ViewModel.Windows;
 using InvestLens.ViewModel.Windows.Dialogs;
 using InvestLens.ViewModel.Wrappers;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
 using System.Windows.Data;
@@ -44,17 +45,21 @@ public class PortfolioDetailViewModel : ViewModelBaseWithContentHeader, IPortfol
         ContentHeaderVm.Buttons.Clear();
         ContentHeaderVm.AddButtons(buttonModels);
 
-        PortfolioStats = _model.PortfolioStats.Select(p => new StatWrapper(p)).ToList();
+        var stats = _model.PortfolioStats.Select(p => new StatWrapper(p)).ToList();
+        PortfolioStats = new ObservableCollection<StatWrapper>(stats);
         var securities = _model.Securities.Select(s => new SecurityInfoWrapper(s)).ToList();
         SecuritiesView = CollectionViewSource.GetDefaultView(securities);
-        SecuritiesView.Filter = wrapper => ShowSold || ((SecurityInfoWrapper)wrapper).Count > 0; ;
+        SecuritiesView.Filter = wrapper => ShowSold || ((SecurityInfoWrapper)wrapper).Count > 0;
+
+        Operations = new ObservableCollection<SecurityOperation>(_model.Operations);
+
         RefreshSecuritiesHeader();
     }
 
     public string Title => _model.Title;
     public string SecuritiesHeader => $"Активы ({_securitiesCount})";
-    public List<StatWrapper> PortfolioStats { get; }
-    public ICollectionView SecuritiesView { get; }
+    public ObservableCollection<StatWrapper> PortfolioStats { get; }
+    public ICollectionView SecuritiesView { get; private set; }
     public bool ShowSold 
     { 
         get => _showSold;
@@ -65,7 +70,7 @@ public class PortfolioDetailViewModel : ViewModelBaseWithContentHeader, IPortfol
             RefreshSecuritiesHeader();
         }
     }
-    public List<SecurityOperation> Operations => _model.Operations;
+    public ObservableCollection<SecurityOperation> Operations { get; }
 
     private async Task OnEditPortfolio()
     {
@@ -120,8 +125,7 @@ public class PortfolioDetailViewModel : ViewModelBaseWithContentHeader, IPortfol
                 acceptedCount = await _portfoliosManager.Recreate(transactions);
             }
 
-            RaisePropertyChanged(nameof(SecuritiesView));
-            RaisePropertyChanged(nameof(Operations));
+            await RefreshModel();
             _windowManager.ShowSuccessDialog($"Было импортированно {acceptedCount} записей");
         }
         catch (Exception ex)
@@ -129,6 +133,35 @@ public class PortfolioDetailViewModel : ViewModelBaseWithContentHeader, IPortfol
             var message = ex.InnerException?.Message ?? ex.Message;
             _windowManager.ShowErrorDialog(message);
         }
+    }
+
+    private async Task RefreshModel()
+    {
+        var model = await _portfoliosManager.GetPortfolioDetiails(_model.Id);
+        if (model is null) return;
+
+        _model.Securities.Clear();
+        _model.Securities.AddRange(model.Securities);
+
+        _model.PortfolioStats.Clear();
+        _model.PortfolioStats.AddRange(model.PortfolioStats);
+
+        _model.Operations.Clear();
+        _model.Operations.AddRange(model.Operations);
+
+        var portfolioStats = _model.PortfolioStats.Select(p => new StatWrapper(p)).ToList();
+        PortfolioStats.Clear();
+        foreach (var stat in portfolioStats)
+        {
+            PortfolioStats.Add(stat);
+        }
+        
+        var securities = _model.Securities.Select(s => new SecurityInfoWrapper(s)).ToList();
+        SecuritiesView = CollectionViewSource.GetDefaultView(securities);
+
+        RaisePropertyChanged(nameof(SecuritiesView));
+        RaisePropertyChanged(nameof(PortfolioStats));
+        RaisePropertyChanged(nameof(Operations));
     }
 
     private void RefreshSecuritiesHeader()
