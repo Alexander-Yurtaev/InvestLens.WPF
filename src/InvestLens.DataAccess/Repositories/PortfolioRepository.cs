@@ -26,16 +26,6 @@ public class PortfolioRepository(InvestLensDataContext db, IMapper mapper) : IPo
         await _db.Database.RollbackTransactionAsync();
     }
 
-    public async Task<Portfolio?> GetPortfolioById(int id)
-    {
-        var portfolio = await _db.Portfolios
-            .Include(p => p.Transactions)
-            .Include(p => p.ChildrenPortfolios)
-            .FirstOrDefaultAsync(p => p.Id == id);
-
-        return portfolio;
-    }
-
     public async Task<List<Portfolio>> GetAllPortfolios(int ownerId)
     {
         return await _db.Portfolios
@@ -46,6 +36,7 @@ public class PortfolioRepository(InvestLensDataContext db, IMapper mapper) : IPo
     public async Task<List<Portfolio>> GetAllPortfolios(int ownerId, PortfolioType portfolioType)
     {
         return await _db.Portfolios
+            .Include(p => p.ChildrenPortfolios)
             .Where(p => p.OwnerId == ownerId && p.PortfolioType == portfolioType)
             .ToListAsync();
     }
@@ -125,6 +116,14 @@ public class PortfolioRepository(InvestLensDataContext db, IMapper mapper) : IPo
         return await _db.SaveChangesAsync();
     }
 
+    private async Task<Portfolio?> GetPortfolioById(int id)
+    {
+        var portfolio = await _db.Portfolios
+            .Include(p => p.ChildrenPortfolios)
+            .FirstOrDefaultAsync(p => p.Id == id);
+
+        return portfolio;
+    }
     private async Task<int> MergeInMemoty(List<Transaction> transactions)
     {
         var dbTransactions = await _db.Transactions.ToListAsync();
@@ -153,5 +152,14 @@ public class PortfolioRepository(InvestLensDataContext db, IMapper mapper) : IPo
         }
 
         return await _db.SaveChangesAsync();
+    }
+
+    public async Task<List<Transaction>> GetTransactions(int portfolioId)
+    {
+        var transactions = await _db.Transactions
+            .Where(t => t.PortfolioId == portfolioId)
+            .ToListAsync();
+
+        return transactions;
     }
 }

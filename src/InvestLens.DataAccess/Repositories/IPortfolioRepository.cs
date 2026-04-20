@@ -16,10 +16,10 @@ namespace InvestLens.DataAccess.Repositories
         Task Delete(int id);
         Task<List<Portfolio>> GetAllPortfolios(int ownerId);
         Task<List<Portfolio>> GetAllPortfolios(int ownerId, PortfolioType portfolioType);
-        Task<Portfolio?> GetPortfolioById(int id);
         Task<int> Save();
         Task Update(UpdateModel model);
         Task<int> Merge(List<Transaction> transactions);
         Task<int> Recreate(List<Transaction> transactions);
+        Task<List<Transaction>> GetTransactions(int portfolioId);
     }
 }

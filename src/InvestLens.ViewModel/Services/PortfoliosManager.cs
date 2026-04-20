@@ -53,8 +53,12 @@ public class PortfoliosManager : IPortfoliosManager
 
     public async Task<PortfolioDetails?> GetPortfolioDetiails(int id)
     {
-        var portfolio = await _portfolioRepository.GetPortfolioById(id);
-        if (portfolio is null) return null;
+        var portfolio = GetPortfolioById(id);
+        if (portfolio is null)
+        {
+            _windowManager.ShowErrorDialog($"Не найден портфель с Id={id}.");
+            return null;
+        }
 
         var details = new PortfolioDetails(portfolio.Id, portfolio.Name, portfolio.PortfolioType)
         {
@@ -63,28 +67,27 @@ public class PortfoliosManager : IPortfoliosManager
 
         if (details.PortfolioType == PortfolioType.Invest)
         {
-            FillInvestPortfolio(portfolio, details);
+            await FillInvestPortfolio(portfolio, details);
         }
         else
         {
-            FillComplexPortfolio(portfolio, details);
+            await FillComplexPortfolio(portfolio, details);
         }
 
         var portfolioStats = CreateStat(details);
         details.PortfolioStats.AddRange(portfolioStats);
 
-        var operations = _mapper
-            .Map<List<SecurityOperation>>(portfolio.Transactions)
-            .OrderBy(o => o.Date);
-
+        var transactions = await _portfolioRepository.GetTransactions(details.Id);
+        var operations = _mapper.Map<List<SecurityOperation>>(transactions);
         details.Operations.AddRange(operations);
 
         return details;
     }
 
-    private void FillInvestPortfolio(Portfolio portfolio, PortfolioDetails details)
+    private async Task FillInvestPortfolio(PortfolioModel model, PortfolioDetails details)
     {
-        var securityInfos = portfolio.Transactions
+        var transactions = await _portfolioRepository.GetTransactions(model.Id);
+        var securityInfos = transactions
                 .GroupBy(t => t.Symbol)
                 .Select(g =>
                 {
@@ -107,6 +110,12 @@ public class PortfoliosManager : IPortfoliosManager
                 });
 
         details.Securities.AddRange(securityInfos);
+
+        var operations = _mapper
+            .Map<List<SecurityOperation>>(transactions)
+            .OrderBy(o => o.Date);
+        details.Operations.Clear();
+        details.Operations.AddRange(operations);
     }
 
     private List<Stat> CreateStat(PortfolioDetails details)
@@ -120,12 +129,12 @@ public class PortfoliosManager : IPortfoliosManager
         return portfolioStats;
     }
 
-    private void FillComplexPortfolio(Portfolio portfolio, PortfolioDetails details)
+    private async Task FillComplexPortfolio(PortfolioModel portfolio, PortfolioDetails details)
     {
         foreach (var childPortfolio in portfolio.ChildrenPortfolios)
         {
             var childDetails = new PortfolioDetails(0, "", PortfolioType.Invest);
-            FillInvestPortfolio(childPortfolio, childDetails);
+            await FillInvestPortfolio(childPortfolio, childDetails);
 
             foreach (var childSecurityInfo in childDetails.Securities)
             {
@@ -140,9 +149,8 @@ public class PortfoliosManager : IPortfoliosManager
                     info.DividendCount += childSecurityInfo.DividendCount;
                     info.TotalPrice += childSecurityInfo.TotalPrice;
                 }
+                details.Operations.AddRange(childDetails.Operations);
             }
-
-            
         }
 
         details.Portfolios.AddRange(portfolio.ChildrenPortfolios.Select(c => c.Id));
@@ -169,8 +177,13 @@ public class PortfoliosManager : IPortfoliosManager
                 {
                     foreach (var childId in model.Portfolios)
                     {
-                        var childPortfolio = await _portfolioRepository.GetPortfolioById(childId);
-                        childPortfolio!.ParentPortfolioId = portfolio!.Id;
+                        var childPortfolio = GetPortfolioById(childId);
+                        if (childPortfolio is null)
+                        {
+                            _windowManager.ShowErrorDialog($"Не найден портфель с Id={childId}.");
+                            return;
+                        }
+                        childPortfolio!.ParentPortfolioId = portfolio.Id;
                     }
                     await _portfolioRepository.Save();
                 }
@@ -198,7 +211,7 @@ public class PortfoliosManager : IPortfoliosManager
     {
         await _portfolioRepository.Update(model);
         await _portfolioRepository.Save();
-        var portfolio = await _portfolioRepository.GetPortfolioById(model.Id);
+        var portfolio = GetPortfolioById(model.Id);
         if (portfolio is null)
         {
             await Task.FromException(new KeyNotFoundException($"Портфель с {model.Id} не найден."));
@@ -291,7 +304,7 @@ public class PortfoliosManager : IPortfoliosManager
                 _portfolioCache[portfolio.Id] = _mapper.Map<PortfolioModel>(portfolio);
             }
 
-            RefreshCardsAsync();
+            await RefreshCardsAsync();
         }
         finally
         {
@@ -299,6 +312,16 @@ public class PortfoliosManager : IPortfoliosManager
         }
 
         _eventAggregator.GetEvent<PortfoliosLoadedEvent>().Publish();
+    }
+
+    private PortfolioModel? GetPortfolioById(int childId)
+    {
+        if (_portfolioCache.TryGetValue(childId, out var portfolio))
+        {
+            return portfolio;
+        }
+
+        return null;
     }
 
     private async Task RefreshCardsAsync()
