@@ -20,6 +20,7 @@ public class PortfolioDetailViewModel : ViewModelBaseWithContentHeader, IPortfol
     private readonly IAuthManager _authManager;
     private readonly IPortfoliosManager _portfoliosManager;
     private bool _showSold;
+    private int _securitiesCount;
 
     public PortfolioDetailViewModel(
         IMapper mapper,
@@ -47,9 +48,11 @@ public class PortfolioDetailViewModel : ViewModelBaseWithContentHeader, IPortfol
         var securities = _model.Securities.Select(s => new SecurityInfoWrapper(s)).ToList();
         SecuritiesView = CollectionViewSource.GetDefaultView(securities);
         SecuritiesView.Filter = wrapper => ShowSold || ((SecurityInfoWrapper)wrapper).Count > 0; ;
+        RefreshSecuritiesHeader();
     }
 
     public string Title => _model.Title;
+    public string SecuritiesHeader => $"Активы ({_securitiesCount})";
     public List<StatWrapper> PortfolioStats { get; }
     public ICollectionView SecuritiesView { get; }
     public bool ShowSold 
@@ -59,6 +62,7 @@ public class PortfolioDetailViewModel : ViewModelBaseWithContentHeader, IPortfol
         {
             if (!SetProperty(ref _showSold, value)) return;
             SecuritiesView.Refresh();
+            RefreshSecuritiesHeader();
         }
     }
     public List<SecurityOperation> Operations => _model.Operations;
@@ -123,5 +127,11 @@ public class PortfolioDetailViewModel : ViewModelBaseWithContentHeader, IPortfol
             var message = ex.InnerException?.Message ?? ex.Message;
             _windowManager.ShowErrorDialog(message);
         }
+    }
+
+    private void RefreshSecuritiesHeader()
+    {
+        _securitiesCount = SecuritiesView?.Cast<object>().Count() ?? 0;
+        RaisePropertyChanged(nameof(SecuritiesHeader));
     }
 }

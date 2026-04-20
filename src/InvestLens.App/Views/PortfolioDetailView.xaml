@@ -89,7 +89,7 @@
             </ItemsControl>
         </Border>
         <TabControl Grid.Row="2">
-            <TabItem Header="Активы">
+            <TabItem Header="{Binding SecuritiesHeader, FallbackValue='Активы'}">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
