@@ -107,7 +107,6 @@ public class PortfolioRepository(InvestLensDataContext db,
             .ToListAsync();
 
         _db.Transactions.RemoveRange(delTransactions);
-
         await _db.Transactions.AddRangeAsync(transactions);
         return await _db.SaveChangesAsync();
     }

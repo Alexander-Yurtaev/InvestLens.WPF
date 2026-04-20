@@ -67,7 +67,7 @@ public class PortfoliosManager : IPortfoliosManager
 
         if (details.PortfolioType == PortfolioType.Invest)
         {
-            await FillInvestPortfolio(portfolio, details);
+            await FillInvestPortfolio(portfolio.Id, details);
         }
         else
         {
@@ -77,16 +77,12 @@ public class PortfoliosManager : IPortfoliosManager
         var portfolioStats = CreateStat(details);
         details.PortfolioStats.AddRange(portfolioStats);
 
-        var transactions = await _portfolioRepository.GetTransactions(details.Id);
-        var operations = _mapper.Map<List<SecurityOperation>>(transactions);
-        details.Operations.AddRange(operations);
-
         return details;
     }
 
-    private async Task FillInvestPortfolio(PortfolioModel model, PortfolioDetails details)
+    private async Task FillInvestPortfolio(int portfolioId, PortfolioDetails details)
     {
-        var transactions = await _portfolioRepository.GetTransactions(model.Id);
+        var transactions = await _portfolioRepository.GetTransactions(portfolioId);
         var securityInfos = transactions
                 .GroupBy(t => t.Symbol)
                 .Select(g =>
@@ -134,7 +130,7 @@ public class PortfoliosManager : IPortfoliosManager
         foreach (var childPortfolio in portfolio.ChildrenPortfolios)
         {
             var childDetails = new PortfolioDetails(0, "", PortfolioType.Invest);
-            await FillInvestPortfolio(childPortfolio, childDetails);
+            await FillInvestPortfolio(childPortfolio.Id, childDetails);
 
             foreach (var childSecurityInfo in childDetails.Securities)
             {

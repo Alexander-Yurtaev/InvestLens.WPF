@@ -116,172 +116,21 @@
                         </DataGrid.Columns>
                     </DataGrid>
                 </Grid>
-                <!--<ListView ItemsSource="{Binding Securities}"
-                          VirtualizingPanel.IsVirtualizing="True">
-                    <ListView.View>
-                        <GridView>
-                            <GridViewColumn Header="Актив" Width="120">
-                                <GridViewColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <StackPanel Orientation="Horizontal">
-                                            --><!--<Image Source="{Binding IconPath}" Width="20" Height="20" Margin="0,0,8,0"/>--><!--
-                                            <TextBlock Text="{Binding SecId}" FontWeight="SemiBold"/>
-                                        </StackPanel>
-                                    </DataTemplate>
-                                </GridViewColumn.CellTemplate>
-                            </GridViewColumn>
-
-                            <GridViewColumn Header="Количество" Width="100">
-                                <GridViewColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <TextBlock Text="{Binding Count, StringFormat=N0}" 
-                                                   TextAlignment="Right"/>
-                                    </DataTemplate>
-                                </GridViewColumn.CellTemplate>
-                            </GridViewColumn>
-
-                            <GridViewColumn Header="Средняя цена" Width="120">
-                                <GridViewColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <TextBlock Text="{Binding AveragePrice, StringFormat=C2}"
-                                                   TextAlignment="Right"/>
-                                    </DataTemplate>
-                                </GridViewColumn.CellTemplate>
-                            </GridViewColumn>
-
-                            <GridViewColumn Header="Текущая цена" Width="120">
-                                <GridViewColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <TextBlock Text="{Binding CurrentPrice, StringFormat=C2}"
-                                                   TextAlignment="Right"/>
-                                    </DataTemplate>
-                                </GridViewColumn.CellTemplate>
-                            </GridViewColumn>
-
-                            <GridViewColumn Header="Стоимость" Width="120">
-                                <GridViewColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <TextBlock Text="{Binding TotalPrice, StringFormat=C2}"
-                                   TextAlignment="Right"
-                                   FontWeight="SemiBold"/>
-                                    </DataTemplate>
-                                </GridViewColumn.CellTemplate>
-                            </GridViewColumn>
-
-                            <GridViewColumn Header="Прибыль" Width="120">
-                                <GridViewColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <TextBlock Text="{Binding ProfitDisplay}"
-                                                   TextAlignment="Right"
-                                                   FontWeight="SemiBold"
-                                                   Foreground="{Binding ProfitDisplay, Converter={x:Static converters:ValueDisplayToForegroundConverter.Instance}, ConverterParameter=#002855}"/>
-                                    </DataTemplate>
-                                </GridViewColumn.CellTemplate>
-                            </GridViewColumn>
-                        </GridView>
-                    </ListView.View>
-
-                    --><!-- Стилизация ListView --><!--
-                    <ListView.ItemContainerStyle>
-                        <Style TargetType="ListViewItem">
-                            <Setter Property="Height" Value="48"/>
-                            <Setter Property="VerticalContentAlignment" Value="Center"/>
-                            <Style.Triggers>
-                                <Trigger Property="IsMouseOver" Value="True">
-                                    <Setter Property="Background" Value="{StaticResource BackgroundPrimary}"/>
-                                </Trigger>
-                                <Trigger Property="IsSelected" Value="True">
-                                    <Setter Property="Background" Value="#E8EEF8"/>
-                                    <Setter Property="BorderBrush" Value="{StaticResource BrandRed}"/>
-                                    <Setter Property="BorderThickness" Value="0,0,0,0"/>
-                                </Trigger>
-                            </Style.Triggers>
-                        </Style>
-                    </ListView.ItemContainerStyle>
-                </ListView>-->
             </TabItem>
             <TabItem Header="Операции">
-                <ListView ItemsSource="{Binding Operations}"
-                          VirtualizingPanel.IsVirtualizing="True">
-                    <ListView.View>
-                        <GridView>
-                            <GridViewColumn Header="Дата" Width="100">
-                                <GridViewColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <TextBlock Text="{Binding Date, StringFormat=dd.MM.yyyy HH:mm:ss}" 
-                                                   TextAlignment="Right"/>
-                                    </DataTemplate>
-                                </GridViewColumn.CellTemplate>
-                            </GridViewColumn>
-
-                            <GridViewColumn Header="Актив" Width="120">
-                                <GridViewColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <StackPanel Orientation="Horizontal">
-                                            <!--<Image Source="{Binding IconPath}" Width="20" Height="20" Margin="0,0,8,0"/>-->
-                                            <TextBlock Text="{Binding SecId}" FontWeight="SemiBold"/>
-                                        </StackPanel>
-                                    </DataTemplate>
-                                </GridViewColumn.CellTemplate>
-                            </GridViewColumn>
-
-                            <GridViewColumn Header="Тип" Width="100">
-                                <GridViewColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <TextBlock Text="{Binding OperationType}" 
-                                                   TextAlignment="Right"/>
-                                    </DataTemplate>
-                                </GridViewColumn.CellTemplate>
-                            </GridViewColumn>
-
-                            <GridViewColumn Header="Количество" Width="120">
-                                <GridViewColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <TextBlock Text="{Binding Count, StringFormat=F2}"
-                                                   TextAlignment="Right"/>
-                                    </DataTemplate>
-                                </GridViewColumn.CellTemplate>
-                            </GridViewColumn>
-
-                            <GridViewColumn Header="Цена" Width="120">
-                                <GridViewColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <TextBlock Text="{Binding Price, StringFormat=F2}"
-                                                   TextAlignment="Right"/>
-                                    </DataTemplate>
-                                </GridViewColumn.CellTemplate>
-                            </GridViewColumn>
-
-                            <GridViewColumn Header="Комментарий">
-                                <GridViewColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <TextBlock Text="{Binding Description}"
-                                                   TextAlignment="Right"
-                                                   ToolTip="{Binding Description}"/>
-                                    </DataTemplate>
-                                </GridViewColumn.CellTemplate>
-                            </GridViewColumn>
-                        </GridView>
-                    </ListView.View>
-
-                    <!-- Стилизация ListView -->
-                    <ListView.ItemContainerStyle>
-                        <Style TargetType="ListViewItem">
-                            <Setter Property="Height" Value="48"/>
-                            <Setter Property="VerticalContentAlignment" Value="Center"/>
-                            <Style.Triggers>
-                                <Trigger Property="IsMouseOver" Value="True">
-                                    <Setter Property="Background" Value="{StaticResource BackgroundPrimary}"/>
-                                </Trigger>
-                                <Trigger Property="IsSelected" Value="True">
-                                    <Setter Property="Background" Value="#E8EEF8"/>
-                                    <Setter Property="BorderBrush" Value="{StaticResource BrandRed}"/>
-                                    <Setter Property="BorderThickness" Value="0,0,0,0"/>
-                                </Trigger>
-                            </Style.Triggers>
-                        </Style>
-                    </ListView.ItemContainerStyle>
-                </ListView>
+                <DataGrid Grid.Row="1"
+                              ItemsSource="{Binding Operations}"
+                              AutoGenerateColumns="False"
+                              EnableRowVirtualization="True">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Дата" Binding="{Binding Date, StringFormat=dd.MM.yyyy HH:mm:ss}"/>
+                        <DataGridTextColumn Header="Актив" Binding="{Binding SecId}"/>
+                        <DataGridTextColumn Header="Тип" Binding="{Binding OperationType}"/>
+                        <DataGridTextColumn Header="Количество" Binding="{Binding  Count, StringFormat=F2}"/>
+                        <DataGridTextColumn Header="Цена" Binding="{Binding Price, StringFormat='F2'}"/>
+                        <DataGridTextColumn Header="Комментарий" Binding="{Binding Description}"/>
+                    </DataGrid.Columns>
+                </DataGrid>
             </TabItem>
         </TabControl>
     </Grid>

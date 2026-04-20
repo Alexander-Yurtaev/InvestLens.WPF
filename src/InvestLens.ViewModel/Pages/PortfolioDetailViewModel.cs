@@ -52,7 +52,7 @@ public class PortfolioDetailViewModel : ViewModelBaseWithContentHeader, IPortfol
         SecuritiesView = CollectionViewSource.GetDefaultView(securities);
         SecuritiesView.Filter = wrapper => ShowSold || ((SecurityInfoWrapper)wrapper).Count > 0;
 
-        Operations = new ObservableCollection<SecurityOperation>(_model.Operations);
+        Operations = new ObservableCollection<SecurityOperation>(_model.Operations.OrderByDescending(o => o.Date));
 
         RefreshSecuritiesHeader();
     }
@@ -148,7 +148,7 @@ public class PortfolioDetailViewModel : ViewModelBaseWithContentHeader, IPortfol
         _model.PortfolioStats.AddRange(model.PortfolioStats);
 
         _model.Operations.Clear();
-        _model.Operations.AddRange(model.Operations);
+        _model.Operations.AddRange(model.Operations.OrderByDescending(o => o.Date));
 
         var portfolioStats = _model.PortfolioStats.Select(p => new StatWrapper(p)).ToList();
         PortfolioStats.Clear();
