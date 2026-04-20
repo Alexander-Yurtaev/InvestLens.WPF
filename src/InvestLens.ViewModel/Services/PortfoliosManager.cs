@@ -85,6 +85,14 @@ public class PortfoliosManager : IPortfoliosManager
 
         detail.Securities.AddRange(securityInfos);
 
+        var portfolioStats = new List<Stat>
+        {
+            new Stat("Количество", detail.Securities.Sum(s => s.Count)),
+            new Stat("Стоимость", detail.Securities.Sum(s => s.TotalPrice)),
+            new Stat("Дивиденды", detail.Securities.Sum(s => s.DividendCount)),
+        };
+        detail.PortfolioStats.AddRange(portfolioStats);
+
         var operations = _mapper.Map<List<SecurityOperation>>(portfolio.Transactions); 
         detail.Operations.AddRange(operations);
 

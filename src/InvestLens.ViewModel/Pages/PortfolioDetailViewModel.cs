@@ -44,7 +44,7 @@ public class PortfolioDetailViewModel : ViewModelBaseWithContentHeader, IPortfol
         ContentHeaderVm.Buttons.Clear();
         ContentHeaderVm.AddButtons(buttonModels);
 
-        PortfolioStats = model.PortfolioStats.Select(p => new StatWrapper(p)).ToList();
+        PortfolioStats = _model.PortfolioStats.Select(p => new StatWrapper(p)).ToList();
         var securities = _model.Securities.Select(s => new SecurityInfoWrapper(s)).ToList();
         SecuritiesView = CollectionViewSource.GetDefaultView(securities);
         SecuritiesView.Filter = wrapper => ShowSold || ((SecurityInfoWrapper)wrapper).Count > 0; ;
