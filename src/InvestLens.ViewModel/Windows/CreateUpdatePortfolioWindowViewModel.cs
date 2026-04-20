@@ -87,7 +87,7 @@ public abstract class CreateUpdatePortfolioWindowViewModel : ValidationViewModel
         }
 
         var userId = _authManager.CurrentUser.Id;
-        var lookupModels = (await PortfoliosManager.GetLookupModels(userId, Model.Id > 0 ? Model.Id : null))
+        var lookupModels = PortfoliosManager.GetLookupModels(userId, Model.Id > 0 ? Model.Id : null)
             .Select(m =>
             {
                 var vm = new LookupViewModel(m);

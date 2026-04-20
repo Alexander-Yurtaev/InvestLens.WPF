@@ -116,7 +116,7 @@ public class PortfolioRepository(InvestLensDataContext db, IMapper mapper) : IPo
         return await _db.SaveChangesAsync();
     }
 
-    private async Task<Portfolio?> GetPortfolioById(int id)
+    public async Task<Portfolio?> GetPortfolioById(int id)
     {
         var portfolio = await _db.Portfolios
             .Include(p => p.ChildrenPortfolios)
@@ -124,6 +124,7 @@ public class PortfolioRepository(InvestLensDataContext db, IMapper mapper) : IPo
 
         return portfolio;
     }
+
     private async Task<int> MergeInMemoty(List<Transaction> transactions)
     {
         var dbTransactions = await _db.Transactions.ToListAsync();

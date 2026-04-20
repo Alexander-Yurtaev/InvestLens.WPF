@@ -10,11 +10,12 @@ public interface IPortfoliosManager
     List<Card> Cards { get; }
     List<INavigationTreeItem> GetPortfoliosMenuItems(int userId);
     Task<PortfolioDetails?> GetPortfolioDetiails(int id);
-    Task<List<LookupModel>> GetLookupModels(int ownerId, int? portfolioId = null);
+    List<LookupModel> GetLookupModels(int ownerId, int? portfolioId = null);
     Task<bool> CheckNameUniqueAsync(int portfolioId, int ownerId, string name);
     Task Create(CreateModel model);
     Task<bool> Delete(int id);
     Task Update(UpdateModel model);
     Task<int> Merge(List<Transaction> transactions);
     Task<int> Recreate(List<Transaction> transactions);
+    Task ReloadPortfolio(int id);
 }

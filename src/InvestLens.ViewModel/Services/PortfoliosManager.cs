@@ -53,7 +53,7 @@ public class PortfoliosManager : IPortfoliosManager
 
     public async Task<PortfolioDetails?> GetPortfolioDetiails(int id)
     {
-        var portfolio = GetPortfolioById(id);
+        var portfolio = GetPortfolioByIdFromCache(id);
         if (portfolio is null)
         {
             _windowManager.ShowErrorDialog($"Не найден портфель с Id={id}.");
@@ -156,12 +156,14 @@ public class PortfoliosManager : IPortfoliosManager
         details.Portfolios.AddRange(portfolio.ChildrenPortfolios.Select(c => c.Id));
     }
 
-    public async Task<List<LookupModel>> GetLookupModels(int ownerId, int? portfolioId = null)
+    public List<LookupModel> GetLookupModels(int ownerId, int? portfolioId = null)
     {
-        var portfolios = (await _portfolioRepository.GetAllPortfolios(ownerId))
-            .Where(p => (portfolioId is null || p.Id != portfolioId.Value) && p.PortfolioType != PortfolioType.Complex);
+        var portfolios = _portfolioCache.Values
+            .Where(p => (portfolioId is null || p.Id != portfolioId.Value) && 
+                        p.PortfolioType != PortfolioType.Complex);
 
-        return portfolios.Select(p => new Model.Crud.Portfolio.LookupModel(p.Id, p.Name, p.PortfolioType)).ToList();
+        return portfolios.Select(p => new Model.Crud.Portfolio
+                                    .LookupModel(p.Id, p.Name, p.PortfolioType)).ToList();
     }
 
     public async Task Create(CreateModel model)
@@ -177,7 +179,7 @@ public class PortfoliosManager : IPortfoliosManager
                 {
                     foreach (var childId in model.Portfolios)
                     {
-                        var childPortfolio = GetPortfolioById(childId);
+                        var childPortfolio = GetPortfolioByIdFromCache(childId);
                         if (childPortfolio is null)
                         {
                             _windowManager.ShowErrorDialog($"Не найден портфель с Id={childId}.");
@@ -211,7 +213,7 @@ public class PortfoliosManager : IPortfoliosManager
     {
         await _portfolioRepository.Update(model);
         await _portfolioRepository.Save();
-        var portfolio = GetPortfolioById(model.Id);
+        var portfolio = await _portfolioRepository.GetPortfolioById(model.Id);
         if (portfolio is null)
         {
             await Task.FromException(new KeyNotFoundException($"Портфель с {model.Id} не найден."));
@@ -314,9 +316,9 @@ public class PortfoliosManager : IPortfoliosManager
         _eventAggregator.GetEvent<PortfoliosLoadedEvent>().Publish();
     }
 
-    private PortfolioModel? GetPortfolioById(int childId)
+    private PortfolioModel? GetPortfolioByIdFromCache(int id)
     {
-        if (_portfolioCache.TryGetValue(childId, out var portfolio))
+        if (_portfolioCache.TryGetValue(id, out var portfolio))
         {
             return portfolio;
         }
@@ -368,5 +370,29 @@ public class PortfoliosManager : IPortfoliosManager
     public async Task<int> Recreate(List<Transaction> transactions)
     {
         return await _portfolioRepository.Recreate(transactions);
+    }
+
+    public async Task ReloadPortfolio(int id)
+    {
+        try
+        {
+            var portfolio = await _portfolioRepository.GetPortfolioById(id);
+
+            if (portfolio is null)
+            {
+                _windowManager.ShowErrorDialog($"Портфель с Id={id} не найден.");
+                return;
+            }
+
+            _portfolioCache[portfolio.Id] = _mapper.Map<PortfolioModel>(portfolio);
+
+            await RefreshCardsAsync();
+        }
+        finally
+        {
+            _loadSemaphoreSlim.Release();
+        }
+
+        _eventAggregator.GetEvent<PortfoliosLoadedEvent>().Publish();
     }
 }
