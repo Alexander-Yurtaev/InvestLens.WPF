@@ -4,5 +4,5 @@ namespace InvestLens.ViewModel.Services;
 
 public interface IMetricsManager
 {
-    List<MetricCard> GetMetricCards();
+    Task<List<MetricCard>> GetMetricCards();
 }

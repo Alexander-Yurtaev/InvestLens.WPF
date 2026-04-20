@@ -6,10 +6,16 @@
              xmlns:local="clr-namespace:InvestLens.App.UserControls"
              xmlns:pages="clr-namespace:InvestLens.ViewModel.Pages;assembly=InvestLens.ViewModel"
              xmlns:model="clr-namespace:InvestLens.Model;assembly=InvestLens.Model"
+             xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
+             xmlns:behaviors="clr-namespace:InvestLens.App.Behaviors"
              mc:Ignorable="d" 
              d:DataContext="{d:DesignInstance pages:DashboardViewModel, IsDesignTimeCreatable=True}"
              d:DesignHeight="450" d:DesignWidth="800">
 
+    <b:Interaction.Behaviors>
+        <behaviors:LoadBehavior/>
+    </b:Interaction.Behaviors>
+    
     <UserControl.Resources>
         <ResourceDictionary>
             <Style x:Key="ContentHeaderStyle" TargetType="{x:Type local:ContentHeader}">

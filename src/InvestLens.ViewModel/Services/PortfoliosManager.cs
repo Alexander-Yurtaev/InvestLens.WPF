@@ -40,7 +40,7 @@ public class PortfoliosManager : IPortfoliosManager
 
     public List<Card> Cards { get; } = [];
 
-    public List<INavigationTreeItem> GetPortfoliosMenuItems(int ownerId)
+    public List<INavigationTreeItem> GetPortfoliosMenuItems()
     {
         var result = _portfolioCache.Values.Select(p =>
             new NavigationTreeItem(
@@ -121,9 +121,9 @@ public class PortfoliosManager : IPortfoliosManager
     {
         var portfolioStats = new List<Stat>
         {
-            new Stat("Количество", details.Securities.Sum(s => s.Count)),
-            new Stat("Стоимость", details.Securities.Sum(s => s.TotalPrice), "₽"),
-            new Stat("Дивиденды", details.Securities.Sum(s => s.DividendCount), "₽"),
+            new Stat(Stat.CountStat, details.Securities.Sum(s => s.Count)),
+            new Stat(Stat.PriceStat, details.Securities.Sum(s => s.TotalPrice), "₽"),
+            new Stat(Stat.DividendStat, details.Securities.Sum(s => s.DividendCount), "₽"),
         };
         return portfolioStats;
     }
@@ -364,5 +364,12 @@ public class PortfoliosManager : IPortfoliosManager
 
         card.Stats.AddRange(details.PortfolioStats);
         return card;
+    }
+
+    public List<PortfolioModel> GetAllPortfolios(PortfolioType portfolioType)
+    {
+        return _portfolioCache.Values
+            .Where(p => p.PortfolioType == portfolioType)
+            .ToList();
     }
 }

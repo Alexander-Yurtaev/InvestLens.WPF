@@ -2,6 +2,10 @@
 
 public class Stat : ICloneable
 {
+    public const string CountStat = "Количество";
+    public const string PriceStat = "Стоимость";
+    public const string DividendStat = "Дивиденды";
+
     public Stat(string title, decimal value, string unit="", bool unitIsSuffix=true)
     {
         Title = title;

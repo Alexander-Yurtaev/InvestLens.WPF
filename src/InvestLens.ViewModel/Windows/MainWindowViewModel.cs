@@ -9,6 +9,7 @@ public class MainWindowViewModel : BindableBase, IMainWindowViewModel
 {
     private readonly IViewModelFactory _viewModelFactory;
     private INotifyPropertyChanged? _contentVm;
+    private BaseNavigationTreeModel? _currentNavigationTreeModel;
 
     public MainWindowViewModel(
         INavigationViewModel navigationVm, 
@@ -34,7 +35,13 @@ public class MainWindowViewModel : BindableBase, IMainWindowViewModel
 
     private async void OnSelectMenuNode(BaseNavigationTreeModel model)
     {
+        if (model == _currentNavigationTreeModel)
+        {
+            return;
+        }
+
         ContentVm = await GetContentVm(model);
+        _currentNavigationTreeModel = model;
     }
 
     private async Task<INotifyPropertyChanged> GetContentVm(BaseNavigationTreeModel model)

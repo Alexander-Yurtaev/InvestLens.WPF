@@ -1,31 +1,68 @@
 ﻿using InvestLens.Model;
 using InvestLens.ViewModel.Events;
 using InvestLens.ViewModel.Services;
+using InvestLens.ViewModel.Windows;
+using System.Collections.ObjectModel;
 
 namespace InvestLens.ViewModel.Pages;
 
 public class DashboardViewModel : ViewModelBaseWithContentHeader, IDashboardViewModel
 {
+    private readonly IAuthManager _authManager;
+    private readonly IWindowManager _windowManager;
+    private readonly IMetricsManager _metricsManager;
+    private readonly IActivityManager _activityManager;
+
     public DashboardViewModel(
+        IAuthManager authManager,
+        IWindowManager windowManager,
         IMetricsManager metricsManager,
         IActivityManager activityManager,
         IPortfolioDynamicsService portfolioDynamicsService,
         IEventAggregator eventAggregator) : base($"Добро пожаловать, Гость",
         "Вот что происходит с вашими инвестициями сегодня")
     {
-        eventAggregator.GetEvent<LoginEvent>().Subscribe(OnLogin);
+        eventAggregator.GetEvent<PortfoliosLoadedEvent>().Subscribe(OnPortfoliosLoaded);
+        _authManager = authManager;
+        _windowManager = windowManager;
+        _metricsManager = metricsManager;
+        _activityManager = activityManager;
         PortfolioDynamicsService = portfolioDynamicsService;
-        MetricCards = metricsManager.GetMetricCards();
-        ActivityItems = activityManager.GetActivityItems();
+        MetricCards = [];
+        ActivityItems = [];
     }
 
     public IPortfolioDynamicsService PortfolioDynamicsService { get; }
 
-    public List<MetricCard> MetricCards { get; }
-    public List<ActivityItem> ActivityItems { get; }
+    public ObservableCollection<MetricCard> MetricCards { get; }
+    public ObservableCollection<ActivityItem> ActivityItems { get; }
 
-    private void OnLogin(UserInfo userInfo)
+    public async Task Load(bool? force = false)
     {
-        ContentHeaderVm.SetWelcomeTitle($"Добро пожаловать, {userInfo.UserName}");
+        OnPortfoliosLoaded();
+    }
+
+    private async void OnPortfoliosLoaded()
+    {
+        if (_authManager.CurrentUser is null)
+        {
+            return;
+        }
+
+        ContentHeaderVm.SetWelcomeTitle($"Добро пожаловать, {_authManager.CurrentUser.UserName}");
+        
+        var metrics = await _metricsManager.GetMetricCards();
+        MetricCards.Clear();
+        foreach (var metric in metrics)
+        {
+            MetricCards.Add(metric);
+        }
+
+        var activityItems = _activityManager.GetActivityItems();
+        ActivityItems.Clear();
+        foreach (var activityItem in activityItems)
+        {
+            ActivityItems.Add(activityItem);
+        }
     }
 }

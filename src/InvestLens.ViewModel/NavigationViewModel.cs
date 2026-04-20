@@ -117,7 +117,7 @@ public class NavigationViewModel : BindableBase, INavigationViewModel
     private void OnPortfolioCreated(int id)
     {
         var portfolio = _portfoliosManager
-            .GetPortfoliosMenuItems(_authManager.CurrentUser!.Id)
+            .GetPortfoliosMenuItems()
             .Cast<NavigationTreeItem>()
             .FirstOrDefault(p => (p.Model as PortfolioNavigationTreeModel)?.Id == id);
 
@@ -128,7 +128,7 @@ public class NavigationViewModel : BindableBase, INavigationViewModel
     private void OnPortfolioUpdated(int id)
     {
         var updatedPortfolio = _portfoliosManager
-            .GetPortfoliosMenuItems(_authManager.CurrentUser!.Id)
+            .GetPortfoliosMenuItems()
             .Cast<NavigationTreeItem>()
             .FirstOrDefault(p => (p.Model as PortfolioNavigationTreeModel)?.Id == id);
 
@@ -161,7 +161,7 @@ public class NavigationViewModel : BindableBase, INavigationViewModel
     private void RefreshPortfolioList()
     {
         var portfolios = _portfoliosManager
-            .GetPortfoliosMenuItems(_authManager.CurrentUser!.Id)
+            .GetPortfoliosMenuItems()
             .Cast<NavigationTreeItem>()
             .ToList();
         
