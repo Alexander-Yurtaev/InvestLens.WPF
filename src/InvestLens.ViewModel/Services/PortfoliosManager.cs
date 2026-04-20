@@ -6,6 +6,7 @@ using InvestLens.Model.Entities;
 using InvestLens.Model.Enums;
 using InvestLens.Model.NavigationTree;
 using InvestLens.ViewModel.Events;
+using InvestLens.ViewModel.Helpers;
 using InvestLens.ViewModel.NavigationTree;
 
 namespace InvestLens.ViewModel.Services;
@@ -256,38 +257,38 @@ public class PortfoliosManager : IPortfoliosManager
         return !isExists;
     }
 
-    private string PortfolioTypeToStringConverter(PortfolioType portfolioType)
+    public async Task<int> Merge(List<Transaction> transactions)
     {
-        switch (portfolioType)
+        return await _portfolioRepository.Merge(transactions);
+    }
+
+    public async Task<int> Recreate(List<Transaction> transactions)
+    {
+        return await _portfolioRepository.Recreate(transactions);
+    }
+
+    public async Task ReloadPortfolio(int id)
+    {
+        try
         {
-            case PortfolioType.Invest:
-                return "Инвест";
-            case PortfolioType.Complex:
-                return "Составной";
-            default:
-                _windowManager.ShowWarningDialog($"Неизвестный тип портфеля {portfolioType}", "OK");
-                return "";
+            var portfolio = await _portfolioRepository.GetPortfolioById(id);
+
+            if (portfolio is null)
+            {
+                _windowManager.ShowErrorDialog($"Портфель с Id={id} не найден.");
+                return;
+            }
+
+            _portfolioCache[portfolio.Id] = _mapper.Map<PortfolioModel>(portfolio);
+
+            await RefreshCardsAsync();
         }
-    }
-
-    private string PortfolioTypeToForegroundConverter(PortfolioType portfolioType)
-    {
-        return portfolioType switch
+        finally
         {
-            PortfolioType.Complex => "#FFC8102E",
-            PortfolioType.Invest => "#FF2C8C6E",
-            _ => "0xFFFF4500"
-        };
-    }
+            _loadSemaphoreSlim.Release();
+        }
 
-    private string PortfolioTypeToBackgroundConverter(PortfolioType portfolioType)
-    {
-        return portfolioType switch
-        {
-            PortfolioType.Complex => "#1AC8102E",
-            PortfolioType.Invest => "#1A2C8C6E",
-            _ => "0xFFFFA500"
-        };
+        _eventAggregator.GetEvent<PortfoliosLoadedEvent>().Publish();
     }
 
     private async void OnLogin(UserInfo info)
@@ -349,9 +350,9 @@ public class PortfoliosManager : IPortfoliosManager
     {
         var card = new Card(model.Id, model.Name, true)
         {
-            CardType = PortfolioTypeToStringConverter(model.PortfolioType),
-            CardTypeForeground = PortfolioTypeToForegroundConverter(model.PortfolioType),
-            CardTypeBackground = PortfolioTypeToBackgroundConverter(model.PortfolioType),
+            CardType = PortfoliosCardHelper.PortfolioTypeToStringConverter(model.PortfolioType),
+            CardTypeForeground = PortfoliosCardHelper.PortfolioTypeToForegroundConverter(model.PortfolioType),
+            CardTypeBackground = PortfoliosCardHelper.PortfolioTypeToBackgroundConverter(model.PortfolioType),
             LastDateUpdate = "сегодня"
         };
         var details = await GetPortfolioDetiails(model.Id);
@@ -363,39 +364,5 @@ public class PortfoliosManager : IPortfoliosManager
 
         card.Stats.AddRange(details.PortfolioStats);
         return card;
-    }
-
-    public async Task<int> Merge(List<Transaction> transactions)
-    {
-        return await _portfolioRepository.Merge(transactions);
-    }
-
-    public async Task<int> Recreate(List<Transaction> transactions)
-    {
-        return await _portfolioRepository.Recreate(transactions);
-    }
-
-    public async Task ReloadPortfolio(int id)
-    {
-        try
-        {
-            var portfolio = await _portfolioRepository.GetPortfolioById(id);
-
-            if (portfolio is null)
-            {
-                _windowManager.ShowErrorDialog($"Портфель с Id={id} не найден.");
-                return;
-            }
-
-            _portfolioCache[portfolio.Id] = _mapper.Map<PortfolioModel>(portfolio);
-
-            await RefreshCardsAsync();
-        }
-        finally
-        {
-            _loadSemaphoreSlim.Release();
-        }
-
-        _eventAggregator.GetEvent<PortfoliosLoadedEvent>().Publish();
     }
 }
