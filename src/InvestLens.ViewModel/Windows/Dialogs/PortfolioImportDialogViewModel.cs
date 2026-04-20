@@ -1,6 +1,6 @@
-﻿using InvestLens.Model.Crud.Portfolio;
-using InvestLens.ViewModel.Services;
+﻿using InvestLens.ViewModel.Services;
 using System.ComponentModel.DataAnnotations;
+using System.IO;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
 
@@ -8,11 +8,10 @@ namespace InvestLens.ViewModel.Windows.Dialogs;
 
 public class PortfolioImportDialogViewModel : BaseDialogViewModel, IPortfolioImportDialogViewModel
 {
-    private string _fileFullName;
-    private string _fileName;
+    private string _fileFullName = string.Empty;
     private bool _mergeMode;
     private bool _recreateMode;
-    private string _errorMessage;
+    private string _errorMessage = string.Empty;
 
     public PortfolioImportDialogViewModel(IWindowManager windowManager) : base(windowManager)
     {

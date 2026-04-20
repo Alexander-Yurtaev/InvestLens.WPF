@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using InvestLens.DataAccess.Repositories;
 using InvestLens.Model;
 using InvestLens.Model.Crud.Portfolio;
 using InvestLens.ViewModel.Helpers;
@@ -7,6 +6,9 @@ using InvestLens.ViewModel.Services;
 using InvestLens.ViewModel.Windows;
 using InvestLens.ViewModel.Windows.Dialogs;
 using InvestLens.ViewModel.Wrappers;
+using System.ComponentModel;
+using System.IO;
+using System.Windows.Data;
 
 namespace InvestLens.ViewModel.Pages;
 
@@ -17,6 +19,7 @@ public class PortfolioDetailViewModel : ViewModelBaseWithContentHeader, IPortfol
     private readonly IWindowManager _windowManager;
     private readonly IAuthManager _authManager;
     private readonly IPortfoliosManager _portfoliosManager;
+    private bool _showSold;
 
     public PortfolioDetailViewModel(
         IMapper mapper,
@@ -41,12 +44,23 @@ public class PortfolioDetailViewModel : ViewModelBaseWithContentHeader, IPortfol
         ContentHeaderVm.AddButtons(buttonModels);
 
         PortfolioStats = model.PortfolioStats.Select(p => new StatWrapper(p)).ToList();
-        Securities = _model.Securities.Select(s => new SecurityInfoWrapper(s)).ToList();
+        var securities = _model.Securities.Select(s => new SecurityInfoWrapper(s)).ToList();
+        SecuritiesView = CollectionViewSource.GetDefaultView(securities);
+        SecuritiesView.Filter = wrapper => ShowSold || ((SecurityInfoWrapper)wrapper).Count > 0; ;
     }
 
     public string Title => _model.Title;
     public List<StatWrapper> PortfolioStats { get; }
-    public List<SecurityInfoWrapper> Securities { get; }
+    public ICollectionView SecuritiesView { get; }
+    public bool ShowSold 
+    { 
+        get => _showSold;
+        set
+        {
+            if (!SetProperty(ref _showSold, value)) return;
+            SecuritiesView.Refresh();
+        }
+    }
     public List<SecurityOperation> Operations => _model.Operations;
 
     private async Task OnEditPortfolio()
@@ -101,7 +115,7 @@ public class PortfolioDetailViewModel : ViewModelBaseWithContentHeader, IPortfol
                 await _portfoliosManager.Recreate(transactions);
             }
 
-            RaisePropertyChanged(nameof(Securities));
+            RaisePropertyChanged(nameof(SecuritiesView));
             RaisePropertyChanged(nameof(Operations));
         }
         catch (Exception ex)

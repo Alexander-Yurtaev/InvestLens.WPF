@@ -9,6 +9,10 @@ public class CustomEnumConverter : ITypeConverter
 {
     public object? ConvertFromString(string? text, IReaderRow row, MemberMapData memberMapData)
     {
+        if (string.IsNullOrEmpty(text))
+        {
+            throw new ArgumentNullException(nameof(text));
+        }
         return Enum.Parse<TransactionEvents>(text, true);
     }
 

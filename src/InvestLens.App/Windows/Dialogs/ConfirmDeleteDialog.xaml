@@ -131,10 +131,7 @@
                         <StackPanel Orientation="Horizontal"
                                 Margin="0 24"
                                 Background="#F8FAFE">
-                            <Viewbox Width="18"
-                                 Cursor="Hand">
-                                <CheckBox IsChecked="{Binding IsAgree}"/>
-                            </Viewbox>
+                            <CheckBox IsChecked="{Binding IsAgree}"/>
                             <TextBlock FontSize="19"
                                        Foreground="#5A6E8A"
                                        TextWrapping="WrapWithOverflow"

@@ -11,6 +11,7 @@ public class SecurityInfo
     public string SecId { get; }
     public string Name { get; }
     public decimal Count { get; init; }
+    public decimal DividendCount { get; init; }
     public decimal AveragePrice { get; init; }
     public decimal CurrentPrice { get; init; }
     public decimal TotalPrice { get; init; }

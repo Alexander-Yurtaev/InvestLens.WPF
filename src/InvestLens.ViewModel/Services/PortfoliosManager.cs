@@ -64,12 +64,20 @@ public class PortfoliosManager : IPortfoliosManager
             .GroupBy(t => t.Symbol)
             .Select(g =>
             {
-                var count = g.Sum(t => t.Quantity);
-                var totalPrice = g.Sum(t => t.Price);
-
+                var count = g.Where(t => t.Event == TransactionEvents.Buy).Sum(t => t.Quantity)
+                            -
+                            g.Where(t => t.Event == TransactionEvents.Sell).Sum(t => t.Quantity);
+                var totalPrice = g.Where(t => t.Event == TransactionEvents.Buy).Sum(t => t.Price)
+                                 -
+                                 g.Where(t => t.Event == TransactionEvents.Sell).Sum(t => t.Price);
+                
+                var dividendCount = g.Where(t => t.Event == TransactionEvents.Dividend)
+                                 .Sum(t => t.Quantity);
+                
                 return new SecurityInfo(g.Key, g.Key)
                 {
                     Count = count,
+                    DividendCount = dividendCount,
                     TotalPrice = totalPrice,
                     AveragePrice = count > 0 ? totalPrice / count : 0
                 };

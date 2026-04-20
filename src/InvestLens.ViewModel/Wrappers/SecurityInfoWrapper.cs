@@ -18,6 +18,7 @@ public class SecurityInfoWrapper
     public decimal AveragePrice => _model.AveragePrice;
     public decimal CurrentPrice => _model.CurrentPrice;
     public decimal TotalPrice => _model.TotalPrice;
+    public decimal DividendCount => _model.DividendCount;
 
     public string ProfitDisplay
     {

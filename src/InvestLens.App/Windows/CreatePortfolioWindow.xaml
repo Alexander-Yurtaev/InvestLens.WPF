@@ -142,18 +142,16 @@
                                                 <ColumnDefinition Width="12"/>
                                                 <ColumnDefinition Width="*"/>
                                             </Grid.ColumnDefinitions>
-                                            <Viewbox Grid.Column="0"
-                                                     Width="18"
-                                                     Height="18">
-                                                <CheckBox IsChecked="{Binding IsChecked}"/>
-                                            </Viewbox>
+                                            <CheckBox Grid.Column="0"
+                                                      IsChecked="{Binding IsChecked}"/>
                                             <StackPanel Grid.Column="2" 
                                                         Orientation="Vertical">
                                                 <TextBlock Text="{Binding Name}"
                                                            FontWeight="Medium"
+                                                           FontSize="18"
                                                            Margin="0 0 0 2"/>
                                                 <TextBlock Text="{Binding Description}"
-                                                           FontSize="11"
+                                                           FontSize="14"
                                                            Foreground="#8E92A8"/>
                                             </StackPanel>
                                         </Grid>
