@@ -1,0 +1,6 @@
+﻿namespace InvestLens.DataAccess.Repositories;
+
+public interface ITransactionRepository
+{
+    Task<decimal> GetTotalCost();
+}
