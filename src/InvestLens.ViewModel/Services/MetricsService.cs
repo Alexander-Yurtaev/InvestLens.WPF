@@ -66,9 +66,9 @@ public class MetricsService : IMetricsService
         return await _repository.GetProfitYTD();
     }
 
-    public Task<decimal> PortfolioProfitYTD(int id)
+    public async Task<decimal> PortfolioProfitYTD(int id)
     {
-        throw new NotImplementedException();
+        return await _repository.GetPortfolioProfitYTD(id);
     }
 
     #endregion YTD

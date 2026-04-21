@@ -74,4 +74,13 @@ public class TransactionRepository : BaseRepository, ITransactionRepository
 
         return totalCost - totalCost + dividends;
     }
+
+    public async Task<decimal> GetPortfolioProfitYTD(int id)
+    {
+        var currentCost = 0m;
+        var totalCost = await GetPortfolioTotalCost(id);
+        var dividends = await GetPortfolioDividends(id);
+
+        return totalCost - totalCost + dividends;
+    }
 }

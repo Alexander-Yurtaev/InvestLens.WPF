@@ -9,4 +9,5 @@ public interface ITransactionRepository
     Task<decimal> GetDividends();
     Task<decimal> GetPortfolioDividends(int id);
     Task<decimal> GetProfitYTD();
+    Task<decimal> GetPortfolioProfitYTD(int id);
 }
