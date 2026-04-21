@@ -52,9 +52,9 @@ public class MetricsService : IMetricsService
         return await _repository.GetDividends();
     }
 
-    public Task<decimal> PortfolioDividends(int id)
+    public async Task<decimal> PortfolioDividends(int id)
     {
-        throw new NotImplementedException();
+        return await _repository.GetPortfolioDividends(id);
     }
 
     #endregion Dividends
