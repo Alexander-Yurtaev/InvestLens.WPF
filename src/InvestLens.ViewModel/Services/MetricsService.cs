@@ -3,11 +3,11 @@ using InvestLens.Model.Enums;
 
 namespace InvestLens.ViewModel.Services;
 
-public class MetricsManager : IMetricsManager
+public class MetricsService : IMetricsService
 {
     private readonly IPortfoliosManager _portfoliosManager;
 
-    public MetricsManager(IPortfoliosManager portfoliosManager)
+    public MetricsService(IPortfoliosManager portfoliosManager)
     {
         _portfoliosManager = portfoliosManager;
     }

@@ -11,13 +11,13 @@ public class DashboardViewModel : ViewModelBaseWithContentHeader, IDashboardView
 {
     private readonly IAuthManager _authManager;
     private readonly IWindowManager _windowManager;
-    private readonly IMetricsManager _metricsManager;
+    private readonly IMetricsService _metricsManager;
     private readonly IActivityManager _activityManager;
 
     public DashboardViewModel(
         IAuthManager authManager,
         IWindowManager windowManager,
-        IMetricsManager metricsManager,
+        IMetricsService metricsManager,
         IActivityManager activityManager,
         IPortfolioDynamicsService portfolioDynamicsService,
         IEventAggregator eventAggregator) : base($"Добро пожаловать, Гость",
