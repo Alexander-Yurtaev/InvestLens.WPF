@@ -24,9 +24,9 @@ public class MetricsService : IMetricsService
         return await _repository.GetTotalCost();
     }
 
-    public Task<decimal> PortfolioTotalCost(int id)
+    public async Task<decimal> PortfolioTotalCost(int id)
     {
-        throw new NotImplementedException();
+        return await _repository.GetPortfolioTotalCost(id);
     }
 
     #endregion TotalCost
@@ -38,9 +38,9 @@ public class MetricsService : IMetricsService
         return await _repository.GetYield();
     }
 
-    public Task<decimal> PortfolioYield(int id)
+    public async Task<decimal> PortfolioYield(int id)
     {
-        throw new NotImplementedException();
+        return await _repository.GetPortfolioYield(id);
     }
 
     #endregion Yield

@@ -33,7 +33,25 @@ public class TransactionRepository : BaseRepository, ITransactionRepository
         return totalCost;
     }
 
+    public async Task<decimal> GetPortfolioTotalCost(int id)
+    {
+        var totalCost = await DataContext.Transactions
+            .Where(t => t.PortfolioId == id &&
+                        (t.Event == Model.Enums.TransactionEvents.Buy ||
+                         t.Event == Model.Enums.TransactionEvents.Sell))
+            .SumAsync(t => t.Event == Model.Enums.TransactionEvents.Buy
+                        ? t.Price
+                        : -t.Price);
+
+        return totalCost;
+    }
+
     public async Task<decimal> GetYield()
+    {
+        return await Task.FromResult(0m);
+    }
+
+    public async Task<decimal> GetPortfolioYield(int id)
     {
         return await Task.FromResult(0m);
     }
