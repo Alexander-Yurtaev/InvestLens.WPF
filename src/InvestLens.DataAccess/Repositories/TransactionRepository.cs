@@ -12,6 +12,15 @@ public class TransactionRepository : BaseRepository, ITransactionRepository
     {
     }
 
+    public async Task<decimal> GetDividends()
+    {
+        var dividends = await DataContext.Transactions
+            .Where(t => t.Event == Model.Enums.TransactionEvents.Dividend)
+            .SumAsync(t => t.Quantity);
+
+        return dividends;
+    }
+
     public async Task<decimal> GetTotalCost()
     {
         var totalCost = await DataContext.Transactions

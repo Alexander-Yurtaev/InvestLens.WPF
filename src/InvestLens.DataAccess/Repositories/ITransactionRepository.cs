@@ -4,4 +4,5 @@ public interface ITransactionRepository
 {
     Task<decimal> GetTotalCost();
     Task<decimal> GetYield();
+    Task<decimal> GetDividends();
 }

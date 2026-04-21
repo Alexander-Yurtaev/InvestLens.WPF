@@ -21,7 +21,7 @@ public class MetricsService : IMetricsService
 
     public async Task<decimal> TotalCost()
     {
-        return await _repository.GetTotalCostAsync();
+        return await _repository.GetTotalCost();
     }
 
     public Task<decimal> PortfolioTotalCost(int id)
@@ -47,9 +47,9 @@ public class MetricsService : IMetricsService
 
     #region Dividends - денежный поток (купоны/дивиденды)
 
-    public Task<decimal> Dividends()
+    public async Task<decimal> Dividends()
     {
-        throw new NotImplementedException();
+        return await _repository.GetDividends();
     }
 
     public Task<decimal> PortfolioDividends(int id)
@@ -77,21 +77,21 @@ public class MetricsService : IMetricsService
     {
         var totalCost = await TotalCost();
         var TotalYield = await Yield();
-        var dividend = 0m;
+        var totalDividend = await Dividends();
         var risk = 0m;
 
         var portfolios = _portfoliosManager.GetAllPortfolios(PortfolioType.Invest);
         foreach (var portfolio in portfolios)
         {
             var detailes = await _portfoliosManager.GetPortfolioDetiails(portfolio.Id);
-            dividend += detailes?.PortfolioStats.First(s => s.Title == Stat.DividendStat).Value ?? 0m;
+            totalDividend += detailes?.PortfolioStats.First(s => s.Title == Stat.DividendStat).Value ?? 0m;
         }
 
         var result = new List<MetricCard>
         {
             new MetricCard { Icon = "💰", Label = "Сколько вложили", Value = totalCost.ToString("C2"), Change = "", IsPositive = true },
-            new MetricCard { Icon = "📈", Label = "Относительная доходность", Value = Yield.ToString("P"), Change = "", IsPositive = true },
-            new MetricCard { Icon = "💸", Label = "Дивиденды", Value = dividend.ToString(), Change = "", IsPositive = false },
+            new MetricCard { Icon = "📈", Label = "Относительная доходность", Value = TotalYield.ToString("P"), Change = "", IsPositive = true },
+            new MetricCard { Icon = "💸", Label = "Дивиденды", Value = totalDividend.ToString(), Change = "", IsPositive = false },
             new MetricCard { Icon = "⚠️", Label = "Абсолютный финансовый результат", Value = risk.ToString(), Change = "", IsPositive = true }
         };
 
