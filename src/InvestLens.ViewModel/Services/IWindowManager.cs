@@ -13,4 +13,7 @@ public interface IWindowManager
     void CloseWindow<TViewModel>() where TViewModel : class;
     void SetMainWindow<TViewModel>() where TViewModel : class;
     string ShowSelectFileDialog(string title, string? filter = "");
+
+    void ShowIsBusyAsync();
+    void HideIsBusyAsync();
 }

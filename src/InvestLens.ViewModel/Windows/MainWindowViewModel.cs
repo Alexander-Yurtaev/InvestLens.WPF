@@ -10,6 +10,7 @@ public class MainWindowViewModel : BindableBase, IMainWindowViewModel
     private readonly IViewModelFactory _viewModelFactory;
     private INotifyPropertyChanged? _contentVm;
     private BaseNavigationTreeModel? _currentNavigationTreeModel;
+    private bool _isBusy;
 
     public MainWindowViewModel(
         INavigationViewModel navigationVm, 
@@ -26,6 +27,12 @@ public class MainWindowViewModel : BindableBase, IMainWindowViewModel
 
     public INavigationViewModel NavigationVm { get; }
     public IHeaderViewModel HeaderVm { get; }
+
+    public bool IsBusy
+    { 
+        get => _isBusy;
+        set => SetProperty(ref _isBusy, value);
+    }
 
     public INotifyPropertyChanged? ContentVm
     {

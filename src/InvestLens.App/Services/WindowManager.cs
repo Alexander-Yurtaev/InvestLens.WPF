@@ -1,8 +1,11 @@
 ﻿using Autofac;
+using InvestLens.App.Windows;
 using InvestLens.ViewModel.Services;
+using InvestLens.ViewModel.Windows;
 using InvestLens.ViewModel.Windows.Dialogs;
 using Microsoft.Win32;
 using System.Windows;
+using System.Windows.Threading;
 
 namespace InvestLens.App.Services;
 
@@ -168,5 +171,30 @@ public class WindowManager : IWindowManager
         }
 
         return "";
+    }
+
+    public void ShowIsBusyAsync()
+    {
+        var viewModel = GetMainWindowViewModel();
+        if (viewModel is not null)
+        {
+            viewModel.IsBusy = true;
+        }
+    }
+
+    public void HideIsBusyAsync()
+    {
+        var viewModel = GetMainWindowViewModel();
+        if (viewModel is not null)
+        {
+            viewModel.IsBusy = false;
+        }
+    }
+
+    private MainWindowViewModel? GetMainWindowViewModel()
+    {
+        var mainWindow = (MainWindow)_windows[typeof(MainWindowViewModel)]; ;
+        var viewModel = mainWindow.DataContext as MainWindowViewModel;
+        return viewModel;
     }
 }

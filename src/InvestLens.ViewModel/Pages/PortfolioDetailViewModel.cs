@@ -11,6 +11,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
 using System.Windows.Data;
+using System.Windows.Threading;
 
 namespace InvestLens.ViewModel.Pages;
 
@@ -41,8 +42,13 @@ public class PortfolioDetailViewModel : ViewModelBaseWithContentHeader, IPortfol
         {
             new ButtonModel("Редактировать", OnEditPortfolio),
             new ButtonModel("Удалить", OnDeletePortfolio),
-            new ButtonModel("Импортировать", OnImportPortfolio),
         };
+
+        if (_model.PortfolioType == Model.Enums.PortfolioType.Invest)
+        {
+            buttonModels.Add(new ButtonModel("Импортировать", OnImportPortfolio));
+        }
+
         ContentHeaderVm.Buttons.Clear();
         ContentHeaderVm.AddButtons(buttonModels);
 
@@ -107,9 +113,13 @@ public class PortfolioDetailViewModel : ViewModelBaseWithContentHeader, IPortfol
 
         try
         {
-            using var reader = File.OpenText(fileFullName);
-            var transactionModels = TransactionHelper.Convert(reader);
-            var transactions = _mapper.Map<List<Model.Entities.Transaction>>(transactionModels);
+            _windowManager.ShowIsBusyAsync();
+            
+            var transactions = await Task.Run(() => {
+                using var reader = File.OpenText(fileFullName);
+                var transactionModels = TransactionHelper.Convert(reader);
+                return _mapper.Map<List<Model.Entities.Transaction>>(transactionModels);
+            });
 
             foreach ( var transaction in transactions)
             {
@@ -127,12 +137,17 @@ public class PortfolioDetailViewModel : ViewModelBaseWithContentHeader, IPortfol
             }
 
             await RefreshModel();
+            
             _windowManager.ShowSuccessDialog($"Было импортированно {acceptedCount} записей");
         }
         catch (Exception ex)
         {
             var message = ex.InnerException?.Message ?? ex.Message;
             _windowManager.ShowErrorDialog(message);
+        }
+        finally
+        {
+            _windowManager.HideIsBusyAsync();
         }
     }
 

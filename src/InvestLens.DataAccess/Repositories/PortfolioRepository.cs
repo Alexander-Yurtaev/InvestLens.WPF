@@ -101,14 +101,29 @@ public class PortfolioRepository(InvestLensDataContext db,
     public async Task<int> Recreate(List<Transaction> transactions)
     {
         if (!transactions.Any()) return 0;
-        var portfolioId = transactions.Select(t => t.PortfolioId).Distinct().Single();
-        var delTransactions = await _db.Transactions
-            .Where(t => t.PortfolioId == portfolioId)
-            .ToListAsync();
 
-        _db.Transactions.RemoveRange(delTransactions);
-        await _db.Transactions.AddRangeAsync(transactions);
-        return await _db.SaveChangesAsync();
+        var task = Task.Run(() =>
+        {
+            using var transaction = _db.Database.BeginTransaction();
+
+            try
+            {
+                var portfolioId = transactions.Select(t => t.PortfolioId).Distinct().Single();
+                _db.Transactions.Where(t => t.PortfolioId == portfolioId).ExecuteDelete();
+                _db.Transactions.AddRange(transactions);
+                var count = _db.SaveChanges();
+                transaction.Commit();
+                return count;
+            }
+            catch (Exception)
+            {
+                transaction.Rollback();
+                throw;
+            }
+        });
+
+        var count = await task;
+        return count;
     }
 
     public async Task<Portfolio?> GetPortfolioById(int id)
