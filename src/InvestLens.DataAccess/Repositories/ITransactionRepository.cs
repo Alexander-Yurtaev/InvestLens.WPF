@@ -2,12 +2,18 @@
 
 public interface ITransactionRepository
 {
-    Task<decimal> GetTotalCost();
-    Task<decimal> GetPortfolioTotalCost(int id);
-    Task<decimal> GetYield();
-    Task<decimal> GetPortfolioYield(int id);
-    Task<decimal> GetDividends();
-    Task<decimal> GetPortfolioDividends(int id);
-    Task<decimal> GetProfitYTD();
-    Task<decimal> GetPortfolioProfitYTD(int id);
+    Task<decimal> GetTotalCashIn();
+    Task<decimal> GetPortfolioTotalCashIn(int[] ids);
+
+    Task<decimal> GetTotalCashOut();
+    Task<decimal> GetPortfolioTotalCashOut(int[] ids);
+
+    Task<decimal> GetCurrentCost();
+    Task<decimal> GetPortfolioCurrentCost(int[] ids);
+
+    Task<decimal> GetTotalDividends();
+    Task<decimal> GetPortfolioTotalDividends(int[] ids);
+
+    Task<decimal> GetTotalFeeTax();
+    Task<decimal> GetPortfolioTotalFeeTax(int[] ids);
 }

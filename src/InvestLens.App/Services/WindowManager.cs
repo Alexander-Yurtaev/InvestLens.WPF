@@ -173,7 +173,7 @@ public class WindowManager : IWindowManager
         return "";
     }
 
-    public void ShowIsBusyAsync()
+    public void ShowIsBusy()
     {
         var viewModel = GetMainWindowViewModel();
         if (viewModel is not null)
@@ -182,7 +182,7 @@ public class WindowManager : IWindowManager
         }
     }
 
-    public void HideIsBusyAsync()
+    public void HideIsBusy()
     {
         var viewModel = GetMainWindowViewModel();
         if (viewModel is not null)

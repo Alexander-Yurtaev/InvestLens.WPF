@@ -15,12 +15,13 @@ using System.Windows.Threading;
 
 namespace InvestLens.ViewModel.Pages;
 
-public class PortfolioDetailViewModel : ViewModelBaseWithContentHeader, IPortfolioDetailViewModel
+public class PortfolioDetailViewModel : ViewModelBaseWithContentHeader, IPortfolioDetailViewModel, ILoadableViewModel
 {
     private readonly IMapper _mapper;
     private readonly PortfolioDetails _model;
     private readonly IWindowManager _windowManager;
     private readonly IAuthManager _authManager;
+    private readonly IMetricsService _metricsService;
     private readonly IPortfoliosManager _portfoliosManager;
     private bool _showSold;
     private int _securitiesCount;
@@ -30,12 +31,14 @@ public class PortfolioDetailViewModel : ViewModelBaseWithContentHeader, IPortfol
         PortfolioDetails model, 
         IWindowManager windowManager, 
         IAuthManager authManager,
+        IMetricsService metricsService,
         IPortfoliosManager portfoliosManager) : base(model.Title, model.Description)
     {
         _mapper = mapper;
         _model = model;
         _windowManager = windowManager;
         _authManager = authManager;
+        _metricsService = metricsService;
         _portfoliosManager = portfoliosManager;
         
         var buttonModels = new List<ButtonModel>
@@ -52,8 +55,8 @@ public class PortfolioDetailViewModel : ViewModelBaseWithContentHeader, IPortfol
         ContentHeaderVm.Buttons.Clear();
         ContentHeaderVm.AddButtons(buttonModels);
 
-        var stats = _model.PortfolioStats.Select(p => new StatWrapper(p)).ToList();
-        PortfolioStats = new ObservableCollection<StatWrapper>(stats);
+        MetricCards = [];
+
         var securities = _model.Securities.Select(s => new SecurityInfoWrapper(s)).ToList();
         SecuritiesView = CollectionViewSource.GetDefaultView(securities);
         SecuritiesView.Filter = wrapper => ShowSold || ((SecurityInfoWrapper)wrapper).Count > 0;
@@ -65,7 +68,7 @@ public class PortfolioDetailViewModel : ViewModelBaseWithContentHeader, IPortfol
 
     public string Title => _model.Title;
     public string SecuritiesHeader => $"Активы ({_securitiesCount})";
-    public ObservableCollection<StatWrapper> PortfolioStats { get; }
+    public ObservableCollection<MetricCard> MetricCards { get; }
     public ICollectionView SecuritiesView { get; private set; }
     public bool ShowSold 
     { 
@@ -113,7 +116,7 @@ public class PortfolioDetailViewModel : ViewModelBaseWithContentHeader, IPortfol
 
         try
         {
-            _windowManager.ShowIsBusyAsync();
+            _windowManager.ShowIsBusy();
             
             var transactions = await Task.Run(() => {
                 using var reader = File.OpenText(fileFullName);
@@ -147,42 +150,57 @@ public class PortfolioDetailViewModel : ViewModelBaseWithContentHeader, IPortfol
         }
         finally
         {
-            _windowManager.HideIsBusyAsync();
+            _windowManager.HideIsBusy();
         }
     }
 
     private async Task RefreshModel()
     {
-        var model = await _portfoliosManager.GetPortfolioDetiails(_model.Id);
-        if (model is null) return;
-
-        _model.Securities.Clear();
-        _model.Securities.AddRange(model.Securities);
-
-        _model.PortfolioStats.Clear();
-        _model.PortfolioStats.AddRange(model.PortfolioStats);
-
-        _model.Operations.Clear();
-        _model.Operations.AddRange(model.Operations.OrderByDescending(o => o.Date));
-
-        var portfolioStats = _model.PortfolioStats.Select(p => new StatWrapper(p)).ToList();
-        PortfolioStats.Clear();
-        foreach (var stat in portfolioStats)
-        {
-            PortfolioStats.Add(stat);
-        }
+        _windowManager.ShowIsBusy();
         
-        var securities = _model.Securities.Select(s => new SecurityInfoWrapper(s)).ToList();
-        SecuritiesView = CollectionViewSource.GetDefaultView(securities);
+        try
+        {
+            var model = await _portfoliosManager.GetPortfolioDetiails(_model.Id);
+            if (model is null) return;
 
-        RaisePropertyChanged(nameof(SecuritiesView));
-        RaisePropertyChanged(nameof(PortfolioStats));
-        RaisePropertyChanged(nameof(Operations));
+            _model.Securities.Clear();
+            _model.Securities.AddRange(model.Securities);
+
+            _model.Operations.Clear();
+            _model.Operations.AddRange(model.Operations.OrderByDescending(o => o.Date));
+
+            var ids = _model.PortfolioType == Model.Enums.PortfolioType.Invest
+                ? [_model.Id]
+                : _model.Portfolios.ToArray();
+
+            var metrics = await _metricsService.GetPortfolioMetricCards(ids);
+            MetricCards.Clear();
+            foreach (var metric in metrics)
+            {
+                MetricCards.Add(metric);
+            }
+
+            var securities = _model.Securities.Select(s => new SecurityInfoWrapper(s)).ToList();
+            SecuritiesView = CollectionViewSource.GetDefaultView(securities);
+
+            RaisePropertyChanged(nameof(SecuritiesView));
+            RaisePropertyChanged(nameof(MetricCards));
+            RaisePropertyChanged(nameof(Operations));
+        }
+        finally
+        {
+            _windowManager.HideIsBusy();
+        }
     }
 
     private void RefreshSecuritiesHeader()
     {
         _securitiesCount = SecuritiesView?.Cast<object>().Count() ?? 0;
         RaisePropertyChanged(nameof(SecuritiesHeader));
+    }
+
+    public async Task Load(bool? force = false)
+    {
+        await RefreshModel();
     }
 }

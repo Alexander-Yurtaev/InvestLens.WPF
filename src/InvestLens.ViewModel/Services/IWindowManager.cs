@@ -14,6 +14,6 @@ public interface IWindowManager
     void SetMainWindow<TViewModel>() where TViewModel : class;
     string ShowSelectFileDialog(string title, string? filter = "");
 
-    void ShowIsBusyAsync();
-    void HideIsBusyAsync();
+    void ShowIsBusy();
+    void HideIsBusy();
 }

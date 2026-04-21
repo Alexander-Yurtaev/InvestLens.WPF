@@ -5,20 +5,17 @@ namespace InvestLens.ViewModel.Services;
 public interface IMetricsService
 {
     Task<List<MetricCard>> GetMetricCards();
+    Task<List<MetricCard>> GetPortfolioMetricCards(int[] ids);
 
     // сколько вложили(база)
-    Task<decimal> TotalCost();
-    Task<decimal> PortfolioTotalCost(int id);
+    Task<decimal> TotalCashIn();
+    Task<decimal> PortfolioTotalCashIn(int[] ids);
 
-    // относительная доходность(%)
-    Task<decimal> Yield();
-    Task<decimal> PortfolioYield(int id);
+    // текущая стоимость
+    Task<decimal> CurrentCost();
+    Task<decimal> PortfolioCurrentCost(int[] ids);
 
     // денежный поток(купоны/дивиденды)
-    Task<decimal> Dividends();
-    Task<decimal> PortfolioDividends(int id);
-
-    //абсолютный финансовый результат(₽/$/€)
-    Task<decimal> ProfitYTD();
-    Task<decimal> PortfolioProfitYTD(int id);
+    Task<decimal> TotalDividends();
+    Task<decimal> PortfolioTotalDividends(int[] ids);
 }

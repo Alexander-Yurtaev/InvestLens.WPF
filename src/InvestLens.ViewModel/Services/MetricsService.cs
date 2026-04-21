@@ -1,6 +1,5 @@
 ﻿using InvestLens.DataAccess.Repositories;
 using InvestLens.Model;
-using InvestLens.Model.Enums;
 
 namespace InvestLens.ViewModel.Services;
 
@@ -17,75 +16,81 @@ public class MetricsService : IMetricsService
         _repository = repository;
     }
 
-    #region TotalCost - сколько вложили (база)
+    #region TotalCashIn - сколько вложили (база)
 
-    public async Task<decimal> TotalCost()
+    public async Task<decimal> TotalCashIn()
     {
-        return await _repository.GetTotalCost();
+        return await _repository.GetTotalCashIn();
     }
 
-    public async Task<decimal> PortfolioTotalCost(int id)
+    public async Task<decimal> PortfolioTotalCashIn(int[] ids)
     {
-        return await _repository.GetPortfolioTotalCost(id);
+        return await _repository.GetPortfolioTotalCashIn(ids);
     }
 
-    #endregion TotalCost
+    #endregion TotalCashIn
 
-    #region Yield - относительная доходность (%)
+    #region CurrentCost - текущая стоимость
 
-    public async Task<decimal> Yield()
+    public async Task<decimal> CurrentCost()
     {
-        return await _repository.GetYield();
+        return await _repository.GetCurrentCost();
     }
 
-    public async Task<decimal> PortfolioYield(int id)
+    public async Task<decimal> PortfolioCurrentCost(int[] ids)
     {
-        return await _repository.GetPortfolioYield(id);
+        return await _repository.GetPortfolioCurrentCost(ids);
     }
 
-    #endregion Yield
+    #endregion CurrentCost
 
-    #region Dividends - денежный поток (купоны/дивиденды)
+    #region TotalDividends - денежный поток (купоны/дивиденды)
 
-    public async Task<decimal> Dividends()
+    public async Task<decimal> TotalDividends()
     {
-        return await _repository.GetDividends();
+        return await _repository.GetTotalDividends();
     }
 
-    public async Task<decimal> PortfolioDividends(int id)
+    public async Task<decimal> PortfolioTotalDividends(int[] ids)
     {
-        return await _repository.GetPortfolioDividends(id);
+        return await _repository.GetPortfolioTotalDividends(ids);
     }
 
-    #endregion Dividends
-
-    #region YTD - абсолютный финансовый результат (₽/$/€)
-
-    public async Task<decimal> ProfitYTD()
-    {
-        return await _repository.GetProfitYTD();
-    }
-
-    public async Task<decimal> PortfolioProfitYTD(int id)
-    {
-        return await _repository.GetPortfolioProfitYTD(id);
-    }
-
-    #endregion YTD
+    #endregion TotalDividends
 
     public async Task<List<MetricCard>> GetMetricCards()
     {
-        var totalCost = await TotalCost();
-        var TotalYield = await Yield();
-        var totalDividend = await Dividends();
-        var profitYTD = await ProfitYTD();
+        var totalCashIn = await TotalCashIn();
+        var currentCost = await CurrentCost();
+        var totalDividends = await TotalDividends();
+        // ( (Текущая стоимость − Вложено + Дивиденды) / Вложено ) × 100%
+        var totalProfit = (currentCost - totalCashIn + totalDividends) / totalCashIn;
 
         var result = new List<MetricCard>
         {
-            new MetricCard { Icon = "💰", Label = "Сколько вложили", Value = totalCost.ToString("C2"), Change = "", IsPositive = true },
-            new MetricCard { Icon = "📈", Label = "Относительная доходность", Value = TotalYield.ToString("P2"), Change = "", IsPositive = true },
-            new MetricCard { Icon = "💸", Label = "Дивиденды", Value = totalDividend.ToString("C2"), Change = "", IsPositive = false },
-            new MetricCard { Icon = "🎯", Label = "Абсолютный финансовый результат", Value = profitYTD.ToString("C2"), Change = "", IsPositive = true }
+            new MetricCard { Icon = "💸", Label = "Вложили", Value = totalCashIn.ToString("C2"), Change = "", IsPositive = true },
+            new MetricCard { Icon = "💰", Label = "Стоимость", Value = currentCost.ToString("C2"), Change = "", IsPositive = true },
+            new MetricCard { Icon = "💵", Label = "Дивиденды", Value = totalDividends.ToString("C2"), Change = "", IsPositive = false },
+            new MetricCard { Icon = "📈", Label = "Относительная доходность", Value = totalProfit.ToString("P2"), Change = "", IsPositive = true }
+        };
+
+        return result;
+    }
+
+    public async Task<List<MetricCard>> GetPortfolioMetricCards(int[] ids)
+    {
+        var totalCashIn = await PortfolioTotalCashIn(ids);
+        var currentCost = await PortfolioCurrentCost(ids);
+        var totalDividends = await PortfolioTotalDividends(ids);
+        // ( (Текущая стоимость − Вложено + Дивиденды) / Вложено ) × 100%
+        var totalProfit = (currentCost - totalCashIn + totalDividends) / totalCashIn;
+
+        var result = new List<MetricCard>
+        {
+            new MetricCard { Icon = "💸", Label = "Вложили", Value = totalCashIn.ToString("C2"), Change = "", IsPositive = true },
+            new MetricCard { Icon = "💰", Label = "Стоимость", Value = currentCost.ToString("C2"), Change = "", IsPositive = true },
+            new MetricCard { Icon = "💵", Label = "Дивиденды", Value = totalDividends.ToString("C2"), Change = "", IsPositive = false },
+            new MetricCard { Icon = "📈", Label = "Относительная доходность", Value = totalProfit.ToString("P2"), Change = "", IsPositive = true }
         };
 
         return result;

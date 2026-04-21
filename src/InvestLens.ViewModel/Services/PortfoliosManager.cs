@@ -74,9 +74,6 @@ public class PortfoliosManager : IPortfoliosManager
             await FillComplexPortfolio(portfolio, details);
         }
 
-        var portfolioStats = CreateStat(details);
-        details.PortfolioStats.AddRange(portfolioStats);
-
         return details;
     }
 
@@ -112,17 +109,6 @@ public class PortfoliosManager : IPortfoliosManager
             .OrderBy(o => o.Date);
         details.Operations.Clear();
         details.Operations.AddRange(operations);
-    }
-
-    private List<Stat> CreateStat(PortfolioDetails details)
-    {
-        var portfolioStats = new List<Stat>
-        {
-            new Stat(Stat.CountStat, details.Securities.Sum(s => s.Count)),
-            new Stat(Stat.PriceStat, details.Securities.Sum(s => s.TotalPrice), "₽"),
-            new Stat(Stat.DividendStat, details.Securities.Sum(s => s.DividendCount), "₽"),
-        };
-        return portfolioStats;
     }
 
     private async Task FillComplexPortfolio(PortfolioModel portfolio, PortfolioDetails details)
@@ -359,7 +345,6 @@ public class PortfoliosManager : IPortfoliosManager
             return null;
         }
 
-        card.Stats.AddRange(details.PortfolioStats);
         return card;
     }
 

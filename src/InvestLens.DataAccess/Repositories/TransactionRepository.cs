@@ -12,75 +12,103 @@ public class TransactionRepository : BaseRepository, ITransactionRepository
     {
     }
 
-    public async Task<decimal> GetDividends()
+    // TotalCashIn
+
+    public async Task<decimal> GetTotalCashIn()
     {
-        var dividends = await DataContext.Transactions
+        var total = await DataContext.Transactions
+            .Where(t => t.Event == Model.Enums.TransactionEvents.Cash_In)
+            .SumAsync(t => t.Quantity);
+
+        return total;
+    }
+
+    public async Task<decimal> GetPortfolioTotalCashIn(int[] ids)
+    {
+        var total = await DataContext.Transactions
+            .Where(t => ids.Contains(t.PortfolioId) &&
+                        (t.Event == Model.Enums.TransactionEvents.Cash_In))
+            .SumAsync(t => t.Quantity);
+
+        return total;
+    }
+
+    // TotalCashOut
+
+    public async Task<decimal> GetTotalCashOut()
+    {
+        var total = await DataContext.Transactions
+            .Where(t => t.Event == Model.Enums.TransactionEvents.Cash_Out)
+            .SumAsync(t => t.Quantity);
+
+        return total;
+    }
+
+    public async Task<decimal> GetPortfolioTotalCashOut(int[] ids)
+    {
+        var total = await DataContext.Transactions
+            .Where(t => ids.Contains(t.PortfolioId) &&
+                        (t.Event == Model.Enums.TransactionEvents.Cash_Out))
+            .SumAsync(t => t.Quantity);
+
+        return total;
+    }
+
+    // CurrentCost
+
+    public async Task<decimal> GetCurrentCost()
+    {
+        var totalCashIn = await GetTotalCashIn();
+        var totlaFeeTax = await GetTotalFeeTax();
+
+        return totalCashIn - totlaFeeTax;
+    }
+
+    public async Task<decimal> GetPortfolioCurrentCost(int[] ids)
+    {
+        var totalCashIn = await GetPortfolioTotalCashIn(ids);
+        var totlaFeeTax = await GetPortfolioTotalFeeTax(ids);
+
+        return totalCashIn - totlaFeeTax;
+    }
+
+    // Dividends
+
+    public async Task<decimal> GetTotalDividends()
+    {
+        var total = await DataContext.Transactions
             .Where(t => t.Event == Model.Enums.TransactionEvents.Dividend)
             .SumAsync(t => t.Quantity);
 
-        return dividends;
+        return total;
     }
 
-    public async Task<decimal> GetPortfolioDividends(int id)
+    public async Task<decimal> GetPortfolioTotalDividends(int[] ids)
     {
-        var dividends = await DataContext.Transactions
-            .Where(t => t.PortfolioId == id &&
+        var total = await DataContext.Transactions
+            .Where(t => ids.Contains(t.PortfolioId) &&
                         t.Event == Model.Enums.TransactionEvents.Dividend)
             .SumAsync(t => t.Quantity);
 
-        return dividends;
+        return total;
     }
 
-    public async Task<decimal> GetTotalCost()
-    {
-        var totalCost = await DataContext.Transactions
-            .Where(t => t.Event == Model.Enums.TransactionEvents.Buy ||
-                        t.Event == Model.Enums.TransactionEvents.Sell)
-            .SumAsync(t => t.Event == Model.Enums.TransactionEvents.Buy
-                        ? t.Price
-                        : -t.Price);
+    // TotalFeeTax
 
-        return totalCost;
+    public async Task<decimal> GetTotalFeeTax()
+    {
+        var total = await DataContext.Transactions
+            .SumAsync(t => t.FeeTax);
+
+        return total;
     }
 
-    public async Task<decimal> GetPortfolioTotalCost(int id)
+    public async Task<decimal> GetPortfolioTotalFeeTax(int[] ids)
     {
-        var totalCost = await DataContext.Transactions
-            .Where(t => t.PortfolioId == id &&
-                        (t.Event == Model.Enums.TransactionEvents.Buy ||
-                         t.Event == Model.Enums.TransactionEvents.Sell))
-            .SumAsync(t => t.Event == Model.Enums.TransactionEvents.Buy
-                        ? t.Price
-                        : -t.Price);
+        var total = await DataContext.Transactions
+            .Where(t => ids.Contains(t.PortfolioId))
+            .SumAsync(t => t.FeeTax);
 
-        return totalCost;
-    }
-
-    public async Task<decimal> GetYield()
-    {
-        return await Task.FromResult(0m);
-    }
-
-    public async Task<decimal> GetPortfolioYield(int id)
-    {
-        return await Task.FromResult(0m);
-    }
-
-    public async Task<decimal> GetProfitYTD()
-    {
-        var currentCost = 0m;
-        var totalCost = await GetTotalCost();
-        var dividends = await GetDividends();
-
-        return totalCost - totalCost + dividends;
-    }
-
-    public async Task<decimal> GetPortfolioProfitYTD(int id)
-    {
-        var currentCost = 0m;
-        var totalCost = await GetPortfolioTotalCost(id);
-        var dividends = await GetPortfolioDividends(id);
-
-        return totalCost - totalCost + dividends;
+        return total;
     }
 }

@@ -11,12 +11,14 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
 
-    <b:Interaction.Behaviors>
+    <!--<b:Interaction.Behaviors>
         <behaviors:LoadBehavior/>
-    </b:Interaction.Behaviors>
+    </b:Interaction.Behaviors>-->
 
     <UserControl.Resources>
         <ResourceDictionary>
+            <converters:TransactionEventsToStringConverter x:Key="TransactionEventsToStringConv"/>
+            
             <Style x:Key="PortfolioCard" TargetType="{x:Type Button}">
                 <Setter Property="Template">
                     <Setter.Value>
@@ -60,33 +62,29 @@
                              DataContext="{Binding ContentHeaderVm}" 
                              Style="{StaticResource ContentHeaderStyle}"/>
         <Border Grid.Row="1"
-                Background="{StaticResource BackgroundSecondary}"
+                Background="Transparent"
                 Margin="0 0 0 24"
                 Padding="20"
                 CornerRadius="16"
                 BorderThickness="1"
                 BorderBrush="#E9EDF2">
-            <ItemsControl ItemsSource="{Binding PortfolioStats}">
-                <ItemsControl.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <StackPanel Orientation="Horizontal"/>
-                    </ItemsPanelTemplate>
-                </ItemsControl.ItemsPanel>
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate DataType="{x:Type wrappers:StatWrapper}">
-                        <StackPanel Orientation="Vertical"
-                                    Margin="16 0">
-                            <TextBlock Text="{Binding Title}" 
-                                       FontSize="12"
-                                       Foreground="#5A6E8A"/>
-                            <TextBlock Text="{Binding ValueDisplay}"
-                                       FontSize="28"
-                                       FontWeight="Bold"
-                                       Foreground="{Binding ValueDisplay, Converter={x:Static converters:ValueDisplayToForegroundConverter.Instance}, ConverterParameter=#002855}"/>
-                        </StackPanel>
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-            </ItemsControl>
+            <Grid>
+                <ItemsControl ItemsSource="{Binding MetricCards}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <UniformGrid Columns="{Binding Items.Count, 
+                                            RelativeSource={RelativeSource AncestorType=ItemsControl}}" 
+                                         Rows="1"
+                                         HorizontalAlignment="Stretch"/>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <local:MetricCard/>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </Grid>
         </Border>
         <TabControl Grid.Row="2">
             <TabItem Header="{Binding SecuritiesHeader, FallbackValue='Активы'}">
@@ -125,7 +123,7 @@
                     <DataGrid.Columns>
                         <DataGridTextColumn Header="Дата" Binding="{Binding Date, StringFormat=dd.MM.yyyy HH:mm:ss}"/>
                         <DataGridTextColumn Header="Актив" Binding="{Binding SecId}"/>
-                        <DataGridTextColumn Header="Тип" Binding="{Binding OperationType}"/>
+                        <DataGridTextColumn Header="Тип" Binding="{Binding OperationType, Converter={StaticResource TransactionEventsToStringConv}}"/>
                         <DataGridTextColumn Header="Количество" Binding="{Binding  Count, StringFormat=F2}"/>
                         <DataGridTextColumn Header="Цена" Binding="{Binding Price, StringFormat='F2'}"/>
                         <DataGridTextColumn Header="Комментарий" Binding="{Binding Description}"/>
