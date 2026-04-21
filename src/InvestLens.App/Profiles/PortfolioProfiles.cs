@@ -19,6 +19,7 @@ public class PortfolioProfiles : Profile
             .ForMember(dest => dest.OperationType, opt => opt.MapFrom(src => src.Event))
             .ForMember(dest => dest.Count, opt => opt.MapFrom(src => src.Quantity))
             .ForMember(dest => dest.Price, opt => opt.MapFrom(src => src.Price))
+            .ForMember(dest => dest.TotalPrice, opt => opt.MapFrom(src => src.Price * src.Quantity + src.FeeTax))
             .ForMember(dest => dest.Count, opt => opt.MapFrom(src => src.Quantity))
             .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.Note))
             ;

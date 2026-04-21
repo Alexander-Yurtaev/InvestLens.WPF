@@ -1,4 +1,5 @@
 ﻿using InvestLens.Model;
+using InvestLens.Model.Entities;
 
 namespace InvestLens.ViewModel.Services;
 
@@ -16,7 +17,8 @@ public class ActivityManager : IActivityManager
         var transactions = await _portfoliosManager.GetLastTtransactions(3);
 
         var result = transactions
-            .Select(t => new ActivityItem("🟢", t.Event.ToString(), t.Quantity.ToString(), t.Price.ToString(), t.Date.Date.ToString("dd-MM-yyyy")))
+                                       // icon,           title,                       description,                 amount,             date
+            .Select(t => new ActivityItem("🟢", $"{t.Event.ToString()} {t.Symbol}", GetDescription(t), GetTotalCost(t).ToString("C2"), t.Date.Date.ToString("dd-MM-yyyy")))
             .ToList();
 
         //var result = new List<ActivityItem>
@@ -27,5 +29,25 @@ public class ActivityManager : IActivityManager
         //};
 
         return result;
+    }
+
+    private string GetDescription(Transaction transaction)
+    {
+        if (transaction.Event == Model.Enums.TransactionEvents.Buy)
+        {
+            return $"+{transaction.Quantity.ToString("N2")} шт";
+        }
+
+        if (transaction.Event == Model.Enums.TransactionEvents.Sell)
+        {
+            return $"-{transaction.Quantity.ToString("N2")} шт";
+        }
+
+        return transaction.Portfolio?.Name ?? "-";
+    }
+
+    private decimal GetTotalCost(Transaction transaction)
+    {
+        return transaction.Price * transaction.Quantity + transaction.FeeTax;
     }
 }

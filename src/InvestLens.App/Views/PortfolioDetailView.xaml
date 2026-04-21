@@ -108,7 +108,7 @@
                             <DataGridTextColumn Header="Количество" Binding="{Binding Count}"/>
                             <DataGridTextColumn Header="Текущая цена" Binding="{Binding CurrentPrice, StringFormat='F2'}"/>
                             <DataGridTextColumn Header="Средняя цена" Binding="{Binding AveragePrice, StringFormat='F2'}"/>
-                            <DataGridTextColumn Header="Общая стоимость" Binding="{Binding TotalPrice, StringFormat='F2'}"/>
+                            <DataGridTextColumn Header="Общие затраты" Binding="{Binding TotalPrice, StringFormat='F2'}"/>
                             <DataGridTextColumn Header="Прибыль" Binding="{Binding ProfitDisplay}"/>
                             <DataGridTextColumn Header="Общие дивиденты" Binding="{Binding DividendCount, StringFormat='F2'}"/>
                         </DataGrid.Columns>
@@ -126,6 +126,7 @@
                         <DataGridTextColumn Header="Тип" Binding="{Binding OperationType, Converter={StaticResource TransactionEventsToStringConv}}"/>
                         <DataGridTextColumn Header="Количество" Binding="{Binding  Count, StringFormat=F2}"/>
                         <DataGridTextColumn Header="Цена" Binding="{Binding Price, StringFormat='F2'}"/>
+                        <DataGridTextColumn Header="Общие затраты" Binding="{Binding TotalPrice, StringFormat='F2'}"/>
                         <DataGridTextColumn Header="Комментарий" Binding="{Binding Description}"/>
                     </DataGrid.Columns>
                 </DataGrid>

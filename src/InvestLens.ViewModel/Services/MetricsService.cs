@@ -68,7 +68,7 @@ public class MetricsService : IMetricsService
 
         var result = new List<MetricCard>
         {
-            new MetricCard { Icon = "💸", Label = "Вложили", Value = totalCashIn.ToString("C2"), Change = "", IsPositive = true },
+            new MetricCard { Icon = "💸", Label = "Вложено", Value = totalCashIn.ToString("C2"), Change = "", IsPositive = true },
             new MetricCard { Icon = "💰", Label = "Стоимость", Value = currentCost.ToString("C2"), Change = "", IsPositive = true },
             new MetricCard { Icon = "💵", Label = "Дивиденды", Value = totalDividends.ToString("C2"), Change = "", IsPositive = false },
             new MetricCard { Icon = "📈", Label = "Относительная доходность", Value = totalProfit.ToString("P2"), Change = "", IsPositive = true }
@@ -87,7 +87,7 @@ public class MetricsService : IMetricsService
 
         var result = new List<MetricCard>
         {
-            new MetricCard { Icon = "💸", Label = "Вложили", Value = totalCashIn.ToString("C2"), Change = "", IsPositive = true },
+            new MetricCard { Icon = "💸", Label = "Вложено", Value = totalCashIn.ToString("C2"), Change = "", IsPositive = true },
             new MetricCard { Icon = "💰", Label = "Стоимость", Value = currentCost.ToString("C2"), Change = "", IsPositive = true },
             new MetricCard { Icon = "💵", Label = "Дивиденды", Value = totalDividends.ToString("C2"), Change = "", IsPositive = false },
             new MetricCard { Icon = "📈", Label = "Относительная доходность", Value = totalProfit.ToString("P2"), Change = "", IsPositive = true }
