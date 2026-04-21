@@ -21,7 +21,7 @@ public class MetricsService : IMetricsService
 
     public async Task<decimal> TotalCost()
     {
-        return await _repository.GetTotalCost();
+        return await _repository.GetTotalCostAsync();
     }
 
     public Task<decimal> PortfolioTotalCost(int id)
@@ -33,9 +33,9 @@ public class MetricsService : IMetricsService
 
     #region Yield - относительная доходность (%)
 
-    public Task<decimal> Yield()
+    public async Task<decimal> Yield()
     {
-        throw new NotImplementedException();
+        return await _repository.GetYield();
     }
 
     public Task<decimal> PortfolioYield(int id)
@@ -76,7 +76,7 @@ public class MetricsService : IMetricsService
     public async Task<List<MetricCard>> GetMetricCards()
     {
         var totalCost = await TotalCost();
-        var profit = 0m;
+        var TotalYield = await Yield();
         var dividend = 0m;
         var risk = 0m;
 
@@ -90,7 +90,7 @@ public class MetricsService : IMetricsService
         var result = new List<MetricCard>
         {
             new MetricCard { Icon = "💰", Label = "Сколько вложили", Value = totalCost.ToString("C2"), Change = "", IsPositive = true },
-            new MetricCard { Icon = "📈", Label = "Относительная доходность", Value = profit.ToString("P"), Change = "", IsPositive = true },
+            new MetricCard { Icon = "📈", Label = "Относительная доходность", Value = Yield.ToString("P"), Change = "", IsPositive = true },
             new MetricCard { Icon = "💸", Label = "Дивиденды", Value = dividend.ToString(), Change = "", IsPositive = false },
             new MetricCard { Icon = "⚠️", Label = "Абсолютный финансовый результат", Value = risk.ToString(), Change = "", IsPositive = true }
         };

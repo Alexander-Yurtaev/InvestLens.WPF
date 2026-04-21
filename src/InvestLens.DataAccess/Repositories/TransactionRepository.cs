@@ -23,4 +23,9 @@ public class TransactionRepository : BaseRepository, ITransactionRepository
 
         return totalCost;
     }
+
+    public async Task<decimal> GetYield()
+    {
+        return await Task.FromResult(0m);
+    }
 }
