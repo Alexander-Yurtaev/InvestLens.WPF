@@ -41,6 +41,7 @@ public class DashboardViewModel : ViewModelBaseWithContentHeader, IDashboardView
     public async Task Load(bool? force = false)
     {
         OnPortfoliosLoaded();
+        await Task.Delay(0);
     }
 
     private async void OnPortfoliosLoaded()
