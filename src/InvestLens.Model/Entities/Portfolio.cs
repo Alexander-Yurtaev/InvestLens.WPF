@@ -30,5 +30,5 @@ public class Portfolio : BaseEntity
     public required int OwnerId { get; set; }
     public virtual User? Owner { get; set; }
 
-    public virtual List<Transaction> Transactions { get; set; }
+    public virtual List<Transaction> Transactions { get; set; } = [];
 }
