@@ -61,9 +61,9 @@ public class MetricsService : IMetricsService
 
     #region YTD - абсолютный финансовый результат (₽/$/€)
 
-    public Task<decimal> ProfitYTD()
+    public async Task<decimal> ProfitYTD()
     {
-        throw new NotImplementedException();
+        return await _repository.GetProfitYTD();
     }
 
     public Task<decimal> PortfolioProfitYTD(int id)
@@ -78,21 +78,14 @@ public class MetricsService : IMetricsService
         var totalCost = await TotalCost();
         var TotalYield = await Yield();
         var totalDividend = await Dividends();
-        var risk = 0m;
-
-        var portfolios = _portfoliosManager.GetAllPortfolios(PortfolioType.Invest);
-        foreach (var portfolio in portfolios)
-        {
-            var detailes = await _portfoliosManager.GetPortfolioDetiails(portfolio.Id);
-            totalDividend += detailes?.PortfolioStats.First(s => s.Title == Stat.DividendStat).Value ?? 0m;
-        }
+        var profitYTD = await ProfitYTD();
 
         var result = new List<MetricCard>
         {
             new MetricCard { Icon = "💰", Label = "Сколько вложили", Value = totalCost.ToString("C2"), Change = "", IsPositive = true },
-            new MetricCard { Icon = "📈", Label = "Относительная доходность", Value = TotalYield.ToString("P"), Change = "", IsPositive = true },
-            new MetricCard { Icon = "💸", Label = "Дивиденды", Value = totalDividend.ToString(), Change = "", IsPositive = false },
-            new MetricCard { Icon = "⚠️", Label = "Абсолютный финансовый результат", Value = risk.ToString(), Change = "", IsPositive = true }
+            new MetricCard { Icon = "📈", Label = "Относительная доходность", Value = TotalYield.ToString("P2"), Change = "", IsPositive = true },
+            new MetricCard { Icon = "💸", Label = "Дивиденды", Value = totalDividend.ToString("C2"), Change = "", IsPositive = false },
+            new MetricCard { Icon = "🎯", Label = "Абсолютный финансовый результат", Value = profitYTD.ToString("C2"), Change = "", IsPositive = true }
         };
 
         return result;

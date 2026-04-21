@@ -37,4 +37,13 @@ public class TransactionRepository : BaseRepository, ITransactionRepository
     {
         return await Task.FromResult(0m);
     }
+
+    public async Task<decimal> GetProfitYTD()
+    {
+        var currentCost = 0m;
+        var totalCost = await GetTotalCost();
+        var dividends = await GetDividends();
+
+        return totalCost - totalCost + dividends;
+    }
 }
