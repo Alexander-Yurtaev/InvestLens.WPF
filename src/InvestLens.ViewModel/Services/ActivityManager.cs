@@ -1,5 +1,6 @@
 ﻿using InvestLens.Model;
 using InvestLens.Model.Entities;
+using InvestLens.Model.Helpers;
 
 namespace InvestLens.ViewModel.Services;
 
@@ -17,8 +18,7 @@ public class ActivityManager : IActivityManager
         var transactions = await _portfoliosManager.GetLastTtransactions(3);
 
         var result = transactions
-            // icon,           title,                       description,                 amount,             date
-            .Select(t => new ActivityItem("🟢", $"{t.Event.ToString()} {t.Symbol}", GetDescription(t), GetTotalCost(t).ToString("C2"), t.Date.Date.ToString("dd-MM-yyyy")))
+            .Select(t => new ActivityItem("🟢", t))
             .ToList();
 
         //var result = new List<ActivityItem>
@@ -29,46 +29,5 @@ public class ActivityManager : IActivityManager
         //};
 
         return result;
-    }
-
-    private string GetDescription(Transaction transaction)
-    {
-        if (transaction.Event == Model.Enums.TransactionEvent.Buy)
-        {
-            return $"+{transaction.Quantity.ToString("N2")} шт";
-        }
-
-        if (transaction.Event == Model.Enums.TransactionEvent.Sell)
-        {
-            return $"-{transaction.Quantity.ToString("N2")} шт";
-        }
-
-        return transaction.Portfolio?.Name ?? "-";
-    }
-
-    private decimal GetTotalCost(Transaction transaction)
-    {
-        var totalCost = transaction.FeeTax;
-
-        if (transaction.Event == Model.Enums.TransactionEvent.Buy ||
-            transaction.Event == Model.Enums.TransactionEvent.Sell)
-        {
-            totalCost += transaction.Price * transaction.Quantity;
-        }
-        else if (transaction.Event == Model.Enums.TransactionEvent.Dividend)
-        {
-            totalCost += transaction.Quantity;
-        }
-        else if (transaction.Event == Model.Enums.TransactionEvent.Amortisation ||
-                 transaction.Event == Model.Enums.TransactionEvent.Repayment)
-        {
-            totalCost += transaction.Quantity;
-        }
-        else if (transaction.Event == Model.Enums.TransactionEvent.Cash_Convert)
-        {
-            totalCost += transaction.Quantity;
-        }
-
-        return totalCost;
     }
 }
