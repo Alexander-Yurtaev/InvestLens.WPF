@@ -13,26 +13,12 @@
     <PackageReference Include="AutoMapper" Version="16.1.1" />
     <PackageReference Include="AutoMapper.Contrib.Autofac.DependencyInjection" Version="10.0.0" />
     <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.142" />
+    <PackageReference Include="OxyPlot.Wpf" Version="2.2.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\InvestLens.DataAccess\InvestLens.DataAccess.csproj" />
     <ProjectReference Include="..\InvestLens.ViewModel\InvestLens.ViewModel.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Compile Update="Windows\Dialogs\PortfolioImportDialog.xaml.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="Windows\Dialogs\ModalDialog.xaml.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="Windows\UpdatePortfolioWindow.xaml.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="Windows\LoginWindow.xaml.cs">
-      <SubType>Code</SubType>
-    </Compile>
   </ItemGroup>
 
 </Project>

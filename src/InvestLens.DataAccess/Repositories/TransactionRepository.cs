@@ -120,7 +120,7 @@ public class TransactionRepository : BaseRepository, ITransactionRepository
         var result = new Dictionary<DateTime, decimal>();
         var startDate = DataContext.Transactions.Min(t => t.Date);
         
-        foreach (var item in GetDynamicMetricsKey(startDate, period))
+        foreach (var item in GetDynamicMetrics(startDate, period))
         {
             var total = await DataContext.Transactions
                 .Where(t => t.Event == Model.Enums.TransactionEvent.Cash_In &&
@@ -139,31 +139,31 @@ public class TransactionRepository : BaseRepository, ITransactionRepository
         return await Task.FromResult(result);
     }
 
-    private Dictionary<DateTime, decimal> GetDynamicMetricsKey(
+    private Dictionary<DateTime, decimal> GetDynamicMetrics(
         DateTime startDate, 
         PortfolioDynamicPeriod period)
     {
         return period switch
         {
-            PortfolioDynamicPeriod.Period1M => GetDateRange(startDate, 1),
-            PortfolioDynamicPeriod.Period3M => GetDateRange(startDate, 3),
-            PortfolioDynamicPeriod.Period6M => GetDateRange(startDate, 6),
-            PortfolioDynamicPeriod.Period1Y => GetDateRange(startDate, 12),
+            PortfolioDynamicPeriod.Period1M => GetDateRange(startDate, period),
+            PortfolioDynamicPeriod.Period3M => GetDateRange(startDate, period),
+            PortfolioDynamicPeriod.Period6M => GetDateRange(startDate, period),
+            PortfolioDynamicPeriod.Period1Y => GetDateRange(startDate, period),
             _ => throw new NotImplementedException()
         };
     }
 
-    private Dictionary<DateTime, decimal> GetDateRange(DateTime startDate, int stepMonth)
+    private Dictionary<DateTime, decimal> GetDateRange(DateTime startDate, PortfolioDynamicPeriod period)
     {
         var result = new Dictionary<DateTime, decimal>();
 
-        startDate = GetFirstDate(startDate, PortfolioDynamicPeriod.Period1M);
-        var lastDate = GetLastDate(DateTime.Now, PortfolioDynamicPeriod.Period1M);
+        startDate = GetFirstDate(startDate, period);
+        var lastDate = GetLastDate(DateTime.Now, period);
         var cursorDate = startDate;
         while(cursorDate <= lastDate)
         {
             result.Add(cursorDate, 0);
-            cursorDate = cursorDate.AddMonths(stepMonth);
+            cursorDate = cursorDate.AddMonths((int)period);
         }
 
         return result;
@@ -179,6 +179,8 @@ public class TransactionRepository : BaseRepository, ITransactionRepository
         switch (period)
         {
             case PortfolioDynamicPeriod.Period1M:
+            case PortfolioDynamicPeriod.Period3M:
+            case PortfolioDynamicPeriod.Period6M:
                 var daysInMonth = DateTime.DaysInMonth(date.Year, date.Month);
                 return new DateTime(date.Year, date.Month, daysInMonth);
             case PortfolioDynamicPeriod.Period1Y:

@@ -13,14 +13,14 @@ public class DashboardViewModel : ViewModelBaseWithContentHeader, IDashboardView
     private readonly IWindowManager _windowManager;
     private readonly IMetricsService _metricsManager;
     private readonly IActivityManager _activityManager;
-    private IPortfolioDynamicsService _portfolioDynamicsService;
+    private IPortfolioDynamicsViewModel _portfolioDynamicsService;
 
     public DashboardViewModel(
         IAuthManager authManager,
         IWindowManager windowManager,
         IMetricsService metricsManager,
         IActivityManager activityManager,
-        IPortfolioDynamicsService portfolioDynamicsService,
+        IPortfolioDynamicsViewModel portfolioDynamicsViewModel,
         IEventAggregator eventAggregator) : base($"Добро пожаловать, Гость",
         "Вот что происходит с вашими инвестициями сегодня")
     {
@@ -29,12 +29,12 @@ public class DashboardViewModel : ViewModelBaseWithContentHeader, IDashboardView
         _windowManager = windowManager;
         _metricsManager = metricsManager;
         _activityManager = activityManager;
-        PortfolioDynamicsService = portfolioDynamicsService;
+        PortfolioDynamicsViewModel = portfolioDynamicsViewModel;
         MetricCards = [];
         ActivityItems = [];
     }
 
-    public IPortfolioDynamicsService PortfolioDynamicsService 
+    public IPortfolioDynamicsViewModel PortfolioDynamicsViewModel 
     { 
         get => _portfolioDynamicsService; 
         set => SetProperty(ref _portfolioDynamicsService, value); 

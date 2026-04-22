@@ -7,7 +7,7 @@
              xmlns:pages="clr-namespace:InvestLens.ViewModel.Pages;assembly=InvestLens.ViewModel"
              xmlns:model="clr-namespace:InvestLens.Model;assembly=InvestLens.Model"
              xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
-             xmlns:behaviors="clr-namespace:InvestLens.App.Behaviors"
+             xmlns:behaviors="clr-namespace:InvestLens.App.Behaviors" xmlns:oxy="http://oxyplot.org/wpf"
              mc:Ignorable="d" 
              d:DataContext="{d:DesignInstance pages:DashboardViewModel, IsDesignTimeCreatable=True}"
              d:DesignHeight="450" d:DesignWidth="800">
@@ -189,35 +189,26 @@
                         <RadioButton Grid.Column="2" 
                                      GroupName="PeriodSelector" 
                                      Content="1М" 
-                                     IsChecked="{Binding PortfolioDynamicsService.Period1M}"
+                                     IsChecked="{Binding PortfolioDynamicsViewModel.Period1M}"
                                      Style="{StaticResource PeriodSelectorStyle}"/>
                         <RadioButton Grid.Column="3" 
                                      GroupName="PeriodSelector" 
                                      Content="3М" 
-                                     IsChecked="{Binding PortfolioDynamicsService.Period3M}"
+                                     IsChecked="{Binding PortfolioDynamicsViewModel.Period3M}"
                                      Style="{StaticResource PeriodSelectorStyle}"/>
                         <RadioButton Grid.Column="4" 
                                      GroupName="PeriodSelector" 
                                      Content="6М" 
-                                     IsChecked="{Binding PortfolioDynamicsService.Period6M}"
+                                     IsChecked="{Binding PortfolioDynamicsViewModel.Period6M}"
                                      Style="{StaticResource PeriodSelectorStyle}"/>
                         <RadioButton Grid.Column="5" 
                                      GroupName="PeriodSelector" 
                                      Content="1Г" 
-                                     IsChecked="{Binding PortfolioDynamicsService.Period1Y}"
+                                     IsChecked="{Binding PortfolioDynamicsViewModel.Period1Y}"
                                      Style="{StaticResource PeriodSelectorStyle}"/>
                     </Grid>
                     <Border Grid.Row="1" Style="{StaticResource ChartPlaceholderStyle}">
-                        <Viewbox>
-                            <Grid>
-                                <Polyline Points="0,150 50,120 100,140 150,80 200,90 250,40 300,60 350,30 400,50 450,70 500,45 550,60 600,40" 
-                                          Fill="Transparent" 
-                                          Stroke="{StaticResource BrandRed}" 
-                                          StrokeThickness="2"/>
-                                <Polygon Points="0,150 50,120 100,140 150,80 200,90 250,40 300,60 350,30 400,50 450,70 500,45 550,60 600,40 600,180 0,180" 
-                                         Fill="#1AC8102E"/>
-                            </Grid>
-                        </Viewbox>
+                        <oxy:PlotView Model="{Binding PortfolioDynamicsViewModel.ChartModel}"/>
                     </Border>
                 </Grid>
             </Border>

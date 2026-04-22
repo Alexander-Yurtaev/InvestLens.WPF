@@ -34,7 +34,6 @@ namespace InvestLens.App.Startup
             builder.RegisterType<NotificationsManager>().As<INotificationsManager>().SingleInstance();
             builder.RegisterType<MetricsService>().As<IMetricsService>().SingleInstance();
             builder.RegisterType<ActivityManager>().As<IActivityManager>().SingleInstance();
-            builder.RegisterType<PortfolioDynamicsViewModel>().As<IPortfolioDynamicsService>().SingleInstance();
             builder.RegisterType<PortfoliosManager>().As<IPortfoliosManager>().SingleInstance();
             builder.RegisterType<DictionariesMoexManager>().As<IDictionariesMoexManager>().SingleInstance();
             builder.RegisterType<DictionariesManager>().As<IDictionariesManager>().SingleInstance();
@@ -87,6 +86,7 @@ namespace InvestLens.App.Startup
 
             builder.RegisterType<NavigationViewModel>().As<INavigationViewModel>();
             builder.RegisterType<HeaderViewModel>().As<IHeaderViewModel>();
+            builder.RegisterType<PortfolioDynamicsViewModel>().As<IPortfolioDynamicsViewModel>();
 
             //Pages
             builder.RegisterType<DashboardViewModel>().As<IDashboardViewModel>();

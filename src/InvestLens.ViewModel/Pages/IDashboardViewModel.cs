@@ -6,7 +6,7 @@ namespace InvestLens.ViewModel.Pages;
 
 public interface IDashboardViewModel : IViewModelBaseWithContentHeader, ILoadableViewModel
 {
-    IPortfolioDynamicsService PortfolioDynamicsService { get; }
+    IPortfolioDynamicsViewModel PortfolioDynamicsViewModel { get; }
     ObservableCollection<MetricCard> MetricCards { get; }
     ObservableCollection<ActivityItem> ActivityItems { get; }
 }

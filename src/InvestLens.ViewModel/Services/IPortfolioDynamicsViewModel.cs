@@ -1,6 +1,6 @@
 ﻿namespace InvestLens.ViewModel.Services;
 
-public interface IPortfolioDynamicsService
+public interface IPortfolioDynamicsViewModel
 {
     bool Period1M { get; set; }
     bool Period3M { get; set; }
