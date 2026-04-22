@@ -25,11 +25,11 @@
                 <Setter Property="Margin" Value="0 0 0 32"/>
             </Style>
             <Style x:Key="CardStyle" TargetType="{x:Type Border}">
-                <Setter Property="Background" Value="{StaticResource BackgroundSecondary}"/>
+                <Setter Property="Background" Value="{StaticResource BackgroundSecondaryBrush}"/>
                 <Setter Property="CornerRadius" Value="20"/>
                 <Setter Property="Padding" Value="20"/>
                 <Setter Property="BorderThickness" Value="1"/>
-                <Setter Property="BorderBrush" Value="#E9EDF2"/>
+                <Setter Property="BorderBrush" Value="{StaticResource BorderBrush}"/>
                 <Setter Property="Effect">
                     <Setter.Value>
                         <DropShadowEffect ShadowDepth="2" 
@@ -42,12 +42,12 @@
             <Style x:Key="CardHeaderStyle" TargetType="{x:Type TextBlock}">
                 <Setter Property="FontSize" Value="16"/>
                 <Setter Property="FontWeight" Value="SemiBold"/>
-                <Setter Property="Foreground" Value="{StaticResource BrandBlue}"/>
+                <Setter Property="Foreground" Value="{StaticResource BrandBlueBrush}"/>
             </Style>
             <!--PeriodSelector-->
             <Style x:Key="PeriodSelectorStyle" TargetType="{x:Type RadioButton}">
                 <Setter Property="FontSize" Value="12"/>
-                <Setter Property="Foreground" Value="#5A6E8A"/>
+                <Setter Property="Foreground" Value="{StaticResource ForegroundBrush}"/>
                 <Setter Property="Background" Value="Transparent"/>
                 <Setter Property="Template">
                     <Setter.Value>
@@ -65,8 +65,8 @@
                 </Setter>
                 <Style.Triggers>
                     <Trigger Property="IsChecked" Value="True">
-                        <Setter Property="Background" Value="{StaticResource BrandRed}"/>
-                        <Setter Property="Foreground" Value="{StaticResource BackgroundSecondary}"/>
+                        <Setter Property="Background" Value="{StaticResource BrandRedBrush}"/>
+                        <Setter Property="Foreground" Value="{StaticResource BackgroundSecondaryBrush}"/>
                     </Trigger>
                 </Style.Triggers>
             </Style>
@@ -86,7 +86,7 @@
                 <Setter Property="Margin" Value="0 12 0 0"/>
                 <Setter Property="Padding" Value="0 0 0 12"/>
                 <Setter Property="BorderThickness" Value="0 0 0 1"/>
-                <Setter Property="BorderBrush" Value="#E9EDF2"/>
+                <Setter Property="BorderBrush" Value="{StaticResource BorderBrush}"/>
             </Style>
             <Style x:Key="ActivityIcon" TargetType="{x:Type TextBlock}">
                 <Setter Property="Width" Value="32"/>

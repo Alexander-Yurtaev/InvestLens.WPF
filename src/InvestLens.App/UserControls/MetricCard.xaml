@@ -10,12 +10,12 @@
     <UserControl.Resources>
         <ResourceDictionary>
             <Style x:Key="MetricCardStyle" TargetType="Border">
-                <Setter Property="Background" Value="{StaticResource BackgroundSecondary}"/>
+                <Setter Property="Background" Value="{StaticResource BackgroundSecondaryBrush}"/>
                 <Setter Property="CornerRadius" Value="20"/>
                 <Setter Property="Padding" Value="20"/>
                 <Setter Property="Margin" Value="0 0 20 0"/>
                 <Setter Property="BorderThickness" Value="1"/>
-                <Setter Property="BorderBrush" Value="#E9EDF2"/>
+                <Setter Property="BorderBrush" Value="{StaticResource BorderBrush}"/>
             </Style>
             <!--Metric Icon-->
             <Style x:Key="MetricIconBorderStyle" TargetType="Border">
@@ -23,7 +23,7 @@
                 <Setter Property="Height" Value="48"/>
                 <Setter Property="Margin" Value="0 0 16 0"/>
                 <Setter Property="CornerRadius" Value="16"/>
-                <Setter Property="Background" Value="{StaticResource BackgroundPrimary}"/>
+                <Setter Property="Background" Value="{StaticResource BackgroundPrimaryBrush}"/>
             </Style>
             <Style x:Key="MetricIconTextBlockStyle" TargetType="TextBlock">
                 <Setter Property="FontSize" Value="24"/>
@@ -33,20 +33,20 @@
             <!--Metric Info-->
             <Style x:Key="MetricLabelTextBlockStyle" TargetType="TextBlock">
                 <Setter Property="FontSize" Value="13"/>
-                <Setter Property="Foreground" Value="#5A6E8A"/>
+                <Setter Property="Foreground" Value="{StaticResource ForegroundBrush}"/>
                 <Setter Property="Margin" Value="0 0 0 6"/>
             </Style>
             <Style x:Key="MetricValueTextBlockStyle" TargetType="TextBlock">
                 <Setter Property="FontSize" Value="24"/>
                 <Setter Property="FontWeight" Value="Bold"/>
-                <Setter Property="Foreground" Value="{StaticResource BrandBlue}"/>
+                <Setter Property="Foreground" Value="{StaticResource BrandBlueBrush}"/>
             </Style>
             <Style x:Key="MetricChangeTextBlockStyle" TargetType="TextBlock">
                 <Setter Property="FontSize" Value="12"/>
                 <Setter Property="Margin" Value="0 6 0 0"/>
                 <Style.Triggers>
                     <DataTrigger Binding="{Binding IsPositive}" Value="True">
-                        <Setter Property="Foreground" Value="{StaticResource BrandGreen}"/>
+                        <Setter Property="Foreground" Value="{StaticResource BrandGreenBrush}"/>
                     </DataTrigger>
                 </Style.Triggers>
             </Style>

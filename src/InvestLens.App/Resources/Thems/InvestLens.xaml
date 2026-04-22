@@ -1,17 +1,33 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
+    <!--Цвета-->
+    <Color x:Key="BrandBlueColor">#002855</Color>
+    <Color x:Key="BrandRedColor">#C8102E</Color>
+
+    <Color x:Key="BrandRed05Color">#0DC8102E</Color>
+    <Color x:Key="BrandRed10Color">#1AC8102E</Color>
+    <Color x:Key="BrandRed15Color">#26C8102E</Color>
+    <Color x:Key="BrandRed25Color">#40C8102E</Color>
+
+    <Color x:Key="SpinnerBackgroundColor">#33000000</Color>
+    
     <!--Основные цвета бренда-->
-    <SolidColorBrush x:Key="BrandBlue" Color="#002855"/>
-    <SolidColorBrush x:Key="BrandRed" Color="#C8102E"/>
-    <SolidColorBrush x:Key="BrandGreen" Color="#2C8C6E"/>
-    <SolidColorBrush x:Key="BrandGold" Color="#E6B84E"/>
+    <SolidColorBrush x:Key="BrandBlueBrush" Color="{StaticResource BrandBlueColor}"/>
+    <SolidColorBrush x:Key="BrandRedBrush" Color="{StaticResource BrandRedColor}"/>
+    <SolidColorBrush x:Key="BrandRed05Brush" Color="{StaticResource BrandRed05Color}"/>
+    <SolidColorBrush x:Key="BrandGreenBrush" Color="#2C8C6E"/>
+    <SolidColorBrush x:Key="BrandGoldBrush" Color="#E6B84E"/>
 
     <!--Фоновые цвета-->
-    <SolidColorBrush x:Key="BackgroundPrimary" Color="#F8FAFE"/>
-    <SolidColorBrush x:Key="BackgroundSecondary" Color="#FFFFFF"/>
+    <SolidColorBrush x:Key="BackgroundPrimaryBrush" Color="#F8FAFE"/>
+    <SolidColorBrush x:Key="BackgroundSecondaryBrush" Color="#FFFFFF"/>
 
-    <SolidColorBrush x:Key="BackgroundHover" Color="#1AC8102E"/>
+    <SolidColorBrush x:Key="BackgroundHoverBrush" Color="#1AC8102E"/>
     <SolidColorBrush x:Key="BorderBrush" Color="#E9EDF2"/>
+    <SolidColorBrush x:Key="ForegroundBrush" Color="#5A6E8A"/>
 
+    <!--Busy Indicator-->
+    <SolidColorBrush x:Key="SpinnerBorderBrush" Color="#C8102E"/>
+    <SolidColorBrush x:Key="SpinnerBackgroundBrush" Color="{StaticResource SpinnerBackgroundColor}"/>
 </ResourceDictionary>

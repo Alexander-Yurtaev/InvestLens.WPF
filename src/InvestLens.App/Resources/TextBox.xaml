@@ -4,9 +4,9 @@
     <Style TargetType="TextBox">
         <Setter Property="Padding" Value="16 12"/>
         <Setter Property="BorderThickness" Value="1"/>
-        <Setter Property="BorderBrush" Value="#E9EDF2"/>
+        <Setter Property="BorderBrush" Value="{StaticResource BorderBrush}"/>
         <Setter Property="FontSize" Value="14"/>
-        <Setter Property="Background" Value="{StaticResource BackgroundPrimary}"/>
+        <Setter Property="Background" Value="{StaticResource BackgroundPrimaryBrush}"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="TextBox">
@@ -27,7 +27,7 @@
                     <StackPanel>
                         <AdornedElementPlaceholder x:Name="placeholder"/>
                         <TextBlock Text="{Binding ElementName=placeholder, Path=AdornedElement.(Validation.Errors)[0].ErrorContent}"
-                                   Foreground="{StaticResource BrandRed}"/>
+                                   Foreground="{StaticResource BrandRedBrush}"/>
                     </StackPanel>
                 </ControlTemplate>
             </Setter.Value>

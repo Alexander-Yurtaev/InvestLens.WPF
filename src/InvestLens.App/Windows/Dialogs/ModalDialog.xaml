@@ -60,7 +60,7 @@
             <Border Grid.Row="2"
                     Padding="28 16 28 24"
                     BorderThickness="0 1 0 0"
-                    BorderBrush="#E9EDF2">
+                    BorderBrush="{StaticResource BorderBrush}">
                 <StackPanel Orientation="Horizontal"
                             HorizontalAlignment="Right">
                     <Button Content="Отмена"

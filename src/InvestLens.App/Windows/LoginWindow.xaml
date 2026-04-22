@@ -114,7 +114,7 @@
                     <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center">
                         <TextBlock Text="Нет аккаунта?"
                                    FontSize="14"
-                                   Foreground="#5A6E8A"
+                                   Foreground="{StaticResource ForegroundBrush}"
                                    Margin="0 0 4 0"/>
                         <Button Content="Зарегистрироваться" 
                                 FontWeight="Medium"

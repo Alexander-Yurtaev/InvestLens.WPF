@@ -13,8 +13,8 @@
              d:DesignHeight="450" d:DesignWidth="320">
 
     <UserControl.Resources>
-        <SolidColorBrush x:Key="IsMouseOverBackgroundBrush" Color="#26C8102E"/>
-        <SolidColorBrush x:Key="IsCheckedBackgroundBrush" Color="#40C8102E"/>
+        <SolidColorBrush x:Key="IsMouseOverBackgroundBrush" Color="{StaticResource BrandRed15Color}"/>
+        <SolidColorBrush x:Key="IsCheckedBackgroundBrush" Color="{StaticResource BrandRed25Color}"/>
         <SolidColorBrush x:Key="GlyphBrush" Color="#CDD9F0" />
         <Style x:Key="ExpandCollapseToggleStyle" TargetType="{x:Type ToggleButton}">
             <Setter Property="Focusable" Value="False"/>
@@ -115,7 +115,7 @@
                     <Setter Property="Background" Value="{StaticResource IsMouseOverBackgroundBrush}"/>
                 </Trigger>
                 <!--<Trigger Property="IsChecked" Value="True">
-                    <Setter Property="Background" Value="#40C8102E"/>
+                    <Setter Property="Background" Value="{StaticResource BrandRed25Color}"/>
                 </Trigger>-->
             </Style.Triggers>
         </Style>
@@ -128,7 +128,7 @@
                     HorizontalAlignment="Stretch"/>
         </DataTemplate>
         <DataTemplate DataType="{x:Type navigationTree:NavigationTreeItem}">
-            <ToggleButton Foreground="{StaticResource BackgroundSecondary}"
+            <ToggleButton Foreground="{StaticResource BackgroundSecondaryBrush}"
                           HorizontalContentAlignment="Left"
                           Cursor="Hand"
                           Width="200"
@@ -156,7 +156,7 @@
         </DataTemplate>
     </UserControl.Resources>
 
-    <Grid Background="{StaticResource BrandBlue}">
+    <Grid Background="{StaticResource BrandBlueBrush}">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition/>

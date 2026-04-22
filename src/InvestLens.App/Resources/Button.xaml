@@ -3,7 +3,7 @@
                     xmlns:local="clr-namespace:InvestLens.App.UserControls">
 
     <Style x:Key="LinkStyle" TargetType="{x:Type Button}">
-        <Setter Property="Foreground" Value="{StaticResource BrandRed}"/>
+        <Setter Property="Foreground" Value="{StaticResource BrandRedBrush}"/>
         <Setter Property="FontSize" Value="13"/>
         <Setter Property="Cursor" Value="Hand"/>
         <Setter Property="Template">
@@ -20,11 +20,11 @@
     <QuadraticEase x:Key="EaseOutQuad" EasingMode="EaseOut"/>
 
     <Style x:Key="CardBorderStyle" TargetType="{x:Type Border}">
-        <Setter Property="Background" Value="{StaticResource BackgroundSecondary}"/>
+        <Setter Property="Background" Value="{StaticResource BackgroundSecondaryBrush}"/>
         <Setter Property="CornerRadius" Value="20"/>
         <Setter Property="Padding" Value="20"/>
         <Setter Property="BorderThickness" Value="1"/>
-        <Setter Property="BorderBrush" Value="#E9EDF2"/>
+        <Setter Property="BorderBrush" Value="{StaticResource BorderBrush}"/>
 
         <!-- Начальное состояние: тень есть, но прозрачная -->
         <Setter Property="Effect">
@@ -46,7 +46,7 @@
 
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="BorderBrush" Value="{StaticResource BackgroundHover}"/>
+                <Setter Property="BorderBrush" Value="{StaticResource BackgroundHoverBrush}"/>
                 <Trigger.EnterActions>
                     <BeginStoryboard>
                         <Storyboard>
@@ -99,7 +99,7 @@
 
     <Style x:Key="PrimaryButtonStyle" TargetType="Button">
         <Setter Property="FontSize" Value="16"/>
-        <Setter Property="Background" Value="{StaticResource BrandRed}"/>
+        <Setter Property="Background" Value="{StaticResource BrandRedBrush}"/>
         <Setter Property="Foreground" Value="White"/>
         <Setter Property="BorderThickness" Value="0"/>
         <Setter Property="Margin" Value="6 0"/>
@@ -130,7 +130,7 @@
     </Style>
 
     <Style x:Key="SecondaryButtonStyle" TargetType="Button">
-        <Setter Property="Background" Value="{StaticResource BackgroundSecondary}"/>
+        <Setter Property="Background" Value="{StaticResource BackgroundSecondaryBrush}"/>
         <Setter Property="FontSize" Value="16"/>
         <Setter Property="Margin" Value="6 0"/>
         <Setter Property="Padding" Value="20 8"/>

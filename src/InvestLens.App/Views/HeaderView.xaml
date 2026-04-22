@@ -14,37 +14,37 @@
         <Style x:Key="HeaderContainerStyle" TargetType="Border">
             <Setter Property="Padding" Value="32, 20"/>
             <Setter Property="BorderThickness" Value="1"/>
-            <Setter Property="BorderBrush" Value="#E9EDF2"/>
-            <Setter Property="Background" Value="{StaticResource BackgroundSecondary}"/>
+            <Setter Property="BorderBrush" Value="{StaticResource BorderBrush}"/>
+            <Setter Property="Background" Value="{StaticResource BackgroundSecondaryBrush}"/>
             <Setter Property="VerticalAlignment" Value="Center"/>
         </Style>
         <!--PageInfo-->
         <Style x:Key="PageInfoTitleStyle" TargetType="TextBlock">
             <Setter Property="FontSize" Value="24"/>
             <Setter Property="FontWeight" Value="SemiBold"/>
-            <Setter Property="Foreground" Value="{StaticResource BrandBlue}"/>
+            <Setter Property="Foreground" Value="{StaticResource BrandBlueBrush}"/>
             <Setter Property="Margin" Value="0 0 0 4"/>
         </Style>
         <Style x:Key="PageInfoDescriptionStyle" TargetType="TextBlock">
             <Setter Property="FontSize" Value="13"/>
-            <Setter Property="Foreground" Value="#5A6E8A"/>
+            <Setter Property="Foreground" Value="{StaticResource ForegroundBrush}"/>
         </Style>
         <!--Notification Badge-->
         <Style x:Key="NotificationIconStyle" TargetType="TextBlock">
             <Setter Property="FontSize" Value="24"/>
-            <Setter Property="Foreground" Value="{StaticResource BrandGold}"/>
+            <Setter Property="Foreground" Value="{StaticResource BrandGoldBrush}"/>
             <Setter Property="Margin" Value="11 0"/>
         </Style>
         <Style x:Key="NotificationBadgeBorderStyle" TargetType="Border">
             <Setter Property="Margin" Value="0 -6 4 0"/>
-            <Setter Property="Background" Value="{StaticResource BrandRed}"/>
+            <Setter Property="Background" Value="{StaticResource BrandRedBrush}"/>
             <Setter Property="Padding" Value="6 2"/>
             <Setter Property="Width" Value="24"/>
             <Setter Property="Height" Value="24"/>
             <Setter Property="CornerRadius" Value="20"/>
         </Style>
         <Style x:Key="NotificationBadgeTextBlockStyle" TargetType="TextBlock">
-            <Setter Property="Foreground" Value="{StaticResource BackgroundSecondary}"/>
+            <Setter Property="Foreground" Value="{StaticResource BackgroundSecondaryBrush}"/>
             <Setter Property="FontSize" Value="14"/>
             <Setter Property="FontWeight" Value="Bold"/>
             <Setter Property="HorizontalAlignment" Value="Center"/>
@@ -56,14 +56,14 @@
             <Setter Property="Background">
                 <Setter.Value>
                     <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
-                        <GradientStop Color="#C8102E" Offset="0"/>
+                        <GradientStop Color="{StaticResource BrandRedColor}" Offset="0"/>
                         <GradientStop Color="#E64A2E" Offset="1"/>
                     </LinearGradientBrush>
                 </Setter.Value>
             </Setter>
             <Setter Property="CornerRadius" Value="100"/>
             <Setter Property="BorderThickness" Value="3"/>
-            <Setter Property="BorderBrush" Value="{StaticResource BrandRed}"/>
+            <Setter Property="BorderBrush" Value="{StaticResource BrandRedBrush}"/>
         </Style>
         <Style x:Key="AvatarTextBlockStyle" TargetType="TextBlock">
             <Setter Property="FontSize" Value="16"/>

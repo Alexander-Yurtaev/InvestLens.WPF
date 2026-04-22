@@ -15,7 +15,7 @@
         <Setter Property="Background">
             <Setter.Value>
                 <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
-                    <GradientStop Color="#002855" Offset="0"/>
+                    <GradientStop Color="{StaticResource BrandBlueColor}" Offset="0"/>
                     <GradientStop Color="#003D7A" Offset="1"/>
                 </LinearGradientBrush>
             </Setter.Value>
@@ -25,7 +25,7 @@
            TargetType="Border">
         <Setter Property="CornerRadius" Value="0 32 32 0"/>
         <Setter Property="Padding" Value="48"/>
-        <Setter Property="Background" Value="{StaticResource BackgroundSecondary}"/>
+        <Setter Property="Background" Value="{StaticResource BackgroundSecondaryBrush}"/>
     </Style>
     <Style x:Key="H1Style" 
            TargetType="TextBlock">
@@ -35,25 +35,25 @@
     </Style>
     <Style x:Key="H2BlaskStyle" 
            TargetType="TextBlock">
-        <Setter Property="Foreground" Value="{StaticResource BackgroundSecondary}"/>
+        <Setter Property="Foreground" Value="{StaticResource BackgroundSecondaryBrush}"/>
         <Setter Property="FontSize" Value="28"/>
         <Setter Property="FontWeight" Value="Medium"/>
     </Style>
     <Style x:Key="H2WhiteStyle" 
            TargetType="TextBlock">
-        <Setter Property="Foreground" Value="{StaticResource BrandBlue}"/>
+        <Setter Property="Foreground" Value="{StaticResource BrandBlueBrush}"/>
         <Setter Property="FontSize" Value="28"/>
         <Setter Property="FontWeight" Value="Medium"/>
     </Style>
     <Style x:Key="PBlackStyle" 
            TargetType="TextBlock">
-        <Setter Property="Foreground" Value="{StaticResource BackgroundSecondary}"/>
+        <Setter Property="Foreground" Value="{StaticResource BackgroundSecondaryBrush}"/>
         <Setter Property="Opacity" Value="0.8"/>
         <Setter Property="FontSize" Value="15"/>
     </Style>
     <Style x:Key="PWhiteStyle" 
            TargetType="TextBlock">
-        <Setter Property="Foreground" Value="#5A6E8A"/>
+        <Setter Property="Foreground" Value="{StaticResource ForegroundBrush}"/>
         <Setter Property="FontSize" Value="14"/>
     </Style>
 </ResourceDictionary>

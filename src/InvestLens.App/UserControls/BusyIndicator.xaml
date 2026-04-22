@@ -30,7 +30,7 @@
                                 BlurRadius="40" 
                                 ShadowDepth="20"
                                 Opacity="1"
-                                Color="#33000000"/>
+                                Color="{StaticResource SpinnerBackgroundColor}"/>
                 </Setter.Value>
             </Setter>
         </Style>
@@ -41,14 +41,14 @@
             <Setter Property="Margin" Value="0 0 0 20"/>
             <Setter Property="HorizontalAlignment" Value="Center"/>
             <Setter Property="BorderThickness" Value="3"/>
-            <Setter Property="BorderBrush" Value="#E9EDF2"/>
+            <Setter Property="BorderBrush" Value="{StaticResource BorderBrush}"/>
             <Setter Property="CornerRadius" Value="24"/>
         </Style>
         <Style x:Key="LoaderTextStyle"
                TargetType="{x:Type Label}">
             <Setter Property="HorizontalContentAlignment" Value="Center"/>
             <Setter Property="Padding" Value="0"/>
-            <Setter Property="Foreground" Value="#5A6E8A"/>
+            <Setter Property="Foreground" Value="{StaticResource ForegroundBrush}"/>
             <Setter Property="FontSize" Value="13"/>
         </Style>
     </UserControl.Resources>
@@ -74,7 +74,7 @@
                     </Border.Triggers>
                     <Border Style="{StaticResource SpinnerStyle}"
                         BorderThickness="0 3 0 0"
-                        BorderBrush="#C8102E"
+                        BorderBrush="{StaticResource SpinnerBorderBrush}"
                         RenderTransformOrigin="0.5,0.5">
                         <Border.RenderTransform>
                             <RotateTransform x:Name="SpinnerRotate"/>

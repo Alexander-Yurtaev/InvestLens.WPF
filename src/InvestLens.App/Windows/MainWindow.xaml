@@ -10,7 +10,7 @@
         mc:Ignorable="d"
         d:DataContext="{d:DesignInstance viewModel:MainWindowViewModel, IsDesignTimeCreatable=True}"
         Title="MainWindow" Height="800" Width="1500"
-        Background="{StaticResource BackgroundPrimary}"
+        Background="{StaticResource BackgroundPrimaryBrush}"
         FontFamily="Segoe UI"
         WindowStartupLocation="CenterOwner"
         WindowState="Maximized">

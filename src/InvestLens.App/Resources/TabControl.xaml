@@ -16,26 +16,26 @@
                                Text="{TemplateBinding Header}"
                                FontSize="14"
                                FontWeight="Medium"
-                               Foreground="#5A6E8A"
+                               Foreground="{StaticResource ForegroundBrush}"
                                VerticalAlignment="Center"
                                HorizontalAlignment="Center"/>
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsSelected" Value="True">
-                            <Setter TargetName="Border" Property="Background" Value="{StaticResource BrandRed}"/>
-                            <Setter TargetName="HeaderText" Property="Foreground" Value="{StaticResource BackgroundSecondary}"/>
+                            <Setter TargetName="Border" Property="Background" Value="{StaticResource BrandRedBrush}"/>
+                            <Setter TargetName="HeaderText" Property="Foreground" Value="{StaticResource BackgroundSecondaryBrush}"/>
                         </Trigger>
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter TargetName="Border" Property="Background" Value="{StaticResource BackgroundPrimary}"/>
-                            <Setter TargetName="HeaderText" Property="Foreground" Value="{StaticResource BrandRed}"/>
+                            <Setter TargetName="Border" Property="Background" Value="{StaticResource BackgroundPrimaryBrush}"/>
+                            <Setter TargetName="HeaderText" Property="Foreground" Value="{StaticResource BrandRedBrush}"/>
                         </Trigger>
                         <MultiTrigger>
                             <MultiTrigger.Conditions>
                                 <Condition Property="IsSelected" Value="True"/>
                                 <Condition Property="IsMouseOver" Value="True"/>
                             </MultiTrigger.Conditions>
-                            <Setter TargetName="Border" Property="Background" Value="{StaticResource BrandRed}"/>
-                            <Setter TargetName="HeaderText" Property="Foreground" Value="{StaticResource BackgroundSecondary}"/>
+                            <Setter TargetName="Border" Property="Background" Value="{StaticResource BrandRedBrush}"/>
+                            <Setter TargetName="HeaderText" Property="Foreground" Value="{StaticResource BackgroundSecondaryBrush}"/>
                         </MultiTrigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>

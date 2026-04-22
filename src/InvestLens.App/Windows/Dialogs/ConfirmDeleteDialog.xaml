@@ -61,19 +61,19 @@
                         <TextBlock Text="{Binding PortfolioName, FallbackValue='Name', StringFormat='&quot;{0}&quot;'}" 
                                    FontWeight="Bold"
                                    FontSize="19"
-                                   Foreground="#5A6E8A"/>
+                                   Foreground="{StaticResource ForegroundBrush}"/>
                     </StackPanel>
                     <Border Grid.Row="1"
-                        Background="#0DC8102E"
+                        Background="{StaticResource BrandRed0DBrush}"
                         BorderThickness="3 0 0 0"
-                        BorderBrush="#C8102E"
+                        BorderBrush="{StaticResource BrandRedBrush}"
                         Padding="16"
                         CornerRadius="12">
                         <StackPanel>
                             <StackPanel Orientation="Horizontal">
                                 <TextBlock Text="⚠️"
                                            FontWeight="Bold"
-                                           Foreground="{StaticResource BrandGold}"
+                                           Foreground="{StaticResource BrandGoldBrush}"
                                            FontSize="19"
                                            Margin="0 0 0 12"/>
                                 <TextBlock Text="Это действие нельзя отменить" 
@@ -81,47 +81,47 @@
                                            Margin="3 0 0 12"
                                            Typography.Capitals="AllSmallCaps"
                                            FontSize="19"
-                                           Foreground="{StaticResource BrandRed}"/>
+                                           Foreground="{StaticResource BrandRedBrush}"/>
                             </StackPanel>
                             <StackPanel Orientation="Horizontal">
                                 <TextBlock Text="⚠️"
                                            FontSize="19"
                                            Margin="0 6"
-                                           Foreground="{StaticResource BrandGold}"/>
+                                           Foreground="{StaticResource BrandGoldBrush}"/>
                                 <TextBlock Text="Все активы портфеля будут удалены" 
                                            FontSize="19"
                                            Margin="0 6"
-                                           Foreground="#5A6E8A"/>
+                                           Foreground="{StaticResource ForegroundBrush}"/>
                             </StackPanel>
                             <StackPanel Orientation="Horizontal">
                                 <TextBlock Text="⚠️"
                                            FontSize="19"
                                            Margin="0 6"
-                                           Foreground="{StaticResource BrandGold}"/>
+                                           Foreground="{StaticResource BrandGoldBrush}"/>
                                 <TextBlock Text="История операций будет потеряна" 
                                            FontSize="19"
                                            Margin="0 6"
-                                           Foreground="#5A6E8A"/>
+                                           Foreground="{StaticResource ForegroundBrush}"/>
                             </StackPanel>
                             <StackPanel Orientation="Horizontal">
                                 <TextBlock Text="⚠️"
                                            FontSize="19"
                                            Margin="0 6"
-                                           Foreground="{StaticResource BrandGold}"/>
+                                           Foreground="{StaticResource BrandGoldBrush}"/>
                                 <TextBlock Text="Дивидендный календарь будет очищен" 
                                            FontSize="19"
                                            Margin="0 6"
-                                           Foreground="#5A6E8A"/>
+                                           Foreground="{StaticResource ForegroundBrush}"/>
                             </StackPanel>
                             <StackPanel Orientation="Horizontal">
                                 <TextBlock Text="⚠️"
                                            FontSize="19"
                                            Margin="0 6"
-                                           Foreground="{StaticResource BrandGold}"/>
+                                           Foreground="{StaticResource BrandGoldBrush}"/>
                                 <TextBlock Text="Статистика доходности станет недоступна" 
                                            FontSize="19"
                                            Margin="0 6"
-                                           Foreground="#5A6E8A"/>
+                                           Foreground="{StaticResource ForegroundBrush}"/>
                             </StackPanel>
                         </StackPanel>
                     </Border>
@@ -130,10 +130,10 @@
                         CornerRadius="12">
                         <StackPanel Orientation="Horizontal"
                                 Margin="0 24"
-                                Background="#F8FAFE">
+                                Background="{StaticResource BackgroundPrimaryBrush}">
                             <CheckBox IsChecked="{Binding IsAgree}"/>
                             <TextBlock FontSize="19"
-                                       Foreground="#5A6E8A"
+                                       Foreground="{StaticResource ForegroundBrush}"
                                        TextWrapping="WrapWithOverflow"
                                        Margin="12 0 0 0"
                                        Width="400">
@@ -151,7 +151,7 @@
             <Border Grid.Row="2"
                     Padding="28 16 28 24"
                     BorderThickness="0 1 0 0"
-                    BorderBrush="#E9EDF2">
+                    BorderBrush="{StaticResource BorderBrush}">
                 <StackPanel Orientation="Horizontal"
                             HorizontalAlignment="Right">
                     <Button Content="Отмена"

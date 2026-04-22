@@ -31,8 +31,8 @@
 
             <Style TargetType="GridViewColumnHeader">
                 <Setter Property="Height" Value="40"/>
-                <Setter Property="Background" Value="{StaticResource BackgroundPrimary}"/>
-                <Setter Property="Foreground" Value="#5A6E8A"/>
+                <Setter Property="Background" Value="{StaticResource BackgroundPrimaryBrush}"/>
+                <Setter Property="Foreground" Value="{StaticResource ForegroundBrush}"/>
                 <Setter Property="FontSize" Value="12"/>
                 <Setter Property="FontWeight" Value="SemiBold"/>
                 <Setter Property="HorizontalContentAlignment" Value="Left"/>
@@ -40,7 +40,7 @@
                     <Setter.Value>
                         <ControlTemplate TargetType="GridViewColumnHeader">
                             <Border Background="{TemplateBinding Background}"
-                                    BorderBrush="#E9EDF2"
+                                    BorderBrush="{StaticResource BorderBrush}"
                                     BorderThickness="0,0,1,1"
                                     Padding="12,0">
                                 <ContentPresenter VerticalAlignment="Center"/>
@@ -67,7 +67,7 @@
                 Padding="20"
                 CornerRadius="16"
                 BorderThickness="1"
-                BorderBrush="#E9EDF2">
+                BorderBrush="{StaticResource BorderBrush}">
             <Grid>
                 <ItemsControl ItemsSource="{Binding MetricCards}">
                     <ItemsControl.ItemsPanel>

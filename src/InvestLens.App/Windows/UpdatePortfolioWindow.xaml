@@ -45,7 +45,7 @@
                                Text="{Binding Header}"
                                FontSize="22"
                                FontWeight="Bold"
-                               Foreground="{StaticResource BrandBlue}"/>
+                               Foreground="{StaticResource BrandBlueBrush}"/>
                     <Button  Grid.Column="1"
                              Content="X"
                              Command="{Binding CloseCommand}"
@@ -67,7 +67,7 @@
                         <Label Target="PortfolioName">
                             <TextBlock>
                                 <Bold>Название портфеля:</Bold>
-                                <Run Foreground="{StaticResource BrandRed}">*</Run>
+                                <Run Foreground="{StaticResource BrandRedBrush}">*</Run>
                             </TextBlock>
                         </Label>
                         <TextBox x:Name="PortfolioName" 
@@ -96,7 +96,7 @@
                         <Label>
                             <TextBlock>
                                 <Bold>Тип портфеля:</Bold>
-                                <Run Foreground="{StaticResource BrandRed}">*</Run>
+                                <Run Foreground="{StaticResource BrandRedBrush}">*</Run>
                             </TextBlock>
                         </Label>
                         <StackPanel Orientation="Horizontal">
@@ -136,7 +136,7 @@
                                 <DataTemplate DataType="{x:Type viewModel:LookupViewModel}">
                                     <Border Padding="16 12"
                                             BorderThickness="0 0 0 1"
-                                            BorderBrush="#E9EDF2"
+                                            BorderBrush="{StaticResource BorderBrush}"
                                             Cursor="Hand">
                                         <Grid>
                                             <Grid.ColumnDefinitions>

@@ -11,8 +11,8 @@
     <Style x:Key="WindowBorderStyle" TargetType="Border">
         <Setter Property="CornerRadius" Value="32"/>
         <Setter Property="BorderThickness" Value="1"/>
-        <Setter Property="BorderBrush" Value="{StaticResource BrandBlue}"/>
-        <Setter Property="Background" Value="{StaticResource BackgroundSecondary}"/>
+        <Setter Property="BorderBrush" Value="{StaticResource BrandBlueBrush}"/>
+        <Setter Property="Background" Value="{StaticResource BackgroundSecondaryBrush}"/>
         <Setter Property="Margin" Value="10"/>
         <Setter Property="Effect">
             <Setter.Value>

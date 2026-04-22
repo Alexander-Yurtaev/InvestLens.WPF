@@ -71,11 +71,11 @@
                                 <Setter Property="VerticalContentAlignment" Value="Center"/>
                                 <Style.Triggers>
                                     <Trigger Property="IsMouseOver" Value="True">
-                                        <Setter Property="Background" Value="{StaticResource BackgroundPrimary}"/>
+                                        <Setter Property="Background" Value="{StaticResource BackgroundPrimaryBrush}"/>
                                     </Trigger>
                                     <Trigger Property="IsSelected" Value="True">
                                         <Setter Property="Background" Value="#E8EEF8"/>
-                                        <Setter Property="BorderBrush" Value="{StaticResource BrandRed}"/>
+                                        <Setter Property="BorderBrush" Value="{StaticResource BrandRedBrush}"/>
                                         <Setter Property="BorderThickness" Value="0,0,0,0"/>
                                     </Trigger>
                                 </Style.Triggers>
