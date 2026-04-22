@@ -115,7 +115,7 @@ public class PortfolioDynamicsViewModel : BindableBase, IPortfolioDynamicsViewMo
         // Настройка оси Y для числовых значений
         var linearAxis = new LinearAxis
         {
-            Title = "Стоимость, Р",
+            Title = "Стоимость, ₽",
             Position = AxisPosition.Left,
             MajorGridlineStyle = LineStyle.Solid,
         };
@@ -131,7 +131,7 @@ public class PortfolioDynamicsViewModel : BindableBase, IPortfolioDynamicsViewMo
             StrokeThickness = 2,
             Fill = OxyColor.FromArgb(77, 200, 16, 46),
             TrackerFormatString = "{0}\n📅 Дата: {2:dd.MM.yyyy}\n" +
-                                  "💰 Стоимость: {4:N0} Р"
+                                  "💰 Стоимость: {4:N0} ₽"
         };
 
         var dynamicMetrics = await _metricsService.DynamicMetrics(period);
