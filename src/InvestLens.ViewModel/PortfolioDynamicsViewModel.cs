@@ -14,7 +14,7 @@ public class PortfolioDynamicsViewModel : BindableBase, IPortfolioDynamicsViewMo
     private bool _period3M;
     private bool _period6M;
     private bool _period1Y;
-    private PlotModel _chartModel;
+    private PlotModel? _chartModel;
 
     public PortfolioDynamicsViewModel(IMetricsService metricsService)
     {
@@ -22,7 +22,7 @@ public class PortfolioDynamicsViewModel : BindableBase, IPortfolioDynamicsViewMo
         Period1M = true;
     }
 
-    public PlotModel ChartModel
+    public PlotModel? ChartModel
     { 
         get => _chartModel; 
         set => SetProperty(ref _chartModel, value); 
