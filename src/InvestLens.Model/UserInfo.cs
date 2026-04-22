@@ -1,15 +1,15 @@
-﻿using InvestLens.Model.Entities;
+﻿using InvestLens.Model.Crud.User;
 
 namespace InvestLens.Model;
 
 public class UserInfo
 {
-    public UserInfo(User user)
+    public UserInfo(UserModel model)
     {
-        Id = user.Id;
-        UserAvatar = $"{user.FirstName[0]}{user.LastName[0]}";
-        UserName = user.FirstName;
-        UserFullNameInShortFormat = $"{user.FirstName} {user.LastName[0]}";
+        Id = model.Id;
+        UserAvatar = $"{model.FirstName[0]}{model.LastName[0]}";
+        UserName = model.FirstName;
+        UserFullNameInShortFormat = $"{model.FirstName} {model.LastName[0]}";
     }
 
     public int Id { get; init; }

@@ -9,6 +9,9 @@ public class PortfolioProfiles : Profile
 {
     public PortfolioProfiles()
     {
+        CreateMap<User, InvestLens.Model.Crud.User.UserModel>().ReverseMap();
+        CreateMap< InvestLens.Model.Crud.User.RegistrationModel, User>();
+
         CreateMap<InvestLens.Model.Entities.Portfolio, InvestLens.Model.Crud.Portfolio.PortfolioModel>().ReverseMap();
         CreateMap< InvestLens.Model.Crud.Portfolio.CreateModel, InvestLens.Model.Entities.Portfolio>();
         CreateMap<InvestLens.Model.Crud.Portfolio.UpdateModel, InvestLens.Model.Entities.Portfolio>();

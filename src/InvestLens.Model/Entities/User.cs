@@ -2,6 +2,11 @@
 
 public class User : BaseEntity
 {
+    public User() : this("", "", "", "")
+    {
+        
+    }
+
     public User(string firstName, string lastName, string login, string password)
     {
         FirstName = firstName;

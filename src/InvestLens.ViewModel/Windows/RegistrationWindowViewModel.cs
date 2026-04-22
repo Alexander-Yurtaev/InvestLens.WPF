@@ -1,11 +1,11 @@
-﻿using InvestLens.Model;
-using InvestLens.ViewModel.Services;
+﻿using InvestLens.ViewModel.Services;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Security;
 using System.Windows.Input;
 using InvestLens.Common.Helpers;
 using InvestLens.DataAccess.Services;
+using InvestLens.Model.Crud.User;
 
 namespace InvestLens.ViewModel.Windows;
 
@@ -37,26 +37,26 @@ public sealed class RegistrationWindowViewModel : ValidationViewModelBase, IRegi
     [Required(ErrorMessage = "Имя должно быть заполнено")]
     public string Name
     {
-        get => _model.Name;
+        get => _model.FirstName;
         set
         {
-            if (string.Equals(_model.Name, value)) return;
-            _model.Name = value;
+            if (string.Equals(_model.FirstName, value)) return;
+            _model.FirstName = value;
             RaisePropertyChanged();
-            ValidateProperty(_model.Name);
+            ValidateProperty(_model.FirstName);
         }
     }
 
     [Required(ErrorMessage = "Фамилия должна быть заполнена")]
     public string Surname
     {
-        get => _model.Surname;
+        get => _model.LastName;
         set
         {
-            if (string.Equals(_model.Surname, value)) return;
-            _model.Surname = value;
+            if (string.Equals(_model.LastName, value)) return;
+            _model.LastName = value;
             RaisePropertyChanged();
-            ValidateProperty(_model.Surname);
+            ValidateProperty(_model.LastName);
         }
     }
 

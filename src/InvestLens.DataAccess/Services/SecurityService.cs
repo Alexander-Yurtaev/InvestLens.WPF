@@ -1,12 +1,16 @@
-﻿using InvestLens.Common.Helpers;
+﻿using AutoMapper;
+using InvestLens.Common.Helpers;
 using InvestLens.DataAccess.Repositories;
 using InvestLens.Model;
+using InvestLens.Model.Crud.User;
 using InvestLens.Model.Entities;
 
 namespace InvestLens.DataAccess.Services;
 
-public class SecurityService(IUserRepository userRepository) : ISecurityService
+public class SecurityService(IUserRepository userRepository, IMapper mapper) : ISecurityService
 {
+    private readonly IMapper _mapper = mapper;
+
     public async Task<bool> CheckLoginUniqueAsync(string login)
     {
         return await userRepository.CheckLoginUnique(login);
@@ -16,8 +20,8 @@ public class SecurityService(IUserRepository userRepository) : ISecurityService
     {
         try
         {
-            var password = PasswordHelper.HashPassword(PasswordHelper.GetPasswordAsString(model.Password));
-            var user = new User(model.Name, model.Surname, model.Login, password);
+            var user = _mapper.Map<User>(model);
+            user.Password = PasswordHelper.HashPassword(PasswordHelper.GetPasswordAsString(model.Password));
             var success = await userRepository.CreateUser(user);
             return success ? (true, "") : (false, "Данные не сохранились");
         }
@@ -27,7 +31,7 @@ public class SecurityService(IUserRepository userRepository) : ISecurityService
         }
     }
 
-    public async Task<(bool Success, User? User, string ErrorMessage)> LoginAsync(LoginModel model)
+    public async Task<(bool Success, UserModel? User, string ErrorMessage)> LoginAsync(LoginModel model)
     {
         var user = await userRepository.GetUserByLogin(model.Login);
         if (user is null)
@@ -35,8 +39,10 @@ public class SecurityService(IUserRepository userRepository) : ISecurityService
             return (false, null, "Ошибка при авторизации");
         }
 
+        var userModel = _mapper.Map<UserModel>(user);
+
         var isAuth = PasswordHelper.VerifyPassword(PasswordHelper.GetPasswordAsString(model.Password), user.Password);
 
-        return isAuth ? (true, user, "") : (false, null, "Ошибка при авторизации");
+        return isAuth ? (true, userModel, "") : (false, null, "Ошибка при авторизации");
     }
 }

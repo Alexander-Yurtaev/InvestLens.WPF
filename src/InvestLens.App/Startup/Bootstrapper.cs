@@ -8,6 +8,7 @@ using InvestLens.DataAccess.Repositories;
 using InvestLens.DataAccess.Services;
 using InvestLens.Model;
 using InvestLens.Model.Crud.Portfolio;
+using InvestLens.Model.Crud.User;
 using InvestLens.Model.Services;
 using InvestLens.ViewModel;
 using InvestLens.ViewModel.Pages;

@@ -1,4 +1,4 @@
-﻿using InvestLens.Model.Entities;
+﻿using InvestLens.Model.Crud.User;
 using InvestLens.Model.Enums;
 
 namespace InvestLens.Model.Crud.Portfolio;
@@ -18,5 +18,5 @@ public class PortfolioModel : BaseModel
     public virtual PortfolioModel? ParentPortfolio { get; set; }
     public virtual ICollection<PortfolioModel> ChildrenPortfolios { get; set; } = [];
     public required int OwnerId { get; set; }
-    public virtual User? Owner { get; set; }
+    public virtual UserModel? Owner { get; set; }
 }
