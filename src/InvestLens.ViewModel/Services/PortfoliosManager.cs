@@ -2,6 +2,7 @@
 using InvestLens.DataAccess.Repositories;
 using InvestLens.Model;
 using InvestLens.Model.Crud.Portfolio;
+using InvestLens.Model.Crud.Transaction;
 using InvestLens.Model.Entities;
 using InvestLens.Model.Enums;
 using InvestLens.Model.NavigationTree;
@@ -251,13 +252,15 @@ public class PortfoliosManager : IPortfoliosManager
         return !isExists;
     }
 
-    public async Task<int> Merge(List<Transaction> transactions)
+    public async Task<int> Merge(List<TransactionModel> transactionModels)
     {
+        var transactions = _mapper.Map<List<Transaction>>(transactionModels);
         return await _portfolioRepository.Merge(transactions);
     }
 
-    public async Task<int> Recreate(List<Transaction> transactions)
+    public async Task<int> Recreate(List<TransactionModel> transactionModels)
     {
+        var transactions = _mapper.Map<List<Transaction>>(transactionModels);
         return await _portfolioRepository.Recreate(transactions);
     }
 
@@ -366,9 +369,10 @@ public class PortfoliosManager : IPortfoliosManager
             .ToList();
     }
 
-    public async Task<List<Transaction>> GetLastTtransactions(int count)
+    public async Task<List<TransactionModel>> GetLastTtransactions(int count)
     {
         var transactions = await _portfolioRepository.GetLastTtransactions(count);
-        return transactions;
+        var transactionModels = _mapper.Map<List<TransactionModel>>(transactions);
+        return transactionModels;
     }
 }

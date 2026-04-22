@@ -1,6 +1,5 @@
-﻿using InvestLens.Model.Entities;
+﻿using InvestLens.Model.Crud.Transaction;
 using InvestLens.Model.Enums;
-using System.Drawing;
 
 namespace InvestLens.Model.Helpers;
 
@@ -57,27 +56,27 @@ public static class TransactionEventHelper
         };
     }
 
-    public static decimal GetTotalCost(Transaction transaction)
+    public static decimal GetTotalCost(TransactionModel model)
     {
-        var totalCost = transaction.FeeTax;
+        var totalCost = model.FeeTax;
 
-        if (transaction.Event == Model.Enums.TransactionEvent.Buy ||
-            transaction.Event == Model.Enums.TransactionEvent.Sell)
+        if (model.Event == TransactionEvent.Buy ||
+            model.Event == TransactionEvent.Sell)
         {
-            totalCost += transaction.Price * transaction.Quantity;
+            totalCost += model.Price * model.Quantity;
         }
-        else if (transaction.Event == Model.Enums.TransactionEvent.Dividend)
+        else if (model.Event == TransactionEvent.Dividend)
         {
-            totalCost += transaction.Quantity;
+            totalCost += model.Quantity;
         }
-        else if (transaction.Event == Model.Enums.TransactionEvent.Amortisation ||
-                 transaction.Event == Model.Enums.TransactionEvent.Repayment)
+        else if (model.Event == TransactionEvent.Amortisation ||
+                 model.Event == TransactionEvent.Repayment)
         {
-            totalCost += transaction.Quantity;
+            totalCost += model.Quantity;
         }
-        else if (transaction.Event == Model.Enums.TransactionEvent.Cash_Convert)
+        else if (model.Event == TransactionEvent.Cash_Convert)
         {
-            totalCost += transaction.Quantity;
+            totalCost += model.Quantity;
         }
 
         return totalCost;

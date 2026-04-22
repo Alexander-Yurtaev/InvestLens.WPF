@@ -1,6 +1,6 @@
 ﻿using InvestLens.Model;
 using InvestLens.Model.Crud.Portfolio;
-using InvestLens.Model.Entities;
+using InvestLens.Model.Crud.Transaction;
 using InvestLens.Model.Enums;
 using InvestLens.ViewModel.NavigationTree;
 
@@ -16,11 +16,11 @@ public interface IPortfoliosManager
     Task Create(CreateModel model);
     Task<bool> Delete(int id);
     Task Update(UpdateModel model);
-    Task<int> Merge(List<Transaction> transactions);
-    Task<int> Recreate(List<Transaction> transactions);
+    Task<int> Merge(List<TransactionModel> transactions);
+    Task<int> Recreate(List<TransactionModel> transactions);
     Task ReloadPortfolio(int id);
 
     List<PortfolioModel> GetAllPortfolios(PortfolioType portfolioType);
 
-    Task<List<Transaction>> GetLastTtransactions(int count);
+    Task<List<TransactionModel>> GetLastTtransactions(int count);
 }

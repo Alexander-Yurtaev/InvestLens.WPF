@@ -1,4 +1,4 @@
-﻿using InvestLens.Model.Entities;
+﻿using InvestLens.Model.Crud.Transaction;
 using InvestLens.Model.Enums;
 using InvestLens.Model.Helpers;
 
@@ -6,14 +6,14 @@ namespace InvestLens.Model;
 
 public class ActivityItem
 {
-    public ActivityItem(string icon, Transaction transaction)
+    public ActivityItem(string icon, TransactionModel model)
     {
         Icon = icon;
-        IconColor = TransactionEventHelper.EventToColor(transaction.Event);
-        Title = $"{TransactionEventHelper.EventToString(transaction.Event)} {transaction.Symbol}";
-        Description = GetDescription(transaction);
-        Amount = TransactionEventHelper.GetTotalCost(transaction).ToString("C2");
-        Date = transaction.Date.Date.ToString("dd-MM-yyyy");
+        IconColor = TransactionEventHelper.EventToColor(model.Event);
+        Title = $"{TransactionEventHelper.EventToString(model.Event)} {model.Symbol}";
+        Description = GetDescription(model);
+        Amount = TransactionEventHelper.GetTotalCost(model).ToString("C2");
+        Date = model.Date.Date.ToString("dd-MM-yyyy");
     }
 
     public string Icon { get; set; }
@@ -23,18 +23,18 @@ public class ActivityItem
     public string Amount { get; set; }
     public string Date { get; set; }
 
-    private string GetDescription(Transaction transaction)
+    private string GetDescription(TransactionModel model)
     {
-        if (transaction.Event == Model.Enums.TransactionEvent.Buy)
+        if (model.Event == TransactionEvent.Buy)
         {
-            return $"+{transaction.Quantity.ToString("N2")} шт";
+            return $"+{model.Quantity.ToString("N2")} шт";
         }
 
-        if (transaction.Event == Model.Enums.TransactionEvent.Sell)
+        if (model.Event == TransactionEvent.Sell)
         {
-            return $"-{transaction.Quantity.ToString("N2")} шт";
+            return $"-{model.Quantity.ToString("N2")} шт";
         }
 
-        return transaction.Portfolio?.Name ?? "-";
+        return model.Portfolio?.Name ?? "-";
     }
 }

@@ -121,7 +121,7 @@ public class PortfolioDetailViewModel : ViewModelBaseWithContentHeader, IPortfol
             var transactions = await Task.Run(() => {
                 using var reader = File.OpenText(fileFullName);
                 var transactionModels = TransactionHelper.Convert(reader);
-                return _mapper.Map<List<Model.Entities.Transaction>>(transactionModels);
+                return transactionModels;
             });
 
             foreach ( var transaction in transactions)
