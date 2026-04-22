@@ -17,7 +17,7 @@ public class ActivityManager : IActivityManager
         var transactions = await _portfoliosManager.GetLastTtransactions(3);
 
         var result = transactions
-                                       // icon,           title,                       description,                 amount,             date
+            // icon,           title,                       description,                 amount,             date
             .Select(t => new ActivityItem("🟢", $"{t.Event.ToString()} {t.Symbol}", GetDescription(t), GetTotalCost(t).ToString("C2"), t.Date.Date.ToString("dd-MM-yyyy")))
             .ToList();
 
@@ -48,6 +48,27 @@ public class ActivityManager : IActivityManager
 
     private decimal GetTotalCost(Transaction transaction)
     {
-        return transaction.Price * transaction.Quantity + transaction.FeeTax;
+        var totalCost = transaction.FeeTax;
+
+        if (transaction.Event == Model.Enums.TransactionEvent.Buy ||
+            transaction.Event == Model.Enums.TransactionEvent.Sell)
+        {
+            totalCost += transaction.Price * transaction.Quantity;
+        }
+        else if (transaction.Event == Model.Enums.TransactionEvent.Dividend)
+        {
+            totalCost += transaction.Quantity;
+        }
+        else if (transaction.Event == Model.Enums.TransactionEvent.Amortisation ||
+                 transaction.Event == Model.Enums.TransactionEvent.Repayment)
+        {
+            totalCost += transaction.Quantity;
+        }
+        else if (transaction.Event == Model.Enums.TransactionEvent.Cash_Convert)
+        {
+            totalCost += transaction.Quantity;
+        }
+
+        return totalCost;
     }
 }
