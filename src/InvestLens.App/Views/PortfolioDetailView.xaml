@@ -109,7 +109,7 @@
                             <DataGridTextColumn Header="Текущая цена" Binding="{Binding CurrentPrice, StringFormat='F2'}"/>
                             <DataGridTextColumn Header="Средняя цена" Binding="{Binding AveragePrice, StringFormat='F2'}"/>
                             <DataGridTextColumn Header="Общие затраты" Binding="{Binding TotalPrice, StringFormat='F2'}"/>
-                            <DataGridTextColumn Header="Прибыль" Binding="{Binding ProfitDisplay}"/>
+                            <DataGridTextColumn Header="Прибыль" Binding="{Binding Profit, StringFormat='P2'}"/>
                             <DataGridTextColumn Header="Общие дивиденты" Binding="{Binding DividendCount, StringFormat='F2'}"/>
                         </DataGrid.Columns>
                     </DataGrid>

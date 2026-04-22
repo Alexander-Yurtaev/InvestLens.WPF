@@ -10,9 +10,9 @@ public class SecurityInfo : ICloneable
 
     public string SecId { get; }
     public string Name { get; }
-    public decimal Count { get; set; }
-    public decimal DividendCount { get; set; }
-    public decimal AveragePrice => Count > 0 ? TotalPrice / Count : 0;
+    public decimal Quantity { get; set; }
+    public decimal Dividends { get; set; }
+    public decimal AveragePrice => Quantity > 0 ? TotalPrice / Quantity : 0;
     public decimal CurrentPrice { get; set; }
     public decimal TotalPrice { get; set; }
     public decimal Profit { get; init; }
@@ -21,8 +21,8 @@ public class SecurityInfo : ICloneable
     {
         var clone = new SecurityInfo(SecId, Name)
         {
-            Count = Count,
-            DividendCount = DividendCount,
+            Quantity = Quantity,
+            Dividends = Dividends,
             CurrentPrice = CurrentPrice,
             TotalPrice = TotalPrice,
             Profit = Profit

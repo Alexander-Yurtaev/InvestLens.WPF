@@ -84,23 +84,30 @@ public class PortfoliosManager : IPortfoliosManager
                 .GroupBy(t => t.Symbol)
                 .Select(g =>
                 {
-                    var count = g.Where(t => t.Event == TransactionEvent.Buy).Sum(t => t.Quantity)
-                                -
-                                g.Where(t => t.Event == TransactionEvent.Sell).Sum(t => t.Quantity);
-                    var totalPrice = g.Where(t => t.Event == TransactionEvent.Buy).Sum(t => t.Price*t.Quantity+t.FeeTax)
-                                     -
-                                     g.Where(t => t.Event == TransactionEvent.Sell).Sum(t => t.Price * t.Quantity)
-                                     +
-                                     g.Where(t => t.Event == TransactionEvent.Sell).Sum(t => t.FeeTax);
+                var totalQuantity = g.Where(t => t.Event == TransactionEvent.Buy ||
+                                                 t.Event == TransactionEvent.Sell)
+                                      .Sum(t => t.Quantity);
 
-                    var dividendCount = g.Where(t => t.Event == TransactionEvent.Dividend)
-                                     .Sum(t => t.Quantity);
+                var totalBuy = g.Where(t => t.Event == TransactionEvent.Buy).Sum(t => t.Price * t.Quantity);
+                var totalSell = g.Where(t => t.Event == TransactionEvent.Sell).Sum(t => t.Price * t.Quantity);
 
-                    return new SecurityInfo(g.Key, g.Key)
-                    {
-                        Count = count,
-                        DividendCount = dividendCount,
-                        TotalPrice = totalPrice
+                var totalFeeTax = g.Where(t => t.Event == TransactionEvent.Buy ||
+                                               t.Event == TransactionEvent.Sell)
+                                   .Sum(t => t.FeeTax);
+
+                var dividends = g.Where(t => t.Event == TransactionEvent.Dividend)
+                                 .Sum(t => t.Quantity);
+
+                return new SecurityInfo(g.Key, g.Key)
+                {
+                    Quantity = totalQuantity,
+                    CurrentPrice = totalBuy - totalSell,
+                    Dividends = dividends,
+                    TotalPrice = totalBuy - totalSell - totalFeeTax,
+                    // ( (Текущая стоимость − Вложено + Дивиденды) / Вложено ) × 100%
+                    Profit = (totalBuy - totalSell + totalFeeTax) > 0 
+                                ? ((totalBuy - totalSell) - (totalBuy - totalSell + totalFeeTax) + dividends) / (totalBuy - totalSell + totalFeeTax)
+                                : 0
                     };
                 });
 
@@ -129,8 +136,8 @@ public class PortfoliosManager : IPortfoliosManager
                 }
                 else
                 {
-                    info.Count += childSecurityInfo.Count;
-                    info.DividendCount += childSecurityInfo.DividendCount;
+                    info.Quantity += childSecurityInfo.Quantity;
+                    info.Dividends += childSecurityInfo.Dividends;
                     info.TotalPrice += childSecurityInfo.TotalPrice;
                 }
                 details.Operations.AddRange(childDetails.Operations);
@@ -143,7 +150,7 @@ public class PortfoliosManager : IPortfoliosManager
     public List<LookupModel> GetLookupModels(int ownerId, int? portfolioId = null)
     {
         var portfolios = _portfolioCache.Values
-            .Where(p => (portfolioId is null || p.Id != portfolioId.Value) && 
+            .Where(p => (portfolioId is null || p.Id != portfolioId.Value) &&
                         p.PortfolioType != PortfolioType.Complex);
 
         return portfolios.Select(p => new Model.Crud.Portfolio

@@ -14,19 +14,10 @@ public class SecurityInfoWrapper
 
     public string SecId => _model.SecId;
     public string Name => _model.Name;
-    public decimal Count => _model.Count;
+    public decimal Count => _model.Quantity;
     public decimal AveragePrice => _model.AveragePrice;
     public decimal CurrentPrice => _model.CurrentPrice;
     public decimal TotalPrice => _model.TotalPrice;
-    public decimal DividendCount => _model.DividendCount;
-
-    public string ProfitDisplay
-    {
-        get
-        {
-            var result = NumberHelpers.ConvertValueToString(_model.Profit);
-            if (_model.Profit > 0) result = $"+{result}";
-            return result;
-        }
-    }
+    public decimal DividendCount => _model.Dividends;
+    public decimal Profit => _model.Profit;
 }

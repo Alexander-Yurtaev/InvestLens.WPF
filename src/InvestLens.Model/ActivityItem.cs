@@ -12,7 +12,7 @@ public class ActivityItem
         IconColor = TransactionEventHelper.EventToColor(transaction.Event);
         Title = $"{TransactionEventHelper.EventToString(transaction.Event)} {transaction.Symbol}";
         Description = GetDescription(transaction);
-        Amount = GetTotalCost(transaction).ToString("C2");
+        Amount = TransactionEventHelper.GetTotalCost(transaction).ToString("C2");
         Date = transaction.Date.Date.ToString("dd-MM-yyyy");
     }
 
@@ -36,31 +36,5 @@ public class ActivityItem
         }
 
         return transaction.Portfolio?.Name ?? "-";
-    }
-
-    private decimal GetTotalCost(Transaction transaction)
-    {
-        var totalCost = transaction.FeeTax;
-
-        if (transaction.Event == Model.Enums.TransactionEvent.Buy ||
-            transaction.Event == Model.Enums.TransactionEvent.Sell)
-        {
-            totalCost += transaction.Price * transaction.Quantity;
-        }
-        else if (transaction.Event == Model.Enums.TransactionEvent.Dividend)
-        {
-            totalCost += transaction.Quantity;
-        }
-        else if (transaction.Event == Model.Enums.TransactionEvent.Amortisation ||
-                 transaction.Event == Model.Enums.TransactionEvent.Repayment)
-        {
-            totalCost += transaction.Quantity;
-        }
-        else if (transaction.Event == Model.Enums.TransactionEvent.Cash_Convert)
-        {
-            totalCost += transaction.Quantity;
-        }
-
-        return totalCost;
     }
 }

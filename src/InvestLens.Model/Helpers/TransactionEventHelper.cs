@@ -1,4 +1,5 @@
-﻿using InvestLens.Model.Enums;
+﻿using InvestLens.Model.Entities;
+using InvestLens.Model.Enums;
 using System.Drawing;
 
 namespace InvestLens.Model.Helpers;
@@ -54,5 +55,31 @@ public static class TransactionEventHelper
             TransactionEvent.Tax => "#E6B84E",
             _ => "#E9EDF2"
         };
+    }
+
+    public static decimal GetTotalCost(Transaction transaction)
+    {
+        var totalCost = transaction.FeeTax;
+
+        if (transaction.Event == Model.Enums.TransactionEvent.Buy ||
+            transaction.Event == Model.Enums.TransactionEvent.Sell)
+        {
+            totalCost += transaction.Price * transaction.Quantity;
+        }
+        else if (transaction.Event == Model.Enums.TransactionEvent.Dividend)
+        {
+            totalCost += transaction.Quantity;
+        }
+        else if (transaction.Event == Model.Enums.TransactionEvent.Amortisation ||
+                 transaction.Event == Model.Enums.TransactionEvent.Repayment)
+        {
+            totalCost += transaction.Quantity;
+        }
+        else if (transaction.Event == Model.Enums.TransactionEvent.Cash_Convert)
+        {
+            totalCost += transaction.Quantity;
+        }
+
+        return totalCost;
     }
 }
