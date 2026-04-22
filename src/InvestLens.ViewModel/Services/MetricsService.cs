@@ -103,15 +103,15 @@ public class MetricsService : IMetricsService
 
     #region DynamicMetrics
 
-    public async Task<Dictionary<DateTime, decimal>> DynamicMetrics(PortfolioDynamicPeriod period)
+    public async Task<Dictionary<DateTime, decimal>> DynamicMetrics(PortfolioDynamicPeriod period, CancellationToken ct)
     {
-        var result = await _repository.GetDynamicMetrics(period);
+        var result = await _repository.GetDynamicMetrics(period, ct);
         return result;
     }
 
-    public async Task<Dictionary<DateTime, decimal>> PortfolioDynamicMetrics(PortfolioDynamicPeriod period, int[] ids)
+    public async Task<Dictionary<DateTime, decimal>> PortfolioDynamicMetrics(PortfolioDynamicPeriod period, int[] ids, CancellationToken ct)
     {
-        var result = await _repository.GetPortfolioDynamicMetrics(period, ids);
+        var result = await _repository.GetPortfolioDynamicMetrics(period, ids, ct);
         return result;
     }
 

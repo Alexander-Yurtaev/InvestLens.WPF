@@ -21,6 +21,6 @@ public interface IMetricsService
     Task<decimal> PortfolioTotalDividends(int[] ids);
 
     // DynamicMetrics
-    Task<Dictionary<DateTime, decimal>> DynamicMetrics(PortfolioDynamicPeriod period);
-    Task<Dictionary<DateTime, decimal>> PortfolioDynamicMetrics(PortfolioDynamicPeriod period, int[] ids);
+    Task<Dictionary<DateTime, decimal>> DynamicMetrics(PortfolioDynamicPeriod period, CancellationToken ct);
+    Task<Dictionary<DateTime, decimal>> PortfolioDynamicMetrics(PortfolioDynamicPeriod period, int[] ids, CancellationToken ct);
 }

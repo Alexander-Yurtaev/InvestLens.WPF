@@ -190,21 +190,25 @@
                                      GroupName="PeriodSelector" 
                                      Content="1М" 
                                      IsChecked="{Binding PortfolioDynamicsViewModel.Period1M}"
+                                     Command="{Binding PortfolioDynamicsViewModel.LoadPeriod1M}"
                                      Style="{StaticResource PeriodSelectorStyle}"/>
                         <RadioButton Grid.Column="3" 
                                      GroupName="PeriodSelector" 
                                      Content="3М" 
                                      IsChecked="{Binding PortfolioDynamicsViewModel.Period3M}"
+                                     Command="{Binding PortfolioDynamicsViewModel.LoadPeriod3M}"
                                      Style="{StaticResource PeriodSelectorStyle}"/>
                         <RadioButton Grid.Column="4" 
                                      GroupName="PeriodSelector" 
                                      Content="6М" 
                                      IsChecked="{Binding PortfolioDynamicsViewModel.Period6M}"
+                                     Command="{Binding PortfolioDynamicsViewModel.LoadPeriod6M}"
                                      Style="{StaticResource PeriodSelectorStyle}"/>
                         <RadioButton Grid.Column="5" 
                                      GroupName="PeriodSelector" 
                                      Content="1Г" 
                                      IsChecked="{Binding PortfolioDynamicsViewModel.Period1Y}"
+                                     Command="{Binding PortfolioDynamicsViewModel.LoadPeriod1Y}"
                                      Style="{StaticResource PeriodSelectorStyle}"/>
                     </Grid>
                     <Border Grid.Row="1" Style="{StaticResource ChartPlaceholderStyle}">

@@ -115,28 +115,43 @@ public class TransactionRepository : BaseRepository, ITransactionRepository
     }
 
     // DynamicMetrics
-    public async Task<Dictionary<DateTime, decimal>> GetDynamicMetrics(PortfolioDynamicPeriod period)
+    public async Task<Dictionary<DateTime, decimal>> GetDynamicMetrics(PortfolioDynamicPeriod period, CancellationToken ct)
     {
         var result = new Dictionary<DateTime, decimal>();
         var startDate = DataContext.Transactions.Min(t => t.Date);
         
         foreach (var item in GetDynamicMetrics(startDate, period))
         {
+            ct.ThrowIfCancellationRequested();
+
             var total = await DataContext.Transactions
                 .Where(t => t.Event == Model.Enums.TransactionEvent.Cash_In &&
                             t.Date <= item.Key)
-                .SumAsync(t => t.Quantity);
+                .SumAsync(t => t.Quantity, ct);
             result.Add(item.Key, total);
         }
 
         return result;
     }
 
-    public async Task<Dictionary<DateTime, decimal>> GetPortfolioDynamicMetrics(PortfolioDynamicPeriod period, int[] ids)
+    public async Task<Dictionary<DateTime, decimal>> GetPortfolioDynamicMetrics(PortfolioDynamicPeriod period, int[] ids, CancellationToken ct)
     {
         var result = new Dictionary<DateTime, decimal>();
+        var startDate = DataContext.Transactions.Min(t => t.Date);
 
-        return await Task.FromResult(result);
+        foreach (var item in GetDynamicMetrics(startDate, period))
+        {
+            ct.ThrowIfCancellationRequested();
+
+            var total = await DataContext.Transactions
+                .Where(t => ids.Contains(t.PortfolioId) &&
+                            t.Event == Model.Enums.TransactionEvent.Cash_In &&
+                            t.Date <= item.Key)
+                .SumAsync(t => t.Quantity, ct);
+            result.Add(item.Key, total);
+        }
+
+        return result;
     }
 
     private Dictionary<DateTime, decimal> GetDynamicMetrics(
