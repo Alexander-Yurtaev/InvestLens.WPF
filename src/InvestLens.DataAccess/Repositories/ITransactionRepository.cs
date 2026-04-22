@@ -1,4 +1,6 @@
-﻿namespace InvestLens.DataAccess.Repositories;
+﻿using InvestLens.Model.Enums;
+
+namespace InvestLens.DataAccess.Repositories;
 
 public interface ITransactionRepository
 {
@@ -16,4 +18,6 @@ public interface ITransactionRepository
 
     Task<decimal> GetTotalFeeTax();
     Task<decimal> GetPortfolioTotalFeeTax(int[] ids);
+    Task<Dictionary<DateTime, decimal>> GetDynamicMetrics(PortfolioDynamicPeriod period);
+    Task<Dictionary<DateTime, decimal>> GetPortfolioDynamicMetrics(PortfolioDynamicPeriod period, int[] ids);
 }

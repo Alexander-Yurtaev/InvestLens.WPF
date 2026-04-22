@@ -7,7 +7,7 @@ public class Transaction : BaseEntity
     /// <summary>
     /// Произошедшее событие
     /// </summary>
-    public TransactionEvents Event { get; set; }
+    public TransactionEvent Event { get; set; }
 
     /// <summary>
     /// Дата события в формате гггг-мм-дд (год-месяц-день, например 2021-01-15)

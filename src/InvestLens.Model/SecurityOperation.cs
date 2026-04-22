@@ -6,7 +6,7 @@ public class SecurityOperation
 {
     public string SecId { get; set; } = string.Empty;
     public DateTime Date { get; set; }
-    public TransactionEvents OperationType { get; set; }
+    public TransactionEvent OperationType { get; set; }
     public decimal Count { get; set; }
     public decimal Price { get; set; }
     public decimal TotalPrice { get; set; }

@@ -13,6 +13,7 @@ public class DashboardViewModel : ViewModelBaseWithContentHeader, IDashboardView
     private readonly IWindowManager _windowManager;
     private readonly IMetricsService _metricsManager;
     private readonly IActivityManager _activityManager;
+    private IPortfolioDynamicsService _portfolioDynamicsService;
 
     public DashboardViewModel(
         IAuthManager authManager,
@@ -33,7 +34,11 @@ public class DashboardViewModel : ViewModelBaseWithContentHeader, IDashboardView
         ActivityItems = [];
     }
 
-    public IPortfolioDynamicsService PortfolioDynamicsService { get; }
+    public IPortfolioDynamicsService PortfolioDynamicsService 
+    { 
+        get => _portfolioDynamicsService; 
+        set => SetProperty(ref _portfolioDynamicsService, value); 
+    }
 
     public ObservableCollection<MetricCard> MetricCards { get; }
     public ObservableCollection<ActivityItem> ActivityItems { get; }

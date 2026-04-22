@@ -33,12 +33,12 @@ public class ActivityManager : IActivityManager
 
     private string GetDescription(Transaction transaction)
     {
-        if (transaction.Event == Model.Enums.TransactionEvents.Buy)
+        if (transaction.Event == Model.Enums.TransactionEvent.Buy)
         {
             return $"+{transaction.Quantity.ToString("N2")} шт";
         }
 
-        if (transaction.Event == Model.Enums.TransactionEvents.Sell)
+        if (transaction.Event == Model.Enums.TransactionEvent.Sell)
         {
             return $"-{transaction.Quantity.ToString("N2")} шт";
         }

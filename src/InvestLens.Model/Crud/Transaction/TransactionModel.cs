@@ -4,7 +4,7 @@ namespace InvestLens.Model.Crud.Transaction;
 
 public class TransactionModel
 {
-    public TransactionEvents Event { get; set; }
+    public TransactionEvent Event { get; set; }
     public DateTime Date { get; set; }
     public string Symbol { get; set; } = string.Empty;
     public decimal Price { get; set; }

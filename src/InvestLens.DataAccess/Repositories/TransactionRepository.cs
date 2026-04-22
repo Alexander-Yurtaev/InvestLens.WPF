@@ -1,4 +1,6 @@
 ﻿
+using InvestLens.Model.Entities;
+using InvestLens.Model.Enums;
 using InvestLens.Model.Services;
 using Microsoft.EntityFrameworkCore;
 
@@ -17,7 +19,7 @@ public class TransactionRepository : BaseRepository, ITransactionRepository
     public async Task<decimal> GetTotalCashIn()
     {
         var total = await DataContext.Transactions
-            .Where(t => t.Event == Model.Enums.TransactionEvents.Cash_In)
+            .Where(t => t.Event == Model.Enums.TransactionEvent.Cash_In)
             .SumAsync(t => t.Quantity);
 
         return total;
@@ -27,7 +29,7 @@ public class TransactionRepository : BaseRepository, ITransactionRepository
     {
         var total = await DataContext.Transactions
             .Where(t => ids.Contains(t.PortfolioId) &&
-                        (t.Event == Model.Enums.TransactionEvents.Cash_In))
+                        (t.Event == Model.Enums.TransactionEvent.Cash_In))
             .SumAsync(t => t.Quantity);
 
         return total;
@@ -38,7 +40,7 @@ public class TransactionRepository : BaseRepository, ITransactionRepository
     public async Task<decimal> GetTotalCashOut()
     {
         var total = await DataContext.Transactions
-            .Where(t => t.Event == Model.Enums.TransactionEvents.Cash_Out)
+            .Where(t => t.Event == Model.Enums.TransactionEvent.Cash_Out)
             .SumAsync(t => t.Quantity);
 
         return total;
@@ -48,7 +50,7 @@ public class TransactionRepository : BaseRepository, ITransactionRepository
     {
         var total = await DataContext.Transactions
             .Where(t => ids.Contains(t.PortfolioId) &&
-                        (t.Event == Model.Enums.TransactionEvents.Cash_Out))
+                        (t.Event == Model.Enums.TransactionEvent.Cash_Out))
             .SumAsync(t => t.Quantity);
 
         return total;
@@ -77,7 +79,7 @@ public class TransactionRepository : BaseRepository, ITransactionRepository
     public async Task<decimal> GetTotalDividends()
     {
         var total = await DataContext.Transactions
-            .Where(t => t.Event == Model.Enums.TransactionEvents.Dividend)
+            .Where(t => t.Event == Model.Enums.TransactionEvent.Dividend)
             .SumAsync(t => t.Quantity);
 
         return total;
@@ -87,7 +89,7 @@ public class TransactionRepository : BaseRepository, ITransactionRepository
     {
         var total = await DataContext.Transactions
             .Where(t => ids.Contains(t.PortfolioId) &&
-                        t.Event == Model.Enums.TransactionEvents.Dividend)
+                        t.Event == Model.Enums.TransactionEvent.Dividend)
             .SumAsync(t => t.Quantity);
 
         return total;
@@ -110,5 +112,79 @@ public class TransactionRepository : BaseRepository, ITransactionRepository
             .SumAsync(t => t.FeeTax);
 
         return total;
+    }
+
+    // DynamicMetrics
+    public async Task<Dictionary<DateTime, decimal>> GetDynamicMetrics(PortfolioDynamicPeriod period)
+    {
+        var result = new Dictionary<DateTime, decimal>();
+        var startDate = DataContext.Transactions.Min(t => t.Date);
+        
+        foreach (var item in GetDynamicMetricsKey(startDate, period))
+        {
+            var total = await DataContext.Transactions
+                .Where(t => t.Event == Model.Enums.TransactionEvent.Cash_In &&
+                            t.Date <= item.Key)
+                .SumAsync(t => t.Quantity);
+            result.Add(item.Key, total);
+        }
+
+        return result;
+    }
+
+    public async Task<Dictionary<DateTime, decimal>> GetPortfolioDynamicMetrics(PortfolioDynamicPeriod period, int[] ids)
+    {
+        var result = new Dictionary<DateTime, decimal>();
+
+        return await Task.FromResult(result);
+    }
+
+    private Dictionary<DateTime, decimal> GetDynamicMetricsKey(
+        DateTime startDate, 
+        PortfolioDynamicPeriod period)
+    {
+        return period switch
+        {
+            PortfolioDynamicPeriod.Period1M => GetDateRange(startDate, 1),
+            PortfolioDynamicPeriod.Period3M => GetDateRange(startDate, 3),
+            PortfolioDynamicPeriod.Period6M => GetDateRange(startDate, 6),
+            PortfolioDynamicPeriod.Period1Y => GetDateRange(startDate, 12),
+            _ => throw new NotImplementedException()
+        };
+    }
+
+    private Dictionary<DateTime, decimal> GetDateRange(DateTime startDate, int stepMonth)
+    {
+        var result = new Dictionary<DateTime, decimal>();
+
+        startDate = GetFirstDate(startDate, PortfolioDynamicPeriod.Period1M);
+        var lastDate = GetLastDate(DateTime.Now, PortfolioDynamicPeriod.Period1M);
+        var cursorDate = startDate;
+        while(cursorDate <= lastDate)
+        {
+            result.Add(cursorDate, 0);
+            cursorDate = cursorDate.AddMonths(stepMonth);
+        }
+
+        return result;
+    }
+
+    private DateTime GetFirstDate(DateTime date, PortfolioDynamicPeriod period)
+    {
+        return GetLastDate(date, period).AddMonths(-1).AddDays(1);
+    }
+
+    private DateTime GetLastDate(DateTime date, PortfolioDynamicPeriod period)
+    {
+        switch (period)
+        {
+            case PortfolioDynamicPeriod.Period1M:
+                var daysInMonth = DateTime.DaysInMonth(date.Year, date.Month);
+                return new DateTime(date.Year, date.Month, daysInMonth);
+            case PortfolioDynamicPeriod.Period1Y:
+                return new DateTime(date.Year, 12, 31);
+            default:
+                throw new ArgumentOutOfRangeException(period.ToString());
+        }
     }
 }

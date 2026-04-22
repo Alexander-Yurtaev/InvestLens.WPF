@@ -1,4 +1,5 @@
 ﻿using InvestLens.Model;
+using InvestLens.Model.Enums;
 
 namespace InvestLens.ViewModel.Services;
 
@@ -18,4 +19,8 @@ public interface IMetricsService
     // денежный поток(купоны/дивиденды)
     Task<decimal> TotalDividends();
     Task<decimal> PortfolioTotalDividends(int[] ids);
+
+    // DynamicMetrics
+    Task<Dictionary<DateTime, decimal>> DynamicMetrics(PortfolioDynamicPeriod period);
+    Task<Dictionary<DateTime, decimal>> PortfolioDynamicMetrics(PortfolioDynamicPeriod period, int[] ids);
 }

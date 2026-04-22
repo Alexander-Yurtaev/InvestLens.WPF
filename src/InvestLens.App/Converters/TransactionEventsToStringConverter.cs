@@ -9,25 +9,25 @@ public class TransactionEventsToStringConverter : IValueConverter
     public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
     {
         if (value is null) return "ОШИБКА";
-        if (Enum.TryParse<TransactionEvents>(value.ToString(), true, out var transactionEvent))
+        if (Enum.TryParse<TransactionEvent>(value.ToString(), true, out var transactionEvent))
         {
             return transactionEvent switch
             {
-                TransactionEvents.Buy => "Покупка",
-                TransactionEvents.Sell => "Продажа",
-                TransactionEvents.Dividend => "Дивиденд или купон",
-                TransactionEvents.Stock_As_Dividend => "Дивиденд в виде акции",
-                TransactionEvents.Split => "Сплит",
-                TransactionEvents.Spinoff => "Спинофф",
-                TransactionEvents.Fee => "Комиссия",
-                TransactionEvents.Amortisation => "Амортизация по облигации",
-                TransactionEvents.Repayment => "Полное погашение облигации",
-                TransactionEvents.Cash_In => "Пополнение счета",
-                TransactionEvents.Cash_Out => "Вывод средств со счета",
-                TransactionEvents.Cash_Gain => "Прочие доходы",
-                TransactionEvents.Cash_Expense => "Прочие расходы",
-                TransactionEvents.Cash_Convert => "Конвертация",
-                TransactionEvents.Tax => "НДФЛ",
+                TransactionEvent.Buy => "Покупка",
+                TransactionEvent.Sell => "Продажа",
+                TransactionEvent.Dividend => "Дивиденд или купон",
+                TransactionEvent.Stock_As_Dividend => "Дивиденд в виде акции",
+                TransactionEvent.Split => "Сплит",
+                TransactionEvent.Spinoff => "Спинофф",
+                TransactionEvent.Fee => "Комиссия",
+                TransactionEvent.Amortisation => "Амортизация по облигации",
+                TransactionEvent.Repayment => "Полное погашение облигации",
+                TransactionEvent.Cash_In => "Пополнение счета",
+                TransactionEvent.Cash_Out => "Вывод средств со счета",
+                TransactionEvent.Cash_Gain => "Прочие доходы",
+                TransactionEvent.Cash_Expense => "Прочие расходы",
+                TransactionEvent.Cash_Convert => "Конвертация",
+                TransactionEvent.Tax => "НДФЛ",
                 _ => "ОШИБКА"
             };
         }

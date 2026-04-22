@@ -84,16 +84,16 @@ public class PortfoliosManager : IPortfoliosManager
                 .GroupBy(t => t.Symbol)
                 .Select(g =>
                 {
-                    var count = g.Where(t => t.Event == TransactionEvents.Buy).Sum(t => t.Quantity)
+                    var count = g.Where(t => t.Event == TransactionEvent.Buy).Sum(t => t.Quantity)
                                 -
-                                g.Where(t => t.Event == TransactionEvents.Sell).Sum(t => t.Quantity);
-                    var totalPrice = g.Where(t => t.Event == TransactionEvents.Buy).Sum(t => t.Price*t.Quantity+t.FeeTax)
+                                g.Where(t => t.Event == TransactionEvent.Sell).Sum(t => t.Quantity);
+                    var totalPrice = g.Where(t => t.Event == TransactionEvent.Buy).Sum(t => t.Price*t.Quantity+t.FeeTax)
                                      -
-                                     g.Where(t => t.Event == TransactionEvents.Sell).Sum(t => t.Price * t.Quantity)
+                                     g.Where(t => t.Event == TransactionEvent.Sell).Sum(t => t.Price * t.Quantity)
                                      +
-                                     g.Where(t => t.Event == TransactionEvents.Sell).Sum(t => t.FeeTax);
+                                     g.Where(t => t.Event == TransactionEvent.Sell).Sum(t => t.FeeTax);
 
-                    var dividendCount = g.Where(t => t.Event == TransactionEvents.Dividend)
+                    var dividendCount = g.Where(t => t.Event == TransactionEvent.Dividend)
                                      .Sum(t => t.Quantity);
 
                     return new SecurityInfo(g.Key, g.Key)

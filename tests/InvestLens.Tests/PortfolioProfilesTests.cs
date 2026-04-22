@@ -21,22 +21,22 @@ public class PortfolioProfilesTests
     }
 
     [Theory]
-    [InlineData(TransactionEvents.Buy)]
-    [InlineData(TransactionEvents.Sell)]
-    [InlineData(TransactionEvents.Dividend)]
-    [InlineData(TransactionEvents.Stock_As_Dividend)]
-    [InlineData(TransactionEvents.Split)]
-    [InlineData(TransactionEvents.Spinoff)]
-    [InlineData(TransactionEvents.Fee)]
-    [InlineData(TransactionEvents.Amortisation)]
-    [InlineData(TransactionEvents.Repayment)]
-    [InlineData(TransactionEvents.Cash_In)]
-    [InlineData(TransactionEvents.Cash_Out)]
-    [InlineData(TransactionEvents.Cash_Gain)]
-    [InlineData(TransactionEvents.Cash_Expense)]
-    [InlineData(TransactionEvents.Cash_Convert)]
-    [InlineData(TransactionEvents.Tax)]
-    public void ShouldTransactionEventsConvertCorrect(TransactionEvents eventValue)
+    [InlineData(TransactionEvent.Buy)]
+    [InlineData(TransactionEvent.Sell)]
+    [InlineData(TransactionEvent.Dividend)]
+    [InlineData(TransactionEvent.Stock_As_Dividend)]
+    [InlineData(TransactionEvent.Split)]
+    [InlineData(TransactionEvent.Spinoff)]
+    [InlineData(TransactionEvent.Fee)]
+    [InlineData(TransactionEvent.Amortisation)]
+    [InlineData(TransactionEvent.Repayment)]
+    [InlineData(TransactionEvent.Cash_In)]
+    [InlineData(TransactionEvent.Cash_Out)]
+    [InlineData(TransactionEvent.Cash_Gain)]
+    [InlineData(TransactionEvent.Cash_Expense)]
+    [InlineData(TransactionEvent.Cash_Convert)]
+    [InlineData(TransactionEvent.Tax)]
+    public void ShouldTransactionEventsConvertCorrect(TransactionEvent eventValue)
     {
         // Arrange
         var transaction = new Transaction()

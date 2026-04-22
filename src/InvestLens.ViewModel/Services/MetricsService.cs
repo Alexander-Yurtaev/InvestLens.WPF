@@ -1,5 +1,6 @@
 ﻿using InvestLens.DataAccess.Repositories;
 using InvestLens.Model;
+using InvestLens.Model.Enums;
 
 namespace InvestLens.ViewModel.Services;
 
@@ -58,6 +59,8 @@ public class MetricsService : IMetricsService
 
     #endregion TotalDividends
 
+    #region Metrics
+
     public async Task<List<MetricCard>> GetMetricCards()
     {
         var totalCashIn = await TotalCashIn();
@@ -95,4 +98,22 @@ public class MetricsService : IMetricsService
 
         return result;
     }
+
+    #endregion Metrics
+
+    #region DynamicMetrics
+
+    public async Task<Dictionary<DateTime, decimal>> DynamicMetrics(PortfolioDynamicPeriod period)
+    {
+        var result = await _repository.GetDynamicMetrics(period);
+        return result;
+    }
+
+    public async Task<Dictionary<DateTime, decimal>> PortfolioDynamicMetrics(PortfolioDynamicPeriod period, int[] ids)
+    {
+        var result = await _repository.GetPortfolioDynamicMetrics(period, ids);
+        return result;
+    }
+
+    #endregion DynamicMetrics
 }

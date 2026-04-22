@@ -13,7 +13,7 @@ public class CustomEnumConverter : ITypeConverter
         {
             throw new ArgumentNullException(nameof(text));
         }
-        return Enum.Parse<TransactionEvents>(text, true);
+        return Enum.Parse<TransactionEvent>(text, true);
     }
 
     public string? ConvertToString(object? value, IWriterRow row, MemberMapData memberMapData)

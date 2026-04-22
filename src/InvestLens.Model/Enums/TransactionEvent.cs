@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace InvestLens.Model.Enums;
 
-public enum TransactionEvents
+public enum TransactionEvent
 {
     // Покупка
     Buy,
