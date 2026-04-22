@@ -67,7 +67,9 @@ public class MetricsService : IMetricsService
         var currentCost = await CurrentCost();
         var totalDividends = await TotalDividends();
         // ( (Текущая стоимость − Вложено + Дивиденды) / Вложено ) × 100%
-        var totalProfit = (currentCost - totalCashIn + totalDividends) / totalCashIn;
+        var totalProfit = totalCashIn > 0
+            ? (currentCost - totalCashIn + totalDividends) / totalCashIn
+            : 0;
 
         var result = new List<MetricCard>
         {
@@ -86,7 +88,9 @@ public class MetricsService : IMetricsService
         var currentCost = await PortfolioCurrentCost(ids);
         var totalDividends = await PortfolioTotalDividends(ids);
         // ( (Текущая стоимость − Вложено + Дивиденды) / Вложено ) × 100%
-        var totalProfit = (currentCost - totalCashIn + totalDividends) / totalCashIn;
+        var totalProfit = totalCashIn > 0 
+            ? (currentCost - totalCashIn + totalDividends) / totalCashIn
+            : 0;
 
         var result = new List<MetricCard>
         {
