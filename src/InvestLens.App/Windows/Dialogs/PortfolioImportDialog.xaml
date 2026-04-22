@@ -105,7 +105,8 @@
             <Setter Property="Margin" Value="0 0 0 24"/>
         </Style>
         <Style x:Key="ImportModeRadioStyle"
-               TargetType="{x:Type RadioButton}">
+               TargetType="{x:Type RadioButton}"
+               BasedOn="{StaticResource {x:Type RadioButton}}">
             <Setter Property="FontSize" Value="13"/>
             <Setter Property="FontWeight" Value="Bold"/>
             <Setter Property="Foreground" Value="#1E2A3E"/>
@@ -198,11 +199,13 @@
                             <RadioButton GroupName="ImportMode"
                                          Content="Объединить с существующими данными"
                                          IsChecked="{Binding MergeMode}"
-                                         Style="{StaticResource ImportModeRadioStyle}"/>
+                                         Style="{StaticResource ImportModeRadioStyle}"
+                                         IsEnabled="False"/>
                             <RadioButton GroupName="ImportMode"
                                          Content="Заменить текущий портфель"
                                          IsChecked="{Binding RecreateMode}"
-                                         Style="{StaticResource ImportModeRadioStyle}"/>
+                                         Style="{StaticResource ImportModeRadioStyle}"
+                                         IsEnabled="False"/>
                             <TextBlock Text="{Binding ErrorMessage}"
                                        Visibility="{Binding HasErrorMessage, Converter={StaticResource BooleanToVisibilityConv}}"
                                        Style="{StaticResource ErrorMessageStyle}"/>

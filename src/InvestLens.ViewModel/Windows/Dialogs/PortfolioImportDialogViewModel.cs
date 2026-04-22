@@ -19,7 +19,7 @@ public class PortfolioImportDialogViewModel : BaseDialogViewModel, IPortfolioImp
         CancelSelectFileCommand = new DelegateCommand(OnCancelSelectFile);
 
         FileFullName = "";
-        MergeMode = true;
+        RecreateMode = true;
     }
 
     public override string Header => "Импорт";

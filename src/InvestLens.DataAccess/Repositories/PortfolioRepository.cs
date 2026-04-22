@@ -136,32 +136,43 @@ public class PortfolioRepository(
 
     private async Task<int> MergeInMemoty(List<Transaction> transactions)
     {
-        var dbTransactions = await DataContext.Transactions.ToListAsync();
-        foreach (var external in transactions)
+        await using var transaction = DataContext.Database.BeginTransaction();
+
+        try
         {
-            // Event,Date,Symbol,Price,Quantity,Currency,FeeTax,Exchange,NKD,FeeCurrency,DoNotAdjustCash,Note
-            var existing = dbTransactions.SingleOrDefault(
-                t => t.Event == external.Event &&
-                     t.Date == external.Date &&
-                     t.Symbol == external.Symbol &&
-                     t.Price == external.Price &&
-                     t.Quantity == external.Quantity &&
-                     t.Currency == external.Currency
-                );
+            var dbTransactions = await DataContext.Transactions.ToListAsync();
+            foreach (var external in transactions)
+            {
+                // Event,Date,Symbol,Price,Quantity,Currency,FeeTax,Exchange,NKD,FeeCurrency,DoNotAdjustCash,Note
+                var existing = dbTransactions.SingleOrDefault(
+                    t => t.Event == external.Event &&
+                         t.Date == external.Date &&
+                         t.Symbol == external.Symbol &&
+                         t.Price == external.Price &&
+                         t.Quantity == external.Quantity &&
+                         t.Currency == external.Currency
+                    );
 
-            if (existing != null)
-            {
-                external.Id = existing.Id;
-                var entity = DataContext.Entry(existing);
-                entity.CurrentValues.SetValues(external);
+                if (existing != null)
+                {
+                    external.Id = existing.Id;
+                    var entity = DataContext.Entry(existing);
+                    entity.CurrentValues.SetValues(external);
+                }
+                else
+                {
+                    DataContext.Transactions.Add(external);
+                }
             }
-            else
-            {
-                DataContext.Transactions.Add(external);
-            }
+
+            var count = await DataContext.SaveChangesAsync();
+            await transaction.CommitAsync();
+            return count;
         }
-
-        return await DataContext.SaveChangesAsync();
+        finally
+        {
+            await transaction.RollbackAsync();
+        }
     }
 
     public async Task<List<Transaction>> GetTransactions(int portfolioId)
