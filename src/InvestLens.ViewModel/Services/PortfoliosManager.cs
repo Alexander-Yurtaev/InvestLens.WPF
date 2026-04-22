@@ -163,7 +163,8 @@ public class PortfoliosManager : IPortfoliosManager
         {
             try
             {
-                var portfolio = await _portfolioRepository.CreatePortfolio(model);
+                var portfolio = _mapper.Map<Portfolio>(model);
+                portfolio = await _portfolioRepository.CreatePortfolio(portfolio);
                 await _portfolioRepository.Save();
 
                 if (model.Portfolios.Any())
@@ -202,9 +203,10 @@ public class PortfoliosManager : IPortfoliosManager
 
     public async Task Update(UpdateModel model)
     {
-        await _portfolioRepository.Update(model);
+        var portfolio = _mapper.Map<Portfolio>(model);
+        await _portfolioRepository.Update(portfolio, model.Portfolios);
         await _portfolioRepository.Save();
-        var portfolio = await _portfolioRepository.GetPortfolioById(model.Id);
+        portfolio = await _portfolioRepository.GetPortfolioById(model.Id);
         if (portfolio is null)
         {
             await Task.FromException(new KeyNotFoundException($"Портфель с {model.Id} не найден."));

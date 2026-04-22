@@ -46,35 +46,32 @@ public class PortfolioRepository(
             .ToListAsync();
     }
 
-    public async Task<Portfolio> CreatePortfolio(InvestLens.Model.Crud.Portfolio.CreateModel model)
+    public async Task<Portfolio> CreatePortfolio(Portfolio portfolio)
     {
-        var portfolio = _mapper.Map<Portfolio>(model);
         DataContext.Portfolios.Add(portfolio);
         return await Task.FromResult(portfolio);
     }
 
-    public async Task Update(InvestLens.Model.Crud.Portfolio.UpdateModel model)
+    public async Task Update(Portfolio portfolio, List<int> portfolios)
     {
-        var portfolio = await GetPortfolioById(model.Id);
-        if (portfolio is null)
+        var portfolioOriginal = await GetPortfolioById(portfolio.Id);
+        if (portfolioOriginal is null)
         {
-            await Task.FromException(new KeyNotFoundException($"Портфель с {model.Id} не найден."));
+            await Task.FromException(new KeyNotFoundException($"Портфель с {portfolio.Id} не найден."));
             return;
         }
 
-        _mapper.Map(model, portfolio);
-        foreach(var id in model.Portfolios.ToArray())
+        foreach(var id in portfolios.ToArray())
         {
-            if (portfolio.ChildrenPortfolios.Any(c => c.Id == id)) continue;
+            if (portfolioOriginal.ChildrenPortfolios.Any(c => c.Id == id)) continue;
             var childPortfolio = await GetPortfolioById(id);
-            portfolio.ChildrenPortfolios.Add(childPortfolio!);
+            portfolioOriginal.ChildrenPortfolios.Add(childPortfolio!);
         }
 
-        foreach(var childPortfolio in portfolio.ChildrenPortfolios.ToArray())
+        foreach(var childPortfolio in portfolioOriginal.ChildrenPortfolios.ToArray())
         {
-            var deletedChildPortfolioId = model.Portfolios.FirstOrDefault(p => p == childPortfolio.Id);
-            if (deletedChildPortfolioId > 0) continue;
-            portfolio.ChildrenPortfolios.Remove(childPortfolio);
+            if (portfolios.Contains(childPortfolio.Id)) continue;
+            portfolioOriginal.ChildrenPortfolios.Remove(childPortfolio);
         }
     }
 
