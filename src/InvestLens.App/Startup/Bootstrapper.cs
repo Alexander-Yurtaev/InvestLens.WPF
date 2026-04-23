@@ -17,6 +17,7 @@ using InvestLens.ViewModel.Windows;
 using InvestLens.ViewModel.Windows.Dialogs;
 using Microsoft.EntityFrameworkCore;
 using System.IO;
+using System.Windows;
 
 namespace InvestLens.App.Startup
 {
@@ -29,6 +30,8 @@ namespace InvestLens.App.Startup
             RegisterDataContext(builder);
          
             builder.RegisterAutoMapper(typeof(App).Assembly);
+
+            builder.RegisterType<InvestLensDataContextFactory>().AsSelf();
 
             builder.RegisterType<EventAggregator>().As<IEventAggregator>().SingleInstance();
             builder.RegisterType<ViewModelFactory>().As<IViewModelFactory>().SingleInstance();
@@ -110,41 +113,35 @@ namespace InvestLens.App.Startup
             builder.RegisterType<SettingsCommonViewModel>().As<ISettingsCommonViewModel>();
             builder.RegisterType<SettingsPluginsViewModel>().As<ISettingsPluginsViewModel>();
 
-            return builder.Build();
+            var container = builder.Build();
+
+            ApplyMigrations(container);
+
+            return container;
         }
 
         private static void RegisterDataContext(ContainerBuilder builder)
         {
-            builder.Register(_ => new InvestLensDataContext(GetDbContextOptions()))
+            builder.Register(context => context.Resolve<InvestLensDataContextFactory>().CreateDbContext([]))
                 .As<InvestLensDataContext>()
                 .InstancePerLifetimeScope();
         }
 
-        private static DbContextOptions<InvestLensDataContext> GetDbContextOptions()
+        private static void ApplyMigrations(IContainer container)
         {
-            var optionsBuilder = new DbContextOptionsBuilder<InvestLensDataContext>();
-
-            var dbPath = Path.Combine(
-                Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
-                "InvestLens",
-#if DEBUG
-                "DEBUG",
-#endif
-                "database.db");
-
-            var dbDir = Path.GetDirectoryName(dbPath);
-            if (!Directory.Exists(dbDir))
+            try
             {
-                Directory.CreateDirectory(dbDir!);
+                using var scope = container.BeginLifetimeScope();
+                var context = scope.Resolve<InvestLensDataContext>();
+
+                context.Database.Migrate();
             }
-
-            optionsBuilder.UseSqlite($"Data Source={dbPath}", options =>
+            catch (Exception ex)
             {
-                options.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery);
-                options.CommandTimeout(30);
-            });
 
-            return optionsBuilder.Options;
+                System.Diagnostics.Debug.WriteLine(ex.Message);
+                MessageBox.Show(ex.Message);
+            }
         }
     }
 }

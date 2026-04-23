@@ -11,7 +11,6 @@ public sealed class InvestLensDataContext : DbContext
 
     public InvestLensDataContext(DbContextOptions<InvestLensDataContext> options) : base(options)
     {
-        Database.EnsureCreated();
     }
 
     #region Overrides of DbContext

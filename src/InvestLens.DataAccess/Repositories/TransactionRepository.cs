@@ -118,17 +118,25 @@ public class TransactionRepository : BaseRepository, ITransactionRepository
     public async Task<Dictionary<DateTime, decimal>> GetDynamicMetrics(PortfolioDynamicPeriod period, CancellationToken ct)
     {
         var result = new Dictionary<DateTime, decimal>();
-        var startDate = DataContext.Transactions.Min(t => t.Date);
-        
-        foreach (var item in GetDynamicMetrics(startDate, period))
-        {
-            ct.ThrowIfCancellationRequested();
 
-            var total = await DataContext.Transactions
-                .Where(t => t.Event == Model.Enums.TransactionEvent.Cash_In &&
-                            t.Date <= item.Key)
-                .SumAsync(t => t.Quantity, ct);
-            result.Add(item.Key, total);
+        if (await DataContext.Transactions.AnyAsync(ct))
+        {
+            var startDate = DataContext.Transactions.Min(t => t.Date);
+
+            foreach (var item in GetDynamicMetrics(startDate, period))
+            {
+                ct.ThrowIfCancellationRequested();
+
+                var total = await DataContext.Transactions
+                    .Where(t => t.Event == Model.Enums.TransactionEvent.Cash_In &&
+                                t.Date <= item.Key)
+                    .SumAsync(t => t.Quantity, ct);
+                result.Add(item.Key, total);
+            }
+        }
+        else
+        {
+            result = GetDateRange(DateTime.Now.AddMonths(-(int)period), period);
         }
 
         return result;
@@ -137,25 +145,33 @@ public class TransactionRepository : BaseRepository, ITransactionRepository
     public async Task<Dictionary<DateTime, decimal>> GetPortfolioDynamicMetrics(PortfolioDynamicPeriod period, int[] ids, CancellationToken ct)
     {
         var result = new Dictionary<DateTime, decimal>();
-        var startDate = DataContext.Transactions.Min(t => t.Date);
 
-        foreach (var item in GetDynamicMetrics(startDate, period))
+        if (await DataContext.Transactions.AnyAsync(ct))
         {
-            ct.ThrowIfCancellationRequested();
+            var startDate = DataContext.Transactions.Min(t => t.Date);
 
-            var total = await DataContext.Transactions
-                .Where(t => ids.Contains(t.PortfolioId) &&
-                            t.Event == Model.Enums.TransactionEvent.Cash_In &&
-                            t.Date <= item.Key)
-                .SumAsync(t => t.Quantity, ct);
-            result.Add(item.Key, total);
+            foreach (var item in GetDynamicMetrics(startDate, period))
+            {
+                ct.ThrowIfCancellationRequested();
+
+                var total = await DataContext.Transactions
+                    .Where(t => ids.Contains(t.PortfolioId) &&
+                                t.Event == Model.Enums.TransactionEvent.Cash_In &&
+                                t.Date <= item.Key)
+                    .SumAsync(t => t.Quantity, ct);
+                result.Add(item.Key, total);
+            }
+        }
+        else
+        {
+            result = GetDateRange(DateTime.Now.AddMonths(-(int)period), period);
         }
 
         return result;
     }
 
     private Dictionary<DateTime, decimal> GetDynamicMetrics(
-        DateTime startDate, 
+        DateTime startDate,
         PortfolioDynamicPeriod period)
     {
         return period switch
@@ -175,7 +191,7 @@ public class TransactionRepository : BaseRepository, ITransactionRepository
         startDate = GetFirstDate(startDate, period);
         var lastDate = GetLastDate(DateTime.Now, period);
         var cursorDate = startDate;
-        while(cursorDate <= lastDate)
+        while (cursorDate <= lastDate)
         {
             result.Add(cursorDate, 0);
             cursorDate = cursorDate.AddMonths((int)period);
