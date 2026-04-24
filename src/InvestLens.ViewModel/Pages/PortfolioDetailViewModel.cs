@@ -102,7 +102,19 @@ public class PortfolioDetailViewModel : ViewModelBaseWithContentHeader, IPortfol
 
         if (confirmed == true)
         {
-            await _portfoliosManager.Delete(_model.Id);
+            _windowManager.ShowIsBusy();
+            try
+            {
+                await _portfoliosManager.Delete(_model.Id);
+            }
+            catch (Exception ex)
+            {
+                ShowErrorDialog(ex);
+            }
+            finally
+            {
+                _windowManager.HideIsBusy();
+            }
         }
     }
 
@@ -145,8 +157,7 @@ public class PortfolioDetailViewModel : ViewModelBaseWithContentHeader, IPortfol
         }
         catch (Exception ex)
         {
-            var message = ex.InnerException?.Message ?? ex.Message;
-            _windowManager.ShowErrorDialog(message);
+            ShowErrorDialog(ex);
         }
         finally
         {
@@ -187,6 +198,10 @@ public class PortfolioDetailViewModel : ViewModelBaseWithContentHeader, IPortfol
             RaisePropertyChanged(nameof(MetricCards));
             RaisePropertyChanged(nameof(Operations));
         }
+        catch(Exception ex)
+        {
+            ShowErrorDialog(ex);
+        }
         finally
         {
             _windowManager.HideIsBusy();
@@ -202,5 +217,11 @@ public class PortfolioDetailViewModel : ViewModelBaseWithContentHeader, IPortfol
     public async Task Load(bool? force = false)
     {
         await RefreshModel();
+    }
+
+    private void ShowErrorDialog(Exception ex)
+    {
+        var message = ex.InnerException?.Message ?? ex.Message;
+        _windowManager.ShowErrorDialog(message);
     }
 }

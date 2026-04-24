@@ -8,12 +8,12 @@ using Microsoft.EntityFrameworkCore.Storage;
 namespace InvestLens.DataAccess.Repositories;
 
 public class PortfolioRepository(
-    InvestLensDataContext db, 
+    InvestLensDataContext db,
     IMapper mapper,
     IAuthManager authManager) : BaseRepository(db, authManager), IPortfolioRepository
 {
     private readonly IMapper _mapper = mapper;
-    
+
     public async Task<IDbContextTransaction> BeginTransactionAsync()
     {
         return await DataContext.Database.BeginTransactionAsync();
@@ -61,32 +61,51 @@ public class PortfolioRepository(
             return;
         }
 
-        foreach(var id in portfolios.ToArray())
+        foreach (var id in portfolios.ToArray())
         {
             if (portfolioOriginal.ChildrenPortfolios.Any(c => c.Id == id)) continue;
             var childPortfolio = await GetPortfolioById(id);
             portfolioOriginal.ChildrenPortfolios.Add(childPortfolio!);
         }
 
-        foreach(var childPortfolio in portfolioOriginal.ChildrenPortfolios.ToArray())
+        foreach (var childPortfolio in portfolioOriginal.ChildrenPortfolios.ToArray())
         {
             if (portfolios.Contains(childPortfolio.Id)) continue;
             portfolioOriginal.ChildrenPortfolios.Remove(childPortfolio);
         }
     }
 
-    public async Task Delete(int id)
+    public async Task<bool> Delete(int id)
     {
-        var portfolio = await DataContext.Portfolios
-            .FirstOrDefaultAsync(p => p.Id == id);
-        if (portfolio is null) return;
+        using var trans = await DataContext.Database.BeginTransactionAsync();
 
-        DataContext.Portfolios.Remove(portfolio);
+        try
+        {
+            var portfolio = await DataContext.Portfolios
+            .FirstOrDefaultAsync(p => p.Id == id);
+
+            if (portfolio is null)
+            {
+                throw new InvalidOperationException($"Портфель с Id = {id} не найден.");
+            }
+
+            var count = await DataContext.Portfolios.Where(p => p.Id == id).ExecuteDeleteAsync();
+            DataContext.Entry(portfolio).State = EntityState.Detached;
+
+            await trans.CommitAsync();
+
+            return count > 0;
+        }
+        catch
+        {
+            await trans.RollbackAsync();
+            throw;
+        }
     }
 
     public async Task<int> Save()
     {
-        return await DataContext.SaveChangesAsync();
+        return await Task.Run(DataContext.SaveChanges);
     }
 
     public async Task<int> Merge(List<Transaction> transactions)
@@ -105,7 +124,10 @@ public class PortfolioRepository(
             try
             {
                 var portfolioId = transactions.Select(t => t.PortfolioId).Distinct().Single();
-                DataContext.Transactions.Where(t => t.PortfolioId == portfolioId).ExecuteDelete();
+                DataContext.Transactions
+                    .Where(t => t.PortfolioId == portfolioId)
+                    .ExecuteDelete();
+
                 DataContext.Transactions.AddRange(transactions);
                 var count = DataContext.SaveChanges();
                 transaction.Commit();
@@ -133,7 +155,7 @@ public class PortfolioRepository(
 
     private async Task<int> MergeInMemoty(List<Transaction> transactions)
     {
-        await using var transaction = DataContext.Database.BeginTransaction();
+        await using var trans = DataContext.Database.BeginTransaction();
 
         try
         {
@@ -163,12 +185,13 @@ public class PortfolioRepository(
             }
 
             var count = await DataContext.SaveChangesAsync();
-            await transaction.CommitAsync();
+            await trans.CommitAsync();
             return count;
         }
-        finally
+        catch
         {
-            await transaction.RollbackAsync();
+            await trans.RollbackAsync();
+            throw;
         }
     }
 
@@ -186,6 +209,7 @@ public class PortfolioRepository(
         var ownerId = GetOwnerId();
 
         var transactions = await DataContext.Transactions
+            .AsNoTracking()
             .Include(t => t.Portfolio)
             .Where(t => t.Portfolio != null &&
                         t.Portfolio.PortfolioType == PortfolioType.Invest &&
@@ -200,6 +224,7 @@ public class PortfolioRepository(
         var ownerId = GetOwnerId();
 
         var transactions = await DataContext.Transactions
+            .AsNoTracking()
             .Include(t => t.Portfolio)
             .Where(t => t.Portfolio != null &&
                         t.Portfolio.PortfolioType == PortfolioType.Invest &&

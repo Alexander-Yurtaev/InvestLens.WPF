@@ -228,9 +228,8 @@ public class PortfoliosManager : IPortfoliosManager
 
     public async Task<bool> Delete(int portfolioId)
     {
-        await _portfolioRepository.Delete(portfolioId);
-        var count = await _portfolioRepository.Save();
-        if (count == 0) return false;
+        var isDeleted = await _portfolioRepository.Delete(portfolioId);
+        if (!isDeleted) return false;
 
         _portfolioCache.Remove(portfolioId);
 

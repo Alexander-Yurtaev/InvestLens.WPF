@@ -10,7 +10,7 @@ namespace InvestLens.DataAccess.Repositories
         Task CommitTransactionAsync();
         Task RollbackTransactionAsync();
         Task<Portfolio> CreatePortfolio(Portfolio portfolio);
-        Task Delete(int id);
+        Task<bool> Delete(int id);
         Task<List<Portfolio>> GetAllPortfolios();
         Task<List<Portfolio>> GetAllPortfolios(PortfolioType portfolioType);
         Task<Portfolio?> GetPortfolioById(int id);
