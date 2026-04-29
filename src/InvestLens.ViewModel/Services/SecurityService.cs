@@ -1,5 +1,7 @@
-﻿using InvestLens.DataAccess.Repositories;
+﻿using AutoMapper;
+using InvestLens.DataAccess.Repositories;
 using InvestLens.DataAccess.Services;
+using InvestLens.Model;
 using InvestLens.Model.Entities;
 
 namespace InvestLens.ViewModel.Services;
@@ -7,10 +9,17 @@ namespace InvestLens.ViewModel.Services;
 public class SecurityService : ISecurityService
 {
     private readonly ISecurityRepository _repository;
+    private readonly IMoexProvider _moexProvider;
+    private readonly IMapper _mapper;
 
-    public SecurityService(ISecurityRepository repository)
+    public SecurityService(
+        ISecurityRepository repository, 
+        IMoexProvider moexProvider,
+        IMapper mapper)
     {
         _repository = repository;
+        _moexProvider = moexProvider;
+        _mapper = mapper;
     }
 
     public async Task UpdateSecurities(List<string> secIdImportList)
@@ -18,7 +27,9 @@ public class SecurityService : ISecurityService
         var secIdDbList = await _repository.GetSecIdListAsync();
         var secIdNewList = secIdImportList.Except(secIdDbList);
 
-        var newSecurityList = secIdNewList.Select(s => new Security(s));
+        var newSecurityModelList = await _moexProvider.GetSecurityList(secIdNewList);
+
+        var newSecurityList = _mapper.Map<List<Security>>(newSecurityModelList);
 
         await _repository.AddRangeAsync(newSecurityList);
         await _repository.SaveAsync();

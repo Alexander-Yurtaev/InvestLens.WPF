@@ -41,8 +41,9 @@ namespace InvestLens.App.Startup
             builder.RegisterType<PortfoliosManager>().As<IPortfoliosManager>().SingleInstance();
             builder.RegisterType<DictionariesMoexManager>().As<IDictionariesMoexManager>().SingleInstance();
             builder.RegisterType<DictionariesManager>().As<IDictionariesManager>().SingleInstance();
-            builder.RegisterType<MoexService>().As<IMoexService>().SingleInstance();
             builder.RegisterType<DohodService>().As<IDohodService>().SingleInstance();
+
+            builder.RegisterType<MoexProvider>().As<IMoexProvider>();
 
             builder.RegisterType<WindowManager>().As<IWindowManager>().SingleInstance();
             builder.RegisterType<AuthManager>().As<IAuthManager>().SingleInstance();
