@@ -1,5 +1,4 @@
-﻿
-using InvestLens.Model.Entities;
+﻿using InvestLens.Model.Entities;
 using InvestLens.Model.Enums;
 using InvestLens.Model.Services;
 using Microsoft.EntityFrameworkCore;

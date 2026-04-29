@@ -1,19 +1,20 @@
 ﻿using InvestLens.Model.Services;
+using Microsoft.EntityFrameworkCore.Storage;
 
 namespace InvestLens.DataAccess.Repositories;
 
-public abstract class BaseRepository
+public abstract class BaseRepository : IBaseRepository
 {
     protected BaseRepository(
-        InvestLensDataContext dataContext, 
+        InvestLensDataContext dataContext,
         IAuthManager authManager)
     {
         DataContext = dataContext;
         AuthManager = authManager;
     }
 
-    public InvestLensDataContext DataContext { get; }
-    public IAuthManager AuthManager { get; }
+    protected InvestLensDataContext DataContext { get; }
+    protected IAuthManager AuthManager { get; }
 
     protected int GetOwnerId()
     {
@@ -23,5 +24,25 @@ public abstract class BaseRepository
         }
 
         return AuthManager.CurrentUser.Id;
+    }
+
+    public async Task<IDbContextTransaction> BeginTransactionAsync()
+    {
+        return await DataContext.Database.BeginTransactionAsync();
+    }
+
+    public async Task CommitTransactionAsync()
+    {
+        await DataContext.Database.CommitTransactionAsync();
+    }
+
+    public async Task RollbackTransactionAsync()
+    {
+        await DataContext.Database.RollbackTransactionAsync();
+    }
+
+    public async Task<int> SaveAsync()
+    {
+        return await DataContext.SaveChangesAsync();
     }
 }

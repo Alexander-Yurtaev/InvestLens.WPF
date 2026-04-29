@@ -2,7 +2,7 @@
 
 namespace InvestLens.DataAccess.Repositories;
 
-public interface ITransactionRepository
+public interface ITransactionRepository : IBaseRepository
 {
     Task<decimal> GetTotalCashIn();
     Task<decimal> GetPortfolioTotalCashIn(int[] ids);

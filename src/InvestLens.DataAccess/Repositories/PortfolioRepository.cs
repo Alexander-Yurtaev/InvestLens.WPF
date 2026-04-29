@@ -14,21 +14,6 @@ public class PortfolioRepository(
 {
     private readonly IMapper _mapper = mapper;
 
-    public async Task<IDbContextTransaction> BeginTransactionAsync()
-    {
-        return await DataContext.Database.BeginTransactionAsync();
-    }
-
-    public async Task CommitTransactionAsync()
-    {
-        await DataContext.Database.CommitTransactionAsync();
-    }
-
-    public async Task RollbackTransactionAsync()
-    {
-        await DataContext.Database.RollbackTransactionAsync();
-    }
-
     public async Task<List<Portfolio>> GetAllPortfolios()
     {
         var ownerId = GetOwnerId();
@@ -101,11 +86,6 @@ public class PortfolioRepository(
             await trans.RollbackAsync();
             throw;
         }
-    }
-
-    public async Task<int> Save()
-    {
-        return await Task.Run(DataContext.SaveChanges);
     }
 
     public async Task<int> Merge(List<Transaction> transactions)

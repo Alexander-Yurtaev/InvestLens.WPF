@@ -51,6 +51,7 @@ namespace InvestLens.App.Startup
 
             builder.RegisterType<UserRepository>().As<IUserRepository>();
             builder.RegisterType<PortfolioRepository>().As<IPortfolioRepository>();
+            builder.RegisterType<SecurityRepository>().As<ISecurityRepository>();
             builder.RegisterType<TransactionRepository>().As<ITransactionRepository>();
 
             builder.RegisterType<MainWindow>().AsSelf();

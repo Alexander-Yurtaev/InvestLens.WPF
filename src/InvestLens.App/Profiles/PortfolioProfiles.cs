@@ -26,5 +26,6 @@ public class PortfolioProfiles : Profile
             .ForMember(dest => dest.Count, opt => opt.MapFrom(src => src.Quantity))
             .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.Note))
             ;
+        CreateMap<InvestLens.Model.Entities.Security, InvestLens.Model.SecurityModel> ().ReverseMap();
     }
 }

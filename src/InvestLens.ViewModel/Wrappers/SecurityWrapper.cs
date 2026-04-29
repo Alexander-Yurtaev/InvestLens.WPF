@@ -1,17 +1,30 @@
 ﻿using InvestLens.Model;
+using InvestLens.Model.Enums;
 
 namespace InvestLens.ViewModel.Wrappers;
 
 public class SecurityWrapper
 {
-    private readonly Security _model;
+    private readonly SecurityModel _model;
 
-    public SecurityWrapper(Security model)
+    public SecurityWrapper(SecurityModel model)
     {
         _model = model;
     }
 
     public string SecId => _model.SecId;
     public string Name => _model.Name;
-    public string SecType => _model.SecType;
+    public string SecTypeDisplay => GetSecTypeDisplay(_model.SecType);
+
+    private string GetSecTypeDisplay(SecurityType secType)
+    {
+        return secType switch
+        {
+            SecurityType.None => "Нет данных",
+            SecurityType.Stock => "Акции",
+            SecurityType.Bond => "Облигации",
+            SecurityType.ETF => "ETF",
+            _ => throw new ArgumentOutOfRangeException(secType.ToString()),
+        };
+    }
 }

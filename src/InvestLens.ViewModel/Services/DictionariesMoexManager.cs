@@ -5,13 +5,13 @@ namespace InvestLens.ViewModel.Services;
 
 public class DictionariesMoexManager : IDictionariesMoexManager
 {
-    private readonly List<Security> _securities =
+    private readonly List<SecurityModel> _securities =
     [
-        new Security("SBER", "Сбербанк", "Акции"),
-        new Security("GAZP", "Газпром", "Акции"),
-        new Security("LKOH", "Лукойл", "Акции"),
-        new Security("FXRL", "FXRL (Россия)", "ETF"),
-        new Security("YNDX", "Яндекс", "Акции")
+        new SecurityModel("SBER", "Сбербанк", SecurityType.Stock),
+        new SecurityModel("GAZP", "Газпром", SecurityType.Stock),
+        new SecurityModel("LKOH", "Лукойл", SecurityType.Stock),
+        new SecurityModel("FXRL", "FXRL (Россия)", SecurityType.ETF),
+        new SecurityModel("YNDX", "Яндекс", SecurityType.Stock)
     ];
 
     private readonly List<Bond> _bonds =
@@ -22,12 +22,15 @@ public class DictionariesMoexManager : IDictionariesMoexManager
         new Bond("Газпром БО-07", "СберБ 001P", "Газпром", PeriodType.Short)
     ];
 
-    public List<string> GetSecurityTypes()
+    public List<SecurityType> GetSecurityTypes()
     {
-        return _securities.Select(s => s.SecType).Distinct().ToList();
+        return _securities
+            .Select(s => s.SecType)
+            .Distinct()
+            .ToList();
     }
 
-    public List<Security> GetSecurities(string type)
+    public List<SecurityModel> GetSecurities(SecurityType type)
     {
         return _securities.Where(r => r.SecType == type).ToList();
     }

@@ -2,7 +2,7 @@
 
 namespace InvestLens.DataAccess.Repositories;
 
-public interface IUserRepository
+public interface IUserRepository : IBaseRepository
 {
     Task<bool> CheckLoginUnique(string login);
     Task<bool> CreateUser(User user);

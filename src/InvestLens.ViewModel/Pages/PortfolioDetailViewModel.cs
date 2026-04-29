@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
+using InvestLens.DataAccess.Repositories;
 using InvestLens.Model;
+using InvestLens.Model.Entities;
 using InvestLens.Model.Crud.Portfolio;
 using InvestLens.Model.Services;
 using InvestLens.ViewModel.Helpers;
@@ -23,6 +25,7 @@ public class PortfolioDetailViewModel : ViewModelBaseWithContentHeader, IPortfol
     private readonly IAuthManager _authManager;
     private readonly IMetricsService _metricsService;
     private readonly IPortfoliosManager _portfoliosManager;
+    private readonly ISecurityRepository _securityRepository;
     private bool _showSold;
     private int _securitiesCount;
 
@@ -32,7 +35,8 @@ public class PortfolioDetailViewModel : ViewModelBaseWithContentHeader, IPortfol
         IWindowManager windowManager, 
         IAuthManager authManager,
         IMetricsService metricsService,
-        IPortfoliosManager portfoliosManager) : base(model.Title, model.Description)
+        IPortfoliosManager portfoliosManager,
+        ISecurityRepository securityRepository) : base(model.Title, model.Description)
     {
         _mapper = mapper;
         _model = model;
@@ -40,7 +44,7 @@ public class PortfolioDetailViewModel : ViewModelBaseWithContentHeader, IPortfol
         _authManager = authManager;
         _metricsService = metricsService;
         _portfoliosManager = portfoliosManager;
-        
+        _securityRepository = securityRepository;
         var buttonModels = new List<ButtonModel>
         {
             new ButtonModel("Редактировать", OnEditPortfolio),
@@ -151,6 +155,8 @@ public class PortfolioDetailViewModel : ViewModelBaseWithContentHeader, IPortfol
                 acceptedCount = await _portfoliosManager.Recreate(transactions);
             }
 
+            await UpdateSecurities(transactions.Select(t => t.Symbol).Distinct().ToList());
+
             await RefreshModel();
             
             _windowManager.ShowSuccessDialog($"Было импортированно {acceptedCount} записей");
@@ -163,6 +169,17 @@ public class PortfolioDetailViewModel : ViewModelBaseWithContentHeader, IPortfol
         {
             _windowManager.HideIsBusy();
         }
+    }
+
+    private async Task UpdateSecurities(List<string> secIdImportList)
+    {
+        var secIdDbList = await _securityRepository.GetSecIdListAsync();
+        var secIdNewList = secIdImportList.Except(secIdDbList);
+
+        var newSecurityList = secIdNewList.Select(s => new Security(s));
+
+        await _securityRepository.AddRangeAsync(newSecurityList);
+        await _securityRepository.SaveAsync();
     }
 
     private async Task RefreshModel()

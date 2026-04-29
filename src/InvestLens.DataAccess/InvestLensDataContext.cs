@@ -7,6 +7,7 @@ public sealed class InvestLensDataContext : DbContext
 {
     public DbSet<User> Users { get; set; }
     public DbSet<Portfolio> Portfolios { get; set; }
+    public DbSet<Security> Securities { get; set; }
     public DbSet<Transaction> Transactions { get; set; }
 
     public InvestLensDataContext(DbContextOptions<InvestLensDataContext> options) : base(options)
@@ -42,6 +43,12 @@ public sealed class InvestLensDataContext : DbContext
                   .WithOne(p => p.ParentPortfolio)
                   .HasForeignKey(p => p.ParentPortfolioId)
                   .OnDelete(DeleteBehavior.Restrict);
+        });
+
+        modelBuilder.Entity<Security>(entity =>
+        {
+            entity.HasKey(s => s.Id);
+            entity.Property(s => s.SecId).IsRequired();
         });
 
         modelBuilder.Entity<Transaction>(entity =>

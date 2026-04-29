@@ -166,7 +166,7 @@ public class PortfoliosManager : IPortfoliosManager
             {
                 var portfolio = _mapper.Map<Portfolio>(model);
                 portfolio = await _portfolioRepository.CreatePortfolio(portfolio);
-                await _portfolioRepository.Save();
+                await _portfolioRepository.SaveAsync();
 
                 if (model.Portfolios.Any())
                 {
@@ -180,7 +180,7 @@ public class PortfoliosManager : IPortfoliosManager
                         }
                         childPortfolio!.ParentPortfolioId = portfolio.Id;
                     }
-                    await _portfolioRepository.Save();
+                    await _portfolioRepository.SaveAsync();
                 }
 
                 await _portfolioRepository.CommitTransactionAsync();
@@ -206,7 +206,7 @@ public class PortfoliosManager : IPortfoliosManager
     {
         var portfolio = _mapper.Map<Portfolio>(model);
         await _portfolioRepository.Update(portfolio, model.Portfolios);
-        await _portfolioRepository.Save();
+        await _portfolioRepository.SaveAsync();
         portfolio = await _portfolioRepository.GetPortfolioById(model.Id);
         if (portfolio is null)
         {

@@ -1,4 +1,6 @@
-﻿namespace InvestLens.ViewModel;
+﻿using InvestLens.Model.Enums;
+
+namespace InvestLens.ViewModel;
 
 public class TabItemViewModel : BindableBase
 {
