@@ -9,16 +9,16 @@ namespace InvestLens.Tests;
 public class RegistrationViewModelTests
 {
     private readonly RegistrationWindowViewModel _viewModel;
-    private readonly Mock<ISecurityService> _securityServiceMock;
+    private readonly Mock<IAuthService> _authServiceMock;
 
     public RegistrationViewModelTests()
     {
         var model = new Mock<RegistrationModel>();
-        _securityServiceMock = new Mock<ISecurityService>();
-        _securityServiceMock.Setup(s => s.CheckLoginUniqueAsync(It.IsAny<string>())).ReturnsAsync(true);
+        _authServiceMock = new Mock<IAuthService>();
+        _authServiceMock.Setup(s => s.CheckLoginUniqueAsync(It.IsAny<string>())).ReturnsAsync(true);
 
         var windowManagerMock = new Mock<IWindowManager>();
-        _viewModel = new RegistrationWindowViewModel(model.Object, _securityServiceMock.Object, windowManagerMock.Object);
+        _viewModel = new RegistrationWindowViewModel(model.Object, _authServiceMock.Object, windowManagerMock.Object);
     }
 
     [Fact]
@@ -126,6 +126,6 @@ public class RegistrationViewModelTests
         _viewModel.Login = "TestUser";
 
         // Assert
-        _securityServiceMock.Verify(s => s.CheckLoginUniqueAsync("TestUser"), Times.Once);
+        _authServiceMock.Verify(s => s.CheckLoginUniqueAsync("TestUser"), Times.Once);
     }
 }

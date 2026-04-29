@@ -7,7 +7,7 @@ using InvestLens.Model.Entities;
 
 namespace InvestLens.DataAccess.Services;
 
-public class SecurityService(IUserRepository userRepository, IMapper mapper) : ISecurityService
+public class AuthService(IUserRepository userRepository, IMapper mapper) : IAuthService
 {
     private readonly IMapper _mapper = mapper;
 

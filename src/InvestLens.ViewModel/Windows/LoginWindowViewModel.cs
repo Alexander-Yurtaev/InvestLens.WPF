@@ -10,7 +10,7 @@ namespace InvestLens.ViewModel.Windows;
 
 public sealed class LoginWindowViewModel : ValidationViewModelBase, ILoginWindowViewModel
 {
-    private readonly ISecurityService _securityService;
+    private readonly IAuthService _authService;
     private readonly IWindowManager _windowManager;
     private readonly IEventAggregator _eventAggregator;
     private readonly LoginModel _model;
@@ -20,11 +20,11 @@ public sealed class LoginWindowViewModel : ValidationViewModelBase, ILoginWindow
     public LoginWindowViewModel(
         LoginModel model,
         IAuthManager authManager,
-        ISecurityService securityService, 
+        IAuthService authService, 
         IWindowManager windowManager,
         IEventAggregator eventAggregator)
     {
-        _securityService = securityService;
+        _authService = authService;
         _windowManager = windowManager;
         _eventAggregator = eventAggregator;
         _model = model;
@@ -81,7 +81,7 @@ public sealed class LoginWindowViewModel : ValidationViewModelBase, ILoginWindow
     {
         if (!Validate()) return;
 
-        var result = await _securityService.LoginAsync(_model);
+        var result = await _authService.LoginAsync(_model);
         if (result.Success)
         {
             _windowManager.SetMainWindow<MainWindowViewModel>();

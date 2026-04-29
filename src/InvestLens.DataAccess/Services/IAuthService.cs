@@ -3,7 +3,7 @@ using InvestLens.Model.Crud.User;
 
 namespace InvestLens.DataAccess.Services;
 
-public interface ISecurityService
+public interface IAuthService
 {
     Task<bool> CheckLoginUniqueAsync(string login);
     Task<(bool Success, string ErrorMessage)> RegisterAsync(RegistrationModel model);

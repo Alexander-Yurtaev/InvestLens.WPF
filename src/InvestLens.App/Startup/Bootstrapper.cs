@@ -47,6 +47,7 @@ namespace InvestLens.App.Startup
             builder.RegisterType<WindowManager>().As<IWindowManager>().SingleInstance();
             builder.RegisterType<AuthManager>().As<IAuthManager>().SingleInstance();
             
+            builder.RegisterType<AuthService>().As<IAuthService>();
             builder.RegisterType<SecurityService>().As<ISecurityService>();
 
             builder.RegisterType<UserRepository>().As<IUserRepository>();

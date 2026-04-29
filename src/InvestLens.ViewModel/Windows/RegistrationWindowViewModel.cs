@@ -11,7 +11,7 @@ namespace InvestLens.ViewModel.Windows;
 
 public sealed class RegistrationWindowViewModel : ValidationViewModelBase, IRegistrationWindowViewModel
 {
-    private readonly ISecurityService _securityService;
+    private readonly IAuthService _authService;
     private readonly IWindowManager _windowManager;
     private readonly RegistrationModel _model;
     private string _errorMessage = string.Empty;
@@ -21,10 +21,10 @@ public sealed class RegistrationWindowViewModel : ValidationViewModelBase, IRegi
 
     public RegistrationWindowViewModel(
         RegistrationModel model, 
-        ISecurityService securityService, 
+        IAuthService authService, 
         IWindowManager windowManager)
     {
-        _securityService = securityService;
+        _authService = authService;
         _windowManager = windowManager;
         _model = model;
         RegisterCommand = new AsyncDelegateCommand(OnRegister, CanRegister);
@@ -127,7 +127,7 @@ public sealed class RegistrationWindowViewModel : ValidationViewModelBase, IRegi
 
         try
         {
-            var result = await _securityService.RegisterAsync(_model);
+            var result = await _authService.RegisterAsync(_model);
             if (result.Success)
             {
                 _windowManager.SetMainWindow<LoginWindowViewModel>();
@@ -192,7 +192,7 @@ public sealed class RegistrationWindowViewModel : ValidationViewModelBase, IRegi
 
     private async void ValidateLoginAsync()
     {
-        var isUnique = await _securityService.CheckLoginUniqueAsync(Login);
+        var isUnique = await _authService.CheckLoginUniqueAsync(Login);
         if (!isUnique)
         {
             AddError("Такой пользователь уже зарегистрирован", nameof(Login));
