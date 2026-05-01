@@ -4,6 +4,7 @@ using InvestLens.Model.Enums;
 using InvestLens.Model.Helpers;
 using InvestLens.Model.MoexApi.Responses;
 using Microsoft.Extensions.Configuration;
+using System.Net.Http;
 using System.Net.Http.Json;
 
 namespace InvestLens.DataAccess.Services;
@@ -13,12 +14,9 @@ public class MoexProvider : IMoexProvider
     private readonly IMapper _mapper;
     private HttpClient _httpClient;
 
-    public MoexProvider(IMapper mapper)
+    public MoexProvider(IMapper mapper, IHttpClientFactory factory)
     {
-        _httpClient = new HttpClient
-        {
-            BaseAddress = new Uri("https://iss.moex.com/iss/securities.json")
-        };
+        _httpClient = factory.CreateClient("moex");
         _mapper = mapper;
     }
 
@@ -36,7 +34,7 @@ public class MoexProvider : IMoexProvider
         {
             try
             {
-                var response = await _httpClient.GetFromJsonAsync<SecuritiesResponse>($"https://iss.moex.com/iss/securities.json?q={secId}");
+                var response = await _httpClient.GetFromJsonAsync<SecuritiesResponse>($"iss/securities.json?q={secId}");
                 if (response == null)
                 {
                     continue;

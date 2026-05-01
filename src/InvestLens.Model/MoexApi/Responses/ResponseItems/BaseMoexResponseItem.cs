@@ -8,6 +8,6 @@ namespace InvestLens.Model.MoexApi.Responses.ResponseItems
         public string[] Columns { get; set; } = [];
 
         [JsonPropertyName("data")]
-        public string[][] Data { get; set; } = [];
+        public object[][] Data { get; set; } = [];
     }
 }

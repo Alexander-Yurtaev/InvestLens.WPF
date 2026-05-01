@@ -7,7 +7,7 @@ public class Security : BaseEntity
 {
     public required string SecId { get; set; } = string.Empty;
     public string ShortName { get; set; } = string.Empty;
-    public string RegNumber { get; set; } = string.Empty;
+    public string? RegNumber { get; set; }
     public string Name { get; set; } = string.Empty;
     public string Isin { get; set; } = string.Empty;
     public string IsTraded { get; set; } = string.Empty;
@@ -15,6 +15,6 @@ public class Security : BaseEntity
     public SecurityType SecType { get; set; } = SecurityType.None;
     public SecurityGroup SecGroup { get; set; } = SecurityGroup.None;
     public string PrimaryBoardid { get; set; } = string.Empty;
-    public string MarketpriceBoardid { get; set; } = string.Empty;
+    public string? MarketpriceBoardid { get; set; }
     public bool IsLoaded { get; set; }
 }

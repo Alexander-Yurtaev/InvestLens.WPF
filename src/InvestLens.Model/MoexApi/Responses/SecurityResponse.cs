@@ -27,7 +27,7 @@ public record Security
     public string ShortName { get; set; } = string.Empty;
 
     [JsonPropertyName("regnumber")]
-    public string RegNumber { get; set; } = string.Empty;
+    public string? RegNumber { get; set; }
 
     [JsonPropertyName("name")]
     public string Name { get; set; } = string.Empty;
@@ -51,5 +51,5 @@ public record Security
     public string PrimaryBoardid { get; set; } = string.Empty;
 
     [JsonPropertyName("marketprice_boardid")]
-    public string MarketpriceBoardid { get; set; } = string.Empty;
+    public string? MarketpriceBoardid { get; set; }
 }
