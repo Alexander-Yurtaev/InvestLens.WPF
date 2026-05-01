@@ -21,9 +21,9 @@ public class SecurityWrapper
         return secType switch
         {
             SecurityType.None => "Нет данных",
-            SecurityType.Stock => "Акции",
-            SecurityType.Bond => "Облигации",
-            SecurityType.ETF => "ETF",
+            SecurityType.common_share => "Акции",
+            SecurityType.exchange_bond => "Облигации",
+            SecurityType.etf_ppif => "ETF",
             _ => throw new ArgumentOutOfRangeException(secType.ToString()),
         };
     }

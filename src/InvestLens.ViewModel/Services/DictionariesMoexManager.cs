@@ -7,11 +7,11 @@ public class DictionariesMoexManager : IDictionariesMoexManager
 {
     private readonly List<SecurityModel> _securities =
     [
-        new SecurityModel("SBER", SecurityType.Stock){ Name = "Сбербанк" },
-        new SecurityModel("GAZP", SecurityType.Stock) { Name = "Газпром" },
-        new SecurityModel("LKOH", SecurityType.Stock) { Name = "Лукойл" },
-        new SecurityModel("FXRL", SecurityType.ETF) { Name = "FXRL (Россия)" },
-        new SecurityModel("YNDX", SecurityType.Stock) { Name = "Яндекс" }
+        new SecurityModel("SBER", SecurityType.common_share){ Name = "Сбербанк" },
+        new SecurityModel("GAZP", SecurityType.common_share) { Name = "Газпром" },
+        new SecurityModel("LKOH", SecurityType.common_share) { Name = "Лукойл" },
+        new SecurityModel("FXRL", SecurityType.etf_ppif) { Name = "FXRL (Россия)" },
+        new SecurityModel("YNDX", SecurityType.common_share) { Name = "Яндекс" }
     ];
 
     private readonly List<Bond> _bonds =

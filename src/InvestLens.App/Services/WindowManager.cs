@@ -1,22 +1,21 @@
-﻿using Autofac;
-using InvestLens.App.Windows;
+﻿using InvestLens.App.Windows;
 using InvestLens.ViewModel.Services;
 using InvestLens.ViewModel.Windows;
 using InvestLens.ViewModel.Windows.Dialogs;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Win32;
 using System.Windows;
-using System.Windows.Threading;
 
 namespace InvestLens.App.Services;
 
 public class WindowManager : IWindowManager
 {
-    private readonly ILifetimeScope _lifetimeScope;
     private readonly Dictionary<Type, Window> _windows = [];
-    
-    public WindowManager(ILifetimeScope lifetimeScope)
+    private readonly IServiceProvider _serviceProvider;
+
+    public WindowManager(IServiceProvider serviceProvider)
     {
-        _lifetimeScope = lifetimeScope;
+        _serviceProvider = serviceProvider;
     }
 
     public void ShowErrorDialog(string message)
@@ -153,7 +152,7 @@ public class WindowManager : IWindowManager
         }
         else
         {
-            return (Window)_lifetimeScope.Resolve(viewType);
+            return (Window)_serviceProvider.GetRequiredService(viewType);
         }   
     }
 

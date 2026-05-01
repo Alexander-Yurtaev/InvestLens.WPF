@@ -3,7 +3,8 @@
 public enum SecurityGroup
 {
     None = 0,
-    Stock = 1,
-    Bond = 2,
-    ETF = 3
+    stock_etf = 100,
+    stock_ppif = 200,
+    stock_shares = 300,
+    stock_bonds = 400
 }

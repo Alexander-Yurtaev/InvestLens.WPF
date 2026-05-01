@@ -1,4 +1,6 @@
-﻿namespace InvestLens.Model.Entities;
+﻿using System.Text.Json.Serialization;
+
+namespace InvestLens.Model.Entities;
 
 public abstract class BaseEntity
 {
@@ -12,5 +14,6 @@ public abstract class BaseEntity
         Id = id;
     }
 
+    [JsonPropertyName("id")]
     public int Id { get; set; }
 }

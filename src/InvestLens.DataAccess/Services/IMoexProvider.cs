@@ -2,7 +2,7 @@
 
 namespace InvestLens.DataAccess.Services;
 
-public interface IMoexProvider
+public interface IMoexProvider : IDisposable
 {
     Task<List<SecurityModel>> GetSecurityList(IEnumerable<string> secIdNewList);
 }

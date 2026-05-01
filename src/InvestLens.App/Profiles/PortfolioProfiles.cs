@@ -2,6 +2,7 @@
 using InvestLens.Model;
 using InvestLens.Model.Crud.Transaction;
 using InvestLens.Model.Entities;
+using InvestLens.Model.Enums;
 
 namespace InvestLens.App.Profiles;
 
@@ -27,5 +28,6 @@ public class PortfolioProfiles : Profile
             .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.Note))
             ;
         CreateMap<InvestLens.Model.Entities.Security, InvestLens.Model.SecurityModel> ().ReverseMap();
+        CreateMap<Model.MoexApi.Responses.Security, InvestLens.Model.SecurityModel>().ReverseMap();
     }
 }

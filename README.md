@@ -33,7 +33,7 @@
 |-----------|------------|
 | **UI** | WPF (net9.0-windows) |
 | **Архитектура** | MVVM |
-| **DI** | Autofac |
+| **DI** | Microsoft.Extensions.DependencyInjection |
 | **ORM** | Entity Framework Core |
 | **База данных** | SQLite |
 | **Графики** | OxyPlot |

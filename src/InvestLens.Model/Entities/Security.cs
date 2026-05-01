@@ -12,8 +12,8 @@ public class Security : BaseEntity
     public string Isin { get; set; } = string.Empty;
     public string IsTraded { get; set; } = string.Empty;
     public string EmitentTitle { get; set; } = string.Empty;
-    public SecurityType SecType { get; } = SecurityType.None;
-    public SecurityGroup SecGroup { get; } = SecurityGroup.None;
+    public SecurityType SecType { get; set; } = SecurityType.None;
+    public SecurityGroup SecGroup { get; set; } = SecurityGroup.None;
     public string PrimaryBoardid { get; set; } = string.Empty;
     public string MarketpriceBoardid { get; set; } = string.Empty;
     public bool IsLoaded { get; set; }
