@@ -14,6 +14,17 @@ public static class NumberHelpers
         return value.ToString("P2", CultureInfo.InvariantCulture);
     }
 
+    public static dynamic ConvertToNumber(string value)
+    {
+        var number = decimal.Parse(value);
+        if (IsInt(number))
+        {
+            return (int)number;
+        }
+
+        return number;
+    }
+
     public static bool IsInt(decimal value)
     {
         return Math.Abs(value - Math.Round(value)) == 0;

@@ -20,7 +20,7 @@ public class Board : BaseEntity
     public virtual Market? Market { get; set; }
 
     [JsonPropertyName("boardid")]
-    public int BoardId { get; set; }
+    public string? BoardId { get; set; }
 
     public virtual Board? BoardEntity { get; set; }
 

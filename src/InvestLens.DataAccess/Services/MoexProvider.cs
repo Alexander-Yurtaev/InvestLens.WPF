@@ -1,10 +1,11 @@
 ﻿using AutoMapper;
+using InvestLens.DataAccess.Repositories;
+using InvestLens.DataAccess.Repositories.Settings;
 using InvestLens.Model;
-using InvestLens.Model.Enums;
+using InvestLens.Model.Entities.Settings;
 using InvestLens.Model.Helpers;
 using InvestLens.Model.MoexApi.Responses;
-using Microsoft.Extensions.Configuration;
-using System.Net.Http;
+using InvestLens.Model.MoexApi.Responses.ResponseItems;
 using System.Net.Http.Json;
 
 namespace InvestLens.DataAccess.Services;
@@ -12,17 +13,138 @@ namespace InvestLens.DataAccess.Services;
 public class MoexProvider : IMoexProvider
 {
     private readonly IMapper _mapper;
+    private readonly IEngineRepository _engineRepository;
+    private readonly IMarketRepository _marketRepository;
+    private readonly IBoardRepository _boardRepository;
+    private readonly IBoardGroupRepository _boardGroupRepository;
+    private readonly IDurationRepository _durationRepository;
+    private readonly ISecurityTypeRepository _securityTypeRepository;
+    private readonly ISecurityGroupRepository _securityGroupRepository;
+    private readonly ISecurityCollectionRepository _securityCollectionRepository;
     private HttpClient _httpClient;
 
-    public MoexProvider(IMapper mapper, IHttpClientFactory factory)
+    public MoexProvider(
+        IMapper mapper, 
+        IHttpClientFactory factory,
+        IEngineRepository engineRepository,
+        IMarketRepository marketRepository,
+        IBoardRepository boardRepository,
+        IBoardGroupRepository boardGroupRepository,
+        IDurationRepository durationRepository,
+        ISecurityTypeRepository securityTypeRepository,
+        ISecurityGroupRepository securityGroupRepository,
+        ISecurityCollectionRepository securityCollectionRepository
+        )
     {
         _httpClient = factory.CreateClient("moex");
         _mapper = mapper;
+        _engineRepository = engineRepository;
+        _marketRepository = marketRepository;
+        _boardRepository = boardRepository;
+        _boardGroupRepository = boardGroupRepository;
+        _durationRepository = durationRepository;
+        _securityTypeRepository = securityTypeRepository;
+        _securityGroupRepository = securityGroupRepository;
+        _securityCollectionRepository = securityCollectionRepository;
     }
 
     public void Dispose()
     {
         _httpClient?.Dispose();
+    }
+
+    public async Task LoadMoexIndex()
+    {
+        var response = await _httpClient.GetFromJsonAsync<IndexResponse>("iss/index.json");
+        if (response is null)
+        {
+            throw new InvalidOperationException(nameof(IndexResponse));
+        }
+
+        var trans = await _engineRepository.BeginTransactionAsync();
+
+        try
+        {
+            if (response.Engines is not null)
+            {
+                var engines = MoexResponseHelper.GetModels<Engines, Engine>(response.Engines);
+                foreach (var engineModel in engines)
+                {
+                    await _engineRepository.AddOrUpdate(engineModel);
+                }
+            }
+
+            if (response.Markets is not null)
+            {
+                var markets = MoexResponseHelper.GetModels<Markets, Market>(response.Markets);
+                foreach (var marketModel in markets)
+                {
+                    await _marketRepository.AddOrUpdate(marketModel);
+                }
+            }
+
+            if (response.Boards is not null)
+            {
+                var boards = MoexResponseHelper.GetModels<Boards, Board>(response.Boards);
+                foreach (var boardModel in boards)
+                {
+                    await _boardRepository.AddOrUpdate(boardModel);
+                }
+            }
+
+            if (response.BoardGroups is not null)
+            {
+                var boardGroups = MoexResponseHelper.GetModels<BoardGroups, BoardGroup>(response.BoardGroups);
+                foreach (var boardGroupModel in boardGroups)
+                {
+                    await _boardGroupRepository.AddOrUpdate(boardGroupModel);
+                }
+            }
+
+            if (response.Durations is not null)
+            {
+                var durations = MoexResponseHelper.GetModels<Durations, Duration>(response.Durations);
+                foreach (var durationModel in durations)
+                {
+                    await _durationRepository.AddOrUpdate(durationModel);
+                }
+            }
+
+            if (response.SecurityTypes is not null)
+            {
+                var securityTypes = MoexResponseHelper.GetModels<SecurityTypes, Model.Entities.Settings.SecurityType>(response.SecurityTypes);
+                foreach (var securityTypeModel in securityTypes)
+                {
+                    await _securityTypeRepository.AddOrUpdate(securityTypeModel);
+                }
+            }
+
+            if (response.SecurityGroups is not null)
+            {
+                var securityGroups = MoexResponseHelper.GetModels<SecurityGroups, Model.Entities.Settings.SecurityGroup>(response.SecurityGroups);
+                foreach (var securityGroupModel in securityGroups)
+                {
+                    await _securityGroupRepository.AddOrUpdate(securityGroupModel);
+                }
+            }
+
+            if (response.SecurityCollections is not null)
+            {
+                var securityCollections = MoexResponseHelper.GetModels<SecurityCollections, Model.Entities.Settings.SecurityCollection>(response.SecurityCollections);
+                foreach (var securityCollectionModel in securityCollections)
+                {
+                    await _securityCollectionRepository.AddOrUpdate(securityCollectionModel);
+                }
+            }
+        }
+        catch
+        {
+            await trans.RollbackAsync();
+        }
+        finally
+        {
+            await trans.CommitAsync();
+        }
     }
 
     public async Task<List<SecurityModel>> GetSecurityList(IEnumerable<string> secIdNewList)
@@ -35,7 +157,7 @@ public class MoexProvider : IMoexProvider
             try
             {
                 var response = await _httpClient.GetFromJsonAsync<SecuritiesResponse>($"iss/securities.json?q={secId}");
-                if (response == null)
+                if (response?.Securities == null)
                 {
                     continue;
                 }
@@ -43,18 +165,9 @@ public class MoexProvider : IMoexProvider
                 var securities = MoexResponseHelper.GetModels<Securities, Security>(response.Securities);
                 var security = securities.FirstOrDefault(s => s.SecId == secId);
 
-                //if (security == null) continue;
-                //if (!secTypeGoups.TryGetValue(security.SecGroup, out var list))
-                //{
-                //    list = new List<string>();
-                //    secTypeGoups[security.SecGroup] = list;
-                //}
-
-                //if (!list.Contains(security.SecType)) list.Add(security.SecType);
-
                 var model = security is not null
                         ? _mapper.Map<SecurityModel>(security)
-                        : new SecurityModel(secId, SecurityType.None);
+                        : new SecurityModel(secId, InvestLens.Model.Enums.SecurityType.None);
 
                 securityModelList.Add(model);
             }            

@@ -2,7 +2,7 @@
 
 namespace InvestLens.Model.Entities.Settings;
 
-public class Duration
+public class Duration : BaseEntity
 {
     [JsonPropertyName("interval")]
     public int Interval { get; set; }

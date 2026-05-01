@@ -1,5 +1,8 @@
-﻿using InvestLens.Model.MoexApi.Responses.ResponseItems;
+﻿using InvestLens.Common.Helpers;
+using InvestLens.Model.MoexApi.Responses.ResponseItems;
 using System.Reflection;
+using System.Security.AccessControl;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace InvestLens.Model.Helpers;
@@ -24,11 +27,28 @@ public static class MoexResponseHelper
             {
                 if (!props.TryGetValue(responseItem.Columns[i], out var prop)) continue;
 
-                var value = row[i]?.ToString();
-                prop.SetValue(model, value);
+                if (row[i] is not null)
+                {
+                    var elevent = (JsonElement)row[i];
+                    var value = PropetyTypeConvert(prop, elevent);
+                    prop.SetValue(model, value);
+                }
             }
 
             yield return model;
         }
+    }
+
+    private static dynamic PropetyTypeConvert(PropertyInfo prop, JsonElement element)
+    {
+        if (prop.PropertyType == typeof(string)) return element.ToString();
+        if (prop.PropertyType == typeof(int)) return int.Parse(element.ToString());
+        if (prop.PropertyType == typeof(decimal)) return decimal.Parse(element.ToString());
+        if (prop.PropertyType == typeof(bool))
+        {
+            return int.Parse(element.ToString()) == 1;
+        }
+
+        throw new ArgumentException(nameof(prop));
     }
 }

@@ -1,4 +1,5 @@
 ﻿using InvestLens.Model.Entities;
+using InvestLens.Model.Entities.Settings;
 using Microsoft.EntityFrameworkCore;
 
 namespace InvestLens.DataAccess;
@@ -9,6 +10,16 @@ public sealed class InvestLensDataContext : DbContext
     public DbSet<Portfolio> Portfolios { get; set; }
     public DbSet<Security> Securities { get; set; }
     public DbSet<Transaction> Transactions { get; set; }
+
+    //Settings
+    public DbSet<Engine> Engines { get; set; }
+    public DbSet<Market> Markets { get; set; }
+    public DbSet<Board> Boards { get; set; }
+    public DbSet<BoardGroup> BoardGroups { get; set; }
+    public DbSet<Duration> Durations { get; set; }
+    public DbSet<SecurityType> SecurityTypes { get; set; }
+    public DbSet<SecurityGroup> SecurityGroups { get; set; }
+    public DbSet<SecurityCollection> SecurityCollections { get; set; }
 
     public InvestLensDataContext(DbContextOptions<InvestLensDataContext> options) : base(options)
     {

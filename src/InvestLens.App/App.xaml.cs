@@ -3,6 +3,7 @@ using InvestLens.App.Windows;
 using InvestLens.App.Windows.Dialogs;
 using InvestLens.DataAccess;
 using InvestLens.DataAccess.Repositories;
+using InvestLens.DataAccess.Repositories.Settings;
 using InvestLens.DataAccess.Services;
 using InvestLens.Model;
 using InvestLens.Model.Crud.Portfolio;
@@ -55,7 +56,7 @@ namespace InvestLens.App
             e.SetObserved();
         }
 
-        protected override void OnStartup(StartupEventArgs e)
+        protected override async void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
 
@@ -66,6 +67,17 @@ namespace InvestLens.App
             ServiceProvider = services.BuildServiceProvider();
 
             ApplyMigrations();
+
+            var provider = ServiceProvider.GetRequiredService<IMoexProvider>();
+            try
+            {
+                await provider.LoadMoexIndex();
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
 
             var windowManager = ServiceProvider.GetRequiredService<IWindowManager>();
             windowManager.ShowWindow<LoginWindowViewModel>();
@@ -106,6 +118,15 @@ namespace InvestLens.App
             services.AddScoped<IPortfolioRepository, PortfolioRepository>();
             services.AddScoped<ISecurityRepository, SecurityRepository>();
             services.AddScoped<ITransactionRepository, TransactionRepository>();
+
+            services.AddScoped<IEngineRepository, EngineRepository>();
+            services.AddScoped<IMarketRepository, MarketRepository>();
+            services.AddScoped<IBoardRepository, BoardRepository>();
+            services.AddScoped<IBoardGroupRepository, BoardGroupRepository>();
+            services.AddScoped<IDurationRepository, DurationRepository>();
+            services.AddScoped<ISecurityTypeRepository, SecurityTypeRepository>();
+            services.AddScoped<ISecurityGroupRepository, SecurityGroupRepository>();
+            services.AddScoped<ISecurityCollectionRepository, SecurityCollectionRepository>();
 
             services.AddScoped<MainWindow>();
             services.AddScoped<IMainWindowViewModel, MainWindowViewModel>();

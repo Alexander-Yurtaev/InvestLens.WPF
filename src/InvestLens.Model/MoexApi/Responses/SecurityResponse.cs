@@ -9,7 +9,7 @@ namespace InvestLens.Model.MoexApi.Responses;
 public class SecuritiesResponse
 {
     [JsonPropertyName("securities")]
-    public Securities Securities { get; set; }
+    public Securities? Securities { get; set; }
 }
 
 public class Securities : BaseMoexResponseItem
