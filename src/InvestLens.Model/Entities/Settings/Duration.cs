@@ -11,7 +11,7 @@ public class Duration : BaseEntity
     public int DurationCount { get; set; }
 
     [JsonPropertyName("days")]
-    public int? days { get; set; }
+    public int? Days { get; set; }
 
     [JsonPropertyName("title")]
     public string Title { get; set; } = string.Empty;

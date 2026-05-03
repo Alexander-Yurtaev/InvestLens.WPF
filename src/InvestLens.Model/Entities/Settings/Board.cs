@@ -25,7 +25,7 @@ public class Board : BaseEntity
     public virtual Board? BoardEntity { get; set; }
 
     [JsonPropertyName("board_title")]
-    public string board_title { get; set; } = string.Empty;
+    public string BoardTitle { get; set; } = string.Empty;
 
     [JsonPropertyName("is_traded")]
     public bool IsTraded { get; set; }

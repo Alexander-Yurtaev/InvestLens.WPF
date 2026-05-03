@@ -1,5 +1,6 @@
 ﻿using InvestLens.Model.Entities;
 using InvestLens.Model.Entities.Settings;
+using InvestLens.Model.MoexApi.Responses.ResponseItems;
 using Microsoft.EntityFrameworkCore;
 
 namespace InvestLens.DataAccess;
@@ -64,6 +65,7 @@ public sealed class InvestLensDataContext : DbContext
 
         modelBuilder.Entity<Transaction>(entity =>
         {
+            entity.HasKey(p => p.Id);
             entity.Property(p => p.Event).IsRequired();
             entity.Property(p => p.Date).IsRequired();
             entity.Property(p => p.Symbol).IsRequired();
@@ -81,7 +83,118 @@ public sealed class InvestLensDataContext : DbContext
                   .HasForeignKey(t => t.PortfolioId)
                   .OnDelete(DeleteBehavior.Cascade);
         });
+
+        InitSttingsTables(modelBuilder);
     }
 
     #endregion
+
+    private void InitSttingsTables(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<Engine>(entity =>
+        {
+            entity.ToTable("Settings.Engines");
+            entity.HasKey(p => p.Id);
+            entity.Property(p => p.Name).IsRequired().HasMaxLength(45);
+            entity.Property(p => p.Title).IsRequired().HasMaxLength(765);
+        });
+
+        modelBuilder.Entity<Market>(entity =>
+        {
+            entity.ToTable("Settings.Markets");
+            entity.HasKey(p => p.Id);
+            entity.Property(p => p.TradeEngineId).IsRequired();
+            entity.Property(p => p.TradeEngineName).IsRequired().HasMaxLength(45);
+            entity.Property(p => p.TradeEngineTitle).IsRequired().HasMaxLength(765);
+            entity.Property(p => p.MarketName).IsRequired().HasMaxLength(45);
+            entity.Property(p => p.MarketTitle).IsRequired().HasMaxLength(765);
+            entity.Property(p => p.MarketId).IsRequired();
+            entity.Property(p => p.MarketPlace).IsRequired().HasMaxLength(48);
+            entity.Property(p => p.IsOtc).IsRequired();
+            entity.Property(p => p.HasHistoryFiles).IsRequired();
+            entity.Property(p => p.HasHistoryTradesFiles).IsRequired();
+            entity.Property(p => p.HasTrades).IsRequired();
+            entity.Property(p => p.HasHistory).IsRequired();
+            entity.Property(p => p.HasCandles).IsRequired();
+            entity.Property(p => p.HasOrderbook).IsRequired();
+            entity.Property(p => p.HasTradingsession).IsRequired();
+            entity.Property(p => p.HasExtraYields).IsRequired();
+            entity.Property(p => p.HasDelay).IsRequired();
+        });
+
+        modelBuilder.Entity<Board>(entity =>
+        {
+            entity.ToTable("Settings.Boards");
+            entity.HasKey(p => p.Id);
+            entity.Property(p => p.BoardGroupId).IsRequired();
+            entity.Property(p => p.EngineId).IsRequired();
+            entity.Property(p => p.MarketId).IsRequired();
+            entity.Property(p => p.BoardId).HasMaxLength(12);
+            entity.Property(p => p.BoardTitle).IsRequired().HasMaxLength(381);
+            entity.Property(p => p.IsTraded).IsRequired();
+            entity.Property(p => p.HasCandles).IsRequired();
+            entity.Property(p => p.IsPrimary).IsRequired();
+        });
+
+        modelBuilder.Entity<BoardGroup>(entity =>
+        {
+            entity.ToTable("Settings.BoardGroups");
+            entity.HasKey(p => p.Id);
+            entity.Property(p => p.TradeEngineId).IsRequired();
+            entity.Property(p => p.TradeEngineName).IsRequired().HasMaxLength(45);
+            entity.Property(p => p.TradeEngineTitle).IsRequired().HasMaxLength(765);
+            entity.Property(p => p.MarketId).IsRequired();
+            entity.Property(p => p.MarketName).IsRequired().HasMaxLength(45);
+            entity.Property(p => p.Name).IsRequired().HasMaxLength(192);
+            entity.Property(p => p.Title).IsRequired().HasMaxLength(765);
+            entity.Property(p => p.IsDefault).IsRequired();
+            entity.Property(p => p.board_group_id).IsRequired();
+            entity.Property(p => p.IsTraded).IsRequired();
+            entity.Property(p => p.IsOrderDriven).IsRequired();
+            entity.Property(p => p.Category).IsRequired().HasMaxLength(45);
+        });
+
+        modelBuilder.Entity<Duration>(entity => 
+        {
+            entity.ToTable("Settings.Durations");
+            entity.HasKey(p => p.Id);
+            entity.Property(p => p.Interval).IsRequired();
+            entity.Property(p => p.DurationCount).IsRequired();
+            entity.Property(p => p.Days);
+            entity.Property(p => p.Title).IsRequired().HasMaxLength(765);
+            entity.Property(p => p.Hint).IsRequired().HasMaxLength(765);
+
+        });
+
+        modelBuilder.Entity<SecurityType>(entity =>
+        {
+            entity.ToTable("Settings.SecurityTypes");
+            entity.HasKey(p => p.Id);
+            entity.Property(p => p.TradeEngineId).IsRequired();
+            entity.Property(p => p.TradeEngineName).IsRequired().HasMaxLength(45);
+            entity.Property(p => p.TradeEngineTitle).IsRequired().HasMaxLength(765);
+            entity.Property(p => p.SecurityTypeName).IsRequired().HasMaxLength(93);
+            entity.Property(p => p.SecurityTypeTitle).IsRequired().HasMaxLength(765);
+            entity.Property(p => p.SecurityGroupName).IsRequired().HasMaxLength(93);
+            entity.Property(p => p.StockType).IsRequired().HasMaxLength(3);
+        });
+
+        modelBuilder.Entity<SecurityGroup>(entity =>
+        {
+            entity.ToTable("Settings.SecurityGroups");
+            entity.HasKey(p => p.Id);
+            entity.Property(p => p.Name).IsRequired().HasMaxLength(93);
+            entity.Property(p => p.Title).IsRequired().HasMaxLength(765);
+            entity.Property(p => p.IsHidden).IsRequired();
+        });
+
+        modelBuilder.Entity<SecurityCollection>(entity =>
+        {
+            entity.ToTable("Settings.SecurityCollections");
+            entity.HasKey(p => p.Id);
+            entity.Property(p => p.Name).IsRequired().HasMaxLength(96);
+            entity.Property(p => p.Title).IsRequired().HasMaxLength(765);
+            entity.Property(p => p.SecurityGroupId).IsRequired();
+        });
+    }
 }

@@ -10,7 +10,7 @@ public class SecurityType : BaseEntity
     public virtual Engine? TradeEngine { get; set; }
 
     [JsonPropertyName("trade_engine_name")]
-    public string trade_engine_name { get; set; } = string.Empty;
+    public string TradeEngineName { get; set; } = string.Empty;
 
     [JsonPropertyName("trade_engine_title")]
     public string TradeEngineTitle { get; set; } = string.Empty;
