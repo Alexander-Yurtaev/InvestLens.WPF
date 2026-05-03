@@ -4,7 +4,7 @@
     <Style TargetType="Label">
         <Setter Property="FontSize" Value="13"/>
         <Setter Property="FontWeight" Value="Medium"/>
-        <Setter Property="Foreground" Value="#1E2A3E"/>
+        <Setter Property="Foreground" Value="{StaticResource PrimaryForeground}"/>
         <Setter Property="Margin" Value="0 0 0 8"/>
     </Style>
 </ResourceDictionary>

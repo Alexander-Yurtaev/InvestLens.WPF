@@ -56,7 +56,7 @@
                         <TextBlock  
                            Text="Вы действительно хотите удалить портфель"
                            FontSize="21"
-                           Foreground="#1E2A3E"
+                           Foreground="{StaticResource PrimaryForeground}"
                            Margin="0 0 0 12"/>
                         <TextBlock Text="{Binding PortfolioName, FallbackValue='Name', StringFormat='&quot;{0}&quot;'}" 
                                    FontWeight="Bold"

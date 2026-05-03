@@ -3,11 +3,11 @@
 namespace InvestLens.App.UserControls
 {
     /// <summary>
-    /// Interaction logic for Logo.xaml
+    /// Interaction logic for IconLogo.xaml
     /// </summary>
-    public partial class Logo : UserControl
+    public partial class IconLogo : UserControl
     {
-        public Logo()
+        public IconLogo()
         {
             InitializeComponent();
         }

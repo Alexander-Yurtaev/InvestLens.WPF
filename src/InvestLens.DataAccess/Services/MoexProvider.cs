@@ -53,9 +53,11 @@ public class MoexProvider : IMoexProvider
         _httpClient?.Dispose();
     }
 
-    public async Task LoadMoexIndex()
+    public async Task LoadMoexIndex(CancellationToken ct)
     {
-        var response = await _httpClient.GetFromJsonAsync<IndexResponse>("iss/index.json");
+        if (ct.IsCancellationRequested) return;
+
+        var response = await _httpClient.GetFromJsonAsync<IndexResponse>("iss/index.json", ct);
         if (response is null)
         {
             throw new InvalidOperationException(nameof(IndexResponse));
@@ -70,6 +72,7 @@ public class MoexProvider : IMoexProvider
                 var engines = MoexResponseHelper.GetModels<Engines, Engine>(response.Engines);
                 foreach (var engineModel in engines)
                 {
+                    ct.ThrowIfCancellationRequested();
                     await _engineRepository.AddOrUpdate(engineModel);
                 }
             }
@@ -79,6 +82,7 @@ public class MoexProvider : IMoexProvider
                 var markets = MoexResponseHelper.GetModels<Markets, Market>(response.Markets);
                 foreach (var marketModel in markets)
                 {
+                    ct.ThrowIfCancellationRequested();
                     await _marketRepository.AddOrUpdate(marketModel);
                 }
             }
@@ -88,6 +92,7 @@ public class MoexProvider : IMoexProvider
                 var boards = MoexResponseHelper.GetModels<Boards, Board>(response.Boards);
                 foreach (var boardModel in boards)
                 {
+                    ct.ThrowIfCancellationRequested();
                     await _boardRepository.AddOrUpdate(boardModel);
                 }
             }
@@ -97,6 +102,7 @@ public class MoexProvider : IMoexProvider
                 var boardGroups = MoexResponseHelper.GetModels<BoardGroups, BoardGroup>(response.BoardGroups);
                 foreach (var boardGroupModel in boardGroups)
                 {
+                    ct.ThrowIfCancellationRequested();
                     await _boardGroupRepository.AddOrUpdate(boardGroupModel);
                 }
             }
@@ -106,6 +112,7 @@ public class MoexProvider : IMoexProvider
                 var durations = MoexResponseHelper.GetModels<Durations, Duration>(response.Durations);
                 foreach (var durationModel in durations)
                 {
+                    ct.ThrowIfCancellationRequested();
                     await _durationRepository.AddOrUpdate(durationModel);
                 }
             }
@@ -115,6 +122,7 @@ public class MoexProvider : IMoexProvider
                 var securityTypes = MoexResponseHelper.GetModels<SecurityTypes, Model.Entities.Settings.SecurityType>(response.SecurityTypes);
                 foreach (var securityTypeModel in securityTypes)
                 {
+                    ct.ThrowIfCancellationRequested();
                     await _securityTypeRepository.AddOrUpdate(securityTypeModel);
                 }
             }
@@ -124,6 +132,7 @@ public class MoexProvider : IMoexProvider
                 var securityGroups = MoexResponseHelper.GetModels<SecurityGroups, Model.Entities.Settings.SecurityGroup>(response.SecurityGroups);
                 foreach (var securityGroupModel in securityGroups)
                 {
+                    ct.ThrowIfCancellationRequested();
                     await _securityGroupRepository.AddOrUpdate(securityGroupModel);
                 }
             }
@@ -133,17 +142,16 @@ public class MoexProvider : IMoexProvider
                 var securityCollections = MoexResponseHelper.GetModels<SecurityCollections, Model.Entities.Settings.SecurityCollection>(response.SecurityCollections);
                 foreach (var securityCollectionModel in securityCollections)
                 {
+                    ct.ThrowIfCancellationRequested();
                     await _securityCollectionRepository.AddOrUpdate(securityCollectionModel);
                 }
             }
+
+            await trans.CommitAsync();
         }
         catch
         {
             await trans.RollbackAsync();
-        }
-        finally
-        {
-            await trans.CommitAsync();
         }
     }
 

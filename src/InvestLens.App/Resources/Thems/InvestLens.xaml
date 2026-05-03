@@ -19,6 +19,9 @@
     <SolidColorBrush x:Key="BrandGreenBrush" Color="#2C8C6E"/>
     <SolidColorBrush x:Key="BrandGoldBrush" Color="#E6B84E"/>
 
+    <SolidColorBrush x:Key="PrimaryForeground" Color="#1E2A3E"/>
+    <SolidColorBrush x:Key="SecondaryForeground" Color="#8E92A8"/>
+
     <!--Фоновые цвета-->
     <SolidColorBrush x:Key="BackgroundPrimaryBrush" Color="#F8FAFE"/>
     <SolidColorBrush x:Key="BackgroundSecondaryBrush" Color="#FFFFFF"/>

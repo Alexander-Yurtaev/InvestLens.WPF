@@ -15,7 +15,6 @@ using InvestLens.ViewModel.Pages;
 using InvestLens.ViewModel.Services;
 using InvestLens.ViewModel.Windows;
 using InvestLens.ViewModel.Windows.Dialogs;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using System.Windows;
 
@@ -26,7 +25,7 @@ namespace InvestLens.App
     /// </summary>
     public partial class App : Application
     {
-        public IServiceProvider ServiceProvider { get; private set; }
+        public IServiceProvider ServiceProvider { get; private set; } = null!;
 
         public App()
         {
@@ -56,7 +55,7 @@ namespace InvestLens.App
             e.SetObserved();
         }
 
-        protected override async void OnStartup(StartupEventArgs e)
+        protected override void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
 
@@ -66,21 +65,8 @@ namespace InvestLens.App
 
             ServiceProvider = services.BuildServiceProvider();
 
-            ApplyMigrations();
-
-            var provider = ServiceProvider.GetRequiredService<IMoexProvider>();
-            try
-            {
-                await provider.LoadMoexIndex();
-            }
-            catch (Exception ex)
-            {
-
-                throw;
-            }
-
             var windowManager = ServiceProvider.GetRequiredService<IWindowManager>();
-            windowManager.ShowWindow<LoginWindowViewModel>();
+            windowManager.ShowWindow<SplashInitializationWindowViewModel>();
         }
 
         private void ConfigureServices(IServiceCollection services)
@@ -148,6 +134,9 @@ namespace InvestLens.App
             services.AddScoped<IRegistrationWindowViewModel, RegistrationWindowViewModel>();
             services.AddScoped<RegistrationModel>();
 
+            services.AddScoped<SplashInitializationWindow>();
+            services.AddScoped<ISplashInitializationWindowViewModel, SplashInitializationWindowViewModel>();
+
             services.AddScoped<LoginWindow>();
             services.AddScoped<ILoginWindowViewModel, LoginWindowViewModel>();
             services.AddScoped<LoginModel>();
@@ -207,21 +196,6 @@ namespace InvestLens.App
             });
 
             return services;
-        }
-
-        private void ApplyMigrations()
-        {
-            try
-            {
-                var context = ServiceProvider.GetRequiredService<InvestLensDataContext>();
-                context.Database.Migrate();
-            }
-            catch (Exception ex)
-            {
-
-                System.Diagnostics.Debug.WriteLine(ex.Message);
-                MessageBox.Show(ex.Message);
-            }
         }
     }
 }

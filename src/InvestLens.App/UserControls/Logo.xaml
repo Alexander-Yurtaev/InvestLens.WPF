@@ -7,17 +7,7 @@
              mc:Ignorable="d">
 
     <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
-        <Border Width="36"
-                Height="36"
-                Background="{StaticResource BrandRedBrush}"
-                CornerRadius="10">
-            <TextBlock FontWeight="Bold"
-                       FontSize="18"
-                       Foreground="{StaticResource BackgroundSecondaryBrush}"
-                       Margin="6"
-                       HorizontalAlignment="Center"
-                       VerticalAlignment="Center">IL</TextBlock>
-        </Border>
+        <local:IconLogo/>
         <TextBlock FontSize="20"
                    FontWeight="SemiBold"
                    Margin="12"

@@ -59,7 +59,7 @@
                                 <TextBlock Grid.Row="3"
                                            Text="Поддерживаются: CSV"
                                            FontSize="12"
-                                           Foreground="#8E92A8"
+                                           Foreground="{StaticResource SecondaryForeground}"
                                            HorizontalAlignment="Center"
                                            VerticalAlignment="Center"/>
                             </Grid>
@@ -109,7 +109,7 @@
                BasedOn="{StaticResource {x:Type RadioButton}}">
             <Setter Property="FontSize" Value="13"/>
             <Setter Property="FontWeight" Value="Bold"/>
-            <Setter Property="Foreground" Value="#1E2A3E"/>
+            <Setter Property="Foreground" Value="{StaticResource PrimaryForeground}"/>
             <Setter Property="Margin" Value="0 0 0 8"/>
             <Setter Property="Padding" Value="0 8"/>
         </Style>
@@ -178,7 +178,7 @@
                             Content="X"
                             FontSize="18"
                             Cursor="Hand"
-                            Foreground="#8E92A8"
+                            Foreground="{StaticResource SecondaryForeground}"
                             Background="Transparent"
                             BorderThickness="0"
                             Command="{Binding CancelSelectFileCommand}"

@@ -73,7 +73,7 @@
                 </Grid.ColumnDefinitions>
                 <TextBlock Grid.Column="0" 
                            FontSize="12"
-                           Foreground="#8E92A8"
+                           Foreground="{StaticResource SecondaryForeground}"
                            Text="{Binding LastDateUpdate}"
                            VerticalAlignment="Center"/>
                 <Button  Grid.Column="1"

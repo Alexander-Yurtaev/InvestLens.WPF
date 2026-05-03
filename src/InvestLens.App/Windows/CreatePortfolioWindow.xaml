@@ -152,7 +152,7 @@
                                                            Margin="0 0 0 2"/>
                                                 <TextBlock Text="{Binding Description}"
                                                            FontSize="14"
-                                                           Foreground="#8E92A8"/>
+                                                           Foreground="{StaticResource SecondaryForeground}"/>
                                             </StackPanel>
                                         </Grid>
                                     </Border>
