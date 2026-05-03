@@ -1,4 +1,5 @@
-﻿using InvestLens.Model.Entities;
+﻿using InvestLens.DataAccess.Services;
+using InvestLens.Model.Entities;
 using InvestLens.Model.Enums;
 using InvestLens.Model.Services;
 using Microsoft.EntityFrameworkCore;
@@ -8,8 +9,8 @@ namespace InvestLens.DataAccess.Repositories;
 public class TransactionRepository : BaseRepository, ITransactionRepository
 {
     public TransactionRepository(
-        InvestLensDataContext db,
-        IAuthManager authManager) : base(db, authManager)
+        IDatabaseService databaseService,
+        IAuthManager authManager) : base(databaseService, authManager)
     {
     }
 
@@ -17,7 +18,7 @@ public class TransactionRepository : BaseRepository, ITransactionRepository
 
     public async Task<decimal> GetTotalCashIn()
     {
-        var total = await DataContext.Transactions
+        var total = await DatabaseService.DataContext.Transactions
             .Where(t => t.Event == Model.Enums.TransactionEvent.Cash_In)
             .SumAsync(t => t.Quantity);
 
@@ -26,7 +27,7 @@ public class TransactionRepository : BaseRepository, ITransactionRepository
 
     public async Task<decimal> GetPortfolioTotalCashIn(int[] ids)
     {
-        var total = await DataContext.Transactions
+        var total = await DatabaseService.DataContext.Transactions
             .Where(t => ids.Contains(t.PortfolioId) &&
                         (t.Event == Model.Enums.TransactionEvent.Cash_In))
             .SumAsync(t => t.Quantity);
@@ -38,7 +39,7 @@ public class TransactionRepository : BaseRepository, ITransactionRepository
 
     public async Task<decimal> GetTotalCashOut()
     {
-        var total = await DataContext.Transactions
+        var total = await DatabaseService.DataContext.Transactions
             .Where(t => t.Event == Model.Enums.TransactionEvent.Cash_Out)
             .SumAsync(t => t.Quantity);
 
@@ -47,7 +48,7 @@ public class TransactionRepository : BaseRepository, ITransactionRepository
 
     public async Task<decimal> GetPortfolioTotalCashOut(int[] ids)
     {
-        var total = await DataContext.Transactions
+        var total = await DatabaseService.DataContext.Transactions
             .Where(t => ids.Contains(t.PortfolioId) &&
                         (t.Event == Model.Enums.TransactionEvent.Cash_Out))
             .SumAsync(t => t.Quantity);
@@ -77,7 +78,7 @@ public class TransactionRepository : BaseRepository, ITransactionRepository
 
     public async Task<decimal> GetTotalDividends()
     {
-        var total = await DataContext.Transactions
+        var total = await DatabaseService.DataContext.Transactions
             .Where(t => t.Event == Model.Enums.TransactionEvent.Dividend)
             .SumAsync(t => t.Quantity);
 
@@ -86,7 +87,7 @@ public class TransactionRepository : BaseRepository, ITransactionRepository
 
     public async Task<decimal> GetPortfolioTotalDividends(int[] ids)
     {
-        var total = await DataContext.Transactions
+        var total = await DatabaseService.DataContext.Transactions
             .Where(t => ids.Contains(t.PortfolioId) &&
                         t.Event == Model.Enums.TransactionEvent.Dividend)
             .SumAsync(t => t.Quantity);
@@ -98,7 +99,7 @@ public class TransactionRepository : BaseRepository, ITransactionRepository
 
     public async Task<decimal> GetTotalFeeTax()
     {
-        var total = await DataContext.Transactions
+        var total = await DatabaseService.DataContext.Transactions
             .SumAsync(t => t.FeeTax);
 
         return total;
@@ -106,7 +107,7 @@ public class TransactionRepository : BaseRepository, ITransactionRepository
 
     public async Task<decimal> GetPortfolioTotalFeeTax(int[] ids)
     {
-        var total = await DataContext.Transactions
+        var total = await DatabaseService.DataContext.Transactions
             .Where(t => ids.Contains(t.PortfolioId))
             .SumAsync(t => t.FeeTax);
 
@@ -118,15 +119,15 @@ public class TransactionRepository : BaseRepository, ITransactionRepository
     {
         var result = new Dictionary<DateTime, decimal>();
 
-        if (await DataContext.Transactions.AnyAsync(ct))
+        if (await DatabaseService.DataContext.Transactions.AnyAsync(ct))
         {
-            var startDate = DataContext.Transactions.Min(t => t.Date);
+            var startDate = DatabaseService.DataContext.Transactions.Min(t => t.Date);
 
             foreach (var item in GetDynamicMetrics(startDate, period))
             {
                 ct.ThrowIfCancellationRequested();
 
-                var total = await DataContext.Transactions
+                var total = await DatabaseService.DataContext.Transactions
                     .Where(t => t.Event == Model.Enums.TransactionEvent.Cash_In &&
                                 t.Date <= item.Key)
                     .SumAsync(t => t.Quantity, ct);
@@ -145,15 +146,15 @@ public class TransactionRepository : BaseRepository, ITransactionRepository
     {
         var result = new Dictionary<DateTime, decimal>();
 
-        if (await DataContext.Transactions.AnyAsync(ct))
+        if (await DatabaseService.DataContext.Transactions.AnyAsync(ct))
         {
-            var startDate = DataContext.Transactions.Min(t => t.Date);
+            var startDate = DatabaseService.DataContext.Transactions.Min(t => t.Date);
 
             foreach (var item in GetDynamicMetrics(startDate, period))
             {
                 ct.ThrowIfCancellationRequested();
 
-                var total = await DataContext.Transactions
+                var total = await DatabaseService.DataContext.Transactions
                     .Where(t => ids.Contains(t.PortfolioId) &&
                                 t.Event == Model.Enums.TransactionEvent.Cash_In &&
                                 t.Date <= item.Key)

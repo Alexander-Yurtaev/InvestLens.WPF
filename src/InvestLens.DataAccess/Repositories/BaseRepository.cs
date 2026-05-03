@@ -1,6 +1,8 @@
-﻿using InvestLens.Model.Entities;
+﻿using InvestLens.DataAccess.Services;
+using InvestLens.Model.Entities;
 using InvestLens.Model.Entities.Settings;
 using InvestLens.Model.Services;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 
 namespace InvestLens.DataAccess.Repositories;
@@ -8,14 +10,14 @@ namespace InvestLens.DataAccess.Repositories;
 public abstract class BaseRepository : IBaseRepository
 {
     protected BaseRepository(
-        InvestLensDataContext dataContext,
+        IDatabaseService databaseService,
         IAuthManager authManager)
     {
-        DataContext = dataContext;
+        DatabaseService = databaseService;
         AuthManager = authManager;
     }
 
-    protected InvestLensDataContext DataContext { get; }
+    protected IDatabaseService DatabaseService { get; }
     protected IAuthManager AuthManager { get; }
 
     protected int GetOwnerId()
@@ -33,55 +35,34 @@ public abstract class BaseRepository : IBaseRepository
     // Update
     public virtual async Task AddOrUpdate<TEntity>(TEntity entity) where TEntity : BaseEntity
     {
-        if (entity.Id == default)
+        var dbEntry = await Get<TEntity>(entity.Id);
+        if (dbEntry is null)
         {
-            DataContext.Entry(entity).State = Microsoft.EntityFrameworkCore.EntityState.Added;
+            DatabaseService.DataContext.Set<TEntity>().Add(entity);
         }
         else
         {
-            DataContext.Entry(entity).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
+            DatabaseService.DataContext.Entry(dbEntry).State = EntityState.Detached;
+            DatabaseService.DataContext.Attach(entity);
         }
-        await Task.Delay(0);
     }
 
     // Read
     public virtual async Task<TEntity?> Get<TEntity>(int id) where TEntity : BaseEntity
     {
-        var entity = await DataContext.FindAsync<TEntity>(id);
+        var entity = await DatabaseService.DataContext.FindAsync<TEntity>(id);
         return entity;
     }
 
     // Delete
     public virtual async Task Delete<TEntity>(int id) where TEntity : BaseEntity
     {
-        var entity = await DataContext.FindAsync<TEntity>(id);
+        var entity = await DatabaseService.DataContext.FindAsync<TEntity>(id);
         if (entity is null)
         {
             throw new InvalidOperationException($"{this.GetType().Name}: Сущность не найдена.");
         }
 
-        DataContext.Entry(entity).State = Microsoft.EntityFrameworkCore.EntityState.Deleted;
-    }
-
-    // Thatsactions
-
-    public async Task<IDbContextTransaction> BeginTransactionAsync()
-    {
-        return await DataContext.Database.BeginTransactionAsync();
-    }
-
-    public async Task CommitTransactionAsync()
-    {
-        await DataContext.Database.CommitTransactionAsync();
-    }
-
-    public async Task RollbackTransactionAsync()
-    {
-        await DataContext.Database.RollbackTransactionAsync();
-    }
-
-    public async Task<int> SaveAsync()
-    {
-        return await DataContext.SaveChangesAsync();
+        DatabaseService.DataContext.Entry(entity).State = Microsoft.EntityFrameworkCore.EntityState.Deleted;
     }
 }

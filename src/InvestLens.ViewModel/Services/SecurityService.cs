@@ -8,15 +8,18 @@ namespace InvestLens.ViewModel.Services;
 
 public class SecurityService : ISecurityService
 {
+    private readonly IDatabaseService _databaseService;
     private readonly ISecurityRepository _repository;
     private readonly IMoexProvider _moexProvider;
     private readonly IMapper _mapper;
 
     public SecurityService(
+        IDatabaseService databaseService,
         ISecurityRepository repository, 
         IMoexProvider moexProvider,
         IMapper mapper)
     {
+        _databaseService = databaseService;
         _repository = repository;
         _moexProvider = moexProvider;
         _mapper = mapper;
@@ -32,6 +35,6 @@ public class SecurityService : ISecurityService
         var newSecurityList = _mapper.Map<List<Security>>(newSecurityModelList);
 
         await _repository.AddRangeAsync(newSecurityList);
-        await _repository.SaveAsync();
+        await _databaseService.SaveAsync();
     }
 }

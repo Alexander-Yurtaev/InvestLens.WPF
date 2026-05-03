@@ -1,4 +1,5 @@
-﻿using InvestLens.Model.Entities;
+﻿using InvestLens.DataAccess.Services;
+using InvestLens.Model.Entities;
 using InvestLens.Model.Services;
 using Microsoft.EntityFrameworkCore;
 
@@ -6,19 +7,19 @@ namespace InvestLens.DataAccess.Repositories;
 
 public class SecurityRepository : BaseRepository, ISecurityRepository
 {
-    public SecurityRepository(InvestLensDataContext dataContext, 
-        IAuthManager authManager) : base(dataContext, authManager)
+    public SecurityRepository(IDatabaseService databaseService, 
+        IAuthManager authManager) : base(databaseService, authManager)
     {
     }
 
     public async Task AddRangeAsync(IEnumerable<Security> newSecurityList)
     {
-        await DataContext.Securities.AddRangeAsync(newSecurityList);
+        await DatabaseService.DataContext.Securities.AddRangeAsync(newSecurityList);
     }
 
     public async Task<List<string>> GetSecIdListAsync()
     {
-        var result = await DataContext.Securities
+        var result = await DatabaseService.DataContext.Securities
             .Select(s => s.SecId)
             .ToListAsync();
 
@@ -27,7 +28,7 @@ public class SecurityRepository : BaseRepository, ISecurityRepository
 
     public async Task<List<Security>> GetUnloadedSecurityListAsync()
     {
-        var result = await DataContext.Securities
+        var result = await DatabaseService.DataContext.Securities
             .Where(s => !s.IsLoaded)
             .ToListAsync();
 

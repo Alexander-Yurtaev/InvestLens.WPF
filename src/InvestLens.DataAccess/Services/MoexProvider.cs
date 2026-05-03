@@ -13,6 +13,7 @@ namespace InvestLens.DataAccess.Services;
 public class MoexProvider : IMoexProvider
 {
     private readonly IMapper _mapper;
+    private readonly IDatabaseService _databaseService;
     private readonly IEngineRepository _engineRepository;
     private readonly IMarketRepository _marketRepository;
     private readonly IBoardRepository _boardRepository;
@@ -26,6 +27,7 @@ public class MoexProvider : IMoexProvider
     public MoexProvider(
         IMapper mapper, 
         IHttpClientFactory factory,
+        IDatabaseService databaseService,
         IEngineRepository engineRepository,
         IMarketRepository marketRepository,
         IBoardRepository boardRepository,
@@ -38,6 +40,7 @@ public class MoexProvider : IMoexProvider
     {
         _httpClient = factory.CreateClient("moex");
         _mapper = mapper;
+        _databaseService = databaseService;
         _engineRepository = engineRepository;
         _marketRepository = marketRepository;
         _boardRepository = boardRepository;
@@ -63,7 +66,7 @@ public class MoexProvider : IMoexProvider
             throw new InvalidOperationException(nameof(IndexResponse));
         }
 
-        var trans = await _engineRepository.BeginTransactionAsync();
+        await _databaseService.BeginTransactionAsync();
 
         try
         {
@@ -147,11 +150,13 @@ public class MoexProvider : IMoexProvider
                 }
             }
 
-            await trans.CommitAsync();
+            await _databaseService.SaveAsync();
+
+            await _databaseService.CommitTransactionAsync();
         }
         catch
         {
-            await trans.RollbackAsync();
+            await _databaseService.RollbackTransactionAsync();
         }
     }
 

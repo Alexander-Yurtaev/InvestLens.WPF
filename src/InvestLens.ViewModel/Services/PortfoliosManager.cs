@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using InvestLens.DataAccess.Repositories;
+using InvestLens.DataAccess.Services;
 using InvestLens.Model;
 using InvestLens.Model.Crud.Portfolio;
 using InvestLens.Model.Crud.Transaction;
@@ -17,6 +18,7 @@ public class PortfoliosManager : IPortfoliosManager
 {
     private readonly IMapper _mapper;
     private readonly IAuthManager _authManager;
+    private readonly IDatabaseService _databaseService;
     private readonly IPortfolioRepository _portfolioRepository;
     private readonly IWindowManager _windowManager;
     private readonly IEventAggregator _eventAggregator;
@@ -27,12 +29,14 @@ public class PortfoliosManager : IPortfoliosManager
     public PortfoliosManager(
         IMapper mapper,
         IAuthManager authManager,
+        IDatabaseService databaseService,
         IPortfolioRepository portfolioRepository,
         IWindowManager windowManager,
         IEventAggregator eventAggregator)
     {
         _mapper = mapper;
         _authManager = authManager;
+        _databaseService = databaseService;
         _portfolioRepository = portfolioRepository;
         _windowManager = windowManager;
         _eventAggregator = eventAggregator;
@@ -160,45 +164,43 @@ public class PortfoliosManager : IPortfoliosManager
 
     public async Task Create(CreateModel model)
     {
-        using (var transaction = await _portfolioRepository.BeginTransactionAsync())
+        await _databaseService.BeginTransactionAsync();
+        try
         {
-            try
-            {
-                var portfolio = _mapper.Map<Portfolio>(model);
-                portfolio = await _portfolioRepository.CreatePortfolio(portfolio);
-                await _portfolioRepository.SaveAsync();
+            var portfolio = _mapper.Map<Portfolio>(model);
+            portfolio = await _portfolioRepository.CreatePortfolio(portfolio);
+            await _databaseService.SaveAsync();
 
-                if (model.Portfolios.Any())
+            if (model.Portfolios.Any())
+            {
+                foreach (var childId in model.Portfolios)
                 {
-                    foreach (var childId in model.Portfolios)
+                    var childPortfolio = GetPortfolioByIdFromCache(childId);
+                    if (childPortfolio is null)
                     {
-                        var childPortfolio = GetPortfolioByIdFromCache(childId);
-                        if (childPortfolio is null)
-                        {
-                            _windowManager.ShowErrorDialog($"Не найден портфель с Id={childId}.");
-                            return;
-                        }
-                        childPortfolio!.ParentPortfolioId = portfolio.Id;
+                        _windowManager.ShowErrorDialog($"Не найден портфель с Id={childId}.");
+                        return;
                     }
-                    await _portfolioRepository.SaveAsync();
+                    childPortfolio!.ParentPortfolioId = portfolio.Id;
                 }
-
-                await _portfolioRepository.CommitTransactionAsync();
-
-                _portfolioCache[portfolio.Id] = _mapper.Map<PortfolioModel>(portfolio);
-                var card = await CreateCard(_portfolioCache[portfolio.Id]);
-                if (card is not null)
-                {
-                    Cards.Add(card);
-                }
-
-                _eventAggregator.GetEvent<PortfolioCreatedEvent>().Publish(portfolio.Id);
+                await _databaseService.SaveAsync();
             }
-            catch (Exception ex)
+
+            await _databaseService.CommitTransactionAsync();
+
+            _portfolioCache[portfolio.Id] = _mapper.Map<PortfolioModel>(portfolio);
+            var card = await CreateCard(_portfolioCache[portfolio.Id]);
+            if (card is not null)
             {
-                await _portfolioRepository.RollbackTransactionAsync();
-                _windowManager.ShowErrorDialog(ex.Message);
+                Cards.Add(card);
             }
+
+            _eventAggregator.GetEvent<PortfolioCreatedEvent>().Publish(portfolio.Id);
+        }
+        catch (Exception ex)
+        {
+            await _databaseService.RollbackTransactionAsync();
+            _windowManager.ShowErrorDialog(ex.Message);
         }
     }
 
@@ -206,7 +208,7 @@ public class PortfoliosManager : IPortfoliosManager
     {
         var portfolio = _mapper.Map<Portfolio>(model);
         await _portfolioRepository.Update(portfolio, model.Portfolios);
-        await _portfolioRepository.SaveAsync();
+        await _databaseService.SaveAsync();
         portfolio = await _portfolioRepository.GetPortfolioById(model.Id);
         if (portfolio is null)
         {

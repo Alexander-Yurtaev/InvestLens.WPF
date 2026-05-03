@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using InvestLens.DataAccess.Services;
 using InvestLens.Model.Entities;
 using InvestLens.Model.Enums;
 using InvestLens.Model.Services;
@@ -7,17 +8,22 @@ using Microsoft.EntityFrameworkCore.Storage;
 
 namespace InvestLens.DataAccess.Repositories;
 
-public class PortfolioRepository(
-    InvestLensDataContext db,
-    IMapper mapper,
-    IAuthManager authManager) : BaseRepository(db, authManager), IPortfolioRepository
+public class PortfolioRepository : BaseRepository, IPortfolioRepository
 {
-    private readonly IMapper _mapper = mapper;
+    private readonly IMapper _mapper;
+
+    public PortfolioRepository(
+                    IDatabaseService databaseService,
+                    IMapper mapper,
+                    IAuthManager authManager) : base(databaseService, authManager)
+    {
+        _mapper = mapper;
+    }
 
     public async Task<List<Portfolio>> GetAllPortfolios()
     {
         var ownerId = GetOwnerId();
-        return await DataContext.Portfolios
+        return await DatabaseService.DataContext.Portfolios
             .Where(p => p.OwnerId == ownerId)
             .ToListAsync();
     }
@@ -25,7 +31,7 @@ public class PortfolioRepository(
     public async Task<List<Portfolio>> GetAllPortfolios(PortfolioType portfolioType)
     {
         var ownerId = GetOwnerId();
-        return await DataContext.Portfolios
+        return await DatabaseService.DataContext.Portfolios
             .Include(p => p.ChildrenPortfolios)
             .Where(p => p.OwnerId == ownerId && p.PortfolioType == portfolioType)
             .ToListAsync();
@@ -33,7 +39,7 @@ public class PortfolioRepository(
 
     public async Task<Portfolio> CreatePortfolio(Portfolio portfolio)
     {
-        DataContext.Portfolios.Add(portfolio);
+        DatabaseService.DataContext.Portfolios.Add(portfolio);
         return await Task.FromResult(portfolio);
     }
 
@@ -62,11 +68,11 @@ public class PortfolioRepository(
 
     public async Task<bool> Delete(int id)
     {
-        using var trans = await DataContext.Database.BeginTransactionAsync();
+        using var trans = await DatabaseService.DataContext.Database.BeginTransactionAsync();
 
         try
         {
-            var portfolio = await DataContext.Portfolios
+            var portfolio = await DatabaseService.DataContext.Portfolios
             .FirstOrDefaultAsync(p => p.Id == id);
 
             if (portfolio is null)
@@ -74,8 +80,8 @@ public class PortfolioRepository(
                 throw new InvalidOperationException($"Портфель с Id = {id} не найден.");
             }
 
-            var count = await DataContext.Portfolios.Where(p => p.Id == id).ExecuteDeleteAsync();
-            DataContext.Entry(portfolio).State = EntityState.Detached;
+            var count = await DatabaseService.DataContext.Portfolios.Where(p => p.Id == id).ExecuteDeleteAsync();
+            DatabaseService.DataContext.Entry(portfolio).State = EntityState.Detached;
 
             await trans.CommitAsync();
 
@@ -99,17 +105,17 @@ public class PortfolioRepository(
 
         var task = Task.Run(() =>
         {
-            using var transaction = DataContext.Database.BeginTransaction();
+            using var transaction = DatabaseService.DataContext.Database.BeginTransaction();
 
             try
             {
                 var portfolioId = transactions.Select(t => t.PortfolioId).Distinct().Single();
-                DataContext.Transactions
+                DatabaseService.DataContext.Transactions
                     .Where(t => t.PortfolioId == portfolioId)
                     .ExecuteDelete();
 
-                DataContext.Transactions.AddRange(transactions);
-                var count = DataContext.SaveChanges();
+                DatabaseService.DataContext.Transactions.AddRange(transactions);
+                var count = DatabaseService.DataContext.SaveChanges();
                 transaction.Commit();
                 return count;
             }
@@ -126,7 +132,7 @@ public class PortfolioRepository(
 
     public async Task<Portfolio?> GetPortfolioById(int id)
     {
-        var portfolio = await DataContext.Portfolios
+        var portfolio = await DatabaseService.DataContext.Portfolios
             .Include(p => p.ChildrenPortfolios)
             .FirstOrDefaultAsync(p => p.Id == id);
 
@@ -135,11 +141,11 @@ public class PortfolioRepository(
 
     private async Task<int> MergeInMemoty(List<Transaction> transactions)
     {
-        await using var trans = DataContext.Database.BeginTransaction();
+        await using var trans = DatabaseService.DataContext.Database.BeginTransaction();
 
         try
         {
-            var dbTransactions = await DataContext.Transactions.ToListAsync();
+            var dbTransactions = await DatabaseService.DataContext.Transactions.ToListAsync();
             foreach (var external in transactions)
             {
                 // Event,Date,Symbol,Price,Quantity,Currency,FeeTax,Exchange,NKD,FeeCurrency,DoNotAdjustCash,Note
@@ -155,16 +161,16 @@ public class PortfolioRepository(
                 if (existing != null)
                 {
                     external.Id = existing.Id;
-                    var entity = DataContext.Entry(existing);
+                    var entity = DatabaseService.DataContext.Entry(existing);
                     entity.CurrentValues.SetValues(external);
                 }
                 else
                 {
-                    DataContext.Transactions.Add(external);
+                    DatabaseService.DataContext.Transactions.Add(external);
                 }
             }
 
-            var count = await DataContext.SaveChangesAsync();
+            var count = await DatabaseService.DataContext.SaveChangesAsync();
             await trans.CommitAsync();
             return count;
         }
@@ -177,7 +183,7 @@ public class PortfolioRepository(
 
     public async Task<List<Transaction>> GetTransactions(int portfolioId)
     {
-        var transactions = await DataContext.Transactions
+        var transactions = await DatabaseService.DataContext.Transactions
             .Where(t => t.PortfolioId == portfolioId)
             .ToListAsync();
 
@@ -188,7 +194,7 @@ public class PortfolioRepository(
     {
         var ownerId = GetOwnerId();
 
-        var transactions = await DataContext.Transactions
+        var transactions = await DatabaseService.DataContext.Transactions
             .AsNoTracking()
             .Include(t => t.Portfolio)
             .Where(t => t.Portfolio != null &&
@@ -203,7 +209,7 @@ public class PortfolioRepository(
     {
         var ownerId = GetOwnerId();
 
-        var transactions = await DataContext.Transactions
+        var transactions = await DatabaseService.DataContext.Transactions
             .AsNoTracking()
             .Include(t => t.Portfolio)
             .Where(t => t.Portfolio != null &&

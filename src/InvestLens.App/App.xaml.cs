@@ -72,7 +72,9 @@ namespace InvestLens.App
         private void ConfigureServices(IServiceCollection services)
         {
             services.AddAutoMapper(_ => { }, typeof(App).Assembly);
+            
             RegisterDataContext(services);
+            services.AddScoped<IDatabaseService, DatabaseService>();
 
             services.AddHttpClient("moex", client =>
             {
