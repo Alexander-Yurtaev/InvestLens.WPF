@@ -4,6 +4,7 @@ using InvestLens.ViewModel.Windows;
 using InvestLens.ViewModel.Windows.Dialogs;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Win32;
+using System.CodeDom;
 using System.Windows;
 
 namespace InvestLens.App.Services;
@@ -70,10 +71,14 @@ public class WindowManager : IWindowManager
     public void CloseWindow<TViewModel>() where TViewModel : class
     {
         var viewModelType = typeof(TViewModel);
-        if (_windows.TryGetValue(viewModelType, out var window))
+        CloseWindow(viewModelType);
+    }
+
+    public void CloseAll()
+    {
+        foreach (var key in _windows.Keys)
         {
-            window.Close();
-            _windows.Remove(viewModelType);
+            CloseWindow(key);
         }
     }
 
@@ -195,5 +200,14 @@ public class WindowManager : IWindowManager
         var mainWindow = (MainWindow)_windows[typeof(MainWindowViewModel)]; ;
         var viewModel = mainWindow.DataContext as MainWindowViewModel;
         return viewModel;
+    }
+
+    private void CloseWindow(Type viewModelType)
+    {
+        if (_windows.TryGetValue(viewModelType, out var window))
+        {
+            window.Close();
+            _windows.Remove(viewModelType);
+        }
     }
 }

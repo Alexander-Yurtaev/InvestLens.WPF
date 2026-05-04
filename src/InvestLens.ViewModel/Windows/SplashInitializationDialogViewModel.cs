@@ -60,7 +60,7 @@ public class SplashInitializationWindowViewModel : BindableBase, ISplashInitiali
 
     protected void CloseWindow()
     {
-        _windowManager.CloseWindow<SplashInitializationWindowViewModel>();
+        _windowManager.CloseAll();
     }
 
     public async Task Load(bool? force = false)

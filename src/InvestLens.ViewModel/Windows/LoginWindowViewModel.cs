@@ -105,7 +105,7 @@ public sealed class LoginWindowViewModel : ValidationViewModelBase, ILoginWindow
 
     private void OnClose()
     {
-        _windowManager.CloseWindow<LoginWindowViewModel>();
+        _windowManager.CloseAll();
     }
 
     protected override void InvalidateCommands()

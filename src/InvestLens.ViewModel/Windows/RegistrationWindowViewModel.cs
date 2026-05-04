@@ -156,7 +156,7 @@ public sealed class RegistrationWindowViewModel : ValidationViewModelBase, IRegi
 
     private void OnClose()
     {
-        _windowManager.CloseWindow<RegistrationWindowViewModel>();
+        _windowManager.CloseAll();
     }
 
     private void OnPropertyChanged(object? sender, PropertyChangedEventArgs e)
