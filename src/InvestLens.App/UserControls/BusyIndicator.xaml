@@ -34,16 +34,6 @@
                 </Setter.Value>
             </Setter>
         </Style>
-        <Style x:Key="SpinnerStyle" 
-               TargetType="{x:Type Border}">
-            <Setter Property="Width" Value="48"/>
-            <Setter Property="Height" Value="48"/>
-            <Setter Property="Margin" Value="0 0 0 20"/>
-            <Setter Property="HorizontalAlignment" Value="Center"/>
-            <Setter Property="BorderThickness" Value="3"/>
-            <Setter Property="BorderBrush" Value="{StaticResource BorderBrush}"/>
-            <Setter Property="CornerRadius" Value="24"/>
-        </Style>
         <Style x:Key="LoaderTextStyle"
                TargetType="{x:Type Label}">
             <Setter Property="HorizontalContentAlignment" Value="Center"/>
@@ -57,30 +47,7 @@
         <Border Style="{StaticResource BlockerStyle}"/>
         <Border Style="{StaticResource LoaderContainerStyle}">
             <StackPanel>
-                <Border Style="{StaticResource SpinnerStyle}">
-                    <Border.Resources>
-                        <Storyboard x:Key="SpinStoryboard" RepeatBehavior="Forever">
-                            <DoubleAnimation
-                            Storyboard.TargetName="SpinnerRotate"
-                            Storyboard.TargetProperty="Angle"
-                            From="0" To="360"
-                            Duration="0:0:0.8"/>
-                        </Storyboard>
-                    </Border.Resources>
-                    <Border.Triggers>
-                        <EventTrigger RoutedEvent="Border.Loaded">
-                            <BeginStoryboard Storyboard="{StaticResource SpinStoryboard}"/>
-                        </EventTrigger>
-                    </Border.Triggers>
-                    <Border Style="{StaticResource SpinnerStyle}"
-                        BorderThickness="0 3 0 0"
-                        BorderBrush="{StaticResource SpinnerBorderBrush}"
-                        RenderTransformOrigin="0.5,0.5">
-                        <Border.RenderTransform>
-                            <RotateTransform x:Name="SpinnerRotate"/>
-                        </Border.RenderTransform>
-                    </Border>
-                </Border>
+                <local:Spinner/>
                 <Label Content="Выполняется операция..."
                        Style="{StaticResource LoaderTextStyle}"
                        Margin="0 0 0 8"/>

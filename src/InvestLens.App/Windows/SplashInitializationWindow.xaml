@@ -22,6 +22,21 @@
         <behaviors:LoadBehavior/>
     </b:Interaction.Behaviors>
 
+    <Window.Resources>
+        <Style x:Key="IconSpinnerStyle" 
+               TargetType="{x:Type usercontrols:Spinner}">
+            <Setter Property="Size" Value="28"/>
+            <Setter Property="Visibility" Value="Collapsed"/>
+            <Setter Property="VerticalAlignment" Value="Bottom"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding State}" Value="Run">
+                    <Setter Property="Visibility" Value="Visible"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+    </Window.Resources>
+
     <Border Style="{StaticResource WindowBorderStyle}"
             Padding="28 24 28 16">
         <Grid>
@@ -69,8 +84,8 @@
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate DataType="{x:Type wrappers:InitStepWrapper}">
                                     <Border Padding="0 12 12 12"
-                                        BorderThickness="0 0 0 1"
-                                        BorderBrush="#F0F2F5">
+                                            BorderThickness="0 0 0 1"
+                                            BorderBrush="#F0F2F5">
                                         <Grid>
                                             <Grid.ColumnDefinitions>
                                                 <ColumnDefinition Width="Auto"/>
@@ -78,11 +93,13 @@
                                                 <ColumnDefinition Width="Auto"/>
                                             </Grid.ColumnDefinitions>
                                             <TextBlock Grid.Column="0"
-                                               Text="{Binding Icon}"
-                                               Width="28"
-                                               FontSize="18"
-                                               HorizontalAlignment="Center"
-                                               VerticalAlignment="Center"/>
+                                                       Text="{Binding Icon}"
+                                                       Width="28"
+                                                       FontSize="18"
+                                                       HorizontalAlignment="Center"
+                                                       VerticalAlignment="Center"/>
+                                            <usercontrols:Spinner Grid.Column="0"
+                                                                  Style="{StaticResource IconSpinnerStyle}"/>
                                             <StackPanel Grid.Column="1"
                                                 Orientation="Vertical"
                                                 Margin="14 0">
