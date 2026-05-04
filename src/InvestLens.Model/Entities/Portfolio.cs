@@ -5,29 +5,13 @@ namespace InvestLens.Model.Entities;
 
 public class Portfolio : BaseEntity
 {
-    [SetsRequiredMembers]
-    public Portfolio(string name, PortfolioType portfolioType, int ownerId)
-    {
-        Name = name;
-        PortfolioType = portfolioType;
-        OwnerId = ownerId;
-    }
-
-    [SetsRequiredMembers]
-    public Portfolio(int id, string name, PortfolioType portfolioType, int ownerId) : base(id)
-    {
-        Name = name;
-        PortfolioType = portfolioType;
-        OwnerId = ownerId;
-    }
-
-    public string Name { get; set; }
+    public string Name { get; init; } = string.Empty;
     public string? Description { get; set; } = string.Empty;
-    public PortfolioType PortfolioType { get; set; }
+    public PortfolioType PortfolioType { get; init; }
     public int? ParentPortfolioId { get; set; }
     public virtual Portfolio? ParentPortfolio { get; set; }
     public virtual ICollection<Portfolio> ChildrenPortfolios { get; set; } = [];
-    public required int OwnerId { get; set; }
+    public required int OwnerId { get; init; }
     public virtual User? Owner { get; set; }
 
     public virtual List<Transaction> Transactions { get; set; } = [];

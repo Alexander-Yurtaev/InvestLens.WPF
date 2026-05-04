@@ -3,6 +3,7 @@ using System;
 using InvestLens.DataAccess;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace InvestLens.DataAccess.Migrations
 {
     [DbContext(typeof(InvestLensDataContext))]
-    partial class InvestLensDataContextModelSnapshot : ModelSnapshot
+    [Migration("20260504063032_RefactoringOfSettings")]
+    partial class RefactoringOfSettings
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "9.0.14");
@@ -91,7 +94,7 @@ namespace InvestLens.DataAccess.Migrations
                         .HasMaxLength(189)
                         .HasColumnType("TEXT");
 
-                    b.Property<int?>("SecGroupId")
+                    b.Property<int>("SecGroupId")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("SecId")
@@ -645,7 +648,8 @@ namespace InvestLens.DataAccess.Migrations
                     b.HasOne("InvestLens.Model.Entities.Settings.SecurityGroup", "SecGroup")
                         .WithMany()
                         .HasForeignKey("SecGroupId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
                     b.HasOne("InvestLens.Model.Entities.Settings.SecurityType", "SecType")
                         .WithMany()

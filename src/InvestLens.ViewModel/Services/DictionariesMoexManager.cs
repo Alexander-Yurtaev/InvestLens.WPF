@@ -7,11 +7,11 @@ public class DictionariesMoexManager : IDictionariesMoexManager
 {
     private readonly List<SecurityModel> _securities =
     [
-        new SecurityModel("SBER", SecurityType.common_share){ Name = "Сбербанк" },
-        new SecurityModel("GAZP", SecurityType.common_share) { Name = "Газпром" },
-        new SecurityModel("LKOH", SecurityType.common_share) { Name = "Лукойл" },
-        new SecurityModel("FXRL", SecurityType.etf_ppif) { Name = "FXRL (Россия)" },
-        new SecurityModel("YNDX", SecurityType.common_share) { Name = "Яндекс" }
+        new SecurityModel{ SecId = "SBER", SecTypeId = 3, Name = "Сбербанк" },
+        new SecurityModel{ SecId = "GAZP", SecTypeId = 3, Name = "Газпром" },
+        new SecurityModel{ SecId ="LKOH", SecTypeId = 3, Name = "Лукойл" },
+        new SecurityModel{ SecId = "FXRL", SecTypeId = 55, Name = "FXRL (Россия)" },
+        new SecurityModel{ SecId = "YNDX", SecTypeId = 3, Name = "Яндекс" }
     ];
 
     private readonly List<Bond> _bonds =
@@ -22,15 +22,17 @@ public class DictionariesMoexManager : IDictionariesMoexManager
         new Bond("Газпром БО-07", "СберБ 001P", "Газпром", PeriodType.Short)
     ];
 
-    public List<SecurityType> GetSecurityTypes()
+    public List<SecurityTypeModel> GetSecurityTypes()
     {
         return _securities
             .Select(s => s.SecType)
+            .Where(st => st != null)
             .Distinct()
+            .Cast<SecurityTypeModel>()
             .ToList();
     }
 
-    public List<SecurityModel> GetSecurities(SecurityType type)
+    public List<SecurityModel> GetSecurities(SecurityTypeModel type)
     {
         return _securities.Where(r => r.SecType == type).ToList();
     }

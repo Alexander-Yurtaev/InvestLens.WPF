@@ -1,26 +1,20 @@
-﻿using InvestLens.Model.Enums;
-using System.Diagnostics.CodeAnalysis;
+﻿using System.Diagnostics.CodeAnalysis;
 
 namespace InvestLens.Model;
 
-public class SecurityModel
+public class SecurityModel : BaseModel
 {
-    [SetsRequiredMembers]
-    public SecurityModel(string secId, SecurityType secType)
-    {
-        SecId = secId;
-        SecType = secType;
-    }
-
-    public required string SecId { get; set; } = string.Empty;
+    public string SecId { get; init; } = string.Empty;
     public string ShortName { get; set; } = string.Empty;
     public string RegNumber { get; set; } = string.Empty;
     public string Name { get; set; } = string.Empty;
     public string Isin { get; set; } = string.Empty;
-    public string IsTraded { get; set; } = string.Empty;
+    public bool IsTraded { get; set; }
     public string EmitentTitle { get; set; } = string.Empty;
-    public SecurityType SecType { get; set; } = SecurityType.None;
-    public SecurityGroup SecGroup { get; set; } = SecurityGroup.None;
+    public int? SecTypeId { get; set; }
+    public SecurityTypeModel? SecType { get; set; }
+    public int? SecGroupId { get; set; }
+    public SecurityGroupModel? SecGroup { get; set; }
     public string PrimaryBoardid { get; set; } = string.Empty;
     public string MarketpriceBoardid { get; set; } = string.Empty;
 }

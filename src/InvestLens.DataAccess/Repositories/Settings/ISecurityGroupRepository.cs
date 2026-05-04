@@ -1,3 +1,8 @@
-﻿namespace InvestLens.DataAccess.Repositories;
+﻿using InvestLens.Model.Entities.Settings;
 
-public interface ISecurityGroupRepository : IBaseRepository;
+namespace InvestLens.DataAccess.Repositories;
+
+public interface ISecurityGroupRepository : IBaseRepository
+{
+    List<SecurityGroup> GetAll();
+}

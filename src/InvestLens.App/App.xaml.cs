@@ -66,6 +66,7 @@ namespace InvestLens.App
             ServiceProvider = services.BuildServiceProvider();
 
             var windowManager = ServiceProvider.GetRequiredService<IWindowManager>();
+            windowManager.SetMainWindow<MainWindowViewModel>();
             windowManager.ShowWindow<SplashInitializationWindowViewModel>();
         }
 
@@ -116,32 +117,34 @@ namespace InvestLens.App
             services.AddScoped<ISecurityGroupRepository, SecurityGroupRepository>();
             services.AddScoped<ISecurityCollectionRepository, SecurityCollectionRepository>();
 
-            services.AddScoped<MainWindow>();
-            services.AddScoped<IMainWindowViewModel, MainWindowViewModel>();
+            // Windows & Dialogs
 
-            services.AddScoped<ConfirmDeleteDialog>();
-            services.AddScoped<IConfirmDeleteDialogViewModel, ConfirmDeleteDialogViewModel>();
+            services.AddTransient<MainWindow>();
+            services.AddTransient<IMainWindowViewModel, MainWindowViewModel>();
 
-            services.AddScoped<ModalDialog>();
-            services.AddScoped<IConfirmDialogViewModel, ConfirmDialogViewModel>();
-            services.AddScoped<IErrorDialogViewModel, ErrorDialogViewModel>();
-            services.AddScoped<IInformationDialogViewModel, InformationDialogViewModel>();
-            services.AddScoped<ISuccessDialogViewModel, SuccessDialogViewModel>();
-            services.AddScoped<IWarningDialogViewModel, WarningDialogViewModel>();
+            services.AddTransient<ConfirmDeleteDialog>();
+            services.AddTransient<IConfirmDeleteDialogViewModel, ConfirmDeleteDialogViewModel>();
 
-            services.AddScoped<PortfolioImportDialog>();
-            services.AddScoped<IPortfolioImportDialogViewModel, PortfolioImportDialogViewModel>();
+            services.AddTransient<ModalDialog>();
+            services.AddTransient<IConfirmDialogViewModel, ConfirmDialogViewModel>();
+            services.AddTransient<IErrorDialogViewModel, ErrorDialogViewModel>();
+            services.AddTransient<IInformationDialogViewModel, InformationDialogViewModel>();
+            services.AddTransient<ISuccessDialogViewModel, SuccessDialogViewModel>();
+            services.AddTransient<IWarningDialogViewModel, WarningDialogViewModel>();
 
-            services.AddScoped<RegistrationWindow>();
-            services.AddScoped<IRegistrationWindowViewModel, RegistrationWindowViewModel>();
-            services.AddScoped<RegistrationModel>();
+            services.AddTransient<PortfolioImportDialog>();
+            services.AddTransient<IPortfolioImportDialogViewModel, PortfolioImportDialogViewModel>();
 
-            services.AddScoped<SplashInitializationWindow>();
-            services.AddScoped<ISplashInitializationWindowViewModel, SplashInitializationWindowViewModel>();
+            services.AddTransient<RegistrationWindow>();
+            services.AddTransient<IRegistrationWindowViewModel, RegistrationWindowViewModel>();
+            services.AddTransient<RegistrationModel>();
 
-            services.AddScoped<LoginWindow>();
-            services.AddScoped<ILoginWindowViewModel, LoginWindowViewModel>();
-            services.AddScoped<LoginModel>();
+            services.AddTransient<SplashInitializationWindow>();
+            services.AddTransient<ISplashInitializationWindowViewModel, SplashInitializationWindowViewModel>();
+
+            services.AddTransient<LoginWindow>();
+            services.AddTransient<ILoginWindowViewModel, LoginWindowViewModel>();
+            services.AddTransient<LoginModel>();
 
             services.AddTransient(sp =>
             {
@@ -154,13 +157,13 @@ namespace InvestLens.App
                 var model = new Model.Crud.Portfolio.CreateModel(authManager.CurrentUser!.Id);
                 return model;
             });
-            services.AddScoped<UpdateModel>();
+            services.AddTransient<UpdateModel>();
 
-            services.AddScoped<CreatePortfolioWindow>();
-            services.AddScoped<ICreatePortfolioWindowViewModel, CreatePortfolioWindowViewModel>();
+            services.AddTransient<CreatePortfolioWindow>();
+            services.AddTransient<ICreatePortfolioWindowViewModel, CreatePortfolioWindowViewModel>();
 
-            services.AddScoped<UpdatePortfolioWindow>();
-            services.AddScoped<IUpdatePortfolioWindowViewModel, UpdatePortfolioWindowViewModel>();
+            services.AddTransient<UpdatePortfolioWindow>();
+            services.AddTransient<IUpdatePortfolioWindowViewModel, UpdatePortfolioWindowViewModel>();
 
             services.AddScoped<INavigationViewModel, NavigationViewModel>();
             services.AddScoped<IHeaderViewModel, HeaderViewModel>();

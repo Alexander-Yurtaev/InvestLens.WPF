@@ -32,6 +32,8 @@ public sealed class InvestLensDataContext : DbContext
     {
         base.OnModelCreating(modelBuilder);
 
+        InitSttingsTables(modelBuilder);
+
         modelBuilder.Entity<User>(entity =>
         {
             entity.HasKey(u => u.Id);
@@ -61,6 +63,27 @@ public sealed class InvestLensDataContext : DbContext
         {
             entity.HasKey(s => s.Id);
             entity.Property(s => s.SecId).IsRequired();
+            entity.Property(p => p.ShortName).IsRequired().HasMaxLength(189);
+            entity.Property(p => p.RegNumber).HasMaxLength(189);
+            entity.Property(p => p.Name).IsRequired().HasMaxLength(765);
+            entity.Property(p => p.Isin).IsRequired().HasMaxLength(51);
+            entity.Property(p => p.IsTraded);
+            entity.Property(p => p.EmitentTitle).HasMaxLength(765);
+            entity.Property(p => p.SecTypeId).IsRequired();
+            entity.Property(p => p.SecGroupId);
+            entity.Property(p => p.PrimaryBoardid).IsRequired().HasMaxLength(12);
+            entity.Property(p => p.MarketpriceBoardid).HasMaxLength(12);
+            entity.Property(p => p.IsLoaded);
+
+            entity.HasOne(s => s.SecType)
+                  .WithMany()
+                  .HasForeignKey(s => s.SecTypeId)
+                  .OnDelete(DeleteBehavior.Restrict);
+
+            entity.HasOne(s => s.SecGroup)
+                  .WithMany()
+                  .HasForeignKey(s => s.SecGroupId)
+                  .OnDelete(DeleteBehavior.Restrict);
         });
 
         modelBuilder.Entity<Transaction>(entity =>
@@ -83,8 +106,6 @@ public sealed class InvestLensDataContext : DbContext
                   .HasForeignKey(t => t.PortfolioId)
                   .OnDelete(DeleteBehavior.Cascade);
         });
-
-        InitSttingsTables(modelBuilder);
     }
 
     #endregion
@@ -154,7 +175,7 @@ public sealed class InvestLensDataContext : DbContext
             entity.Property(p => p.Category).IsRequired().HasMaxLength(45);
         });
 
-        modelBuilder.Entity<Duration>(entity => 
+        modelBuilder.Entity<Duration>(entity =>
         {
             entity.ToTable("Settings.Durations");
             entity.HasKey(p => p.Id);

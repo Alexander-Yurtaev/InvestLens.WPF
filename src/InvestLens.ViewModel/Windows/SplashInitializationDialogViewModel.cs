@@ -118,7 +118,6 @@ public class SplashInitializationWindowViewModel : BindableBase, ISplashInitiali
 
     private void LoadingCompleted()
     {
-        _windowManager.SetMainWindow<LoginWindowViewModel>();
         _windowManager.ShowWindow<LoginWindowViewModel>();
         _windowManager.CloseWindow<SplashInitializationWindowViewModel>();
     }

@@ -16,15 +16,8 @@ public class SecurityWrapper
     public string Name => _model.Name;
     public string SecTypeDisplay => GetSecTypeDisplay(_model.SecType);
 
-    private string GetSecTypeDisplay(SecurityType secType)
+    private string GetSecTypeDisplay(SecurityTypeModel? secType)
     {
-        return secType switch
-        {
-            SecurityType.None => "Нет данных",
-            SecurityType.common_share => "Акции",
-            SecurityType.exchange_bond => "Облигации",
-            SecurityType.etf_ppif => "ETF",
-            _ => throw new ArgumentOutOfRangeException(secType.ToString()),
-        };
+        return secType?.SecurityTypeTitle ?? string.Empty;
     }
 }

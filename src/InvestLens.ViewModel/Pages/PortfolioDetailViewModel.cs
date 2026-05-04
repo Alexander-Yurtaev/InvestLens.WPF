@@ -155,7 +155,9 @@ public class PortfolioDetailViewModel : ViewModelBaseWithContentHeader, IPortfol
                 acceptedCount = await _portfoliosManager.Recreate(transactions);
             }
 
-            await _securityService.UpdateSecurities(transactions.Select(t => t.Symbol).Distinct().ToList());
+            await _securityService.UpdateSecurities(transactions.Select(t => t.Symbol)
+                                                                .Where(s => !string.IsNullOrEmpty(s))
+                                                                .Distinct().ToList());
 
             await RefreshModel();
             

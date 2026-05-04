@@ -84,7 +84,6 @@ public sealed class LoginWindowViewModel : ValidationViewModelBase, ILoginWindow
         var result = await _authService.LoginAsync(_model);
         if (result.Success)
         {
-            _windowManager.SetMainWindow<MainWindowViewModel>();
             _windowManager.ShowWindow<MainWindowViewModel>();
             _windowManager.CloseWindow<LoginWindowViewModel>();
 
@@ -100,7 +99,6 @@ public sealed class LoginWindowViewModel : ValidationViewModelBase, ILoginWindow
 
     private void OnRegistration()
     {
-        _windowManager.SetMainWindow<RegistrationWindowViewModel>();
         _windowManager.ShowWindow<RegistrationWindowViewModel>();
         _windowManager.CloseWindow<LoginWindowViewModel>();
     }

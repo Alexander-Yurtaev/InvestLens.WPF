@@ -15,7 +15,10 @@ public class DatabaseService : IDatabaseService
 
     public async Task BeginTransactionAsync()
     {
-        if (_currentTransaction is not null) return;
+        if (_currentTransaction is not null)
+        {
+            throw new InvalidOperationException("Транзакция уже начата.");
+        }
         _currentTransaction = await DataContext.Database.BeginTransactionAsync();
     }
 
@@ -24,6 +27,7 @@ public class DatabaseService : IDatabaseService
         if (_currentTransaction is null) return;
         await _currentTransaction.CommitAsync();
         _currentTransaction.Dispose();
+        _currentTransaction = null;
     }
 
     public async Task RollbackTransactionAsync()
@@ -31,6 +35,7 @@ public class DatabaseService : IDatabaseService
         if (_currentTransaction is null) return;
         await _currentTransaction.RollbackAsync();
         _currentTransaction.Dispose();
+        _currentTransaction = null;
     }
 
     public async Task<int> SaveAsync()

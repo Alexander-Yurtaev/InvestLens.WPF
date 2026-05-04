@@ -162,7 +162,6 @@ public class MoexProvider : IMoexProvider
 
     public async Task<List<SecurityModel>> GetSecurityList(IEnumerable<string> secIdNewList)
     {
-        //var secTypeGoups = new Dictionary<string, List<string>>();
         var securityModelList = new List<SecurityModel>();
 
         foreach (var secId in secIdNewList)
@@ -180,7 +179,7 @@ public class MoexProvider : IMoexProvider
 
                 var model = security is not null
                         ? _mapper.Map<SecurityModel>(security)
-                        : new SecurityModel(secId, InvestLens.Model.Enums.SecurityType.None);
+                        : new SecurityModel { SecId = secId, SecTypeId = 3 };
 
                 securityModelList.Add(model);
             }            

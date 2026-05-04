@@ -5,8 +5,8 @@ namespace InvestLens.ViewModel.Services;
 
 public interface IDictionariesMoexManager
 {
-    List<SecurityType> GetSecurityTypes();
-    List<SecurityModel> GetSecurities(SecurityType type);
+    List<SecurityTypeModel> GetSecurityTypes();
+    List<SecurityModel> GetSecurities(SecurityTypeModel type);
     List<PeriodType> GetBondPeriodTypes();
     List<Bond> GetBonds(PeriodType periodType);
 }

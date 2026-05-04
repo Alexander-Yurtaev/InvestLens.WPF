@@ -9,15 +9,22 @@ namespace InvestLens.Tests;
 public class PortfolioProfilesTests
 {
     private IMapper _mapper;
+    private MapperConfiguration _config;
 
     public PortfolioProfilesTests()
     {
-        var config = new MapperConfiguration(cfg =>
+        _config = new MapperConfiguration(cfg =>
         {
             cfg.AddProfile<InvestLens.App.Profiles.PortfolioProfiles>();
         }, NullLoggerFactory.Instance);
 
-        _mapper = config.CreateMapper();
+        _mapper = _config.CreateMapper();
+    }
+
+    [Fact]
+    public void AutoMapper_Configuration_ShouldBeValid()
+    {
+        _config.AssertConfigurationIsValid();
     }
 
     [Theory]

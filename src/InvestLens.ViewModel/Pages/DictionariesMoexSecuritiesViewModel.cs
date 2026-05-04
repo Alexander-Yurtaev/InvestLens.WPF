@@ -29,7 +29,7 @@ public class DictionariesMoexSecuritiesViewModel : ViewModelBaseWithContentHeade
         foreach (var type in types)
         {
             var securities = _dictionariesManager.DictionariesMoexManager.GetSecurities(type);
-            var model = new TabItemViewModel(type.ToString())
+            var model = new TabItemViewModel(type.SecurityTypeTitle)
             {
                 Content = securities.Cast<object>().ToList()
             };

@@ -62,7 +62,7 @@ public class InitStepWrapper : BindableBase
     public string Title { get; } = string.Empty;
     public string Description { get; } = string.Empty;
 
-    public Exception Exception { get; private set; }
+    public Exception? Exception { get; private set; }
 
     public void AddNextStep(InitStepWrapper nextStep)
     {

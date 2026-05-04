@@ -68,7 +68,7 @@ public class PortfolioRepository : BaseRepository, IPortfolioRepository
 
     public async Task<bool> Delete(int id)
     {
-        using var trans = await DatabaseService.DataContext.Database.BeginTransactionAsync();
+        await DatabaseService.BeginTransactionAsync();
 
         try
         {
@@ -83,13 +83,13 @@ public class PortfolioRepository : BaseRepository, IPortfolioRepository
             var count = await DatabaseService.DataContext.Portfolios.Where(p => p.Id == id).ExecuteDeleteAsync();
             DatabaseService.DataContext.Entry(portfolio).State = EntityState.Detached;
 
-            await trans.CommitAsync();
+            await DatabaseService.CommitTransactionAsync();
 
             return count > 0;
         }
         catch
         {
-            await trans.RollbackAsync();
+            await DatabaseService.RollbackTransactionAsync();
             throw;
         }
     }
@@ -103,9 +103,9 @@ public class PortfolioRepository : BaseRepository, IPortfolioRepository
     {
         if (!transactions.Any()) return 0;
 
-        var task = Task.Run(() =>
+        var task = Task.Run(async () =>
         {
-            using var transaction = DatabaseService.DataContext.Database.BeginTransaction();
+            await DatabaseService.BeginTransactionAsync();
 
             try
             {
@@ -116,12 +116,12 @@ public class PortfolioRepository : BaseRepository, IPortfolioRepository
 
                 DatabaseService.DataContext.Transactions.AddRange(transactions);
                 var count = DatabaseService.DataContext.SaveChanges();
-                transaction.Commit();
+                await DatabaseService.CommitTransactionAsync();
                 return count;
             }
             catch (Exception)
             {
-                transaction.Rollback();
+                await DatabaseService.RollbackTransactionAsync();
                 throw;
             }
         });
@@ -141,7 +141,7 @@ public class PortfolioRepository : BaseRepository, IPortfolioRepository
 
     private async Task<int> MergeInMemoty(List<Transaction> transactions)
     {
-        await using var trans = DatabaseService.DataContext.Database.BeginTransaction();
+        await DatabaseService.BeginTransactionAsync();
 
         try
         {
@@ -171,12 +171,12 @@ public class PortfolioRepository : BaseRepository, IPortfolioRepository
             }
 
             var count = await DatabaseService.DataContext.SaveChangesAsync();
-            await trans.CommitAsync();
+            await DatabaseService.CommitTransactionAsync();
             return count;
         }
         catch
         {
-            await trans.RollbackAsync();
+            await DatabaseService.RollbackTransactionAsync();
             throw;
         }
     }

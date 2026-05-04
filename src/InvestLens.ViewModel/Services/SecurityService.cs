@@ -33,6 +33,10 @@ public class SecurityService : ISecurityService
         var newSecurityModelList = await _moexProvider.GetSecurityList(secIdNewList);
 
         var newSecurityList = _mapper.Map<List<Security>>(newSecurityModelList);
+        foreach (var security in newSecurityList)
+        {
+            security.IsLoaded = true;
+        }
 
         await _repository.AddRangeAsync(newSecurityList);
         await _databaseService.SaveAsync();
