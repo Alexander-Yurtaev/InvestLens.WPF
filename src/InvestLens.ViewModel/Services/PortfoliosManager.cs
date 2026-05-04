@@ -89,30 +89,37 @@ public class PortfoliosManager : IPortfoliosManager
                 .GroupBy(t => t.Symbol)
                 .Select(g =>
                 {
-                var totalQuantity = g.Where(t => t.Event == TransactionEvent.Buy ||
-                                                 t.Event == TransactionEvent.Sell)
-                                      .Sum(t => t.Quantity);
+                    var totalQuantity = g.Where(t => t.Event == TransactionEvent.Buy ||
+                                                     t.Event == TransactionEvent.Sell)
+                                          .Sum(t => t.Quantity);
 
-                var totalBuy = g.Where(t => t.Event == TransactionEvent.Buy).Sum(t => t.Price * t.Quantity);
-                var totalSell = g.Where(t => t.Event == TransactionEvent.Sell).Sum(t => t.Price * t.Quantity);
+                    var totalBuy = g.Where(t => t.Event == TransactionEvent.Buy).Sum(t => t.Price * t.Quantity);
+                    var totalSell = g.Where(t => t.Event == TransactionEvent.Sell).Sum(t => t.Price * t.Quantity);
 
-                var totalFeeTax = g.Where(t => t.Event == TransactionEvent.Buy ||
-                                               t.Event == TransactionEvent.Sell)
-                                   .Sum(t => t.FeeTax);
+                    var totalFeeTax = g.Where(t => t.Event == TransactionEvent.Buy ||
+                                                   t.Event == TransactionEvent.Sell)
+                                       .Sum(t => t.FeeTax);
 
-                var dividends = g.Where(t => t.Event == TransactionEvent.Dividend)
-                                 .Sum(t => t.Quantity);
+                    var dividends = g.Where(t => t.Event == TransactionEvent.Dividend)
+                                     .Sum(t => t.Quantity);
 
-                return new SecurityInfo(g.Key, g.Key)
-                {
-                    Quantity = totalQuantity,
-                    CurrentPrice = totalBuy - totalSell,
-                    Dividends = dividends,
-                    TotalPrice = totalBuy - totalSell - totalFeeTax,
-                    // ( (Текущая стоимость − Вложено + Дивиденды) / Вложено ) × 100%
-                    Profit = (totalBuy - totalSell + totalFeeTax) > 0 
-                                ? ((totalBuy - totalSell) - (totalBuy - totalSell + totalFeeTax) + dividends) / (totalBuy - totalSell + totalFeeTax)
-                                : 0
+                    var key = g.Key;
+                    if (string.IsNullOrEmpty(key))
+                    {
+                        key = string.Join(";", g.Select(i => i.Event).Distinct());
+                        key = $"<{key}>";
+                    }
+
+                    return new SecurityInfo(key, key)
+                    {
+                        Quantity = totalQuantity,
+                        CurrentPrice = totalBuy - totalSell,
+                        Dividends = dividends,
+                        TotalPrice = totalBuy - totalSell - totalFeeTax,
+                        // ( (Текущая стоимость − Вложено + Дивиденды) / Вложено ) × 100%
+                        Profit = (totalBuy - totalSell + totalFeeTax) > 0
+                                    ? ((totalBuy - totalSell) - (totalBuy - totalSell + totalFeeTax) + dividends) / (totalBuy - totalSell + totalFeeTax)
+                                    : 0
                     };
                 });
 

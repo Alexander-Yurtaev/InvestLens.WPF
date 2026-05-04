@@ -1,8 +1,6 @@
 ﻿using AutoMapper;
-using InvestLens.DataAccess.Services;
 using InvestLens.Model;
 using InvestLens.Model.Crud.Portfolio;
-using InvestLens.Model.Entities;
 using InvestLens.Model.Services;
 using InvestLens.ViewModel.Helpers;
 using InvestLens.ViewModel.Services;
@@ -13,7 +11,6 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
 using System.Windows.Data;
-using System.Windows.Threading;
 
 namespace InvestLens.ViewModel.Pages;
 
@@ -61,9 +58,7 @@ public class PortfolioDetailViewModel : ViewModelBaseWithContentHeader, IPortfol
 
         MetricCards = [];
 
-        var securities = _model.Securities.Select(s => new SecurityInfoWrapper(s)).ToList();
-        SecuritiesView = CollectionViewSource.GetDefaultView(securities);
-        SecuritiesView.Filter = wrapper => ShowSold || ((SecurityInfoWrapper)wrapper).Count > 0;
+        InitSecuritiesView();
 
         Operations = new ObservableCollection<SecurityOperation>(_model.Operations.OrderByDescending(o => o.Date));
 
@@ -199,8 +194,7 @@ public class PortfolioDetailViewModel : ViewModelBaseWithContentHeader, IPortfol
                 MetricCards.Add(metric);
             }
 
-            var securities = _model.Securities.Select(s => new SecurityInfoWrapper(s)).ToList();
-            SecuritiesView = CollectionViewSource.GetDefaultView(securities);
+            InitSecuritiesView();
 
             RaisePropertyChanged(nameof(SecuritiesView));
             RaisePropertyChanged(nameof(MetricCards));
@@ -231,5 +225,12 @@ public class PortfolioDetailViewModel : ViewModelBaseWithContentHeader, IPortfol
     {
         var message = ex.InnerException?.Message ?? ex.Message;
         _windowManager.ShowErrorDialog(message);
+    }
+
+    private void InitSecuritiesView()
+    {
+        var securities = _model.Securities.Select(s => new SecurityInfoWrapper(s)).ToList();
+        SecuritiesView = CollectionViewSource.GetDefaultView(securities);
+        SecuritiesView.Filter = wrapper => ShowSold || ((SecurityInfoWrapper)wrapper).Count > 0;
     }
 }
