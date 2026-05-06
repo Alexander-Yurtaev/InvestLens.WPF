@@ -31,7 +31,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\InvestLens.DataAccess\InvestLens.DataAccess.csproj" />
     <ProjectReference Include="..\InvestLens.ViewModel\InvestLens.ViewModel.csproj" />
   </ItemGroup>
 

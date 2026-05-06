@@ -25,6 +25,8 @@ public class PortfolioDetailViewModel : ViewModelBaseWithContentHeader, IPortfol
     private readonly ISecurityService _securityService;
     private bool _showSold;
     private int _securitiesCount;
+    // ToDo Implement a Cancelation
+    private CancellationTokenSource _importCancelationTokenSource;
 
     public PortfolioDetailViewModel(
         IMapper mapper,
@@ -35,6 +37,8 @@ public class PortfolioDetailViewModel : ViewModelBaseWithContentHeader, IPortfol
         IPortfoliosManager portfoliosManager,
         ISecurityService securityService) : base(model.Title, model.Description)
     {
+        _importCancelationTokenSource = new();
+
         _mapper = mapper;
         _model = model;
         _windowManager = windowManager;
@@ -68,7 +72,7 @@ public class PortfolioDetailViewModel : ViewModelBaseWithContentHeader, IPortfol
     public string Title => _model.Title;
     public string SecuritiesHeader => $"Активы ({_securitiesCount})";
     public ObservableCollection<MetricCard> MetricCards { get; }
-    public ICollectionView SecuritiesView { get; private set; }
+    public ICollectionView SecuritiesView { get; private set; } = null!;
     public bool ShowSold 
     { 
         get => _showSold;
@@ -150,9 +154,11 @@ public class PortfolioDetailViewModel : ViewModelBaseWithContentHeader, IPortfol
                 acceptedCount = await _portfoliosManager.Recreate(transactions);
             }
 
+            var ct = _importCancelationTokenSource.Token;
             await _securityService.UpdateSecurities(transactions.Select(t => t.Symbol)
                                                                 .Where(s => !string.IsNullOrEmpty(s))
-                                                                .Distinct().ToList());
+                                                                .Distinct().ToList(),
+                                                                ct);
 
             await RefreshModel();
             

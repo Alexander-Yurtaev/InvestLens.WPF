@@ -98,8 +98,8 @@ public class SplashInitializationWindowViewModel : BindableBase, ISplashInitiali
             "Глобальные справочники",
             new AsyncDelegateCommand(async () =>
             {
-                var provider = _serviceProvider.GetRequiredService<IMoexProvider>();
-                await provider.LoadMoexIndex(ct);
+                var service = _serviceProvider.GetRequiredService<IMoexService>();
+                await service.LoadMoexIndex(ct);
             }),
             ct);
         migrationInitStep.AddNextStep(moexInitStep);

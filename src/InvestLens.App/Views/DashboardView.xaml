@@ -154,8 +154,7 @@
             <ItemsControl ItemsSource="{Binding MetricCards}">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
-                        <UniformGrid Columns="{Binding Items.Count, 
-                          RelativeSource={RelativeSource AncestorType=ItemsControl}}" 
+                        <UniformGrid Columns="4" 
                                      Rows="1"
                                      HorizontalAlignment="Stretch"/>
                     </ItemsPanelTemplate>

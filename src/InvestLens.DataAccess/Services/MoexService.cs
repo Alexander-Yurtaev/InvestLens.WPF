@@ -10,7 +10,19 @@ using System.Net.Http.Json;
 
 namespace InvestLens.DataAccess.Services;
 
-public class MoexProvider : IMoexProvider
+public class MoexCache
+{
+    public List<EngineModel> Engines { get; set; } = [];
+    public List<MarketModel> Markets { get; set; } = [];
+    public List<BoardModel> Boards { get; set; } = [];
+    public List<BoardGroupModel> BoardGroups { get; set; } = [];
+    public List<DurationModel> Durations { get; set; } = [];
+    public List<SecurityTypeModel> SecurityTypes { get; set; } = [];
+    public List<SecurityGroupModel> SecurityGroups { get; set; } = [];
+    public List<SecurityCollectionModel> SecurityCollections { get; set; } = [];
+}
+
+public class MoexService : IMoexService
 {
     private readonly IMapper _mapper;
     private readonly IDatabaseService _databaseService;
@@ -24,7 +36,7 @@ public class MoexProvider : IMoexProvider
     private readonly ISecurityCollectionRepository _securityCollectionRepository;
     private HttpClient _httpClient;
 
-    public MoexProvider(
+    public MoexService(
         IMapper mapper, 
         IHttpClientFactory factory,
         IDatabaseService databaseService,
@@ -49,12 +61,11 @@ public class MoexProvider : IMoexProvider
         _securityTypeRepository = securityTypeRepository;
         _securityGroupRepository = securityGroupRepository;
         _securityCollectionRepository = securityCollectionRepository;
+
+        MoexDictionaries = new();
     }
 
-    public void Dispose()
-    {
-        _httpClient?.Dispose();
-    }
+    public MoexCache MoexDictionaries { get; }
 
     public async Task LoadMoexIndex(CancellationToken ct)
     {
@@ -73,80 +84,96 @@ public class MoexProvider : IMoexProvider
             if (response.Engines is not null)
             {
                 var engines = MoexResponseHelper.GetModels<Engines, Engine>(response.Engines);
-                foreach (var engineModel in engines)
+                foreach (var engineEntity in engines)
                 {
                     ct.ThrowIfCancellationRequested();
-                    await _engineRepository.AddOrUpdate(engineModel);
+                    await _engineRepository.AddOrUpdate(engineEntity);
+                    var engineModel = _mapper.Map<EngineModel>(engineEntity);
+                    MoexDictionaries.Engines.Add(engineModel);
                 }
             }
 
             if (response.Markets is not null)
             {
                 var markets = MoexResponseHelper.GetModels<Markets, Market>(response.Markets);
-                foreach (var marketModel in markets)
+                foreach (var marketEntity in markets)
                 {
                     ct.ThrowIfCancellationRequested();
-                    await _marketRepository.AddOrUpdate(marketModel);
+                    await _marketRepository.AddOrUpdate(marketEntity);
+                    var marketModel = _mapper.Map<MarketModel>(marketEntity);
+                    MoexDictionaries.Markets.Add(marketModel);
                 }
             }
 
             if (response.Boards is not null)
             {
                 var boards = MoexResponseHelper.GetModels<Boards, Board>(response.Boards);
-                foreach (var boardModel in boards)
+                foreach (var boardEntity in boards)
                 {
                     ct.ThrowIfCancellationRequested();
-                    await _boardRepository.AddOrUpdate(boardModel);
+                    await _boardRepository.AddOrUpdate(boardEntity);
+                    var boardModel = _mapper.Map<BoardModel>(boardEntity);
+                    MoexDictionaries.Boards.Add(boardModel);
                 }
             }
 
             if (response.BoardGroups is not null)
             {
                 var boardGroups = MoexResponseHelper.GetModels<BoardGroups, BoardGroup>(response.BoardGroups);
-                foreach (var boardGroupModel in boardGroups)
+                foreach (var boardGroupEntity in boardGroups)
                 {
                     ct.ThrowIfCancellationRequested();
-                    await _boardGroupRepository.AddOrUpdate(boardGroupModel);
+                    await _boardGroupRepository.AddOrUpdate(boardGroupEntity);
+                    var boardGroupModel = _mapper.Map<BoardGroupModel>(boardGroupEntity);
+                    MoexDictionaries.BoardGroups.Add(boardGroupModel);
                 }
             }
 
             if (response.Durations is not null)
             {
                 var durations = MoexResponseHelper.GetModels<Durations, Duration>(response.Durations);
-                foreach (var durationModel in durations)
+                foreach (var durationEntity in durations)
                 {
                     ct.ThrowIfCancellationRequested();
-                    await _durationRepository.AddOrUpdate(durationModel);
+                    await _durationRepository.AddOrUpdate(durationEntity);
+                    var durationModel = _mapper.Map<DurationModel>(durationEntity);
+                    MoexDictionaries.Durations.Add(durationModel);
                 }
             }
 
             if (response.SecurityTypes is not null)
             {
                 var securityTypes = MoexResponseHelper.GetModels<SecurityTypes, Model.Entities.Settings.SecurityType>(response.SecurityTypes);
-                foreach (var securityTypeModel in securityTypes)
+                foreach (var securityTypeEntity in securityTypes)
                 {
                     ct.ThrowIfCancellationRequested();
-                    await _securityTypeRepository.AddOrUpdate(securityTypeModel);
+                    await _securityTypeRepository.AddOrUpdate(securityTypeEntity);
+                    var securityTypeModel = _mapper.Map<SecurityTypeModel>(securityTypeEntity);
+                    MoexDictionaries.SecurityTypes.Add(securityTypeModel);
                 }
             }
 
             if (response.SecurityGroups is not null)
             {
                 var securityGroups = MoexResponseHelper.GetModels<SecurityGroups, Model.Entities.Settings.SecurityGroup>(response.SecurityGroups);
-                foreach (var securityGroupModel in securityGroups)
+                foreach (var securityGroupEntity in securityGroups)
                 {
                     ct.ThrowIfCancellationRequested();
-                    await _securityGroupRepository.AddOrUpdate(securityGroupModel);
+                    await _securityGroupRepository.AddOrUpdate(securityGroupEntity);
+                    var securityGroupModel = _mapper.Map<SecurityGroupModel>(securityGroupEntity);
+                    MoexDictionaries.SecurityGroups.Add(securityGroupModel);
                 }
             }
 
             if (response.SecurityCollections is not null)
             {
                 var securityCollections = MoexResponseHelper.GetModels<SecurityCollections, Model.Entities.Settings.SecurityCollection>(response.SecurityCollections);
-                foreach (var securityCollectionModel in securityCollections)
+                foreach (var securityCollectionEntity in securityCollections)
                 {
                     ct.ThrowIfCancellationRequested();
-                    await _securityCollectionRepository.AddOrUpdate(securityCollectionModel);
+                    await _securityCollectionRepository.AddOrUpdate(securityCollectionEntity);
+                    var securityCollectionModel = _mapper.Map<SecurityCollectionModel>(securityCollectionEntity);
+                    MoexDictionaries.SecurityCollections.Add(securityCollectionModel);
                 }
             }
 
@@ -160,33 +187,27 @@ public class MoexProvider : IMoexProvider
         }
     }
 
-    public async Task<List<SecurityModel>> GetSecurityList(IEnumerable<string> secIdNewList)
+    public async Task<List<SecurityModel>> GetSecurityList(IEnumerable<string> secIdNewList, CancellationToken ct)
     {
         var securityModelList = new List<SecurityModel>();
 
         foreach (var secId in secIdNewList)
         {
-            try
+            await Task.Delay(100);
+            var response = await _httpClient.GetFromJsonAsync<SecuritiesResponse>($"iss/securities.json?q={secId}", ct);
+            if (response?.Securities == null)
             {
-                var response = await _httpClient.GetFromJsonAsync<SecuritiesResponse>($"iss/securities.json?q={secId}");
-                if (response?.Securities == null)
-                {
-                    continue;
-                }
-
-                var securities = MoexResponseHelper.GetModels<Securities, Security>(response.Securities);
-                var security = securities.FirstOrDefault(s => s.SecId == secId);
-
-                var model = security is not null
-                        ? _mapper.Map<SecurityModel>(security)
-                        : new SecurityModel { SecId = secId, SecTypeId = 3 };
-
-                securityModelList.Add(model);
-            }            
-            catch (Exception)
-            {
-
+                continue;
             }
+
+            var securities = MoexResponseHelper.GetModels<Securities, Security>(response.Securities);
+            var security = securities.FirstOrDefault(s => s.SecId == secId);
+
+            var model = security is not null
+                    ? _mapper.Map<SecurityModel>(security)
+                    : new SecurityModel { SecId = secId };
+
+            securityModelList.Add(model);
         }
 
         return securityModelList;

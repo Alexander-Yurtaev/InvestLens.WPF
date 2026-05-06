@@ -2,5 +2,5 @@
 
 public interface ISecurityService
 {
-    Task UpdateSecurities(List<string> secIdImportList);
+    Task UpdateSecurities(List<string> secIdImportList, CancellationToken ct);
 }

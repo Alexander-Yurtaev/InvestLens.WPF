@@ -52,7 +52,8 @@ public class WindowManager : IWindowManager
 
     public void ShowWindow<TViewModel>(TViewModel? viewModel = null) where TViewModel : class
     {
-        var window = GetWindow(typeof(TViewModel), viewModel);
+        var viewModelType = typeof(TViewModel);
+        var window = GetWindow(viewModelType, viewModel);
         window.Show();
     }
 
@@ -66,20 +67,6 @@ public class WindowManager : IWindowManager
             return confirmable.IsConfirmed;
         }
         return result;
-    }
-
-    public void CloseWindow<TViewModel>() where TViewModel : class
-    {
-        var viewModelType = typeof(TViewModel);
-        CloseWindow(viewModelType);
-    }
-
-    public void CloseAll()
-    {
-        foreach (var key in _windows.Keys)
-        {
-            CloseWindow(key);
-        }
     }
 
     public void SetMainWindow<TViewModel>() where TViewModel : class
@@ -99,11 +86,6 @@ public class WindowManager : IWindowManager
 
     private Window GetWindow(Type viewModelType, object? viewModel = null)
     {
-        if (viewModel is not null)
-        {
-            _windows.Remove(viewModelType);
-        }
-
         Window? window = null;
         if (viewModel is IViewableViewModel viewable)
         {
@@ -139,6 +121,7 @@ public class WindowManager : IWindowManager
         }
 
         _windows[viewModelType] = window;
+        SubscribeWindow(window, viewModelType);
         if (viewModel is not null)
         {
             window.DataContext = viewModel;
@@ -195,19 +178,45 @@ public class WindowManager : IWindowManager
         }
     }
 
-    private MainWindowViewModel? GetMainWindowViewModel()
+    public void CloseAll()
     {
-        var mainWindow = (MainWindow)_windows[typeof(MainWindowViewModel)]; ;
-        var viewModel = mainWindow.DataContext as MainWindowViewModel;
-        return viewModel;
+        var windowsToClose = _windows.Values.ToList();
+        _windows.Clear();
+
+        foreach (var window in windowsToClose)
+        {
+            window.Close();
+        }
     }
 
-    private void CloseWindow(Type viewModelType)
+    public void CloseWindow<TViewModel>() where TViewModel : class
     {
+        var viewModelType = typeof(TViewModel);
         if (_windows.TryGetValue(viewModelType, out var window))
         {
             window.Close();
-            _windows.Remove(viewModelType);
         }
+    }
+
+    private MainWindowViewModel? GetMainWindowViewModel()
+    {
+        if (!_windows.TryGetValue(typeof(MainWindowViewModel), out var mainWindow))
+        {
+            return null;
+        }
+
+        return mainWindow.DataContext as MainWindowViewModel;
+    }
+
+    private void SubscribeWindow(Window window, Type viewModelType)
+    {
+        window.Closed += (s, e) =>
+        {
+            if (_windows.TryGetValue(viewModelType, out var existingWindow) 
+                            && existingWindow == window)
+            {
+                _windows.Remove(viewModelType);
+            }
+        };
     }
 }

@@ -52,7 +52,6 @@ public class MainWindowViewModel : BindableBase, IMainWindowViewModel
         {
             await loadable.Load();
         }
-
         ContentVm = viewModel;
         _currentNavigationTreeModel = model;
     }

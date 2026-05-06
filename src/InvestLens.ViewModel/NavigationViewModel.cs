@@ -1,5 +1,4 @@
 ﻿using System.Collections.ObjectModel;
-using InvestLens.Model;
 using InvestLens.Model.NavigationTree;
 using InvestLens.Model.Services;
 using InvestLens.ViewModel.Events;
@@ -14,7 +13,7 @@ public class NavigationViewModel : BindableBase, INavigationViewModel
     private readonly IPortfoliosManager _portfoliosManager;
     private readonly IDohodService _dohodService;
     private readonly IEventAggregator _eventAggregator;
-    private NavigationTreeItem? _portfoliosTreeItem;
+    private NavigationTreeItem _portfoliosTreeItem;
     private INavigationTreeItem? _selectedItem;
 
     public NavigationViewModel(
@@ -35,6 +34,7 @@ public class NavigationViewModel : BindableBase, INavigationViewModel
         _eventAggregator.GetEvent<SelectPortfolioEvent>().Subscribe(OnSelectPortfolio);
 
         MenuItems = [];
+        _portfoliosTreeItem = new NavigationTreeItem(new PortfoliosNavigationTreeModel(), _eventAggregator);
     }
 
     public ObservableCollection<INavigationTreeItem> MenuItems { get; set; }
@@ -45,7 +45,7 @@ public class NavigationViewModel : BindableBase, INavigationViewModel
         set => SetProperty(ref _selectedItem, value); 
     }
 
-    public async Task LoadAsync()
+    public async Task Load(bool? force = false)
     {
         var menuItems = await GetMenuItems();
 
@@ -58,8 +58,6 @@ public class NavigationViewModel : BindableBase, INavigationViewModel
     
     private async Task<List<INavigationTreeItem>> GetMenuItems()
     {
-        _portfoliosTreeItem = new NavigationTreeItem(new PortfoliosNavigationTreeModel(), _eventAggregator);
-
         var result = new List<INavigationTreeItem>
         {
             new NavigationTreeItem(new DashboardNavigationTreeModel(), _eventAggregator),

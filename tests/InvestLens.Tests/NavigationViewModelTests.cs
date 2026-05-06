@@ -36,7 +36,7 @@ namespace InvestLens.Tests
             var authManagerMock = new Mock<IAuthManager>();
 
             var navigationVm = new NavigationViewModel(authManagerMock.Object, portfoliosManagerMock.Object, dohodServiceMock.Object, eventAggregatorMock.Object);
-            await navigationVm.LoadAsync();
+            await navigationVm.Load();
 
             var vm = new MainWindowViewModel(
                 navigationVm, 

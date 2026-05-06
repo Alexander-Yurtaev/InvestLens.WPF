@@ -15,6 +15,6 @@ public class InverseBooleanToVisibilityConverter : IValueConverter
     public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
     {
         var visibleValue = value is Visibility v ? v : Visibility.Hidden;
-        return visibleValue = Visibility.Hidden;
+        return visibleValue == Visibility.Hidden;
     }
 }

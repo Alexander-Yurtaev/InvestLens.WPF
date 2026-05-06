@@ -13,16 +13,7 @@ namespace InvestLens.App.Views
     {
         public NavigationView()
         {
-            this.Loaded += OnLoaded;
             InitializeComponent();
-        }
-
-        private async void OnLoaded(object sender, RoutedEventArgs e)
-        {
-            if (this.DataContext is NavigationViewModel viewModel)
-            {
-                await viewModel.LoadAsync();
-            }
         }
 
         private void ToggleButton_OnChecked(object sender, RoutedEventArgs e)

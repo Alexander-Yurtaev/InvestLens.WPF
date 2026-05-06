@@ -4,7 +4,7 @@ using InvestLens.ViewModel.Windows;
 namespace InvestLens.App.Windows
 {
     /// <summary>
-    /// Interaction logic for RegistrationWindow.xaml
+    /// Interaction logic for LoginWindow.xaml
     /// </summary>
     public partial class LoginWindow : Window
     {

@@ -9,7 +9,6 @@
              d:DataContext="{d:DesignInstance viewModel:HeaderViewModel, IsDesignTimeCreatable=True}"
              d:DesignWidth="800">
     <UserControl.Resources>
-        <conv:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
         <!--Header Container-->
         <Style x:Key="HeaderContainerStyle" TargetType="Border">
             <Setter Property="Padding" Value="32, 20"/>
@@ -119,7 +118,7 @@
                                Style="{StaticResource NotificationIconStyle}"/>
                     <Border Grid.Column="1"
                             Grid.Row="0"
-                            Visibility="{Binding NotificationsManager.HasNotifications, Converter={StaticResource BooleanToVisibilityConverter}}"
+                            Visibility="{Binding NotificationsManager.HasNotifications, Converter={StaticResource BooleanToVisibilityConv}}"
                             Style="{StaticResource NotificationBadgeBorderStyle}">
                         <TextBlock Text="{Binding NotificationsManager.NotificationsCountDisplay}" 
                                    Style="{StaticResource NotificationBadgeTextBlockStyle}"/>

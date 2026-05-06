@@ -4,7 +4,7 @@ using System.ComponentModel;
 
 namespace InvestLens.ViewModel;
 
-public interface INavigationViewModel : INotifyPropertyChanged
+public interface INavigationViewModel : INotifyPropertyChanged, ILoadableViewModel
 {
     ObservableCollection<INavigationTreeItem> MenuItems { get; set; }
 }

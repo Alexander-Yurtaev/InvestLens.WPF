@@ -12,6 +12,10 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="320">
 
+    <b:Interaction.Behaviors>
+        <behaviors:LoadBehavior/>
+    </b:Interaction.Behaviors>
+    
     <UserControl.Resources>
         <SolidColorBrush x:Key="IsMouseOverBackgroundBrush" Color="{StaticResource BrandRed15Color}"/>
         <SolidColorBrush x:Key="IsCheckedBackgroundBrush" Color="{StaticResource BrandRed25Color}"/>

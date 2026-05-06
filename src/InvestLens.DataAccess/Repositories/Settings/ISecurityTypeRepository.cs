@@ -4,5 +4,5 @@ namespace InvestLens.DataAccess.Repositories;
 
 public interface ISecurityTypeRepository : IBaseRepository
 {
-    List<SecurityType> GetAll();
+    Task<List<SecurityType>> GetAllAsync();
 }

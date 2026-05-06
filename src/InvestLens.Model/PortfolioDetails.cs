@@ -1,6 +1,4 @@
-﻿using InvestLens.Model.Entities;
-using InvestLens.Model.Enums;
-using System.Collections.ObjectModel;
+﻿using InvestLens.Model.Enums;
 
 namespace InvestLens.Model;
 

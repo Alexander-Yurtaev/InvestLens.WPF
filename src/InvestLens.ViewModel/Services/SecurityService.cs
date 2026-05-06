@@ -10,35 +10,45 @@ public class SecurityService : ISecurityService
 {
     private readonly IDatabaseService _databaseService;
     private readonly ISecurityRepository _repository;
-    private readonly IMoexProvider _moexProvider;
+    private readonly IMoexService _moexProvider;
     private readonly IMapper _mapper;
+    private readonly IWindowManager _windowManager;
 
     public SecurityService(
         IDatabaseService databaseService,
         ISecurityRepository repository, 
-        IMoexProvider moexProvider,
-        IMapper mapper)
+        IMoexService moexProvider,
+        IMapper mapper,
+        IWindowManager windowManager)
     {
         _databaseService = databaseService;
         _repository = repository;
         _moexProvider = moexProvider;
         _mapper = mapper;
+        _windowManager = windowManager;
     }
 
-    public async Task UpdateSecurities(List<string> secIdImportList)
+    public async Task UpdateSecurities(List<string> secIdImportList, CancellationToken ct)
     {
-        var secIdDbList = await _repository.GetSecIdListAsync();
-        var secIdNewList = secIdImportList.Except(secIdDbList);
-
-        var newSecurityModelList = await _moexProvider.GetSecurityList(secIdNewList);
-
-        var newSecurityList = _mapper.Map<List<Security>>(newSecurityModelList);
-        foreach (var security in newSecurityList)
+        try
         {
-            security.IsLoaded = true;
-        }
+            var secIdDbList = await _repository.GetSecIdListAsync();
+            var secIdNewList = secIdImportList.Except(secIdDbList);
 
-        await _repository.AddRangeAsync(newSecurityList);
-        await _databaseService.SaveAsync();
+            var newSecurityModelList = await _moexProvider.GetSecurityList(secIdNewList, ct);
+
+            var newSecurityList = _mapper.Map<List<Security>>(newSecurityModelList);
+            foreach (var security in newSecurityList)
+            {
+                security.IsLoaded = true;
+            }
+
+            await _repository.AddRangeAsync(newSecurityList);
+            await _databaseService.SaveAsync();
+        }
+        catch (Exception ex)
+        {
+            _windowManager.ShowErrorDialog($"Ошибка при обновлении ценнсых бумаг: {ex.Message}");
+        }
     }
 }

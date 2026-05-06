@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using InvestLens.App.Profiles;
 using InvestLens.Model;
 using InvestLens.Model.Entities;
 using InvestLens.Model.Enums;
@@ -15,7 +16,7 @@ public class PortfolioProfilesTests
     {
         _config = new MapperConfiguration(cfg =>
         {
-            cfg.AddProfile<InvestLens.App.Profiles.PortfolioProfiles>();
+            cfg.AddProfile(new InvestLensProfiles());
         }, NullLoggerFactory.Instance);
 
         _mapper = _config.CreateMapper();

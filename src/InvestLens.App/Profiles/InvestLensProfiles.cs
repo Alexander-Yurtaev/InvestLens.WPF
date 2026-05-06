@@ -1,16 +1,14 @@
 ﻿using AutoMapper;
-using InvestLens.DataAccess.Repositories;
+using InvestLens.DataAccess.Resolvers;
 using InvestLens.Model;
 using InvestLens.Model.Crud.Transaction;
 using InvestLens.Model.Entities;
-using InvestLens.Model.Entities.Settings;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace InvestLens.App.Profiles;
 
-public class PortfolioProfiles : Profile
+public class InvestLensProfiles : Profile
 {
-    public PortfolioProfiles()
+    public InvestLensProfiles()
     {
         CreateMap<User, InvestLens.Model.Crud.User.UserModel>().ReverseMap();
         CreateMap< InvestLens.Model.Crud.User.RegistrationModel, User>()
@@ -23,6 +21,13 @@ public class PortfolioProfiles : Profile
             ;
 
         CreateMap< InvestLens.Model.Entities.Settings.Engine, InvestLens.Model.EngineModel>().ReverseMap();
+        CreateMap<InvestLens.Model.Entities.Settings.Market, InvestLens.Model.MarketModel>().ReverseMap();
+        CreateMap<InvestLens.Model.Entities.Settings.Duration, InvestLens.Model.DurationModel>().ReverseMap();
+        CreateMap<InvestLens.Model.Entities.Settings.Board, InvestLens.Model.BoardModel>().ReverseMap();
+        CreateMap<InvestLens.Model.Entities.Settings.BoardGroup, InvestLens.Model.BoardGroupModel>().ReverseMap();
+        CreateMap<InvestLens.Model.Entities.Settings.SecurityType, InvestLens.Model.SecurityTypeModel>().ReverseMap();
+        CreateMap<InvestLens.Model.Entities.Settings.SecurityGroup, InvestLens.Model.SecurityGroupModel>().ReverseMap();
+        CreateMap<InvestLens.Model.Entities.Settings.SecurityCollection, InvestLens.Model.SecurityCollectionModel>().ReverseMap();
 
         CreateMap<InvestLens.Model.Entities.Portfolio, InvestLens.Model.Crud.Portfolio.PortfolioModel>()
             .ForMember(dest => dest.Portfolios, dest => dest.MapFrom(src => src.ChildrenPortfolios.Select(cp => cp.Id).ToList()));
@@ -40,7 +45,6 @@ public class PortfolioProfiles : Profile
             .ForMember(dest => dest.ParentPortfolio, opt => opt.Ignore())
             .ForMember(dest => dest.ChildrenPortfolios, opt => opt.Ignore())
             .ForMember(dest => dest.Owner, opt => opt.Ignore())
-            .ForMember(dest => dest.Owner, opt => opt.Ignore())
             .ForMember(dest => dest.OwnerId, opt => opt.Ignore())
             .ForMember(dest => dest.Transactions, opt => opt.Ignore());
         CreateMap<TransactionModel, InvestLens.Model.Entities.Transaction>()
@@ -56,16 +60,13 @@ public class PortfolioProfiles : Profile
             .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.Note))
             ;
 
-        CreateMap<SecurityType, InvestLens.Model.SecurityTypeModel>().ReverseMap();
-        CreateMap<SecurityGroup, InvestLens.Model.SecurityGroupModel>().ReverseMap();
-
         CreateMap<Model.MoexApi.Responses.Security, InvestLens.Model.SecurityModel>()
             .ForMember(dest => dest.Id, opt => opt.Ignore())
             .ForMember(dest => dest.IsTraded, opt => opt.MapFrom(src => src.IsTraded == "1"))
-            .ForMember(dest => dest.SecTypeId, opt => opt.MapFrom(src => GetSecurityTypeIdByName(src.SecType)))
-            .ForMember(dest => dest.SecType, opt => opt.MapFrom(src => GetSecurityTypeByName(src.SecType)))
-            .ForMember(dest => dest.SecGroupId, opt => opt.MapFrom(src => GetSecurityGroupIdByName(src.SecGroup)))
-            .ForMember(dest => dest.SecGroup, opt => opt.MapFrom(src => GetSecurityGroupByName(src.SecGroup)));
+            .ForMember(dest => dest.SecTypeId, opt => opt.MapFrom<SecurityTypeIdResolver, string>(src => src.SecType))
+            .ForMember(dest => dest.SecType, opt => opt.MapFrom<SecurityTypeResolver, string>(src => src.SecType))
+            .ForMember(dest => dest.SecGroupId, opt => opt.MapFrom<SecurityGroupIdResolver, string>(src => src.SecGroup))
+            .ForMember(dest => dest.SecGroup, opt => opt.MapFrom<SecurityGroupResolver, string>(src => src.SecGroup));
 
         //CreateMap<Model.MoexApi.Responses.Security, InvestLens.Model.Entities.Security>()
         //    .ForMember(dest => dest.Id, opt => opt.Ignore())
@@ -85,40 +86,4 @@ public class PortfolioProfiles : Profile
             .ForMember(dest => dest.SecGroup, opt => opt.Ignore())
             .ForMember(dest => dest.IsLoaded, opt => opt.MapFrom(src => false));
     }
-
-    // SecurityType
-
-    private SecurityType GetSecurityTypeByName(string secType)
-    {
-        var serviceProvider = ((InvestLens.App.App)App.Current).ServiceProvider;
-        var securityTypeRepository = serviceProvider.GetRequiredService<ISecurityTypeRepository>();
-        var securityTypes = securityTypeRepository.GetAll();
-        
-        return securityTypes.First(s => s.SecurityTypeName == secType);
-    }
-
-    private int? GetSecurityTypeIdByName(string secType)
-    {
-        return GetSecurityTypeByName(secType)?.Id;
-    }
-
-    private string GetSecurityTypeName(SecurityTypeModel? model) => model?.SecurityTypeName ?? string.Empty;
-
-    // SecurityGroup
-
-    private SecurityGroup GetSecurityGroupByName(string name)
-    {
-        var serviceProvider = ((InvestLens.App.App)App.Current).ServiceProvider;
-        var securityGroupRepository = serviceProvider.GetRequiredService<ISecurityGroupRepository>();
-        var securityGroups = securityGroupRepository.GetAll();
-
-        return securityGroups.First(s => s.Name == name);
-    }
-
-    private int? GetSecurityGroupIdByName(string name)
-    {
-        return GetSecurityGroupByName(name)?.Id;
-    }
-
-    private string GetSecurityGroupName(SecurityGroupModel? model) => model?.Name ?? string.Empty;
 }

@@ -29,7 +29,7 @@
             <TabControl.ContentTemplate>
                 <DataTemplate>
                     <ListView ItemsSource="{Binding}"
-                          VirtualizingPanel.IsVirtualizing="True">
+                              VirtualizingPanel.IsVirtualizing="True">
                         <ListView.View>
                             <GridView>
                                 <GridViewColumn Header="Тикер" Width="100">

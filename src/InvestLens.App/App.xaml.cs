@@ -4,6 +4,7 @@ using InvestLens.App.Windows.Dialogs;
 using InvestLens.DataAccess;
 using InvestLens.DataAccess.Repositories;
 using InvestLens.DataAccess.Repositories.Settings;
+using InvestLens.DataAccess.Resolvers;
 using InvestLens.DataAccess.Services;
 using InvestLens.Model;
 using InvestLens.Model.Crud.Portfolio;
@@ -72,8 +73,6 @@ namespace InvestLens.App
 
         private void ConfigureServices(IServiceCollection services)
         {
-            services.AddAutoMapper(_ => { }, typeof(App).Assembly);
-            
             RegisterDataContext(services);
             services.AddScoped<IDatabaseService, DatabaseService>();
 
@@ -92,7 +91,7 @@ namespace InvestLens.App
             services.AddSingleton<IDictionariesManager, DictionariesManager>();
             services.AddSingleton<IMetricsService, MetricsService>();
             services.AddSingleton<IDohodService, DohodService>();
-            services.AddSingleton<IMoexProvider, MoexProvider>();
+            services.AddSingleton<IMoexService, MoexService>();
 
             services.AddSingleton<IWindowManager, WindowManager>();
             services.AddSingleton<IAuthManager, AuthManager>();
@@ -189,6 +188,13 @@ namespace InvestLens.App
             services.AddScoped<ISettingsViewModel, SettingsViewModel>();
             services.AddScoped<ISettingsCommonViewModel, SettingsCommonViewModel>();
             services.AddScoped<ISettingsPluginsViewModel, SettingsPluginsViewModel>();
+
+            services.AddSingleton<SecurityTypeIdResolver>();
+            services.AddSingleton<SecurityTypeResolver>();
+            services.AddSingleton<SecurityGroupIdResolver>();
+            services.AddSingleton<SecurityGroupResolver>();
+
+            services.AddAutoMapper(_ => { }, typeof(App).Assembly);
         }
 
         private IServiceCollection RegisterDataContext(IServiceCollection services)
