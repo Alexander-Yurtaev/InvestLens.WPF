@@ -214,8 +214,20 @@ public class PortfoliosManager : IPortfoliosManager
     public async Task Update(UpdateModel model)
     {
         var portfolio = _mapper.Map<Portfolio>(model);
-        await _portfolioRepository.Update(portfolio, model.Portfolios);
-        await _databaseService.SaveAsync();
+
+        try
+        {
+            await _databaseService.BeginTransactionAsync();
+            await _portfolioRepository.Update(portfolio, model.Portfolios);
+            var count = await _databaseService.SaveAsync();
+            await _databaseService.CommitTransactionAsync();
+        }
+        catch (Exception)
+        {
+            await _databaseService.RollbackTransactionAsync();
+            throw;
+        }
+
         portfolio = await _portfolioRepository.GetPortfolioById(model.Id);
         if (portfolio is null)
         {

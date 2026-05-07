@@ -2,6 +2,7 @@
 using InvestLens.Model.Entities.Settings;
 using InvestLens.Model.MoexApi.Responses.ResponseItems;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 namespace InvestLens.DataAccess;
 
@@ -27,6 +28,15 @@ public sealed class InvestLensDataContext : DbContext
     }
 
     #region Overrides of DbContext
+
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    {
+        base.OnConfiguring(optionsBuilder);
+#if DEBUG
+        optionsBuilder.LogTo(message => System.Diagnostics.Debug.WriteLine(message), LogLevel.Information);
+        optionsBuilder.EnableSensitiveDataLogging(true);
+#endif
+    }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

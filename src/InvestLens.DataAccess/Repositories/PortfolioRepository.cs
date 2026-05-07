@@ -45,17 +45,26 @@ public class PortfolioRepository : BaseRepository, IPortfolioRepository
 
     public async Task Update(Portfolio portfolio, List<int> portfolios)
     {
-        var portfolioOriginal = await GetPortfolioById(portfolio.Id);
+        var portfolioList = await GetAllPortfolios();
+
+        var portfolioOriginal = portfolioList.FirstOrDefault(p => p.Id == portfolio.Id);
         if (portfolioOriginal is null)
         {
             await Task.FromException(new KeyNotFoundException($"Портфель с {portfolio.Id} не найден."));
             return;
         }
 
+        _mapper.Map(portfolio, portfolioOriginal);
+
         foreach (var id in portfolios.ToArray())
         {
             if (portfolioOriginal.ChildrenPortfolios.Any(c => c.Id == id)) continue;
-            var childPortfolio = await GetPortfolioById(id);
+            var childPortfolio = portfolioList.FirstOrDefault(p => p.Id == portfolio.Id);
+            if (childPortfolio is null)
+            {
+                await Task.FromException(new KeyNotFoundException($"Портфель с {portfolio.Id} не найден."));
+                return;
+            }
             portfolioOriginal.ChildrenPortfolios.Add(childPortfolio!);
         }
 

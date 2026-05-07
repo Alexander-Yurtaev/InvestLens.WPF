@@ -29,6 +29,11 @@ public class InvestLensProfiles : Profile
         CreateMap<InvestLens.Model.Entities.Settings.SecurityGroup, InvestLens.Model.SecurityGroupModel>().ReverseMap();
         CreateMap<InvestLens.Model.Entities.Settings.SecurityCollection, InvestLens.Model.SecurityCollectionModel>().ReverseMap();
 
+        CreateMap<InvestLens.Model.Entities.Portfolio, InvestLens.Model.Entities.Portfolio>()
+            .ForMember(dest => dest.ChildrenPortfolios, opt => opt.Ignore())
+            .ForMember(dest => dest.Owner, opt => opt.Ignore())
+            .ForMember(dest => dest.OwnerId, opt => opt.Ignore())
+            .ForMember(dest => dest.Transactions, opt => opt.Ignore());
         CreateMap<InvestLens.Model.Entities.Portfolio, InvestLens.Model.Crud.Portfolio.PortfolioModel>()
             .ForMember(dest => dest.Portfolios, dest => dest.MapFrom(src => src.ChildrenPortfolios.Select(cp => cp.Id).ToList()));
         CreateMap<InvestLens.Model.Crud.Portfolio.PortfolioModel, InvestLens.Model.Entities.Portfolio>()
