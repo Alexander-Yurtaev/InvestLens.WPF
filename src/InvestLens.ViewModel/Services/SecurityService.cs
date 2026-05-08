@@ -43,7 +43,9 @@ public class SecurityService : ISecurityService
             {
                 security.IsLoaded = true;
             }
+
             await _databaseService.BeginTransactionAsync();
+            
             await _repository.AddRangeAsync(newSecurityList);
 
             foreach (var security in newSecurityList.Where(s => !string.IsNullOrEmpty(s.MarketpriceBoardid)))

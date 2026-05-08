@@ -115,6 +115,7 @@ namespace InvestLens.App
             services.AddScoped<ISecurityTypeRepository, SecurityTypeRepository>();
             services.AddScoped<ISecurityGroupRepository, SecurityGroupRepository>();
             services.AddScoped<ISecurityCollectionRepository, SecurityCollectionRepository>();
+            services.AddScoped<IHistoryRepository, HistoryRepository>();
 
             // Windows & Dialogs
 

@@ -1,4 +1,5 @@
 ﻿using InvestLens.Model.Entities;
+using InvestLens.Model.Entities.Moex;
 using InvestLens.Model.Entities.Settings;
 using InvestLens.Model.MoexApi.Responses.ResponseItems;
 using Microsoft.EntityFrameworkCore;
@@ -12,6 +13,7 @@ public sealed class InvestLensDataContext : DbContext
     public DbSet<Portfolio> Portfolios { get; set; }
     public DbSet<Security> Securities { get; set; }
     public DbSet<Transaction> Transactions { get; set; }
+    public DbSet<Model.Entities.Moex.History> History { get; set; }
 
     //Settings
     public DbSet<Engine> Engines { get; set; }

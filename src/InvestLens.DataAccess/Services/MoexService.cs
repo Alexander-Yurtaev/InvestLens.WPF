@@ -36,6 +36,7 @@ public class MoexService : IMoexService
     private readonly ISecurityTypeRepository _securityTypeRepository;
     private readonly ISecurityGroupRepository _securityGroupRepository;
     private readonly ISecurityCollectionRepository _securityCollectionRepository;
+    private readonly IHistoryRepository _historyRepository;
     private HttpClient _httpClient;
 
     public MoexService(
@@ -50,7 +51,8 @@ public class MoexService : IMoexService
         IDurationRepository durationRepository,
         ISecurityTypeRepository securityTypeRepository,
         ISecurityGroupRepository securityGroupRepository,
-        ISecurityCollectionRepository securityCollectionRepository
+        ISecurityCollectionRepository securityCollectionRepository,
+        IHistoryRepository historyRepository
         )
     {
         _httpClient = factory.CreateClient("moex");
@@ -65,6 +67,7 @@ public class MoexService : IMoexService
         _securityTypeRepository = securityTypeRepository;
         _securityGroupRepository = securityGroupRepository;
         _securityCollectionRepository = securityCollectionRepository;
+        _historyRepository = historyRepository;
         MoexDictionaries = new();
     }
 
@@ -136,7 +139,11 @@ public class MoexService : IMoexService
 
         if (historyList.Any())
         {
-            // ToDo save history
+            foreach (var history in historyList)
+            {
+                ct.ThrowIfCancellationRequested();
+                await _historyRepository.AddOrUpdate(history);
+            }
         }
 
         return;
@@ -253,12 +260,12 @@ public class MoexService : IMoexService
             }
 
             await _databaseService.SaveAsync();
-
             await _databaseService.CommitTransactionAsync();
         }
         catch
         {
             await _databaseService.RollbackTransactionAsync();
+            throw;
         }
     }
 
