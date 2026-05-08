@@ -3,6 +3,7 @@ using InvestLens.Model.Entities;
 using InvestLens.Model.Enums;
 using InvestLens.Model.Services;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Internal;
 
 namespace InvestLens.DataAccess.Repositories;
 
@@ -60,18 +61,50 @@ public class TransactionRepository : BaseRepository, ITransactionRepository
 
     public async Task<decimal> GetCurrentCost()
     {
-        var totalCashIn = await GetTotalCashIn();
-        var totlaFeeTax = await GetTotalFeeTax();
-
-        return totalCashIn - totlaFeeTax;
+        return await GetPortfolioCurrentCost([]);
     }
 
     public async Task<decimal> GetPortfolioCurrentCost(int[] ids)
     {
-        var totalCashIn = await GetPortfolioTotalCashIn(ids);
-        var totlaFeeTax = await GetPortfolioTotalFeeTax(ids);
+        IQueryable<Transaction> query = DatabaseService.DataContext.Transactions;
 
-        return totalCashIn - totlaFeeTax;
+        if (ids.Any())
+        {
+            query = query.Where(t => ids.Contains(t.PortfolioId));
+        }
+
+        var transactionList = await query.OrderBy(t => t.Date)
+                                         .Select(t => new {
+                                            PortfolioId = t.PortfolioId,
+                                            Symbol = t.Symbol,
+                                            Date = t.Date,
+                                            Event = t.Event,
+                                            Quantity = t.Quantity,
+                                            Price = t.Price
+                                         })
+                                         .ToListAsync();
+
+        var total = transactionList
+            .GroupBy(t => new { PortfolioId = t.PortfolioId, Symbol = t.Symbol })
+            .ToDictionary(k => k.Key, g => g
+                .OrderBy(t => t.Date)
+                .Aggregate(0.0m, (acc, t) => t.Event == TransactionEvent.Buy ? acc + t.Quantity :
+                                             t.Event == TransactionEvent.Sell ? acc - t.Quantity :
+                                             t.Event == TransactionEvent.Split ? acc * t.Price : acc)
+            )
+            .GroupBy(k => k.Key.Symbol)
+            .ToDictionary(g => g.Key, g =>
+            {
+                var quantity = g.Sum(v => v.Value);
+                var price = DatabaseService.DataContext.History
+                            .Where(h => h.SecId == g.Key)
+                            .OrderByDescending(h => h.Date)
+                            .Select(h => h.Close)
+                            .FirstOrDefault();
+                return quantity * price;
+            });
+
+        return total.Sum(d => d.Value);
     }
 
     // Dividends
