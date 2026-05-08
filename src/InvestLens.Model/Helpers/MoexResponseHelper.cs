@@ -1,5 +1,6 @@
 ﻿using InvestLens.Common.Helpers;
 using InvestLens.Model.MoexApi.Responses.ResponseItems;
+using System.Globalization;
 using System.Reflection;
 using System.Security.AccessControl;
 using System.Text.Json;
@@ -42,8 +43,10 @@ public static class MoexResponseHelper
     private static dynamic PropetyTypeConvert(PropertyInfo prop, JsonElement element)
     {
         if (prop.PropertyType == typeof(string)) return element.ToString();
+        if (prop.PropertyType == typeof(DateTime)) return DateTime.Parse(element.ToString());
         if (prop.PropertyType == typeof(int)) return int.Parse(element.ToString());
-        if (prop.PropertyType == typeof(decimal)) return decimal.Parse(element.ToString());
+        if (prop.PropertyType == typeof(long)) return long.Parse(element.ToString());
+        if (prop.PropertyType == typeof(decimal)) return decimal.Parse(element.ToString(), CultureInfo.InvariantCulture);
         if (prop.PropertyType == typeof(bool))
         {
             return int.Parse(element.ToString()) == 1;

@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using InvestLens.DataAccess.Services;
 using InvestLens.Model;
 using InvestLens.Model.Crud.Portfolio;
 using InvestLens.Model.Services;
@@ -23,6 +24,7 @@ public class PortfolioDetailViewModel : ViewModelBaseWithContentHeader, IPortfol
     private readonly IMetricsService _metricsService;
     private readonly IPortfoliosManager _portfoliosManager;
     private readonly ISecurityService _securityService;
+    private readonly IMoexService _moexService;
     private bool _showSold;
     private int _securitiesCount;
     // ToDo Implement a Cancelation
@@ -35,7 +37,8 @@ public class PortfolioDetailViewModel : ViewModelBaseWithContentHeader, IPortfol
         IAuthManager authManager,
         IMetricsService metricsService,
         IPortfoliosManager portfoliosManager,
-        ISecurityService securityService) : base(model.Title, model.Description)
+        ISecurityService securityService,
+        IMoexService moexService) : base(model.Title, model.Description)
     {
         _importCancelationTokenSource = new();
 
@@ -46,6 +49,8 @@ public class PortfolioDetailViewModel : ViewModelBaseWithContentHeader, IPortfol
         _metricsService = metricsService;
         _portfoliosManager = portfoliosManager;
         _securityService = securityService;
+        _moexService = moexService;
+
         var buttonModels = new List<ButtonModel>
         {
             new ButtonModel("Редактировать", OnEditPortfolio),
@@ -155,11 +160,10 @@ public class PortfolioDetailViewModel : ViewModelBaseWithContentHeader, IPortfol
             }
 
             var ct = _importCancelationTokenSource.Token;
-            await _securityService.UpdateSecurities(transactions.Select(t => t.Symbol)
-                                                                .Where(s => !string.IsNullOrEmpty(s))
-                                                                .Distinct().ToList(),
-                                                                ct);
-
+            var secIds = transactions.Select(t => t.Symbol)
+                                     .Where(s => !string.IsNullOrEmpty(s))
+                                     .Distinct().ToList();
+            await _securityService.UpdateSecurities(secIds, ct);
             await RefreshModel();
             
             _windowManager.ShowSuccessDialog($"Было импортированно {acceptedCount} записей");

@@ -193,6 +193,8 @@ namespace InvestLens.App
             services.AddSingleton<SecurityTypeResolver>();
             services.AddSingleton<SecurityGroupIdResolver>();
             services.AddSingleton<SecurityGroupResolver>();
+            services.AddSingleton<EngineResolver>();
+            services.AddSingleton<MarketResolver>();
 
             services.AddAutoMapper(_ => { }, typeof(App).Assembly);
         }

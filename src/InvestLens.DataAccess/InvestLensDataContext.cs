@@ -33,8 +33,8 @@ public sealed class InvestLensDataContext : DbContext
     {
         base.OnConfiguring(optionsBuilder);
 #if DEBUG
-        optionsBuilder.LogTo(message => System.Diagnostics.Debug.WriteLine(message), LogLevel.Information);
-        optionsBuilder.EnableSensitiveDataLogging(true);
+        //optionsBuilder.LogTo(message => System.Diagnostics.Debug.WriteLine(message), LogLevel.Information);
+        //optionsBuilder.EnableSensitiveDataLogging(true);
 #endif
     }
 
@@ -79,7 +79,7 @@ public sealed class InvestLensDataContext : DbContext
             entity.Property(p => p.Isin).IsRequired().HasMaxLength(51);
             entity.Property(p => p.IsTraded);
             entity.Property(p => p.EmitentTitle).HasMaxLength(765);
-            entity.Property(p => p.SecTypeId).IsRequired();
+            entity.Property(p => p.SecTypeId);
             entity.Property(p => p.SecGroupId);
             entity.Property(p => p.PrimaryBoardid).IsRequired().HasMaxLength(12);
             entity.Property(p => p.MarketpriceBoardid).HasMaxLength(12);

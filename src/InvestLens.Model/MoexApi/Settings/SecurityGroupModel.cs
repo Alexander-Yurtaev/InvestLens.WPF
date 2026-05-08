@@ -1,4 +1,4 @@
-﻿namespace InvestLens.Model;
+﻿namespace InvestLens.Model.MoexApi.Settings;
 
 public class SecurityGroupModel : BaseModel
 {

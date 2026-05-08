@@ -1,7 +1,4 @@
-﻿using InvestLens.Model.Entities;
-using InvestLens.Model.Enums;
-using InvestLens.Model.MoexApi.Responses.ResponseItems;
-using System.Reflection;
+﻿using InvestLens.Model.MoexApi.Responses.ResponseItems;
 using System.Text.Json.Serialization;
 
 namespace InvestLens.Model.MoexApi.Responses;

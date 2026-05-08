@@ -3,6 +3,10 @@ using InvestLens.DataAccess.Resolvers;
 using InvestLens.Model;
 using InvestLens.Model.Crud.Transaction;
 using InvestLens.Model.Entities;
+using InvestLens.Model.MoexApi;
+using InvestLens.Model.MoexApi.Settings;
+using System.Reflection;
+using System.Text.RegularExpressions;
 
 namespace InvestLens.App.Profiles;
 
@@ -20,14 +24,21 @@ public class InvestLensProfiles : Profile
             .ForMember(dest => dest.Portfolios, opt => opt.Ignore())
             ;
 
-        CreateMap< InvestLens.Model.Entities.Settings.Engine, InvestLens.Model.EngineModel>().ReverseMap();
-        CreateMap<InvestLens.Model.Entities.Settings.Market, InvestLens.Model.MarketModel>().ReverseMap();
-        CreateMap<InvestLens.Model.Entities.Settings.Duration, InvestLens.Model.DurationModel>().ReverseMap();
-        CreateMap<InvestLens.Model.Entities.Settings.Board, InvestLens.Model.BoardModel>().ReverseMap();
-        CreateMap<InvestLens.Model.Entities.Settings.BoardGroup, InvestLens.Model.BoardGroupModel>().ReverseMap();
-        CreateMap<InvestLens.Model.Entities.Settings.SecurityType, InvestLens.Model.SecurityTypeModel>().ReverseMap();
-        CreateMap<InvestLens.Model.Entities.Settings.SecurityGroup, InvestLens.Model.SecurityGroupModel>().ReverseMap();
-        CreateMap<InvestLens.Model.Entities.Settings.SecurityCollection, InvestLens.Model.SecurityCollectionModel>().ReverseMap();
+        CreateMap< InvestLens.Model.Entities.Settings.Engine, EngineModel>().ReverseMap();
+        CreateMap<InvestLens.Model.Entities.Settings.Market, MarketModel>().ReverseMap();
+        CreateMap<InvestLens.Model.Entities.Settings.Duration, DurationModel>().ReverseMap();
+
+        CreateMap<InvestLens.Model.Entities.Settings.Board, BoardModel>()
+            .ForMember(dest => dest.Engine, opt => opt.MapFrom<EngineResolver, int>(src => src.EngineId))
+            .ForMember(dest => dest.Market, opt => opt.MapFrom<MarketResolver, int>(src => src.MarketId));
+
+        CreateMap<InvestLens.Model.Entities.Settings.BoardGroup, BoardGroupModel>().ReverseMap();
+        CreateMap<InvestLens.Model.Entities.Settings.SecurityType, SecurityTypeModel>().ReverseMap();
+        CreateMap<InvestLens.Model.Entities.Settings.SecurityGroup, SecurityGroupModel>().ReverseMap();
+        CreateMap<InvestLens.Model.Entities.Settings.SecurityCollection, SecurityCollectionModel>().ReverseMap();
+
+        CreateMap<InvestLens.Model.Entities.Moex.History, HistoryModel>().ReverseMap();
+        CreateMap<InvestLens.Model.MoexApi.Responses.ResponseItems.HistoryCursor, InvestLens.Model.MoexApi.HistoryCursor>().ReverseMap();
 
         CreateMap<InvestLens.Model.Entities.Portfolio, InvestLens.Model.Entities.Portfolio>()
             .ForMember(dest => dest.ChildrenPortfolios, opt => opt.Ignore())

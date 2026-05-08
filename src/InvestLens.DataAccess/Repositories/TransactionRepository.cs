@@ -220,4 +220,11 @@ public class TransactionRepository : BaseRepository, ITransactionRepository
                 throw new ArgumentOutOfRangeException(period.ToString());
         }
     }
+
+    public async Task<DateTime> GetFirstDate(string secId)
+    {
+        return await DatabaseService.DataContext.Transactions
+            .Where(t => t.Symbol == secId)
+            .MinAsync(t => t.Date);
+    }
 }

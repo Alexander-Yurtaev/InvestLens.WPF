@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using InvestLens.DataAccess.Services;
 using InvestLens.Model;
 using InvestLens.Model.Services;
 using InvestLens.ViewModel.Pages;
@@ -15,6 +16,7 @@ namespace InvestLens.ViewModel.Factories
             IAuthManager authManager, 
             IMetricsService metricsService, 
             IPortfoliosManager portfoliosManager, 
-            ISecurityService securityService);
+            ISecurityService securityService,
+            IMoexService moexService);
     }
 }

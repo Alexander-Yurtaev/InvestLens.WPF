@@ -4,7 +4,7 @@ namespace InvestLens.Model.MoexApi.Responses.ResponseItems
 {
     public abstract class BaseMoexResponseItem
     {
-        [JsonPropertyName("columns")]
+        [JsonPropertyName("Columns")]
         public string[] Columns { get; set; } = [];
 
         [JsonPropertyName("data")]

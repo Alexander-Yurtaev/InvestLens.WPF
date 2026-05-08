@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using InvestLens.DataAccess.Services;
 using InvestLens.Model;
 using InvestLens.Model.Services;
 using InvestLens.ViewModel.Pages;
@@ -15,7 +16,8 @@ public class CreatePortfolioViewModelFactory : ICreatePortfolioViewModelFactory
         IAuthManager authManager,
         IMetricsService metricsService,
         IPortfoliosManager portfoliosManager,
-        ISecurityService securityService
+        ISecurityService securityService,
+        IMoexService moexService
         )
     {
         return new PortfolioDetailViewModel(mapper,
@@ -24,6 +26,7 @@ public class CreatePortfolioViewModelFactory : ICreatePortfolioViewModelFactory
                                             authManager,
                                             metricsService,
                                             portfoliosManager,
-                                            securityService);
+                                            securityService,
+                                            moexService);
     }
 }

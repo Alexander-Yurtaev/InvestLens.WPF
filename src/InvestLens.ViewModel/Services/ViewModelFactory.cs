@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using InvestLens.DataAccess.Services;
 using InvestLens.Model;
 using InvestLens.Model.NavigationTree;
 using InvestLens.Model.Services;
@@ -21,6 +22,7 @@ public class ViewModelFactory : IViewModelFactory
     private readonly IAuthManager _authManager;
     private readonly IMetricsService _metricsService;
     private readonly ISecurityService _securityService;
+    private readonly IMoexService _moexService;
 
     public ViewModelFactory(IServiceProvider serviceProvider, 
         IPortfoliosManager portfoliosManager,
@@ -30,7 +32,8 @@ public class ViewModelFactory : IViewModelFactory
         IWindowManager windowManager,
         IAuthManager authManager,
         IMetricsService metricsService,
-        ISecurityService securityService)
+        ISecurityService securityService,
+        IMoexService moexService)
     {
         _serviceProvider = serviceProvider;
         _portfoliosManager = portfoliosManager;
@@ -41,6 +44,7 @@ public class ViewModelFactory : IViewModelFactory
         _authManager = authManager;
         _metricsService = metricsService;
         _securityService = securityService;
+        _moexService = moexService;
     }
 
     public async Task<INotifyPropertyChanged> CreateViewModel(BaseNavigationTreeModel model)
@@ -77,7 +81,7 @@ public class ViewModelFactory : IViewModelFactory
 
         var viewModel = _createPortfolioViewModelFactory.CreatePortfolioDetailViewModel(
             _mapper, portfolioModel, _windowManager, _authManager, 
-            _metricsService, _portfoliosManager, _securityService);
+            _metricsService, _portfoliosManager, _securityService, _moexService);
         return viewModel;
     }
 

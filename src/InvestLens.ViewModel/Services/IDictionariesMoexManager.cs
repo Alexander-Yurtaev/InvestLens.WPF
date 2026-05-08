@@ -1,5 +1,6 @@
 ﻿using InvestLens.Model;
 using InvestLens.Model.Enums;
+using InvestLens.Model.MoexApi.Settings;
 
 namespace InvestLens.ViewModel.Services;
 

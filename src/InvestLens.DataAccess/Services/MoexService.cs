@@ -6,6 +6,7 @@ using InvestLens.Model.Entities.Settings;
 using InvestLens.Model.Helpers;
 using InvestLens.Model.MoexApi.Responses;
 using InvestLens.Model.MoexApi.Responses.ResponseItems;
+using InvestLens.Model.MoexApi.Settings;
 using System.Net.Http.Json;
 
 namespace InvestLens.DataAccess.Services;
@@ -26,6 +27,7 @@ public class MoexService : IMoexService
 {
     private readonly IMapper _mapper;
     private readonly IDatabaseService _databaseService;
+    private readonly ITransactionRepository _transactionRepository;
     private readonly IEngineRepository _engineRepository;
     private readonly IMarketRepository _marketRepository;
     private readonly IBoardRepository _boardRepository;
@@ -40,6 +42,7 @@ public class MoexService : IMoexService
         IMapper mapper, 
         IHttpClientFactory factory,
         IDatabaseService databaseService,
+        ITransactionRepository transactionRepository,
         IEngineRepository engineRepository,
         IMarketRepository marketRepository,
         IBoardRepository boardRepository,
@@ -53,6 +56,7 @@ public class MoexService : IMoexService
         _httpClient = factory.CreateClient("moex");
         _mapper = mapper;
         _databaseService = databaseService;
+        _transactionRepository = transactionRepository;
         _engineRepository = engineRepository;
         _marketRepository = marketRepository;
         _boardRepository = boardRepository;
@@ -61,11 +65,82 @@ public class MoexService : IMoexService
         _securityTypeRepository = securityTypeRepository;
         _securityGroupRepository = securityGroupRepository;
         _securityCollectionRepository = securityCollectionRepository;
-
         MoexDictionaries = new();
     }
 
     public MoexCache MoexDictionaries { get; }
+
+    public async Task LoadHistory(Model.Entities.Security security, CancellationToken ct)
+    {
+        if (ct.IsCancellationRequested) return;
+
+        if (string.IsNullOrEmpty(security.MarketpriceBoardid))
+        {
+            throw new ArgumentException(nameof(security.MarketpriceBoardid));
+        }
+
+        var firstDate = await _transactionRepository.GetFirstDate(security.SecId);
+
+        var historyList = new List<InvestLens.Model.Entities.Moex.History>();
+
+        var currentHistoryCursor = new InvestLens.Model.MoexApi.HistoryCursor();
+
+        var board = MoexDictionaries.Boards.FirstOrDefault(b => b.BoardId == security.MarketpriceBoardid);
+
+        if (board?.Market is null)
+        {
+            throw new ArgumentException(nameof(security.SecGroup));
+        }
+
+        while (currentHistoryCursor.Total == 0 || currentHistoryCursor.Total > currentHistoryCursor.Index * currentHistoryCursor.PageSize)
+        {
+            var url = $"https://iss.moex.com/iss/history/engines/{board.Market.TradeEngineName}/markets/{board.Market.MarketName}/securities/{security.SecId}.json" +
+                $"?from={firstDate.ToString("yyyy-MM-dd")}&tradingsession=3&marketprice_board=1" +
+                $"&start={currentHistoryCursor.Index * currentHistoryCursor.PageSize}";
+
+            var response = await _httpClient.GetFromJsonAsync<HistoryResponse>(url, ct);
+            if (response is null)
+            {
+                throw new InvalidOperationException(nameof(IndexResponse));
+            }
+
+            if (response.History is not null)
+            {
+                var history = MoexResponseHelper
+                    .GetModels<Model.MoexApi.Responses.ResponseItems.History, InvestLens.Model.Entities.Moex.History>(response.History)
+                    .ToList();
+
+                historyList.AddRange(history);
+            }
+
+            if (response.HistoryCursor is not null)
+            {
+                var historyCursor = MoexResponseHelper
+                    .GetModels<Model.MoexApi.Responses.ResponseItems.HistoryCursor, Model.MoexApi.HistoryCursor>(response.HistoryCursor)
+                    .SingleOrDefault();
+
+                if (historyCursor is null)
+                {
+                    throw new InvalidOperationException(nameof(historyCursor));
+                }
+
+                currentHistoryCursor.PageSize = historyCursor.PageSize;
+                currentHistoryCursor.Total = historyCursor.Total;
+                currentHistoryCursor.Index++;
+            }
+            else
+            {
+                break;
+            }
+        }
+
+        if (historyList.Any())
+        {
+            // ToDo save history
+        }
+
+        return;
+    }
 
     public async Task LoadMoexIndex(CancellationToken ct)
     {

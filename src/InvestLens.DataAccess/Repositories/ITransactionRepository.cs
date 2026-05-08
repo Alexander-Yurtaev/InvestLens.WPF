@@ -20,4 +20,5 @@ public interface ITransactionRepository : IBaseRepository
     Task<decimal> GetPortfolioTotalFeeTax(int[] ids);
     Task<Dictionary<DateTime, decimal>> GetDynamicMetrics(PortfolioDynamicPeriod period, CancellationToken ct);
     Task<Dictionary<DateTime, decimal>> GetPortfolioDynamicMetrics(PortfolioDynamicPeriod period, int[] ids, CancellationToken ct);
+    Task<DateTime> GetFirstDate(string secId);
 }

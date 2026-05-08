@@ -1,6 +1,6 @@
 ﻿using InvestLens.Model.Entities.Settings;
 
-namespace InvestLens.Model;
+namespace InvestLens.Model.MoexApi.Settings;
 
 public class SecurityCollectionModel : BaseModel
 {

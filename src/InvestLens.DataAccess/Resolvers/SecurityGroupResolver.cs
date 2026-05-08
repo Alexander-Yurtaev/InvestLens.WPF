@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using InvestLens.DataAccess.Services;
 using InvestLens.Model;
+using InvestLens.Model.MoexApi.Settings;
 
 namespace InvestLens.DataAccess.Resolvers;
 

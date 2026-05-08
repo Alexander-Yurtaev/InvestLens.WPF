@@ -1,4 +1,5 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using InvestLens.Model.MoexApi.Settings;
+using System.Diagnostics.CodeAnalysis;
 
 namespace InvestLens.Model;
 
