@@ -3,6 +3,7 @@ using InvestLens.Model.Crud.User;
 using InvestLens.ViewModel.Services;
 using InvestLens.ViewModel.Windows;
 using Moq;
+using FluentAssertions;
 
 namespace InvestLens.Tests;
 
@@ -24,49 +25,49 @@ public class RegistrationViewModelTests
     [Fact]
     public void NamePropertyIsRequired()
     {
-        Assert.False(_viewModel.HasErrors);
+        _viewModel.HasErrors.Should().BeFalse();
         _viewModel.Name = "";
         // При первом запуске валидация не выполняется
-        Assert.False(_viewModel.HasErrors);
+        _viewModel.HasErrors.Should().BeFalse();
 
         _viewModel.Name = "Bob";
-        Assert.False(_viewModel.HasErrors);
+        _viewModel.HasErrors.Should().BeFalse();
 
         _viewModel.Name = "";
         // До этого уже были изменения - ошибка есть
-        Assert.True(_viewModel.HasErrors);
+        _viewModel.HasErrors.Should().BeTrue();
     }
 
     [Fact]
     public void SurnamePropertyIsRequired()
     {
-        Assert.False(_viewModel.HasErrors);
+        _viewModel.HasErrors.Should().BeFalse();
         _viewModel.Surname = "";
         // При первом запуске валидация не выполняется
-        Assert.False(_viewModel.HasErrors);
+        _viewModel.HasErrors.Should().BeFalse();
 
         _viewModel.Surname = "Smith";
-        Assert.False(_viewModel.HasErrors);
+        _viewModel.HasErrors.Should().BeFalse();
 
         _viewModel.Surname = "";
         // До этого уже были изменения - ошибка есть
-        Assert.True(_viewModel.HasErrors);
+        _viewModel.HasErrors.Should().BeTrue();
     }
 
     [Fact]
     public void LoginPropertyIsRequired()
     {
-        Assert.False(_viewModel.HasErrors);
+        _viewModel.HasErrors.Should().BeFalse();
         _viewModel.Login = "";
         // При первом запуске валидация не выполняется
-        Assert.False(_viewModel.HasErrors);
+        _viewModel.HasErrors.Should().BeFalse();
 
         _viewModel.Login = "TestUser";
-        Assert.False(_viewModel.HasErrors);
+        _viewModel.HasErrors.Should().BeFalse();
 
         _viewModel.Login = "";
         // До этого уже были изменения - ошибка есть
-        Assert.True(_viewModel.HasErrors);
+        _viewModel.HasErrors.Should().BeTrue();
     }
 
     [Fact]
@@ -81,16 +82,16 @@ public class RegistrationViewModelTests
 
         // При первом запуске валидация не выполняется
         _viewModel.Name = "";
-        Assert.False(fired);
+        fired.Should().BeFalse();
 
         // Ранее ошибок не было
         _viewModel.Name = "Bob";
-        Assert.False(fired);
+        fired.Should().BeFalse();
         fired = false;
 
         // До этого уже были изменения
         _viewModel.Name = "";
-        Assert.True(fired);
+        fired.Should().BeTrue();
     }
 
     [Fact]
@@ -105,16 +106,16 @@ public class RegistrationViewModelTests
 
         // При первом запуске валидация не выполняется
         _viewModel.Surname = "";
-        Assert.False(fired);
+        fired.Should().BeFalse();
 
         // Ранее ошибок не было
         _viewModel.Surname = "Smith";
-        Assert.False(fired);
+        fired.Should().BeFalse();
         fired = false;
 
         // До этого уже были изменения
         _viewModel.Surname = "";
-        Assert.True(fired);
+        fired.Should().BeTrue();
     }
 
     [Fact]
