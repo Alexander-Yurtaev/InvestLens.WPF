@@ -1,5 +1,6 @@
 ﻿using InvestLens.ViewModel.Helpers;
 using System.Text;
+using FluentAssertions;
 
 namespace InvestLens.Tests;
 
