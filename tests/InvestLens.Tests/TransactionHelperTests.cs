@@ -1,8 +1,6 @@
-﻿using Castle.Components.DictionaryAdapter.Xml;
-using InvestLens.ViewModel.Helpers;
-using Microsoft.Extensions.Logging;
+﻿using InvestLens.ViewModel.Helpers;
 using System.Text;
-using static System.Runtime.InteropServices.JavaScript.JSType;
+using FluentAssertions;
 
 namespace InvestLens.Tests;
 
@@ -21,9 +19,9 @@ public class TransactionHelperTests
         var items = TransactionHelper.Convert(textReader);
 
         // Assert
-        Assert.Single(items);
+        items.Count.Should().Be(1);
         var model = items.First();
-        Assert.NotNull(model);
-        Assert.Equal(150.16666667m, model.Price, 8);
+        model.Should().NotBeNull();
+        model.Price.Should().BeApproximately(150.16666667m, 0.00000001m);
     }
 }
