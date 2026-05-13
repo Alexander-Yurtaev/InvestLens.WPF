@@ -3,9 +3,9 @@ using InvestLens.Model.Enums;
 
 namespace InvestLens.ViewModel.Services;
 
-public interface IMetricsService
+public interface IMetricsManager
 {
-    Task<List<MetricCard>> GetMetricCards();
+    Task<List<MetricCard>> GetMetricCards(CancellationToken ct);
     Task<List<MetricCard>> GetPortfolioMetricCards(int[] ids);
 
     // сколько вложили(база)
@@ -13,8 +13,8 @@ public interface IMetricsService
     Task<decimal> PortfolioTotalCashIn(int[] ids);
 
     // текущая стоимость
-    Task<decimal> CurrentCost();
-    Task<decimal> PortfolioCurrentCost(int[] ids);
+    decimal CurrentCost();
+    decimal PortfolioCurrentCost(int[] ids);
 
     // денежный поток(купоны/дивиденды)
     Task<decimal> TotalDividends();

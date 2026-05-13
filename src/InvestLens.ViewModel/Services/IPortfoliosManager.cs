@@ -21,6 +21,7 @@ public interface IPortfoliosManager
     Task ReloadPortfolio(int id);
 
     List<PortfolioModel> GetAllPortfolios(PortfolioType portfolioType);
+    List<int> GetAllPortfolioIds(PortfolioType portfolioType);
 
     Task<List<TransactionModel>> GetLastTtransactions(int count);
 }

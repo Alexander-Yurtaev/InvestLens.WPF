@@ -20,7 +20,7 @@ public class ViewModelFactory : IViewModelFactory
     private readonly IMapper _mapper;
     private readonly IWindowManager _windowManager;
     private readonly IAuthManager _authManager;
-    private readonly IMetricsService _metricsService;
+    private readonly IMetricsManager _metricsService;
     private readonly ISecurityService _securityService;
     private readonly IMoexService _moexService;
 
@@ -31,7 +31,7 @@ public class ViewModelFactory : IViewModelFactory
         IMapper mapper,
         IWindowManager windowManager,
         IAuthManager authManager,
-        IMetricsService metricsService,
+        IMetricsManager metricsService,
         ISecurityService securityService,
         IMoexService moexService)
     {

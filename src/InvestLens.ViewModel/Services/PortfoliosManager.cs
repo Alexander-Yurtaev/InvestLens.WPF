@@ -20,6 +20,7 @@ public class PortfoliosManager : IPortfoliosManager
     private readonly IAuthManager _authManager;
     private readonly IDatabaseService _databaseService;
     private readonly IPortfolioRepository _portfolioRepository;
+    private readonly IHistoryRepository _historyRepository;
     private readonly IWindowManager _windowManager;
     private readonly IEventAggregator _eventAggregator;
     private readonly SemaphoreSlim _loadSemaphoreSlim = new SemaphoreSlim(1);
@@ -31,6 +32,7 @@ public class PortfoliosManager : IPortfoliosManager
         IAuthManager authManager,
         IDatabaseService databaseService,
         IPortfolioRepository portfolioRepository,
+        IHistoryRepository historyRepository,
         IWindowManager windowManager,
         IEventAggregator eventAggregator)
     {
@@ -38,6 +40,7 @@ public class PortfoliosManager : IPortfoliosManager
         _authManager = authManager;
         _databaseService = databaseService;
         _portfolioRepository = portfolioRepository;
+        _historyRepository = historyRepository;
         _windowManager = windowManager;
         _eventAggregator = eventAggregator;
 
@@ -85,6 +88,7 @@ public class PortfoliosManager : IPortfoliosManager
     private async Task FillInvestPortfolio(int portfolioId, PortfolioDetails details)
     {
         var transactions = await _portfolioRepository.GetTransactions(portfolioId);
+        var history = await _historyRepository.GetAllLastHistory();
         var securityInfos = transactions
                 .GroupBy(t => t.Symbol)
                 .Select(g =>
@@ -110,15 +114,17 @@ public class PortfoliosManager : IPortfoliosManager
                         key = $"<{key}>";
                     }
 
+                    var currentPrice = history.ContainsKey(key) ? history[key].Close : 0m;
+
                     return new SecurityInfo(key, key)
                     {
                         Quantity = totalQuantity,
-                        CurrentPrice = totalBuy - totalSell,
+                        CurrentPrice = currentPrice,
                         Dividends = dividends,
                         TotalPrice = totalBuy - totalSell - totalFeeTax,
                         // ( (Текущая стоимость − Вложено + Дивиденды) / Вложено ) × 100%
                         Profit = (totalBuy - totalSell + totalFeeTax) > 0
-                                    ? ((totalBuy - totalSell) - (totalBuy - totalSell + totalFeeTax) + dividends) / (totalBuy - totalSell + totalFeeTax)
+                                    ? (currentPrice * totalQuantity + dividends) / (totalBuy - totalSell + totalFeeTax) - 1
                                     : 0
                     };
                 });
@@ -394,5 +400,13 @@ public class PortfoliosManager : IPortfoliosManager
         var transactions = await _portfolioRepository.GetLastTtransactions(count);
         var transactionModels = _mapper.Map<List<TransactionModel>>(transactions);
         return transactionModels;
+    }
+
+    public List<int> GetAllPortfolioIds(PortfolioType portfolioType)
+    {
+        return _portfolioCache.Values
+            .Where(p => p.PortfolioType == portfolioType)
+            .Select(p => p.Id)
+            .ToList();
     }
 }

@@ -11,14 +11,15 @@ public class DashboardViewModel : ViewModelBaseWithContentHeader, IDashboardView
 {
     private readonly IAuthManager _authManager;
     private readonly IWindowManager _windowManager;
-    private readonly IMetricsService _metricsManager;
+    private readonly IMetricsManager _metricsManager;
     private readonly IActivityManager _activityManager;
     private IPortfolioDynamicsViewModel _portfolioDynamicsViewModel;
+    private CancellationTokenSource? _portfoliosLoadedCancellationSource;
 
     public DashboardViewModel(
         IAuthManager authManager,
         IWindowManager windowManager,
-        IMetricsService metricsManager,
+        IMetricsManager metricsManager,
         IActivityManager activityManager,
         IPortfolioDynamicsViewModel portfolioDynamicsViewModel,
         IEventAggregator eventAggregator) : base($"Добро пожаловать, Гость",
@@ -51,25 +52,38 @@ public class DashboardViewModel : ViewModelBaseWithContentHeader, IDashboardView
 
     private async void OnPortfoliosLoaded()
     {
-        if (_authManager.CurrentUser is null)
-        {
-            return;
-        }
+        _windowManager.ShowIsBusy();
 
-        ContentHeaderVm.SetWelcomeTitle($"Добро пожаловать, {_authManager.CurrentUser.UserName}");
-        
-        var metrics = await _metricsManager.GetMetricCards();
-        MetricCards.Clear();
-        foreach (var metric in metrics)
+        try
         {
-            MetricCards.Add(metric);
-        }
+            if (_authManager.CurrentUser is null)
+            {
+                return;
+            }
 
-        var activityItems = await _activityManager.GetActivityItems();
-        ActivityItems.Clear();
-        foreach (var activityItem in activityItems)
+            _portfoliosLoadedCancellationSource?.Cancel();
+            _portfoliosLoadedCancellationSource = new();
+            var ct = _portfoliosLoadedCancellationSource.Token;
+
+            ContentHeaderVm.SetWelcomeTitle($"Добро пожаловать, {_authManager.CurrentUser.UserName}");
+
+            var metrics = await _metricsManager.GetMetricCards(ct);
+            MetricCards.Clear();
+            foreach (var metric in metrics)
+            {
+                MetricCards.Add(metric);
+            }
+
+            var activityItems = await _activityManager.GetActivityItems();
+            ActivityItems.Clear();
+            foreach (var activityItem in activityItems)
+            {
+                ActivityItems.Add(activityItem);
+            }
+        }
+        finally
         {
-            ActivityItems.Add(activityItem);
+            _windowManager.HideIsBusy();
         }
     }
 }

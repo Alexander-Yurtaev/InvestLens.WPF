@@ -89,7 +89,7 @@ namespace InvestLens.App
             services.AddSingleton<IPortfoliosManager, PortfoliosManager>();
             services.AddSingleton<IDictionariesMoexManager, DictionariesMoexManager>();
             services.AddSingleton<IDictionariesManager, DictionariesManager>();
-            services.AddSingleton<IMetricsService, MetricsService>();
+            services.AddSingleton<IMetricsManager, MetricsManager>();
             services.AddSingleton<IDohodService, DohodService>();
             services.AddSingleton<IMoexService, MoexService>();
 

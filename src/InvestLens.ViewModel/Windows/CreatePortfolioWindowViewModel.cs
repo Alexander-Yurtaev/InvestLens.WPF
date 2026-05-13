@@ -60,7 +60,6 @@ public sealed class CreatePortfolioWindowViewModel : CreateUpdatePortfolioWindow
 
     protected override async Task ExecuteAction()
     {
-        // ToDo make DialogService
         if (_authManager.CurrentUser is null)
         {
             WindowManager.ShowErrorDialog("Вы не авторизованы!");

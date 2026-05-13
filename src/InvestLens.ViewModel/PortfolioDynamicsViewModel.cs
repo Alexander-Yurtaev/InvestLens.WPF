@@ -9,7 +9,7 @@ namespace InvestLens.ViewModel;
 
 public class PortfolioDynamicsViewModel : BindableBase, IPortfolioDynamicsViewModel
 {
-    private readonly IMetricsService _metricsService;
+    private readonly IMetricsManager _metricsService;
     private readonly IWindowManager _windowManager;
     private bool _period1M;
     private bool _period3M;
@@ -19,7 +19,7 @@ public class PortfolioDynamicsViewModel : BindableBase, IPortfolioDynamicsViewMo
     private PortfolioDynamicPeriod? _currentPeriod;
     private CancellationTokenSource? _currentCts;
 
-    public PortfolioDynamicsViewModel(IMetricsService metricsService, IWindowManager windowManager)
+    public PortfolioDynamicsViewModel(IMetricsManager metricsService, IWindowManager windowManager)
     {
         _metricsService = metricsService;
         _windowManager = windowManager;

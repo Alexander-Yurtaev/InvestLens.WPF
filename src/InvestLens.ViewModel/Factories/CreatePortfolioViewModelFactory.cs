@@ -14,7 +14,7 @@ public class CreatePortfolioViewModelFactory : ICreatePortfolioViewModelFactory
         PortfolioDetails model,
         IWindowManager windowManager,
         IAuthManager authManager,
-        IMetricsService metricsService,
+        IMetricsManager metricsService,
         IPortfoliosManager portfoliosManager,
         ISecurityService securityService,
         IMoexService moexService

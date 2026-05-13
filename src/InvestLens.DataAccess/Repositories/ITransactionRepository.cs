@@ -10,8 +10,8 @@ public interface ITransactionRepository : IBaseRepository
     Task<decimal> GetTotalCashOut();
     Task<decimal> GetPortfolioTotalCashOut(int[] ids);
 
-    Task<decimal> GetCurrentCost();
-    Task<decimal> GetPortfolioCurrentCost(int[] ids);
+    Task<decimal> GetCurrentCost(CancellationToken ct);
+    Task<decimal> GetPortfolioCurrentCost(int[] ids, CancellationToken ct);
 
     Task<decimal> GetTotalDividends();
     Task<decimal> GetPortfolioTotalDividends(int[] ids);

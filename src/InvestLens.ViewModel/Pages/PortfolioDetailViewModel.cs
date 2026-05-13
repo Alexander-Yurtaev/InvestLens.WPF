@@ -21,7 +21,7 @@ public class PortfolioDetailViewModel : ViewModelBaseWithContentHeader, IPortfol
     private readonly PortfolioDetails _model;
     private readonly IWindowManager _windowManager;
     private readonly IAuthManager _authManager;
-    private readonly IMetricsService _metricsService;
+    private readonly IMetricsManager _metricsService;
     private readonly IPortfoliosManager _portfoliosManager;
     private readonly ISecurityService _securityService;
     private readonly IMoexService _moexService;
@@ -35,7 +35,7 @@ public class PortfolioDetailViewModel : ViewModelBaseWithContentHeader, IPortfol
         PortfolioDetails model, 
         IWindowManager windowManager, 
         IAuthManager authManager,
-        IMetricsService metricsService,
+        IMetricsManager metricsService,
         IPortfoliosManager portfoliosManager,
         ISecurityService securityService,
         IMoexService moexService) : base(model.Title, model.Description)

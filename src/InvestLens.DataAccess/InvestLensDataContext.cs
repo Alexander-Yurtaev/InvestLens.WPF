@@ -181,7 +181,7 @@ public sealed class InvestLensDataContext : DbContext
             entity.Property(p => p.Name).IsRequired().HasMaxLength(192);
             entity.Property(p => p.Title).IsRequired().HasMaxLength(765);
             entity.Property(p => p.IsDefault).IsRequired();
-            entity.Property(p => p.board_group_id).IsRequired();
+            entity.Property(p => p.BoardGroupId).IsRequired();
             entity.Property(p => p.IsTraded).IsRequired();
             entity.Property(p => p.IsOrderDriven).IsRequired();
             entity.Property(p => p.Category).IsRequired().HasMaxLength(45);

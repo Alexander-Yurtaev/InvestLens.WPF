@@ -59,12 +59,12 @@ public class TransactionRepository : BaseRepository, ITransactionRepository
 
     // CurrentCost
 
-    public async Task<decimal> GetCurrentCost()
+    public async Task<decimal> GetCurrentCost(CancellationToken ct)
     {
-        return await GetPortfolioCurrentCost([]);
+        return await GetPortfolioCurrentCost([], ct);
     }
 
-    public async Task<decimal> GetPortfolioCurrentCost(int[] ids)
+    public async Task<decimal> GetPortfolioCurrentCost(int[] ids, CancellationToken ct)
     {
         IQueryable<Transaction> query = DatabaseService.DataContext.Transactions;
 
@@ -82,9 +82,11 @@ public class TransactionRepository : BaseRepository, ITransactionRepository
                                             Quantity = t.Quantity,
                                             Price = t.Price
                                          })
-                                         .ToListAsync();
+                                         .ToListAsync(ct);
 
-        var total = transactionList
+        var total = await Task.Run(() =>
+        {
+            return transactionList
             .GroupBy(t => new { PortfolioId = t.PortfolioId, Symbol = t.Symbol })
             .ToDictionary(k => k.Key, g => g
                 .OrderBy(t => t.Date)
@@ -103,6 +105,7 @@ public class TransactionRepository : BaseRepository, ITransactionRepository
                             .FirstOrDefault();
                 return quantity * price;
             });
+        }, ct);
 
         return total.Sum(d => d.Value);
     }

@@ -38,7 +38,6 @@ public class InvestLensProfiles : Profile
         CreateMap<InvestLens.Model.Entities.Settings.SecurityCollection, SecurityCollectionModel>().ReverseMap();
 
         CreateMap<InvestLens.Model.Entities.Moex.History, HistoryModel>().ReverseMap();
-        CreateMap<InvestLens.Model.MoexApi.Responses.ResponseItems.HistoryCursor, InvestLens.Model.MoexApi.HistoryCursor>().ReverseMap();
 
         CreateMap<InvestLens.Model.Entities.Portfolio, InvestLens.Model.Entities.Portfolio>()
             .ForMember(dest => dest.ChildrenPortfolios, opt => opt.Ignore())

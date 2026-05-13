@@ -32,8 +32,8 @@ public class BoardGroup : BaseEntity
     [JsonPropertyName("is_default")]
     public bool IsDefault { get; set; }
 
-    [JsonPropertyName("board_group_id")]
-    public int board_group_id { get; set; }
+    [JsonPropertyName("BoardGroupId")]
+    public int BoardGroupId { get; set; }
 
     public virtual BoardGroup? BoardGroupEntity { get; set; }
 

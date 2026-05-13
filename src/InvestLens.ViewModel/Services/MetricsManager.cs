@@ -1,20 +1,28 @@
 ﻿using InvestLens.DataAccess.Repositories;
 using InvestLens.Model;
 using InvestLens.Model.Enums;
+using InvestLens.ViewModel.Events;
 
 namespace InvestLens.ViewModel.Services;
 
-public class MetricsService : IMetricsService
+public class MetricsManager : IMetricsManager
 {
+    private readonly IEventAggregator _eventAggregator;
     private readonly IPortfoliosManager _portfoliosManager;
     private readonly ITransactionRepository _repository;
+    private readonly Dictionary<int, decimal> _currentPortfolioCostCache = [];
+    private CancellationTokenSource _initcancellationTokenSource;
 
-    public MetricsService(
+    public MetricsManager(
+        IEventAggregator eventAggregator,
         IPortfoliosManager portfoliosManager,
         ITransactionRepository repository)
     {
+        _eventAggregator = eventAggregator;
         _portfoliosManager = portfoliosManager;
         _repository = repository;
+
+        _eventAggregator.GetEvent<LoginEvent>().Subscribe(OnLogin);
     }
 
     #region TotalCashIn - сколько вложили (база)
@@ -33,14 +41,29 @@ public class MetricsService : IMetricsService
 
     #region CurrentCost - текущая стоимость
 
-    public async Task<decimal> CurrentCost()
+    // ToDo Вычилсять текущую стоимость при запуске и сохранять в кэше
+
+    public decimal CurrentCost()
     {
-        return await _repository.GetCurrentCost();
+        return _currentPortfolioCostCache.Sum(c => c.Value);
     }
 
-    public async Task<decimal> PortfolioCurrentCost(int[] ids)
+    public decimal PortfolioCurrentCost(int[] ids)
     {
-        return await _repository.GetPortfolioCurrentCost(ids);
+        var total = 0m;
+        foreach (var id in ids)
+        {
+            if (_currentPortfolioCostCache.TryGetValue(id, out var cost))
+            {
+                total += cost;
+            }
+        }
+        return total;
+    }
+
+    private async Task<decimal> ComputePortfolioCurrentCost(int[] ids, CancellationToken ct)
+    {
+        return await _repository.GetPortfolioCurrentCost(ids, ct);
     }
 
     #endregion CurrentCost
@@ -61,10 +84,10 @@ public class MetricsService : IMetricsService
 
     #region Metrics
 
-    public async Task<List<MetricCard>> GetMetricCards()
+    public async Task<List<MetricCard>> GetMetricCards(CancellationToken ct)
     {
         var totalCashIn = await TotalCashIn();
-        var currentCost = await CurrentCost();
+        var currentCost = CurrentCost();
         var totalDividends = await TotalDividends();
         // ( (Текущая стоимость − Вложено + Дивиденды) / Вложено ) × 100%
         var totalProfit = totalCashIn > 0
@@ -85,7 +108,7 @@ public class MetricsService : IMetricsService
     public async Task<List<MetricCard>> GetPortfolioMetricCards(int[] ids)
     {
         var totalCashIn = await PortfolioTotalCashIn(ids);
-        var currentCost = await PortfolioCurrentCost(ids);
+        var currentCost = PortfolioCurrentCost(ids);
         var totalDividends = await PortfolioTotalDividends(ids);
         // ( (Текущая стоимость − Вложено + Дивиденды) / Вложено ) × 100%
         var totalProfit = totalCashIn > 0 
@@ -120,4 +143,34 @@ public class MetricsService : IMetricsService
     }
 
     #endregion DynamicMetrics
+
+    private async void OnLogin(UserInfo info)
+    {
+        _initcancellationTokenSource?.Cancel();
+        _initcancellationTokenSource = new();
+
+        try
+        {
+            await Init(_initcancellationTokenSource.Token);
+        }
+        catch (OperationCanceledException)
+        {
+
+        }
+        catch
+        {
+            throw;
+        }
+    }
+
+    private async Task Init(CancellationToken ct)
+    {
+        var ids = _portfoliosManager.GetAllPortfolioIds(PortfolioType.Invest);
+        foreach (var id in ids)
+        {
+            if (ct.IsCancellationRequested) return;
+            var currentCost = await ComputePortfolioCurrentCost([id], ct);
+            _currentPortfolioCostCache[id] = currentCost;
+        }
+    }
 }

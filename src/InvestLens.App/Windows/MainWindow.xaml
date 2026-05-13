@@ -13,7 +13,8 @@
         Background="{StaticResource BackgroundPrimaryBrush}"
         FontFamily="Segoe UI"
         WindowStartupLocation="CenterScreen"
-        WindowState="Maximized">
+        WindowState="Maximized"
+        Icon="/InvestLens.ico">
 
     <Window.Resources>
         <ResourceDictionary>

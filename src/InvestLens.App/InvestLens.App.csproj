@@ -7,11 +7,18 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <UseWPF>true</UseWPF>
     <AssemblyName>InvestLens</AssemblyName>
-    <ApplicationIcon>Invest Lens.ico</ApplicationIcon>
+    <ApplicationIcon>InvestLens.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Include="Invest Lens.ico" />
+    <Compile Remove="AssemblyInfo.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="AssemblyInfo.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="InvestLens.ico" />
   </ItemGroup>
 
   <ItemGroup>
