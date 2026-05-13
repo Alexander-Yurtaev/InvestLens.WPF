@@ -1,5 +1,6 @@
 ﻿using InvestLens.Model;
 using InvestLens.ViewModel.Wrappers;
+using FluentAssertions;
 
 namespace InvestLens.Tests;
 
@@ -15,6 +16,6 @@ public class StatWrapperTests
         var model = new Stat("", value, unit, suffix);
         var vm = new StatWrapper(model);
 
-        Assert.Equal(expected, vm.ValueDisplay);
+        vm.ValueDisplay.Should().Be(expected);
     }
 }
