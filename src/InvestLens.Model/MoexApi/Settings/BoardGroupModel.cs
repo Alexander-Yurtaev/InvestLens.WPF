@@ -10,7 +10,7 @@ public class BoardGroupModel : BaseModel
     public string Name { get; set; } = string.Empty;
     public string Title { get; set; } = string.Empty;
     public bool IsDefault { get; set; }
-    public int board_group_id { get; set; }
+    public int BoardGroupId { get; set; }
     public bool IsTraded { get; set; }
     public bool IsOrderDriven { get; set; }
     public string Category { get; set; } = string.Empty;

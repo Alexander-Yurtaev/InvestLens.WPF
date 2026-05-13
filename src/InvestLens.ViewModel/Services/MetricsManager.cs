@@ -11,7 +11,7 @@ public class MetricsManager : IMetricsManager
     private readonly IPortfoliosManager _portfoliosManager;
     private readonly ITransactionRepository _repository;
     private readonly Dictionary<int, decimal> _currentPortfolioCostCache = [];
-    private CancellationTokenSource _initcancellationTokenSource;
+    private CancellationTokenSource? _initcanCellationTokenSource;
 
     public MetricsManager(
         IEventAggregator eventAggregator,
@@ -146,12 +146,12 @@ public class MetricsManager : IMetricsManager
 
     private async void OnLogin(UserInfo info)
     {
-        _initcancellationTokenSource?.Cancel();
-        _initcancellationTokenSource = new();
+        _initcanCellationTokenSource?.Cancel();
+        _initcanCellationTokenSource = new();
 
         try
         {
-            await Init(_initcancellationTokenSource.Token);
+            await Init(_initcanCellationTokenSource.Token);
         }
         catch (OperationCanceledException)
         {
