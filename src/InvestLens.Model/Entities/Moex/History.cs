@@ -10,8 +10,14 @@ public class History : BaseEntity
     [JsonPropertyName("CLOSE")]
     public decimal Close { get; set; }
 
+    [JsonPropertyName("FACEVALUE")]
+    public decimal FaceValue { get; set; }
+
     [JsonPropertyName("CURRENCYID")]
     public string CurrenencyId { get; set; } = string.Empty;
+
+    [JsonPropertyName("FACEUNIT")]
+    public string FaceUnit { get; set; } = string.Empty;
 
     [JsonPropertyName("TRADEDATE")]
     public DateTime Date { get; set; }
