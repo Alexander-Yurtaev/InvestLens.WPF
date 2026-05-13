@@ -4,6 +4,7 @@ using InvestLens.Model;
 using InvestLens.Model.Entities;
 using InvestLens.Model.Enums;
 using Microsoft.Extensions.Logging.Abstractions;
+using FluentAssertions;
 
 namespace InvestLens.Tests;
 
@@ -56,7 +57,7 @@ public class PortfolioProfilesTests
         var operation = _mapper.Map<SecurityOperation>(transaction);
 
         // Assert
-        Assert.NotNull(operation);
-        Assert.Equal(eventValue, operation.OperationType);
+        operation.Should().NotBeNull();
+        operation.OperationType.Should().Be(eventValue);
     }
 }
