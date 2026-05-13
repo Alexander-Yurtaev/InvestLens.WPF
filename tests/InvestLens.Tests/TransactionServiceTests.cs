@@ -29,8 +29,8 @@ public class TransactionServiceTests
 
         using var textReader = new StringReader(builder.ToString());
         var items = TransactionHelper.Convert(textReader);
-        
-        Assert.NotNull(items);
-        Assert.Equal(7, items.Count);
+
+        items.Should().NotBeNullOrEmpty();
+        items.Count.Should().Be(7);
     }
 }
