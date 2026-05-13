@@ -7,6 +7,7 @@ using InvestLens.ViewModel.NavigationTree;
 using InvestLens.ViewModel.Services;
 using InvestLens.ViewModel.Windows;
 using Moq;
+using FluentAssertions;
 
 namespace InvestLens.Tests
 {
@@ -44,40 +45,40 @@ namespace InvestLens.Tests
                 viewModelFactoryMock.Object, 
                 eventAggregatorMock.Object);
 
-            Assert.NotNull(vm.NavigationVm.MenuItems);
-            Assert.Equal(/*10*/3, vm.NavigationVm.MenuItems.Count);
 
+            vm.NavigationVm.MenuItems.Should().NotBeNullOrEmpty();
+            vm.NavigationVm.MenuItems.Count.Should().Be(3);
+            
             var dashboard = vm.NavigationVm.MenuItems[0] as NavigationTreeItem;
-            Assert.NotNull(dashboard);
+            dashboard.Should().NotBeNull();
             var dashboardModel = dashboard.Model as DashboardNavigationTreeModel;
-            Assert.NotNull(dashboardModel);
-            Assert.Equal("Главная", dashboardModel.Title);
-            Assert.NotNull(dashboard.Children);
-            Assert.Empty(dashboard.Children);
+            dashboardModel.Should().NotBeNull();
+            dashboardModel.Title.Should().Be("Главная");
+            dashboard.Children.Should().BeEmpty();
 
             var divider = vm.NavigationVm.MenuItems[1] as NavigationTreeDivider;
-            Assert.NotNull(divider);
+            divider.Should().NotBeNull();
             
             var portfolios = vm.NavigationVm.MenuItems[2] as NavigationTreeItem;
-            Assert.NotNull(portfolios);
+            portfolios.Should().NotBeNull();
             var portfoliosModel = portfolios.Model as PortfoliosNavigationTreeModel;
+            portfoliosModel.Should().NotBeNull();
             Assert.NotNull(portfoliosModel);
-            Assert.Equal("Портфели", portfoliosModel.Title);
-            Assert.NotNull(portfolios.Children);
-            Assert.Empty(portfolios.Children);
+            portfoliosModel.Title.Should().Be("Портфели");
+            portfolios.Children.Should().BeEmpty();
 
             //var dictionaries = vm.NavigationVm.MenuItems[3] as NavigationTreeItem;
             //Assert.NotNull(dictionaries);
             //var dictionariesModel = dictionaries.Model as DictionariesNavigationTreeModel;
             //Assert.NotNull(dictionariesModel);
-            //Assert.Equal("Справочники", dictionariesModel.Title);
-            //Assert.NotNull(dictionaries.Children);
-            //Assert.Equal(2, dictionaries.Children.Count);
+            //dictionariesModel.Title.Should().Be("Справочники");
+            //dictionaries.Children.Should().NotBeNullOrEmpty();
+            //dictionaries.Children.Count.Should().Be(2);
 
             //var moex = dictionaries.Children[0] as NavigationTreeItem;
-            //Assert.NotNull(moex);
+            //moex.Children.Should().NotBeNullOrEmpty();
             //var moexModel = moex.Model as DictionariesMoexNavigationTreeModel;
-            //Assert.NotNull(moexModel);
+            //moexModel.Should().NotBeNull();
             //Assert.Equal("MOEX", moexModel.Title);
             //Assert.NotNull(moex.Children);
             //Assert.Equal(2, moex.Children.Count);
