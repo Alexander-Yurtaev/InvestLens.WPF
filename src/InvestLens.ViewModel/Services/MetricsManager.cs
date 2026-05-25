@@ -155,7 +155,7 @@ public class MetricsManager : IMetricsManager
         _initcanCellationTokenSource?.Cancel();
         _initcanCellationTokenSource = new();
 
-        _windowManager.ShowIsBusy();
+        _windowManager.ShowIsBusy("Метрики: обновление...");
 
         try
         {
@@ -181,6 +181,7 @@ public class MetricsManager : IMetricsManager
         foreach (var id in ids)
         {
             if (ct.IsCancellationRequested) return;
+            _windowManager.ShowIsBusy("Вычисление: стоимость...");
             var currentCost = await ComputePortfolioCurrentCost(id, ct);
             _currentPortfolioCostCache[id] = currentCost;
         }

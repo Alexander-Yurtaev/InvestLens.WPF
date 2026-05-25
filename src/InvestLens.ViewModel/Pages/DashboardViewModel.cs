@@ -52,7 +52,7 @@ public class DashboardViewModel : ViewModelBaseWithContentHeader, IDashboardView
 
     private async void OnMetricsManagerInit()
     {
-        _windowManager.ShowIsBusy();
+        _windowManager.ShowIsBusy("Dashboard: инициализация");
 
         try
         {

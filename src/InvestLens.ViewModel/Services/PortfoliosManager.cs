@@ -321,6 +321,8 @@ public class PortfoliosManager : IPortfoliosManager
 
     private async Task LoadPortfolios(int ownerId)
     {
+        _windowManager.ShowIsBusy("Загрузка портфелей...");
+
         await _loadSemaphoreSlim.WaitAsync();
 
         try
@@ -338,6 +340,7 @@ public class PortfoliosManager : IPortfoliosManager
         finally
         {
             _loadSemaphoreSlim.Release();
+            _windowManager.HideIsBusy();
         }
 
         _eventAggregator.GetEvent<PortfoliosLoadedEvent>().Publish();

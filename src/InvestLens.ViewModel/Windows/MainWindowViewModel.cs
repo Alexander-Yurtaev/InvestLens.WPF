@@ -11,6 +11,7 @@ public class MainWindowViewModel : BindableBase, IMainWindowViewModel
     private INotifyPropertyChanged? _contentVm;
     private BaseNavigationTreeModel? _currentNavigationTreeModel;
     private bool _isBusy;
+    private string? _busyContent;
 
     public MainWindowViewModel(
         INavigationViewModel navigationVm, 
@@ -32,6 +33,12 @@ public class MainWindowViewModel : BindableBase, IMainWindowViewModel
     { 
         get => _isBusy;
         set => SetProperty(ref _isBusy, value);
+    }
+
+    public string? BusyContent
+    {
+        get => _busyContent;
+        set => SetProperty(ref _busyContent, value);
     }
 
     public INotifyPropertyChanged? ContentVm

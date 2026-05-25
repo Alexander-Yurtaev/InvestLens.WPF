@@ -48,7 +48,7 @@
         <Border Style="{StaticResource LoaderContainerStyle}">
             <StackPanel>
                 <local:Spinner/>
-                <Label Content="Выполняется операция..."
+                <Label Content="{Binding BusyContent, RelativeSource={RelativeSource AncestorType={x:Type local:BusyIndicator}}, TargetNullValue='Выполняется операция...', FallbackValue='Выполняется операция...'}"
                        Style="{StaticResource LoaderTextStyle}"
                        Margin="0 0 0 8"/>
                 <Label Content="Пожалуйста, подождите"

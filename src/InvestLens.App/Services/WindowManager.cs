@@ -160,11 +160,12 @@ public class WindowManager : IWindowManager
         return "";
     }
 
-    public void ShowIsBusy()
+    public void ShowIsBusy(string? busyContent = "")
     {
         var viewModel = GetMainWindowViewModel();
         if (viewModel is not null)
         {
+            viewModel.BusyContent = busyContent;
             viewModel.IsBusy = true;
         }
     }

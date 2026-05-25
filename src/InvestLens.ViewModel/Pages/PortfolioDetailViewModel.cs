@@ -110,7 +110,7 @@ public class PortfolioDetailViewModel : ViewModelBaseWithContentHeader, IPortfol
 
         if (confirmed == true)
         {
-            _windowManager.ShowIsBusy();
+            _windowManager.ShowIsBusy("Портфель: удаление...");
             try
             {
                 await _portfoliosManager.Delete(_model.Id);
@@ -136,8 +136,8 @@ public class PortfolioDetailViewModel : ViewModelBaseWithContentHeader, IPortfol
 
         try
         {
-            _windowManager.ShowIsBusy();
-            
+            _windowManager.ShowIsBusy("Портфель: импорт...");
+
             var transactions = await Task.Run(() => {
                 using var reader = File.OpenText(fileFullName);
                 var transactionModels = TransactionHelper.Convert(reader);
@@ -180,8 +180,8 @@ public class PortfolioDetailViewModel : ViewModelBaseWithContentHeader, IPortfol
 
     private async Task RefreshModel()
     {
-        _windowManager.ShowIsBusy();
-        
+        _windowManager.ShowIsBusy("Портфель: обновление...");
+
         try
         {
             var model = await _portfoliosManager.GetPortfolioDetiails(_model.Id);
