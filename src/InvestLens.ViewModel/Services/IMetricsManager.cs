@@ -14,7 +14,7 @@ public interface IMetricsManager
 
     // текущая стоимость
     decimal CurrentCost();
-    decimal PortfolioCurrentCost(int[] ids);
+    decimal GetCurrentPortfolioCost(int[] ids);
 
     // денежный поток(купоны/дивиденды)
     Task<decimal> TotalDividends();

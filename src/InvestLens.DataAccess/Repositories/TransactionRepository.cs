@@ -4,6 +4,8 @@ using InvestLens.Model.Enums;
 using InvestLens.Model.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Internal;
+using System.Collections.Generic;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace InvestLens.DataAccess.Repositories;
 
@@ -59,52 +61,60 @@ public class TransactionRepository : BaseRepository, ITransactionRepository
 
     // CurrentCost
 
-    public async Task<decimal> GetCurrentCost(CancellationToken ct)
+    public async Task<decimal> GetPortfolioCurrentCost(int id, List<Security> securityList, CancellationToken ct)
     {
-        return await GetPortfolioCurrentCost([], ct);
+        return await GetPortfolioCostTillDateInternal(id, DateTime.UtcNow, securityList, ct);
     }
 
-    public async Task<decimal> GetPortfolioCurrentCost(int[] ids, CancellationToken ct)
+    public async Task<decimal> GetPortfolioCostTillDate(int id, DateTime date, List<Security> securityList, CancellationToken ct)
     {
-        IQueryable<Transaction> query = DatabaseService.DataContext.Transactions;
+        return await GetPortfolioCostTillDateInternal(id, date, securityList, ct);
+    }
 
-        if (ids.Any())
-        {
-            query = query.Where(t => ids.Contains(t.PortfolioId));
-        }
-
-        var transactionList = await query.OrderBy(t => t.Date)
-                                         .Select(t => new {
-                                            PortfolioId = t.PortfolioId,
-                                            Symbol = t.Symbol,
-                                            Date = t.Date,
-                                            Event = t.Event,
-                                            Quantity = t.Quantity,
-                                            Price = t.Price
-                                         })
-                                         .ToListAsync(ct);
+    private async Task<decimal> GetPortfolioCostTillDateInternal(int id, DateTime date, List<Security> securityList, CancellationToken ct)
+    {
+        var transactionList = await DatabaseService.DataContext.Transactions
+                    .Where(t => t.PortfolioId == id && t.Date <= date)
+                    .OrderBy(t => t.Date)
+                    .Select(t => new {
+                        PortfolioId = t.PortfolioId,
+                        Symbol = t.Symbol,
+                        Date = t.Date,
+                        Event = t.Event,
+                        Quantity = t.Quantity,
+                        Price = t.Price
+                    })
+                    .ToListAsync(ct);
 
         var total = await Task.Run(() =>
         {
             return transactionList
-            .GroupBy(t => new { PortfolioId = t.PortfolioId, Symbol = t.Symbol })
-            .ToDictionary(k => k.Key, g => g
-                .OrderBy(t => t.Date)
-                .Aggregate(0.0m, (acc, t) => t.Event == TransactionEvent.Buy ? acc + t.Quantity :
-                                             t.Event == TransactionEvent.Sell ? acc - t.Quantity :
-                                             t.Event == TransactionEvent.Split ? acc * t.Price : acc)
-            )
-            .GroupBy(k => k.Key.Symbol)
-            .ToDictionary(g => g.Key, g =>
-            {
-                var quantity = g.Sum(v => v.Value);
-                var price = DatabaseService.DataContext.History
-                            .Where(h => h.SecId == g.Key)
-                            .OrderByDescending(h => h.Date)
-                            .Select(h => h.Close)
-                            .FirstOrDefault();
-                return quantity * price;
-            });
+                .GroupBy(t => new { PortfolioId = t.PortfolioId, Symbol = t.Symbol })
+                .ToDictionary(k => k.Key, g => g
+                    .OrderBy(t => t.Date)
+                    .Aggregate(0.0m, (acc, t) => t.Event == TransactionEvent.Buy ? acc + t.Quantity :
+                                                 t.Event == TransactionEvent.Sell ? acc - t.Quantity :
+                                                 t.Event == TransactionEvent.Split ? acc * t.Price : acc)
+                )
+                .GroupBy(k => k.Key.Symbol)
+                .ToDictionary(g => g.Key, g =>
+                {
+                    var security = securityList.FirstOrDefault(s => s.SecId == g.Key);
+                    var quantity = g.Sum(v => v.Value);
+                    var history = DatabaseService.DataContext.History
+                                .Where(h => h.SecId == g.Key)
+                                .OrderByDescending(h => h.Date)
+                                .FirstOrDefault();
+                    
+                    var price = 0m;
+                    if (history is not null)
+                    {
+                        var isBond = security?.SecGroupId == 3;
+                        var close = isBond ? history.Close / 100m : history.Close;
+                        price = close * (history.FaceValue > 0 ? history.FaceValue : 1);
+                    }
+                    return quantity * price;
+                });
         }, ct);
 
         return total.Sum(d => d.Value);

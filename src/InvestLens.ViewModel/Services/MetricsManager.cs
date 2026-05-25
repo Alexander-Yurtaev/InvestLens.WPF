@@ -9,20 +9,25 @@ public class MetricsManager : IMetricsManager
 {
     private readonly IEventAggregator _eventAggregator;
     private readonly IPortfoliosManager _portfoliosManager;
+    private readonly IWindowManager _windowManager;
     private readonly ITransactionRepository _repository;
+    private readonly ISecurityRepository _securityRepository;
     private readonly Dictionary<int, decimal> _currentPortfolioCostCache = [];
     private CancellationTokenSource? _initcanCellationTokenSource;
 
     public MetricsManager(
         IEventAggregator eventAggregator,
         IPortfoliosManager portfoliosManager,
-        ITransactionRepository repository)
+        IWindowManager windowManager,
+        ITransactionRepository repository,
+        ISecurityRepository securityRepository)
     {
         _eventAggregator = eventAggregator;
         _portfoliosManager = portfoliosManager;
+        _windowManager = windowManager;
         _repository = repository;
-
-        _eventAggregator.GetEvent<LoginEvent>().Subscribe(OnLogin);
+        _securityRepository = securityRepository;
+        _eventAggregator.GetEvent<PortfoliosLoadedEvent>().Subscribe(OnPortfoliosLoaded);
     }
 
     #region TotalCashIn - сколько вложили (база)
@@ -41,14 +46,14 @@ public class MetricsManager : IMetricsManager
 
     #region CurrentCost - текущая стоимость
 
-    // ToDo Вычилсять текущую стоимость при запуске и сохранять в кэше
+    // ToDo Вычислять текущую стоимость при запуске и сохранять в кэше
 
     public decimal CurrentCost()
     {
         return _currentPortfolioCostCache.Sum(c => c.Value);
     }
 
-    public decimal PortfolioCurrentCost(int[] ids)
+    public decimal GetCurrentPortfolioCost(int[] ids)
     {
         var total = 0m;
         foreach (var id in ids)
@@ -61,9 +66,10 @@ public class MetricsManager : IMetricsManager
         return total;
     }
 
-    private async Task<decimal> ComputePortfolioCurrentCost(int[] ids, CancellationToken ct)
+    private async Task<decimal> ComputePortfolioCurrentCost(int id, CancellationToken ct)
     {
-        return await _repository.GetPortfolioCurrentCost(ids, ct);
+        var securities = await _securityRepository.GetLoadedSecurityListAsync(ct);
+        return await _repository.GetPortfolioCurrentCost(id, securities, ct);
     }
 
     #endregion CurrentCost
@@ -108,7 +114,7 @@ public class MetricsManager : IMetricsManager
     public async Task<List<MetricCard>> GetPortfolioMetricCards(int[] ids)
     {
         var totalCashIn = await PortfolioTotalCashIn(ids);
-        var currentCost = PortfolioCurrentCost(ids);
+        var currentCost = GetCurrentPortfolioCost(ids);
         var totalDividends = await PortfolioTotalDividends(ids);
         // ( (Текущая стоимость − Вложено + Дивиденды) / Вложено ) × 100%
         var totalProfit = totalCashIn > 0 
@@ -144,10 +150,12 @@ public class MetricsManager : IMetricsManager
 
     #endregion DynamicMetrics
 
-    private async void OnLogin(UserInfo info)
+    private async void OnPortfoliosLoaded()
     {
         _initcanCellationTokenSource?.Cancel();
         _initcanCellationTokenSource = new();
+
+        _windowManager.ShowIsBusy();
 
         try
         {
@@ -161,6 +169,10 @@ public class MetricsManager : IMetricsManager
         {
             throw;
         }
+        finally
+        {
+            _windowManager.HideIsBusy();
+        }
     }
 
     private async Task Init(CancellationToken ct)
@@ -169,8 +181,10 @@ public class MetricsManager : IMetricsManager
         foreach (var id in ids)
         {
             if (ct.IsCancellationRequested) return;
-            var currentCost = await ComputePortfolioCurrentCost([id], ct);
+            var currentCost = await ComputePortfolioCurrentCost(id, ct);
             _currentPortfolioCostCache[id] = currentCost;
         }
+
+        _eventAggregator.GetEvent<MetricsManagerInitEvent>().Publish();
     }
 }

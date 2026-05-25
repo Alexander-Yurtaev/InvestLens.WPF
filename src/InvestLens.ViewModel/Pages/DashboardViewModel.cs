@@ -25,7 +25,7 @@ public class DashboardViewModel : ViewModelBaseWithContentHeader, IDashboardView
         IEventAggregator eventAggregator) : base($"Добро пожаловать, Гость",
         "Вот что происходит с вашими инвестициями сегодня")
     {
-        eventAggregator.GetEvent<PortfoliosLoadedEvent>().Subscribe(OnPortfoliosLoaded);
+        eventAggregator.GetEvent<MetricsManagerInitEvent>().Subscribe(OnMetricsManagerInit);
         _authManager = authManager;
         _windowManager = windowManager;
         _metricsManager = metricsManager;
@@ -46,11 +46,11 @@ public class DashboardViewModel : ViewModelBaseWithContentHeader, IDashboardView
 
     public async Task Load(bool? force = false)
     {
-        OnPortfoliosLoaded();
+        OnMetricsManagerInit();
         await Task.Delay(0);
     }
 
-    private async void OnPortfoliosLoaded()
+    private async void OnMetricsManagerInit()
     {
         _windowManager.ShowIsBusy();
 

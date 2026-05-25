@@ -33,7 +33,7 @@ public class SecurityService : ISecurityService
     {
         try
         {
-            var secIdDbList = await _repository.GetSecIdListAsync();
+            var secIdDbList = await _repository.GetSecIdListAsync(ct);
             var secIdNewList = secIdImportList.Except(secIdDbList);
 
             var newSecurityModelList = await _moexService.GetSecurityList(secIdNewList, ct);
@@ -46,7 +46,7 @@ public class SecurityService : ISecurityService
 
             await _databaseService.BeginTransactionAsync();
             
-            await _repository.AddRangeAsync(newSecurityList);
+            await _repository.AddRangeAsync(newSecurityList, ct);
 
             foreach (var security in newSecurityList.Where(s => !string.IsNullOrEmpty(s.MarketpriceBoardid)))
             {

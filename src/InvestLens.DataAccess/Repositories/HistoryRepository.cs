@@ -18,4 +18,13 @@ public class HistoryRepository : BaseRepository, IHistoryRepository
             .ToDictionaryAsync(g => g.Key, g => g.OrderByDescending(v => v.Date).First());
         return result;
     }
+
+    public async Task<Dictionary<string, History>> GetHistory(DateTime dateTime)
+    {
+        var result = await DatabaseService.DataContext.History
+            .Where(h => h.Date < dateTime)
+            .GroupBy(h => h.SecId)
+            .ToDictionaryAsync(g => g.Key, g => g.OrderByDescending(v => v.Date).First());
+        return result;
+    }
 }

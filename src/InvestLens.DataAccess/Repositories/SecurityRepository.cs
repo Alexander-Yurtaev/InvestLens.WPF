@@ -12,25 +12,34 @@ public class SecurityRepository : BaseRepository, ISecurityRepository
     {
     }
 
-    public async Task AddRangeAsync(IEnumerable<Security> newSecurityList)
+    public async Task AddRangeAsync(IEnumerable<Security> newSecurityList, CancellationToken ct)
     {
-        await DatabaseService.DataContext.Securities.AddRangeAsync(newSecurityList);
+        await DatabaseService.DataContext.Securities.AddRangeAsync(newSecurityList, ct);
     }
 
-    public async Task<List<string>> GetSecIdListAsync()
+    public async Task<List<string>> GetSecIdListAsync(CancellationToken ct)
     {
         var result = await DatabaseService.DataContext.Securities
             .Select(s => s.SecId)
-            .ToListAsync();
+            .ToListAsync(ct);
 
         return result;
     }
 
-    public async Task<List<Security>> GetUnloadedSecurityListAsync()
+    public async Task<List<Security>> GetLoadedSecurityListAsync(CancellationToken ct)
+    {
+        var result = await DatabaseService.DataContext.Securities
+            .Where(s => s.IsLoaded)
+            .ToListAsync(ct);
+
+        return result;
+    }
+
+    public async Task<List<Security>> GetUnloadedSecurityListAsync(CancellationToken ct)
     {
         var result = await DatabaseService.DataContext.Securities
             .Where(s => !s.IsLoaded)
-            .ToListAsync();
+            .ToListAsync(ct);
 
         return result;
     }

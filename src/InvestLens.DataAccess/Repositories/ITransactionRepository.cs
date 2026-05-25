@@ -1,4 +1,5 @@
-﻿using InvestLens.Model.Enums;
+﻿using InvestLens.Model.Entities;
+using InvestLens.Model.Enums;
 
 namespace InvestLens.DataAccess.Repositories;
 
@@ -10,8 +11,9 @@ public interface ITransactionRepository : IBaseRepository
     Task<decimal> GetTotalCashOut();
     Task<decimal> GetPortfolioTotalCashOut(int[] ids);
 
-    Task<decimal> GetCurrentCost(CancellationToken ct);
-    Task<decimal> GetPortfolioCurrentCost(int[] ids, CancellationToken ct);
+
+    Task<decimal> GetPortfolioCostTillDate(int id, DateTime date, List<Security> securityList, CancellationToken ct);
+    Task<decimal> GetPortfolioCurrentCost(int id, List<Security> securityList, CancellationToken ct);
 
     Task<decimal> GetTotalDividends();
     Task<decimal> GetPortfolioTotalDividends(int[] ids);
