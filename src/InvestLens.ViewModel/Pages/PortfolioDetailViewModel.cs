@@ -163,7 +163,9 @@ public class PortfolioDetailViewModel : ViewModelBaseWithContentHeader, IPortfol
             var secIds = transactions.Select(t => t.Symbol)
                                      .Where(s => !string.IsNullOrEmpty(s))
                                      .Distinct().ToList();
+            _windowManager.ShowIsBusy("Портфель: обновление ЦБ...");
             await _securityService.UpdateSecurities(secIds, ct);
+            _windowManager.ShowIsBusy("");
             await RefreshModel();
             
             _windowManager.ShowSuccessDialog($"Было импортированно {acceptedCount} записей");

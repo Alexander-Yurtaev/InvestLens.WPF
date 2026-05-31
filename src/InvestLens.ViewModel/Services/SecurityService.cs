@@ -36,6 +36,8 @@ public class SecurityService : ISecurityService
             var secIdDbList = await _repository.GetSecIdListAsync(ct);
             var secIdNewList = secIdImportList.Except(secIdDbList);
 
+            _windowManager.ShowIsBusy("Получаем список ЦБ...");
+
             var newSecurityModelList = await _moexService.GetSecurityList(secIdNewList, ct);
 
             var newSecurityList = _mapper.Map<List<Security>>(newSecurityModelList);
@@ -45,14 +47,37 @@ public class SecurityService : ISecurityService
             }
 
             await _databaseService.BeginTransactionAsync();
-            
+
+            _windowManager.ShowIsBusy("Добавляем список ЦБ...");
+
             await _repository.AddRangeAsync(newSecurityList, ct);
+
+            _windowManager.ShowIsBusy("Получаем исторические данные...");
+
+            using var semaphorSlim = new SemaphoreSlim(1);
+            var tasks = new List<Task>();
 
             foreach (var security in newSecurityList.Where(s => !string.IsNullOrEmpty(s.MarketpriceBoardid)))
             {
-                await _moexService.LoadHistory(security, ct);
+                await semaphorSlim.WaitAsync(ct);
+
+                var task = Task.Run(async () => {
+                    try
+                    {
+                        await _moexService.LoadHistory(security, ct);
+                    }
+                    finally
+                    {
+                        semaphorSlim.Release();
+                    }
+                }, ct);
+                tasks.Add(task);
             }
-            
+
+            await Task.WhenAll(tasks);
+
+            _windowManager.ShowIsBusy("");
+
             await _databaseService.SaveAsync();
             await _databaseService.CommitTransactionAsync();
         }
