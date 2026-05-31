@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:InvestLens.App.UserControls"
              xmlns:pages="clr-namespace:InvestLens.ViewModel.Pages;assembly=InvestLens.ViewModel"
-             xmlns:model="clr-namespace:InvestLens.Model;assembly=InvestLens.Model"
+             xmlns:model="clr-namespace:InvestLens.Shared.Model;assembly=InvestLens.Shared"
              xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
              xmlns:behaviors="clr-namespace:InvestLens.App.Behaviors" xmlns:oxy="http://oxyplot.org/wpf" xmlns:converters="clr-namespace:InvestLens.App.Converters"
              mc:Ignorable="d" 

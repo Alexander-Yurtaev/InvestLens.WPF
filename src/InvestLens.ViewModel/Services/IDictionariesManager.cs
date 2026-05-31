@@ -1,4 +1,4 @@
-﻿using InvestLens.Model;
+﻿using InvestLens.Shared.Model;
 
 namespace InvestLens.ViewModel.Services;
 

@@ -1,5 +1,5 @@
-﻿using InvestLens.Model;
-using InvestLens.Model.Services;
+﻿using InvestLens.Shared.Model;
+using InvestLens.Shared.Model.Services;
 using InvestLens.ViewModel.Events;
 using InvestLens.ViewModel.Services;
 using InvestLens.ViewModel.Windows;

@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
-using InvestLens.DataAccess.Services;
-using InvestLens.Model;
-using InvestLens.Model.Crud.Portfolio;
-using InvestLens.Model.Services;
+using InvestLens.Shared.DataAccess.Services;
+using InvestLens.Shared.Model;
+using InvestLens.Shared.Model.Crud.Portfolio;
+using InvestLens.Shared.Model.Services;
 using InvestLens.ViewModel.Helpers;
 using InvestLens.ViewModel.Services;
 using InvestLens.ViewModel.Windows;
@@ -57,7 +57,7 @@ public class PortfolioDetailViewModel : ViewModelBaseWithContentHeader, IPortfol
             new ButtonModel("Удалить", OnDeletePortfolio),
         };
 
-        if (_model.PortfolioType == Model.Enums.PortfolioType.Invest)
+        if (_model.PortfolioType == Shared.Model.Enums.PortfolioType.Invest)
         {
             buttonModels.Add(new ButtonModel("Импортировать", OnImportPortfolio));
         }
@@ -195,7 +195,7 @@ public class PortfolioDetailViewModel : ViewModelBaseWithContentHeader, IPortfol
             _model.Operations.Clear();
             _model.Operations.AddRange(model.Operations.OrderByDescending(o => o.Date));
 
-            var ids = _model.PortfolioType == Model.Enums.PortfolioType.Invest
+            var ids = _model.PortfolioType == Shared.Model.Enums.PortfolioType.Invest
                 ? [_model.Id]
                 : _model.Portfolios.ToArray();
 

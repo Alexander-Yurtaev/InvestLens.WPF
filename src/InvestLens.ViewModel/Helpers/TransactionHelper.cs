@@ -1,6 +1,6 @@
 ﻿using CsvHelper;
 using CsvHelper.Configuration;
-using InvestLens.Model.Crud.Transaction;
+using InvestLens.Shared.Model.Crud.Transaction;
 using System.Globalization;
 using System.IO;
 

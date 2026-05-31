@@ -1,12 +1,10 @@
 ﻿using AutoMapper;
-using InvestLens.DataAccess.Services;
-using InvestLens.Model;
-using InvestLens.Model.NavigationTree;
-using InvestLens.Model.Services;
+using InvestLens.Shared.DataAccess.Services;
+using InvestLens.Shared.Model.NavigationTree;
+using InvestLens.Shared.Model.Services;
 using InvestLens.ViewModel.Factories;
 using InvestLens.ViewModel.Pages;
 using Microsoft.Extensions.DependencyInjection;
-using System;
 using System.ComponentModel;
 
 namespace InvestLens.ViewModel.Services;

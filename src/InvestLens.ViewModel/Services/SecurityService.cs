@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
-using InvestLens.DataAccess.Repositories;
-using InvestLens.DataAccess.Services;
-using InvestLens.Model;
-using InvestLens.Model.Entities;
+using InvestLens.Shared.DataAccess.Repositories;
+using InvestLens.Shared.DataAccess.Services;
+using InvestLens.Shared.Model;
+using InvestLens.Shared.Model.Entities;
 using OxyPlot.Series;
 
 namespace InvestLens.ViewModel.Services;

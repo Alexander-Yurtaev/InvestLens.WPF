@@ -1,6 +1,6 @@
-﻿using InvestLens.Model;
-using InvestLens.Model.Enums;
-using InvestLens.Model.MoexApi.Settings;
+﻿using InvestLens.Shared.Model;
+using InvestLens.Shared.Model.Enums;
+using InvestLens.Shared.Model.MoexApi.Settings;
 
 namespace InvestLens.ViewModel.Services;
 

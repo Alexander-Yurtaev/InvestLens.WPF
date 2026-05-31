@@ -3,9 +3,9 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Windows.Input;
-using InvestLens.DataAccess.Repositories;
-using InvestLens.Model.Crud.Portfolio;
-using InvestLens.Model.Services;
+using InvestLens.Shared.DataAccess.Repositories;
+using InvestLens.Shared.Model.Crud.Portfolio;
+using InvestLens.Shared.Model.Services;
 
 namespace InvestLens.ViewModel.Windows;
 

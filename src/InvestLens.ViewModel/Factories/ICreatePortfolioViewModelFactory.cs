@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
-using InvestLens.DataAccess.Services;
-using InvestLens.Model;
-using InvestLens.Model.Services;
+using InvestLens.Shared.DataAccess.Services;
+using InvestLens.Shared.Model;
+using InvestLens.Shared.Model.Services;
 using InvestLens.ViewModel.Pages;
 using InvestLens.ViewModel.Services;
 

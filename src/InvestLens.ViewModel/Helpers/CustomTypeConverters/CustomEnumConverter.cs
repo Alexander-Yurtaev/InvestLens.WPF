@@ -1,7 +1,7 @@
 ﻿using CsvHelper;
 using CsvHelper.Configuration;
 using CsvHelper.TypeConversion;
-using InvestLens.Model.Enums;
+using InvestLens.Shared.Model.Enums;
 
 namespace InvestLens.ViewModel.Helpers.TypeConverters;
 

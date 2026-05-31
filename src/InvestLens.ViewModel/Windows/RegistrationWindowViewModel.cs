@@ -3,8 +3,8 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Security;
 using System.Windows.Input;
-using InvestLens.DataAccess.Services;
-using InvestLens.Model.Crud.User;
+using InvestLens.Shared.DataAccess.Services;
+using InvestLens.Shared.Model.Crud.User;
 using InvestLens.Shared.Helpers;
 
 namespace InvestLens.ViewModel.Windows;

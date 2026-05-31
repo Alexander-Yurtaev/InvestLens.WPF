@@ -1,9 +1,6 @@
-﻿using InvestLens.DataAccess.Repositories;
-using InvestLens.Model.Crud.Portfolio;
-using InvestLens.Model.Entities;
-using InvestLens.Model.Enums;
-using InvestLens.Model.Services;
-using InvestLens.ViewModel.Events;
+﻿using InvestLens.Shared.Model.Crud.Portfolio;
+using InvestLens.Shared.Model.Enums;
+using InvestLens.Shared.Model.Services;
 using InvestLens.ViewModel.Services;
 using System.Runtime.CompilerServices;
 

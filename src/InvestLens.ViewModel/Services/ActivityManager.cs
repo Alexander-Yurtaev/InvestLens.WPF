@@ -1,6 +1,6 @@
-﻿using InvestLens.Model;
-using InvestLens.Model.Entities;
-using InvestLens.Model.Helpers;
+﻿using InvestLens.Shared.Model;
+using InvestLens.Shared.Model.Entities;
+using InvestLens.Shared.Model.Helpers;
 
 namespace InvestLens.ViewModel.Services;
 

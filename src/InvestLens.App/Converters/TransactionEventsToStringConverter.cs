@@ -1,4 +1,4 @@
-﻿using InvestLens.Model.Helpers;
+﻿using InvestLens.Shared.Model.Helpers;
 using System.Globalization;
 using System.Windows.Data;
 

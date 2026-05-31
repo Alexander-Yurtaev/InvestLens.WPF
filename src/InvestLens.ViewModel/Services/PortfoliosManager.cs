@@ -1,16 +1,17 @@
 ﻿using AutoMapper;
-using InvestLens.DataAccess.Repositories;
-using InvestLens.DataAccess.Services;
-using InvestLens.Model;
-using InvestLens.Model.Crud.Portfolio;
-using InvestLens.Model.Crud.Transaction;
-using InvestLens.Model.Entities;
-using InvestLens.Model.Enums;
-using InvestLens.Model.NavigationTree;
-using InvestLens.Model.Services;
+using InvestLens.Shared.DataAccess.Repositories;
+using InvestLens.Shared.DataAccess.Services;
+using InvestLens.Shared.Model;
+using InvestLens.Shared.Model.Crud.Portfolio;
+using InvestLens.Shared.Model.Crud.Transaction;
+using InvestLens.Shared.Model.Entities;
+using InvestLens.Shared.Model.Enums;
+using InvestLens.Shared.Model.NavigationTree;
+using InvestLens.Shared.Model.Services;
 using InvestLens.ViewModel.Events;
 using InvestLens.ViewModel.Helpers;
 using InvestLens.ViewModel.NavigationTree;
+using System.Linq;
 
 namespace InvestLens.ViewModel.Services;
 
@@ -25,7 +26,7 @@ public class PortfoliosManager : IPortfoliosManager
     private readonly IEventAggregator _eventAggregator;
     private readonly SemaphoreSlim _loadSemaphoreSlim = new SemaphoreSlim(1);
 
-    private readonly Dictionary<int, Model.Crud.Portfolio.PortfolioModel> _portfolioCache = [];
+    private readonly Dictionary<int, Shared.Model.Crud.Portfolio.PortfolioModel> _portfolioCache = [];
 
     public PortfoliosManager(
         IMapper mapper,
@@ -171,7 +172,7 @@ public class PortfoliosManager : IPortfoliosManager
             .Where(p => (portfolioId is null || p.Id != portfolioId.Value) &&
                         p.PortfolioType != PortfolioType.Complex);
 
-        return portfolios.Select(p => new Model.Crud.Portfolio
+        return portfolios.Select(p => new Shared.Model.Crud.Portfolio
                                     .LookupModel(p.Id, p.Name, p.PortfolioType)).ToList();
     }
 

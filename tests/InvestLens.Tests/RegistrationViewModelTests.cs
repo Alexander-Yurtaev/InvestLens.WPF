@@ -1,5 +1,5 @@
-﻿using InvestLens.DataAccess.Services;
-using InvestLens.Model.Crud.User;
+﻿using InvestLens.Shared.DataAccess.Services;
+using InvestLens.Shared.Model.Crud.User;
 using InvestLens.ViewModel.Services;
 using InvestLens.ViewModel.Windows;
 using Moq;

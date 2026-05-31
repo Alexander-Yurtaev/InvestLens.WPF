@@ -1,5 +1,5 @@
 ﻿using InvestLens.Shared.Helpers;
-using InvestLens.Model;
+using InvestLens.Shared.Model;
 
 namespace InvestLens.ViewModel.Wrappers;
 

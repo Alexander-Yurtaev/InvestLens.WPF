@@ -1,7 +1,7 @@
-﻿using InvestLens.Model;
-using InvestLens.Model.Crud.Portfolio;
-using InvestLens.Model.Crud.Transaction;
-using InvestLens.Model.Enums;
+﻿using InvestLens.Shared.Model;
+using InvestLens.Shared.Model.Crud.Portfolio;
+using InvestLens.Shared.Model.Crud.Transaction;
+using InvestLens.Shared.Model.Enums;
 using InvestLens.ViewModel.NavigationTree;
 
 namespace InvestLens.ViewModel.Services;

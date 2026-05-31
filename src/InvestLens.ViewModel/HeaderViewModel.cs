@@ -1,6 +1,5 @@
-﻿using InvestLens.Model;
-using InvestLens.Model.Entities;
-using InvestLens.Model.NavigationTree;
+﻿using InvestLens.Shared.Model;
+using InvestLens.Shared.Model.NavigationTree;
 using InvestLens.ViewModel.Events;
 using InvestLens.ViewModel.Services;
 

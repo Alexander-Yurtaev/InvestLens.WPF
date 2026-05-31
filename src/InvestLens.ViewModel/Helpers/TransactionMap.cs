@@ -1,7 +1,7 @@
 ﻿using CsvHelper.Configuration;
 using CsvHelper.TypeConversion;
-using InvestLens.Model.Crud.Transaction;
-using InvestLens.Model.Enums;
+using InvestLens.Shared.Model.Crud.Transaction;
+using InvestLens.Shared.Model.Enums;
 using InvestLens.ViewModel.Helpers.TypeConverters;
 using Microsoft.EntityFrameworkCore.Update.Internal;
 using System.Globalization;

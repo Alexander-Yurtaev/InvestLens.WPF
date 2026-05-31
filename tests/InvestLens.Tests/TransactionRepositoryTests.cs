@@ -1,11 +1,11 @@
 ﻿using FluentAssertions;
-using InvestLens.DataAccess;
-using InvestLens.DataAccess.Repositories;
-using InvestLens.DataAccess.Services;
-using InvestLens.Model.Entities;
-using InvestLens.Model.Entities.Moex;
-using InvestLens.Model.Enums;
-using InvestLens.Model.Services;
+using InvestLens.Shared.DataAccess.Repositories;
+using InvestLens.Shared.DataAccess.Services;
+using InvestLens.Shared.Model.Entities;
+using InvestLens.Shared.Model.Enums;
+using InvestLens.Shared.Model.Services;
+using InvestLens.Shared.DataAccess;
+using InvestLens.Shared.Models.Entities.Moex;
 using Microsoft.EntityFrameworkCore;
 using Moq;
 

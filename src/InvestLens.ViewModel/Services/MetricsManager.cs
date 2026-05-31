@@ -1,6 +1,6 @@
-﻿using InvestLens.DataAccess.Repositories;
-using InvestLens.Model;
-using InvestLens.Model.Enums;
+﻿using InvestLens.Shared.DataAccess.Repositories;
+using InvestLens.Shared.Model;
+using InvestLens.Shared.Model.Enums;
 using InvestLens.ViewModel.Events;
 
 namespace InvestLens.ViewModel.Services;

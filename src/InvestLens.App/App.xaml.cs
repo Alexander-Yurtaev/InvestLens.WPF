@@ -1,15 +1,15 @@
 ﻿using InvestLens.App.Services;
 using InvestLens.App.Windows;
 using InvestLens.App.Windows.Dialogs;
-using InvestLens.DataAccess;
-using InvestLens.DataAccess.Repositories;
-using InvestLens.DataAccess.Repositories.Settings;
-using InvestLens.DataAccess.Resolvers;
-using InvestLens.DataAccess.Services;
-using InvestLens.Model;
-using InvestLens.Model.Crud.Portfolio;
-using InvestLens.Model.Crud.User;
-using InvestLens.Model.Services;
+using InvestLens.Shared.DataAccess;
+using InvestLens.Shared.DataAccess.Repositories;
+using InvestLens.Shared.DataAccess.Repositories.Settings;
+using InvestLens.Shared.DataAccess.Resolvers;
+using InvestLens.Shared.DataAccess.Services;
+using InvestLens.Shared.Model;
+using InvestLens.Shared.Model.Crud.Portfolio;
+using InvestLens.Shared.Model.Crud.User;
+using InvestLens.Shared.Model.Services;
 using InvestLens.ViewModel;
 using InvestLens.ViewModel.Factories;
 using InvestLens.ViewModel.Pages;
@@ -154,7 +154,7 @@ namespace InvestLens.App
                     throw new InvalidOperationException("Пользователь не авторизован!");
                 }
 
-                var model = new Model.Crud.Portfolio.CreateModel(authManager.CurrentUser!.Id);
+                var model = new Shared.Model.Crud.Portfolio.CreateModel(authManager.CurrentUser!.Id);
                 return model;
             });
             services.AddTransient<UpdateModel>();

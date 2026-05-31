@@ -1,4 +1,4 @@
-﻿using InvestLens.Model.NavigationTree;
+﻿using InvestLens.Shared.Model.NavigationTree;
 using InvestLens.ViewModel.Events;
 using InvestLens.ViewModel.Services;
 using System.ComponentModel;

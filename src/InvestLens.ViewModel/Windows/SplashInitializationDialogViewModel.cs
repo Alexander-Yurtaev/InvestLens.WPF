@@ -1,6 +1,6 @@
-﻿using InvestLens.DataAccess;
-using InvestLens.DataAccess.Services;
-using InvestLens.Model.Enums;
+﻿using InvestLens.Shared.DataAccess.Services;
+using InvestLens.Shared.Model.Enums;
+using InvestLens.Shared.DataAccess;
 using InvestLens.ViewModel.Services;
 using InvestLens.ViewModel.Wrappers;
 using Microsoft.EntityFrameworkCore;

@@ -1,8 +1,8 @@
 ﻿using FluentAssertions;
 using InvestLens.App.Services;
-using InvestLens.DataAccess.Repositories;
-using InvestLens.Model.Entities;
-using InvestLens.Model.Enums;
+using InvestLens.Shared.DataAccess.Repositories;
+using InvestLens.Shared.Model.Entities;
+using InvestLens.Shared.Model.Enums;
 using InvestLens.ViewModel.Events;
 using InvestLens.ViewModel.Services;
 using Moq;

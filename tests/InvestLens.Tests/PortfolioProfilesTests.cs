@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
 using InvestLens.App.Profiles;
-using InvestLens.Model;
-using InvestLens.Model.Entities;
-using InvestLens.Model.Enums;
+using InvestLens.Shared.Model;
+using InvestLens.Shared.Model.Entities;
+using InvestLens.Shared.Model.Enums;
 using Microsoft.Extensions.Logging.Abstractions;
 using FluentAssertions;
 

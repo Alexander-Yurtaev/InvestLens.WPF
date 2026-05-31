@@ -1,4 +1,4 @@
-﻿using InvestLens.Model.Enums;
+﻿using InvestLens.Shared.Model.Enums;
 
 namespace InvestLens.ViewModel.Wrappers;
 

@@ -1,4 +1,4 @@
-﻿using InvestLens.Model;
+﻿using InvestLens.Shared.Model;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 

@@ -1,6 +1,6 @@
-﻿using InvestLens.Model;
-using InvestLens.Model.Enums;
-using InvestLens.Model.NavigationTree;
+﻿using InvestLens.Shared.Model;
+using InvestLens.Shared.Model.Enums;
+using InvestLens.Shared.Model.NavigationTree;
 using InvestLens.ViewModel.NavigationTree;
 
 namespace InvestLens.ViewModel.Services;

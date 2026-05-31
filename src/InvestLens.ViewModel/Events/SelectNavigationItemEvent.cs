@@ -1,4 +1,4 @@
-﻿using InvestLens.Model.NavigationTree;
+﻿using InvestLens.Shared.Model.NavigationTree;
 
 namespace InvestLens.ViewModel.Events;
 

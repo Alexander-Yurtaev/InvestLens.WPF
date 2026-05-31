@@ -8,17 +8,13 @@
 
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="16.1.1" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.14" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.14">
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.16" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.16">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="9.0.14" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="9.0.16" />
     <PackageReference Include="Microsoft.Extensions.Http" Version="9.0.15" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\InvestLens.Model\InvestLens.Model.csproj" />
   </ItemGroup>
 
 </Project>

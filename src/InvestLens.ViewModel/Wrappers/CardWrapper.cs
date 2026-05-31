@@ -1,4 +1,4 @@
-﻿using InvestLens.Model;
+﻿using InvestLens.Shared.Model;
 using System.Windows.Input;
 
 namespace InvestLens.ViewModel.Wrappers;

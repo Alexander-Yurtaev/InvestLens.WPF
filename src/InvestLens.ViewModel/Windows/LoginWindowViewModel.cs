@@ -1,10 +1,10 @@
-﻿using InvestLens.Model;
+﻿using InvestLens.Shared.Model;
 using InvestLens.ViewModel.Services;
 using System.ComponentModel.DataAnnotations;
 using System.Security;
 using System.Windows.Input;
-using InvestLens.DataAccess.Services;
-using InvestLens.Model.Services;
+using InvestLens.Shared.DataAccess.Services;
+using InvestLens.Shared.Model.Services;
 
 namespace InvestLens.ViewModel.Windows;
 

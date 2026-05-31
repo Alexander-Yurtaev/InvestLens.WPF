@@ -1,4 +1,4 @@
-﻿using InvestLens.Model;
+﻿using InvestLens.Shared.Model;
 using InvestLens.ViewModel.Wrappers;
 using FluentAssertions;
 
