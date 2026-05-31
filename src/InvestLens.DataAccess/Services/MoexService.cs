@@ -7,20 +7,21 @@ using InvestLens.Model.Helpers;
 using InvestLens.Model.MoexApi.Responses;
 using InvestLens.Model.MoexApi.Responses.ResponseItems;
 using InvestLens.Model.MoexApi.Settings;
+using System.Collections.Concurrent;
 using System.Net.Http.Json;
 
 namespace InvestLens.DataAccess.Services;
 
 public class MoexCache
 {
-    public List<EngineModel> Engines { get; set; } = [];
-    public List<MarketModel> Markets { get; set; } = [];
-    public List<BoardModel> Boards { get; set; } = [];
-    public List<BoardGroupModel> BoardGroups { get; set; } = [];
-    public List<DurationModel> Durations { get; set; } = [];
-    public List<SecurityTypeModel> SecurityTypes { get; set; } = [];
-    public List<SecurityGroupModel> SecurityGroups { get; set; } = [];
-    public List<SecurityCollectionModel> SecurityCollections { get; set; } = [];
+    public ConcurrentBag<EngineModel> Engines { get; } = [];
+    public ConcurrentBag<MarketModel> Markets { get; } = [];
+    public ConcurrentBag<BoardModel> Boards { get; } = [];
+    public ConcurrentBag<BoardGroupModel> BoardGroups { get; } = [];
+    public ConcurrentBag<DurationModel> Durations { get; } = [];
+    public ConcurrentBag<SecurityTypeModel> SecurityTypes { get; } = [];
+    public ConcurrentBag<SecurityGroupModel> SecurityGroups { get; } = [];
+    public ConcurrentBag<SecurityCollectionModel> SecurityCollections { get; } = [];
 }
 
 public class MoexService : IMoexService
@@ -38,6 +39,7 @@ public class MoexService : IMoexService
     private readonly ISecurityCollectionRepository _securityCollectionRepository;
     private readonly IHistoryRepository _historyRepository;
     private HttpClient _httpClient;
+    private SemaphoreSlim _semaphoreSlim = new SemaphoreSlim(1);
 
     public MoexService(
         IMapper mapper, 
@@ -75,14 +77,23 @@ public class MoexService : IMoexService
 
     public async Task LoadHistory(Model.Entities.Security security, CancellationToken ct)
     {
-        if (ct.IsCancellationRequested) return;
+        ct.ThrowIfCancellationRequested();
 
         if (string.IsNullOrEmpty(security.MarketpriceBoardid))
         {
-            throw new ArgumentException(nameof(security.MarketpriceBoardid));
+            throw new ArgumentException($"Аргумент {nameof(security.MarketpriceBoardid)} не задан");
         }
 
-        var firstDate = await _transactionRepository.GetFirstDate(security.SecId);
+        DateTime firstDate = DateTime.UtcNow;
+        await _semaphoreSlim.WaitAsync(ct);
+        try
+        {
+            firstDate = await _transactionRepository.GetFirstDate(security.SecId);
+        }
+        finally
+        {
+            _semaphoreSlim.Release();
+        }
 
         var historyList = new List<InvestLens.Model.Entities.Moex.History>();
 
@@ -92,11 +103,13 @@ public class MoexService : IMoexService
 
         if (board?.Market is null)
         {
-            throw new ArgumentException(nameof(security.SecGroup));
+            throw new ArgumentException($"Не найдена доска Id={security.MarketpriceBoardid} либо у доски не указан рынок");
         }
 
         while (currentHistoryCursor.Total == 0 || currentHistoryCursor.Total > currentHistoryCursor.Index * currentHistoryCursor.PageSize)
         {
+            ct.ThrowIfCancellationRequested();
+
             var url = $"https://iss.moex.com/iss/history/engines/{board.Market.TradeEngineName}/markets/{board.Market.MarketName}/securities/{security.SecId}.json" +
                 $"?from={firstDate.ToString("yyyy-MM-dd")}&tradingsession=3&marketprice_board=1" +
                 $"&start={currentHistoryCursor.Index * currentHistoryCursor.PageSize}";
@@ -104,7 +117,7 @@ public class MoexService : IMoexService
             var response = await _httpClient.GetFromJsonAsync<HistoryResponse>(url, ct);
             if (response is null)
             {
-                throw new InvalidOperationException(nameof(IndexResponse));
+                throw new InvalidOperationException("Пришел пустой или не корректный ответ от Moex");
             }
 
             if (response.History is not null)
@@ -124,7 +137,7 @@ public class MoexService : IMoexService
 
                 if (historyCursor is null)
                 {
-                    throw new InvalidOperationException(nameof(historyCursor));
+                    throw new InvalidOperationException("Ошибка при обработке курсора данных от Moex");
                 }
 
                 currentHistoryCursor.PageSize = historyCursor.PageSize;
@@ -151,18 +164,19 @@ public class MoexService : IMoexService
 
     public async Task LoadMoexIndex(CancellationToken ct)
     {
-        if (ct.IsCancellationRequested) return;
+        ct.ThrowIfCancellationRequested();
 
         var response = await _httpClient.GetFromJsonAsync<IndexResponse>("iss/index.json", ct);
         if (response is null)
         {
-            throw new InvalidOperationException(nameof(IndexResponse));
+            throw new InvalidOperationException("Пришел пустой или не корректный ответ от Moex");
         }
 
         await _databaseService.BeginTransactionAsync();
 
         try
         {
+            MoexDictionaries.Engines.Clear();
             if (response.Engines is not null)
             {
                 var engines = MoexResponseHelper.GetModels<Engines, Engine>(response.Engines);
@@ -175,6 +189,7 @@ public class MoexService : IMoexService
                 }
             }
 
+            MoexDictionaries.Markets.Clear();
             if (response.Markets is not null)
             {
                 var markets = MoexResponseHelper.GetModels<Markets, Market>(response.Markets);
@@ -187,6 +202,7 @@ public class MoexService : IMoexService
                 }
             }
 
+            MoexDictionaries.Boards.Clear();
             if (response.Boards is not null)
             {
                 var boards = MoexResponseHelper.GetModels<Boards, Board>(response.Boards);
@@ -199,6 +215,7 @@ public class MoexService : IMoexService
                 }
             }
 
+            MoexDictionaries.BoardGroups.Clear();
             if (response.BoardGroups is not null)
             {
                 var boardGroups = MoexResponseHelper.GetModels<BoardGroups, BoardGroup>(response.BoardGroups);
@@ -211,6 +228,7 @@ public class MoexService : IMoexService
                 }
             }
 
+            MoexDictionaries.Durations.Clear();
             if (response.Durations is not null)
             {
                 var durations = MoexResponseHelper.GetModels<Durations, Duration>(response.Durations);
@@ -223,6 +241,7 @@ public class MoexService : IMoexService
                 }
             }
 
+            MoexDictionaries.SecurityTypes.Clear();
             if (response.SecurityTypes is not null)
             {
                 var securityTypes = MoexResponseHelper.GetModels<SecurityTypes, Model.Entities.Settings.SecurityType>(response.SecurityTypes);
@@ -235,6 +254,7 @@ public class MoexService : IMoexService
                 }
             }
 
+            MoexDictionaries.SecurityGroups.Clear();
             if (response.SecurityGroups is not null)
             {
                 var securityGroups = MoexResponseHelper.GetModels<SecurityGroups, Model.Entities.Settings.SecurityGroup>(response.SecurityGroups);
@@ -247,6 +267,7 @@ public class MoexService : IMoexService
                 }
             }
 
+            MoexDictionaries.SecurityCollections.Clear();
             if (response.SecurityCollections is not null)
             {
                 var securityCollections = MoexResponseHelper.GetModels<SecurityCollections, Model.Entities.Settings.SecurityCollection>(response.SecurityCollections);
@@ -271,27 +292,44 @@ public class MoexService : IMoexService
 
     public async Task<List<SecurityModel>> GetSecurityList(IEnumerable<string> secIdNewList, CancellationToken ct)
     {
-        var securityModelList = new List<SecurityModel>();
+        ct.ThrowIfCancellationRequested();
+
+        var securityModelBag = new ConcurrentBag<SecurityModel>();
+        using var semaphorSlim = new SemaphoreSlim(5);
+        var tasks = new List<Task>();
 
         foreach (var secId in secIdNewList)
         {
-            await Task.Delay(100);
-            var response = await _httpClient.GetFromJsonAsync<SecuritiesResponse>($"iss/securities.json?q={secId}", ct);
-            if (response?.Securities == null)
-            {
-                continue;
-            }
+            await semaphorSlim.WaitAsync(ct);
 
-            var securities = MoexResponseHelper.GetModels<Securities, Security>(response.Securities);
-            var security = securities.FirstOrDefault(s => s.SecId == secId);
+            tasks.Add(Task.Run(async () => {
+                try
+                {
+                    ct.ThrowIfCancellationRequested();
+                    var response = await _httpClient.GetFromJsonAsync<SecuritiesResponse>($"iss/securities.json?q={secId}", ct);
+                    if (response?.Securities == null)
+                    {
+                        return;
+                    }
 
-            var model = security is not null
-                    ? _mapper.Map<SecurityModel>(security)
-                    : new SecurityModel { SecId = secId };
+                    var securities = MoexResponseHelper.GetModels<Securities, Security>(response.Securities);
+                    var security = securities.FirstOrDefault(s => s.SecId == secId);
 
-            securityModelList.Add(model);
+                    var model = security is not null
+                            ? _mapper.Map<SecurityModel>(security)
+                            : new SecurityModel { SecId = secId };
+
+                    securityModelBag.Add(model);
+                }
+                finally
+                {
+                    semaphorSlim.Release();
+                }
+            }, ct));
         }
 
-        return securityModelList;
+        await Task.WhenAll(tasks);
+
+        return securityModelBag.ToList();
     }
 }
