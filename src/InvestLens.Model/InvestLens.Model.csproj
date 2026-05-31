@@ -7,7 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\InvestLens.Common\InvestLens.Common.csproj" />
+    <ProjectReference Include="..\shared\src\InvestLens.Shared\InvestLens.Shared.csproj" />
   </ItemGroup>
 
 </Project>

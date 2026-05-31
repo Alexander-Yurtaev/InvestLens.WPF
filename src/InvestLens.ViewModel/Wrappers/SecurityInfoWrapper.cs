@@ -1,4 +1,4 @@
-﻿using InvestLens.Common.Helpers;
+﻿using InvestLens.Shared.Helpers;
 using InvestLens.Model;
 
 namespace InvestLens.ViewModel.Wrappers;

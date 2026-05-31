@@ -16,9 +16,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\InvestLens.Common\InvestLens.Common.csproj" />
     <ProjectReference Include="..\InvestLens.DataAccess\InvestLens.DataAccess.csproj" />
     <ProjectReference Include="..\InvestLens.Model\InvestLens.Model.csproj" />
+    <ProjectReference Include="..\shared\src\InvestLens.Shared\InvestLens.Shared.csproj" />
   </ItemGroup>
 
 </Project>
