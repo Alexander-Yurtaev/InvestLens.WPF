@@ -53,7 +53,7 @@
 
 ```bash
 git clone --recurse-submodules https://github.com/Alexander-Yurtaev/InvestLens.WPF.git
-cd InvestLens
+cd InvestLens.WPF
 dotnet restore
 dotnet build
 ```

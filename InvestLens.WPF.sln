@@ -26,7 +26,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "shared", "shared", "{9E205E
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InvestLens.Shared", "src\shared\src\InvestLens.Shared\InvestLens.Shared.csproj", "{9DF5641A-4CF8-72F8-F709-0D26D0F47C18}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InvestLens.Shared.Tests", "..\InvestLens.Shared\InvestLens.Tests\InvestLens.Shared.Tests.csproj", "{9CDF284B-A490-E309-7811-A3C745DE683D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InvestLens.Shared.Tests", "src\shared\InvestLens.Tests\InvestLens.Shared.Tests.csproj", "{9CDF284B-A490-E309-7811-A3C745DE683D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
