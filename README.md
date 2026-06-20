@@ -49,10 +49,10 @@
 - **Windows 10/11** (приложение использует WPF)
 - **Visual Studio 2022** (с поддержкой .NET 9.0) / Rider / VS Code
 
-### Установка
+### Установка (внимание, используется submodules!)
 
 ```bash
-git clone https://github.com/Alexander-Yurtaev/InvestLens.WPF.git
+git clone --recurse-submodules https://github.com/Alexander-Yurtaev/InvestLens.WPF.git
 cd InvestLens
 dotnet restore
 dotnet build
